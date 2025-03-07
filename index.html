@@ -7,6 +7,7 @@
     <meta name="author" content="L1-G4">
     <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
     <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
@@ -22,32 +23,32 @@
     <!-- Barra de navegación -->
     <header>
         <nav class="navbar">
-            
+
             <!-- Sección superior: Logo, barra de búsqueda y botones -->
             <div class="nav-top">
                 <a href="index.html" class="logo" aria-label="Inicio - Under Sounds">Under Sounds</a>
-                
+
                 <form class="search-bar" role="search" aria-label="Buscar contenido">
                     <input type="text" placeholder="Buscar..." aria-label="Campo de búsqueda">
                     <button type="submit" class="search-button" aria-label="Buscar">🔍</button>
                 </form>
-                
+
                 <div class="auth-buttons">
-                    <button class="login-btn">Iniciar sesión</button>
-                    <button class="signup-btn">Registro</button>
-                </div>
+                    <button class="login-btn" onclick="window.location.href='login.html'">Iniciar Sesión</button>
+                    <button class="signup-btn" onclick="window.location.href='register.html'">Registro</button>
+                </div>                
             </div>
 
             <!-- Sección inferior: Menú de navegación -->
             <div class="nav-bottom">
                 <ul>
-                    <li><a href="#">Biblioteca</a></li>
-                    <li><a href="#">Seguidos</a></li>
-                    <li><a href="#">Subir Canción</a></li>
-                    <li><a href="#">Subir Álbum</a></li>
+                    <li><a href="collection.html">Biblioteca</a></li>
+                    <li><a href="following.html">Seguidos</a></li>
+                    <li><a href="newSong.html">Subir Canción</a></li>
+                    <li><a href="newAlbum.html">Subir Álbum</a></li>
                 </ul>
             </div>
-            
+
         </nav>
     </header>
 
@@ -56,13 +57,13 @@
         <section>
             <h2>Bienvenido a Under Sounds</h2>
             <p>Explora nuestra biblioteca de música.</p>
-        </section>    
+        </section>
     </main>
 
     <!-- Pie de página -->
     <footer class="footer">
         <div class="footer-container">
-            
+
             <!-- Sección de enlaces -->
             <div class="footer-links">
                 <div class="footer-column">
@@ -74,7 +75,7 @@
                         <li><a href="studio.html">Studio</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-column">
                     <h3>Social</h3>
                     <ul>
@@ -84,7 +85,7 @@
                         <li><a href="https://x.com">Twitter</a></li>
                     </ul>
                 </div>
-    
+
                 <div class="footer-column">
                     <h3>Contacto</h3>
                     <ul>
@@ -94,7 +95,7 @@
                     </ul>
                 </div>
             </div>
-    
+
             <!-- Sección de logo e idioma -->
             <div class="footer-brand">
                 <div class="logo">
@@ -105,16 +106,17 @@
                     <button class="contrast-btn">Contraste</button>
                 </div>
             </div>
-    
+
         </div>
-    
+
         <!-- Copyright -->
         <div class="footer-copyright">
             <p>Copyright © 2025 <strong>[UnderSounds]</strong>. Todos los derechos reservados.</p>
         </div>
-    
+
     </footer>
-    
+
+    <script src="scripts/darkmode.js"></script>
 
 </body>
 

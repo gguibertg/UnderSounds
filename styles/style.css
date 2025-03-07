@@ -58,21 +58,22 @@ svg {
    =========================== */
 
 button {
-    background: #007bff; 
-    color: white; 
-    border: none; 
-    padding: 8px 14px; 
-    cursor: pointer; 
-    font-size: 14px; 
-    border-radius: 5px; /* Bordes redondeados */
-    font-weight: 500; /* Hace que el texto sea más visible */
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    font-weight: 500;
     transition: background 0.3s ease, transform 0.2s ease;
 }
 
 /* Efecto hover en botones */
 button:hover {
     background: #0056b3;
-    transform: scale(1.05); /* Efecto de crecimiento */
+    transform: scale(1.05);
+    /* Efecto de crecimiento */
 }
 
 /* ===========================
@@ -81,16 +82,17 @@ button:hover {
 
 /* Todos los enlaces tendrán el mismo estilo */
 a {
-    text-decoration: none; 
+    text-decoration: none;
     color: #007bff;
     font-size: 14px;
-    font-weight: 500; /* Hace que el texto se vea más grueso */
+    font-weight: 500;
+    /* Hace que el texto se vea más grueso */
     transition: color 0.3s ease;
 }
 
 /* Efecto hover en enlaces */
 a:hover {
-    color: #0056b3; 
+    color: #0056b3;
 }
 
 /* ==========================================================
@@ -105,9 +107,9 @@ header {
 
 .nav-top {
     display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 12px 20px; 
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
     margin: auto;
 }
 
@@ -151,9 +153,11 @@ header {
 /* Barra de navegación inferior */
 .nav-bottom {
     display: flex;
-    justify-content: flex-start; /* Alinea los elementos a la izquierda */
+    justify-content: flex-start;
+    /* Alinea los elementos a la izquierda */
     padding: 12px 20px;
-    border-top: 2px solid #ccc; /* Línea superior */
+    border-top: 2px solid #ccc;
+    /* Línea superior */
     background-color: white;
     margin: auto;
 }
@@ -162,7 +166,8 @@ header {
 .nav-bottom ul {
     list-style: none;
     display: flex;
-    gap: 25px; /* Espacio uniforme */
+    gap: 25px;
+    /* Espacio uniforme */
     padding: 0;
     margin: 0;
 }
@@ -173,9 +178,10 @@ header {
 
 main {
     padding: 20px;
-    flex: 1; /* Permite que el main ocupe el espacio disponible */
+    flex: 1;
+    /* Permite que el main ocupe el espacio disponible */
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
 }
 
 /* ==========================================================
@@ -184,11 +190,14 @@ main {
 
 /* Estilos generales del footer */
 .footer {
-    background-color: #f8f9fa; /* Fondo claro */
-    color: #333; /* Texto oscuro */
+    background-color: #f8f9fa;
+    /* Fondo claro */
+    color: #333;
+    /* Texto oscuro */
     padding: 40px 60px;
     font-size: 14px;
-    border-top: 2px solid #ccc; /* Línea superior */
+    border-top: 2px solid #ccc;
+    /* Línea superior */
 }
 
 /* Contenedor principal */
@@ -200,7 +209,7 @@ main {
 .footer-links {
     display: flex;
     gap: 60px;
-    flex-grow: 1; 
+    flex-grow: 1;
 }
 
 .footer-column h3 {
@@ -219,24 +228,29 @@ main {
 .footer-brand {
     display: flex;
     flex-direction: column;
-    align-self:center;
+    align-self: center;
     align-items: flex-end;
     text-align: right;
-    flex-grow: 0.3; /* Reduce el espacio vacío */
+    flex-grow: 0.3;
+    /* Reduce el espacio vacío */
 }
 
 .italic-text {
     font-style: italic;
-    font-size: 24px; /* Tamaño más grande */
+    font-size: 24px;
+    /* Tamaño más grande */
     font-weight: bold;
     background: #007bff;
     color: white;
-    padding: 15px 40px; /* Más padding para hacerlo más largo */
+    padding: 15px 40px;
+    /* Más padding para hacerlo más largo */
     display: inline-block;
     border-radius: 5px;
     text-align: center;
-    width: 100%; /* Hace que ocupe todo el ancho disponible */
-    margin: auto; /* Centra horizontalmente */
+    width: 100%;
+    /* Hace que ocupe todo el ancho disponible */
+    margin: auto;
+    /* Centra horizontalmente */
 }
 
 /* Botones de idioma y contraste */
@@ -255,5 +269,3 @@ main {
     padding-top: 15px;
     font-size: 14px;
 }
-
-
