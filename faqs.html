@@ -8,6 +8,7 @@
     <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
     <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
     <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/styles/faqs.css"> 
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
@@ -55,15 +56,13 @@
     <!-- Contenido principal -->
     <main>
         <section class="search-section">
-            <h2>¿En qué podemos ayudarte?</h2>
-            <div class="search-box">
-                <input type="text" placeholder="Buscar...">
-                <button aria-label="Buscar">
-                    🔍
-                </button>
-            </div>
+            <h1>¿En qué podemos ayudarte?</h1>
+            <form class="search-bar" role="search" aria-label="Buscar contenido">
+                <input type="text" placeholder="Buscar..." aria-label="Campo de búsqueda">
+                <button type="submit" class="search-button" aria-label="Buscar">🔍</button>
+            </form>
         </section>
-    
+
         <section class="faq-section">
             <h2>Preguntas Frecuentes</h2>
             <div class="faq-container">
