@@ -4,7 +4,7 @@
 
 /* Aplica el modo oscuro cuando el body tenga la clase "dark-mode" */
 .dark-mode {
-    background-color: #121212;
+    background-color: #000000;
     color: white;
 }
 
@@ -12,27 +12,39 @@
     HEADER EN MODO OSCURO
    ======================= */
 .dark-mode header {
-    background-color: #1e1e1e;
+    background-color: #000000;
     border-bottom: 2px solid #333;
 }
 
 /* Barra de navegación inferior */
 .dark-mode .nav-bottom {
     border-top: 2px solid #333;
-    background-color: #1e1e1e;
+    background-color: #111111;
 }
+
+/* Logo */
+.dark-mode .nav-top .logo {
+    background-color: white;
+    color: black;
+}
+
+.dark-mode .italic-text {
+    background: white;
+    color: black;
+}
+
 
 /* ========================
     BOTONES EN MODO OSCURO
    ======================== */
 .dark-mode button {
-    background: #007bff;
-    color: white;
-    border: 1px solid #007bff;
+    background: white;
+    color: black;
+    border: 1px solid white;
 }
 
 .dark-mode button:hover {
-    background: #0056b3;
+    background: white;
 }
 
 /* ====================
@@ -85,8 +97,9 @@
     FOOTER EN MODO OSCURO
    ======================== */
 .dark-mode .footer {
-    background-color: #1e1e1e;
+    background-color: #111111;
     border-top: 2px solid #333;
+    color: white;
 }
 
 /* Copyright en modo oscuro */
@@ -94,3 +107,5 @@
     color: #ccc;
     border-top: 1px solid #444;
 }
+
+
