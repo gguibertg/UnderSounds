@@ -1,0 +1,53 @@
+h2 {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 50px;
+}
+
+main {
+    padding: 12px;
+    flex: 1;
+    /* Permite que el main ocupe el espacio disponible */
+    display: flex;
+    flex-direction: column;
+}
+
+.box-pay {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    box-sizing: border-box;
+    height: auto;
+    justify-content: center;
+    gap: 350px;
+    background-color: white;
+}
+
+.box-type-wallet {
+    display: flex;
+    flex-direction: row;
+    opacity: .9;
+    width: 700px;
+    height: 400px;
+    background-color: white;
+    padding: 20px;
+    flex-grow: 1;
+    gap: 60px;
+}
+
+.box-type-resum {
+    border: 4px solid #000;
+    box-sizing: border-box;
+    opacity: .9;
+    width: 350px;
+    height: 200px;
+    background-color: white;
+}
+
+.pay-column ul {
+    list-style: none;
+}
+
+.pay-column li {
+    margin-bottom: 20px;
+}

@@ -35,6 +35,23 @@
     background: #0056b3;
 }
 
+/* ====================
+    BOX EN MODO OSCURO
+   ==================== */
+.dark-mode .box-pay {
+    background-color: #121212;
+}
+
+.dark-mode .box-type-wallet {
+    border-top: 2px solid #333;
+    background-color: #1e1e1e;
+}
+
+.dark-mode .box-type-resum {
+    border-top: 2px solid #333;
+    background-color: #1e1e1e;
+}
+
 /* ================================
     TEXTO Y TÍTULOS EN MODO OSCURO
    ================================ */
