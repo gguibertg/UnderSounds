@@ -48,13 +48,13 @@
 }
 
 .dark-mode .button-alt {
-    background: black;
+    background: transparent;
     color: white;
     border: 1px solid white;
 }
 
 .dark-mode .button-alt:hover {
-    background: black;
+    background: transparent;
 }
 
 /* ================================

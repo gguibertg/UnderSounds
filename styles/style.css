@@ -77,13 +77,13 @@ button:hover {
 }
 
 .button-alt {
-    background: white;
+    background: transparent;
     color: #007bff;
     border: 1px solid #007bff;
 }
 
 .button-alt:hover {
-    background: white;
+    background: transparent;
 }
 
 /* ===========================
