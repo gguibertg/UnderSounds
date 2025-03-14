@@ -47,6 +47,16 @@
     background: white;
 }
 
+.dark-mode .button-alt {
+    background: black;
+    color: white;
+    border: 1px solid white;
+}
+
+.dark-mode .button-alt:hover {
+    background: black;
+}
+
 /* ================================
     TEXTO Y TÍTULOS EN MODO OSCURO
    ================================ */

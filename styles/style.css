@@ -76,6 +76,16 @@ button:hover {
     /* Efecto de crecimiento */
 }
 
+.button-alt {
+    background: white;
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.button-alt:hover {
+    background: white;
+}
+
 /* ===========================
     ENLACES - ESTILO GENERAL
    =========================== */
