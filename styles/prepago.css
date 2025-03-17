@@ -1,7 +1,11 @@
 h2 {
     display: flex;
     flex-direction: column;
-    padding: 8px 50px;
+    padding: 8px;
+}
+
+input{
+    display: block;
 }
 
 main {
@@ -25,9 +29,8 @@ main {
 
 .box-type-wallet {
     display: flex;
-    flex-direction: row;
-    opacity: .9;
-    width: 700px;
+    border: 4px solid #000;
+    width: 60%;
     height: 400px;
     background-color: white;
     padding: 20px;
@@ -36,18 +39,23 @@ main {
 }
 
 .box-type-resum {
+    display: flex;
     border: 4px solid #000;
     box-sizing: border-box;
-    opacity: .9;
-    width: 350px;
+    width: 30%;
     height: 200px;
     background-color: white;
 }
 
-.pay-column ul {
+.pay-column table {
     list-style: none;
 }
 
-.pay-column li {
+.pay-column tr {
     margin-bottom: 20px;
 }
+
+.pay-column td {
+    margin-bottom: 20px;
+}
+

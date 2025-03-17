@@ -58,22 +58,21 @@
         <section>
             <h2>Método de Pago</h2>
             <div class="box-pay">
-                <form method="post" action="/">
-                    <fieldset>
-                        <legend border: 4px solid #000;>Tarjeta de Crédito o Débito</legend>
-                        <div class="box-type-wallet">
-                            <div class="pay-column">
-                                <ul>
-                                    <li> <input type="month" name="Fecha de expiración" maxlength="5" maxlength="5" required placeholder="mm/yy"/></li>
-                                    <li> <input width=300px type="text" name="Número de la tarjeta" maxlength="16" maxlength="16" required placeholder="Número de tarjeta" /></li>
-                                    <li><input type="text" name="Código de seguridad" maxlength="3" maxlength="3"	 required placeholder="3 dígitos"/></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
+                <div class="box-type-wallet">
+                    <div class="pay-column">
+                        <table>
+                            <tr>
+                                <td><input type="text" name="Número de la tarjeta" maxlength="16" maxlength="16" required placeholder="Número de tarjeta" /></td>
+                            </tr>
+                            <tr>
+                                <td><input type="month" name="Fecha de expiración" maxlength="5" maxlength="5" required placeholder="mm/yy"/></td>
+                                <td><input type="text" name="Código de seguridad" maxlength="3" maxlength="3"	 required placeholder="3 dígitos"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
                 <div class="box-type-resum">
-                    
+
                 </div>
             </div>
             <div class="pay-rect">
