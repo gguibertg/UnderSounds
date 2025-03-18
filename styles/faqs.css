@@ -1,60 +1,63 @@
-main {
-    margin: 0 auto;
-    padding: 40px 20px;
+/* ==========================================================
+    ---------------------- ESTILOS DE FAQs ----------------------
+   ========================================================== */
+
+   .faqs-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
     text-align: center;
 }
 
-.search-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+.faqs-container h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #007bff;
 }
 
-.search-box input {
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-.search-box button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-}
-
-.faq-section {
-    margin-top: 40px;
-}
-
-.faq-section h2 {
-    font-size: 1.8rem;
+.faqs-container h2 {
+    font-size: 22px;
+    font-weight: bold;
     margin-bottom: 20px;
 }
 
-.faq-container {
-    display: flex;
-    justify-content: space-between;
+/* ========================
+    DISEÑO GRID PARA CARDS
+   ======================== */
+
+.faqs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
+    justify-content: center;
 }
 
-.faq-item {
-    flex: 1;
+/* ========================
+    ESTILOS DE LAS CARDS
+   ======================== */
+
+.faq-card {
     background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: 1px solid #ddd;
 }
 
-.faq-item h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+/* Estilo de las preguntas */
+.faq-card h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 8px;
+    text-align: center;
 }
 
-.faq-item p {
-    font-size: 0.95rem;
+/* Estilo de las respuestas */
+.faq-card p {
+    font-size: 16px;
+    color: #333;
     line-height: 1.5;
-    text-align: justify;
 }
