@@ -1,0 +1,92 @@
+hr {
+    width: 85%;
+    border: 1px solid #B1B2B5;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.button-back {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+    border-radius: 50%;
+    text-align: center;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+}
+
+.div-bg {
+    margin: auto;
+    width: 97vw;
+    height: auto;
+    background-color: #111111;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.div-pannel {
+    margin: auto;
+    width: 46vw;
+    height: auto;
+    background-color: #222222;
+    border-color: #aaaaaa;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 15px;
+}
+
+.div-content {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    word-wrap: break-word;
+}
+
+.div-content-narrow {
+    width: 90%;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    word-wrap: break-word;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.grid-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr) 3fr repeat(2, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+input {
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #B1B2B5;
+}
