@@ -9,16 +9,24 @@
     text-align: center;
 }
 
+.faqs-container h1,
+.faqs-container h2 {
+    font-weight: bold;
+    color: #007bff; /* En modo claro */
+}
+
+.dark-mode .faqs-container h1,
+.dark-mode .faqs-container h2 {
+    color: white; /* En modo oscuro */
+}
+
 .faqs-container h1 {
     font-size: 28px;
-    font-weight: bold;
     margin-bottom: 10px;
-    color: #007bff;
 }
 
 .faqs-container h2 {
     font-size: 22px;
-    font-weight: bold;
     margin-bottom: 20px;
 }
 
@@ -38,26 +46,64 @@
    ======================== */
 
 .faq-card {
-    background: #f9f9f9;
+    background: #f8f9fa; /* Color de fondo en modo claro */
     border-radius: 10px;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
     text-align: center;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
+}
+
+.dark-mode .faq-card {
+    background: #1e1e1e; /* Color de fondo en modo oscuro */
+    box-shadow: 0px 2px 6px rgba(255, 255, 255, 0.05);
+    border: 1px solid #444;
 }
 
 /* Estilo de las preguntas */
 .faq-card h3 {
     font-size: 18px;
     font-weight: bold;
-    color: #007bff;
+    color: #007bff; /* En modo claro */
     margin-bottom: 8px;
     text-align: center;
+}
+
+.dark-mode .faq-card h3 {
+    color: white; /* En modo oscuro */
 }
 
 /* Estilo de las respuestas */
 .faq-card p {
     font-size: 16px;
-    color: #333;
+    color: #333; /* En modo claro */
     line-height: 1.5;
+}
+
+.dark-mode .faq-card p {
+    color: #bbb; /* En modo oscuro */
+}
+
+/* =========================
+    ENLACES EN MODO OSCURO
+   ========================= */
+
+a {
+    text-decoration: none;
+    color: #007bff; /* En modo claro */
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+.dark-mode a {
+    color: #71a7ff; /* En modo oscuro */
+}
+
+.dark-mode a:hover {
+    color: #f8f9fa;
 }
