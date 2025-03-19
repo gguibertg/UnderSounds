@@ -16,72 +16,81 @@
 .upload-title {
     font-size: 24px;
     font-weight: bold;
-    color: #007bff;
+    color: #007bff; /* En modo claro */
+}
+
+.dark-mode .upload-title {
+    color: white; /* En modo oscuro */
 }
 
 .upload-form {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
+    align-items: flex-start;
     width: 100%;
     max-width: 900px;
-    align-items: center;
-    gap: 40px;
+    gap: 60px; /* Separa más los elementos */
 }
 
 .upload-group {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px; /* Aumentar el espaciado interno */
     text-align: left;
 }
 
-.upload-group label {
+.upload-group label,
+.upload-checkbox-group label {
     font-weight: bold;
+    color: black; /* En modo claro */
+}
+
+.dark-mode .upload-group label,
+.dark-mode .upload-checkbox-group label {
+    color: white; /* En modo oscuro */
 }
 
 .upload-group input[type="text"] {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background: white;
     color: black;
 }
 
+.dark-mode .upload-group input[type="text"] {
+    background: #222;
+    color: white;
+    border: 1px solid #444;
+}
+
 .upload-checkbox-container {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    justify-content: center;
+    gap: 60px; /* Aumentar separación entre columnas */
     width: 100%;
 }
 
 .upload-checkbox-group {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px; /* Más espacio entre opciones */
     text-align: left;
-}
-
-.upload-checkbox-group label {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.upload-checkbox-group div {
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
 .upload-cover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 20px; /* Más separación con el botón */
 }
 
 .upload-cover img {
-    width: 150px;
-    height: 150px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #ccc;
@@ -91,7 +100,7 @@
     background: #007bff;
     color: white;
     border: none;
-    padding: 10px 16px;
+    padding: 12px 18px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
@@ -103,12 +112,21 @@
     background: #0056b3;
 }
 
+.dark-mode .upload-cover-button {
+    background: white;
+    color: black;
+}
+
+.dark-mode .upload-cover-button:hover {
+    background: #ccc;
+}
+
 .upload-song {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 15px;
+    margin-top: 30px; /* Más separación con los demás elementos */
 }
 
 .upload-song label {
@@ -116,55 +134,14 @@
 }
 
 .upload-song input[type="file"] {
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
     cursor: pointer;
     background: #007bff;
-    color: black;
+    color: white;
     font-size: 14px;
     font-weight: bold;
-}
-
-.upload-song input[type="file"]::file-selector-button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s ease;
-}
-
-.upload-song input[type="file"]::file-selector-button:hover {
-    background: #0056b3;
-}
-
-/* ===========================
-    MODO OSCURO
-   =========================== */
-.dark-mode .upload-title {
-    color: #71a7ff;
-}
-
-.dark-mode .upload-group label,
-.dark-mode .upload-checkbox-group label {
-    color: white;
-}
-
-.dark-mode .upload-group input[type="text"] {
-    background: #222;
-    color: white;
-    border: 1px solid #444;
-}
-
-.dark-mode .upload-cover-button {
-    background: #1a73e8;
-}
-
-.dark-mode .upload-cover-button:hover {
-    background: #1558b3;
 }
 
 .dark-mode .upload-song input[type="file"] {
@@ -173,11 +150,18 @@
     border: 1px solid #444;
 }
 
-.dark-mode .upload-song input[type="file"]::file-selector-button {
-    background: #1a73e8;
+.upload-song input[type="file"]::file-selector-button {
+    background: #007bff;
     color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
 }
 
-.dark-mode .upload-song input[type="file"]::file-selector-button:hover {
-    background: #1558b3;
+.dark-mode .upload-song input[type="file"]::file-selector-button {
+    background: white;
+    color: black;
 }
