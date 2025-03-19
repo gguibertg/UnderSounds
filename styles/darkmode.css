@@ -11,7 +11,8 @@
 /* =======================
     HEADER EN MODO OSCURO
    ======================= */
-.dark-mode header {
+.dark-mode header,
+.dark-mode .nav-top {
     background-color: #000000;
     border-bottom: 2px solid #333;
 }
@@ -33,7 +34,6 @@
     color: black;
 }
 
-
 /* ========================
     BOTONES EN MODO OSCURO
    ======================== */
@@ -45,6 +45,16 @@
 
 .dark-mode button:hover {
     background: white;
+}
+
+.dark-mode .button-alt {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+}
+
+.dark-mode .button-alt:hover {
+    background: transparent;
 }
 
 /* ================================
@@ -59,7 +69,7 @@
     color: white;
 }
 
-/* Corregir colores en títulos del footer para mejor visibilidad */
+/* Ajuste en el footer */
 .dark-mode .footer-column h3 {
     color: #f8f9fa;
 }
@@ -86,9 +96,13 @@
 }
 
 /* Copyright en modo oscuro */
+.dark-mode .footer {
+    background-color: #111111;
+    border-top: 2px solid #333;
+    color: white;
+}
+
 .dark-mode .footer-copyright {
     color: #ccc;
     border-top: 1px solid #444;
 }
-
-
