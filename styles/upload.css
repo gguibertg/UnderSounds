@@ -2,7 +2,7 @@
     ---------------------- UPLOAD PAGE ----------------------
    ========================================================== */
 
-   .upload-page {
+.upload-page {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,39 +16,52 @@
 .upload-title {
     font-size: 24px;
     font-weight: bold;
-    color: #007bff; /* En modo claro */
+    color: #007bff;
+    /* En modo claro */
 }
 
 .dark-mode .upload-title {
-    color: white; /* En modo oscuro */
+    color: white;
+    /* En modo oscuro */
 }
 
 .upload-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 900px;
+    gap: 2rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
     width: 100%;
     max-width: 900px;
-    gap: 60px; /* Separa más los elementos */
+    gap: 60px;
+    /* Separa más los elementos */
 }
 
 .upload-group {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Aumentar el espaciado interno */
+    gap: 15px;
+    /* Aumentar el espaciado interno */
     text-align: left;
 }
 
 .upload-group label,
 .upload-checkbox-group label {
     font-weight: bold;
-    color: black; /* En modo claro */
+    color: black;
+    /* En modo claro */
 }
 
 .dark-mode .upload-group label,
 .dark-mode .upload-checkbox-group label {
-    color: white; /* En modo oscuro */
+    color: white;
+    /* En modo oscuro */
 }
 
 .upload-group input[type="text"] {
@@ -68,16 +81,22 @@
 
 .upload-checkbox-container {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1.5rem;
+    display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 60px; /* Aumentar separación entre columnas */
+    gap: 60px;
+    /* Aumentar separación entre columnas */
     width: 100%;
 }
 
 .upload-checkbox-group {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Más espacio entre opciones */
+    gap: 10px;
+    /* Más espacio entre opciones */
     text-align: left;
 }
 
@@ -85,10 +104,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px; /* Más separación con el botón */
+    gap: 20px;
+    /* Más separación con el botón */
 }
 
 .upload-cover img {
+    width: 140px;
+    height: 140px;
     width: 160px;
     height: 160px;
     border-radius: 50%;
@@ -97,6 +119,8 @@
 }
 
 .upload-cover-button {
+    max-width: 150px;
+    text-align: center;
     background: #007bff;
     color: white;
     border: none;
@@ -113,6 +137,8 @@
 }
 
 .dark-mode .upload-cover-button {
+    max-width: 150px;
+    text-align: center;
     background: white;
     color: black;
 }
@@ -126,7 +152,8 @@
     flex-direction: column;
     align-items: center;
     gap: 15px;
-    margin-top: 30px; /* Más separación con los demás elementos */
+    margin-top: 30px;
+    /* Más separación con los demás elementos */
 }
 
 .upload-song label {
