@@ -2,7 +2,7 @@
     ---------------------- MODO OSCURO ----------------------
    ========================================================== */
 
-   .dark-mode {
+.dark-mode {
     background-color: #000000;
     color: white;
 }
@@ -13,11 +13,11 @@
 .dark-mode header,
 .dark-mode .nav-top {
     background-color: #000000;
-    border-bottom: 2px solid #333;
+    border-bottom: 0.125rem solid #333;
 }
 
 .dark-mode .nav-bottom {
-    border-top: 2px solid #333;
+    border-top: 0.125rem solid #333;
     background-color: #111111;
 }
 
@@ -38,7 +38,7 @@
 .dark-mode button {
     background: white;
     color: black;
-    border: 1px solid white;
+    border: 0.0625rem solid white;
 }
 
 .dark-mode button:hover {
@@ -48,7 +48,7 @@
 .dark-mode .button-alt {
     background: transparent;
     color: white;
-    border: 1px solid white;
+    border: 0.0625rem solid white;
 }
 
 .dark-mode .button-alt:hover {
@@ -58,11 +58,11 @@
 /* ================================
     TEXTO Y TÍTULOS EN MODO OSCURO
    ================================ */
-.dark-mode h1, 
-.dark-mode h2, 
-.dark-mode h3, 
-.dark-mode h4, 
-.dark-mode h5, 
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
 .dark-mode h6 {
     color: white;
 }
@@ -88,11 +88,11 @@
    ======================== */
 .dark-mode .footer {
     background-color: #111111;
-    border-top: 2px solid #333;
+    border-top: 0.125rem solid #333;
     color: white;
 }
 
 .dark-mode .footer-copyright {
     color: #ccc;
-    border-top: 1px solid #444;
+    border-top: 0.0625rem solid #444;
 }
