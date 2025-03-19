@@ -3,7 +3,7 @@
    ========================================================== */
 
    .dark-mode {
-    background-color: #121212;
+    background-color: #000000;
     color: white;
 }
 
@@ -11,46 +11,72 @@
     HEADER EN MODO OSCURO
    ======================= */
 .dark-mode header,
-.dark-mode .nav-top,
-.dark-mode .nav-bottom,
-.dark-mode .footer {
-    background-color: #1e1e1e;
+.dark-mode .nav-top {
+    background-color: #000000;
     border-bottom: 2px solid #333;
 }
 
 .dark-mode .nav-bottom {
     border-top: 2px solid #333;
+    background-color: #111111;
+}
+
+/* Logo */
+.dark-mode .nav-top .logo {
+    background-color: white;
+    color: black;
+}
+
+.dark-mode .italic-text {
+    background: white;
+    color: black;
 }
 
 /* ========================
     BOTONES EN MODO OSCURO
    ======================== */
 .dark-mode button {
-    background: #007bff;
-    color: white;
-    border: 1px solid #007bff;
-    transition: background 0.3s ease;
+    background: white;
+    color: black;
+    border: 1px solid white;
 }
 
 .dark-mode button:hover {
-    background: #0056b3;
+    background: white;
 }
 
-/* =============================
-    TEXTO Y ENLACES EN MODO OSCURO
-   ============================= */
-.dark-mode h1,
-.dark-mode h2,
-.dark-mode h3,
-.dark-mode h4,
-.dark-mode h5,
+.dark-mode .button-alt {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+}
+
+.dark-mode .button-alt:hover {
+    background: transparent;
+}
+
+/* ================================
+    TEXTO Y TÍTULOS EN MODO OSCURO
+   ================================ */
+.dark-mode h1, 
+.dark-mode h2, 
+.dark-mode h3, 
+.dark-mode h4, 
+.dark-mode h5, 
 .dark-mode h6 {
     color: white;
 }
 
+/* Ajuste en el footer */
+.dark-mode .footer-column h3 {
+    color: #f8f9fa;
+}
+
+/* =========================
+    ENLACES EN MODO OSCURO
+   ========================= */
 .dark-mode a {
     color: #71a7ff;
-    transition: color 0.3s ease;
 }
 
 .dark-mode a:hover {
@@ -60,54 +86,13 @@
 /* ========================
     FOOTER EN MODO OSCURO
    ======================== */
+.dark-mode .footer {
+    background-color: #111111;
+    border-top: 2px solid #333;
+    color: white;
+}
+
 .dark-mode .footer-copyright {
     color: #ccc;
     border-top: 1px solid #444;
-}
-
-/* ========================
-    CORRECCIÓN DE FONDOS BLANCOS
-   ======================== */
-.dark-mode main,
-.dark-mode section,
-.dark-mode article,
-.dark-mode aside {
-    background-color: #121212;
-}
-
-.dark-mode .search-bar,
-.dark-mode input,
-.dark-mode textarea,
-.dark-mode select {
-    background-color: #222;
-    color: white;
-    border: 1px solid #444;
-}
-
-.dark-mode .search-bar input {
-    background-color: transparent;
-    color: white;
-}
-
-.dark-mode input::placeholder,
-.dark-mode textarea::placeholder {
-    color: #bbb;
-}
-
-/* ========================
-    FAQs MODO OSCURO
-   ======================== */
-.dark-mode .faq-card {
-    background: #1e1e1e;
-    box-shadow: 0px 2px 6px rgba(255, 255, 255, 0.05);
-    border: 1px solid #444;
-}
-
-.dark-mode .faq-card h3 {
-    color: white;
-    text-align: center;
-}
-
-.dark-mode .faq-card p {
-    color: #bbb;
 }
