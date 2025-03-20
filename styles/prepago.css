@@ -53,6 +53,8 @@ main {
 }
 
 .box-type-wallet {
+    display: flex;
+    flex-direction: row;
     background: #f9f9f9aa;
     border-radius: 10px;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
@@ -64,6 +66,8 @@ main {
 }
 
 .box-type-resum {
+    display: flex;
+    flex-direction: column;
     background: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
@@ -85,6 +89,7 @@ main {
 
  ul {
     list-style: none;
+    padding: 0.1%;
 }
 
 .box-type-wallet ul li {
@@ -97,6 +102,7 @@ main {
 .box-type-resum ul li {
     display: flex;
     justify-content: space-around;
+    margin-left: 10%;
 }
 
 /* ================
@@ -104,15 +110,15 @@ main {
    ================ */
 
 .right-botton {
+    display: flex;
     margin-right: 6vh;
     margin-top: 4vh;
-    width: 30vh;
 }
 
 .left-botton {
+    display: flex;
     margin-left: 6vh; 
     margin-top: 4vh;
-    width: 30vh;
 }
 
 /* ======================
