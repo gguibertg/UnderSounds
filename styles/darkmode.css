@@ -2,8 +2,7 @@
     ---------------------- MODO OSCURO ----------------------
    ========================================================== */
 
-/* Aplica el modo oscuro cuando el body tenga la clase "dark-mode" */
-.dark-mode {
+   .dark-mode {
     background-color: #000000;
     color: white;
 }
@@ -11,15 +10,26 @@
 /* =======================
     HEADER EN MODO OSCURO
    ======================= */
-.dark-mode header {
+.dark-mode header,
+.dark-mode .nav-top {
     background-color: #000000;
-    border-bottom: 2px solid #333;
+    border-bottom: 0.125rem solid #333;
 }
 
-/* Barra de navegación inferior */
 .dark-mode .nav-bottom {
-    border-top: 2px solid #333;
+    border-top: 0.125rem solid #333;
     background-color: #111111;
+}
+
+/* Logo */
+.dark-mode .nav-top .logo {
+    background-color: white;
+    color: black;
+}
+
+.dark-mode .italic-text {
+    background: white;
+    color: black;
 }
 
 /* Logo */
@@ -40,7 +50,7 @@
 .dark-mode button {
     background: white;
     color: black;
-    border: 1px solid white;
+    border: 0.0625rem solid white;
 }
 
 .dark-mode button:hover {
@@ -50,7 +60,7 @@
 .dark-mode .button-alt {
     background: transparent;
     color: white;
-    border: 1px solid white;
+    border: 0.0625rem solid white;
 }
 
 .dark-mode .button-alt:hover {
@@ -69,7 +79,7 @@
     color: white;
 }
 
-/* Corregir colores en títulos del footer para mejor visibilidad */
+/* Ajuste en el footer */
 .dark-mode .footer-column h3 {
     color: #f8f9fa;
 }
@@ -85,20 +95,16 @@
     color: #f8f9fa;
 }
 
-
 /* ========================
     FOOTER EN MODO OSCURO
    ======================== */
 .dark-mode .footer {
     background-color: #111111;
-    border-top: 2px solid #333;
+    border-top: 0.125rem solid #333;
     color: white;
 }
 
-/* Copyright en modo oscuro */
 .dark-mode .footer-copyright {
     color: #ccc;
-    border-top: 1px solid #444;
+    border-top: 0.0625rem solid #444;
 }
-
-

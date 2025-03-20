@@ -5,9 +5,10 @@
     <meta charset="UTF-8"> <!-- Codificación de caracteres -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
     <meta name="author" content="L1-G4">
-    <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
+    <title>FAQs</title> <!-- Título que aparece en la pestaña del navegador -->
     <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
     <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/styles/faqs.css">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
@@ -36,7 +37,7 @@
                 <div class="auth-buttons">
                     <button class="login-btn" onclick="window.location.href='login.html'">Iniciar Sesión</button>
                     <button class="signup-btn" onclick="window.location.href='register.html'">Registro</button>
-                </div>                
+                </div>
             </div>
 
             <!-- Sección inferior: Menú de navegación -->
@@ -53,8 +54,42 @@
     </header>
 
     <!-- Contenido principal -->
-    <main>
-        
+
+    <main class="faqs-container">
+        <h1>¿En qué podemos ayudarte?</h1>
+        <h2>Preguntas Frecuentes</h2>
+
+        <section class="faqs-grid">
+            <div class="faq-card">
+                <h3>¿Cómo puedo crear una cuenta?</h3>
+                <p>Para crear una cuenta, haz clic en "Registro" en la parte superior derecha e introduce tus datos.</p>
+            </div>
+
+            <div class="faq-card">
+                <h3>¿Cómo puedo recuperar mi contraseña?</h3>
+                <p>Si olvidaste tu contraseña, ve a la página de inicio de sesión y haz clic en "Olvidé mi contraseña".</p>
+            </div>
+
+            <div class="faq-card">
+                <h3>¿Cuáles son los métodos de pago aceptados?</h3>
+                <p>Aceptamos tarjetas de crédito/débito, PayPal y transferencias bancarias.</p>
+            </div>
+
+            <div class="faq-card">
+                <h3>¿Puedo eliminar mi cuenta?</h3>
+                <p>Sí, puedes eliminar tu cuenta en la configuración de usuario, pero ten en cuenta que esta acción es irreversible.</p>
+            </div>
+
+            <div class="faq-card">
+                <h3>¿Cómo puedo contactar con soporte?</h3>
+                <p>Puedes enviarnos un mensaje a través de la página de contacto o escribirnos a soporte@ejemplo.com.</p>
+            </div>
+
+            <div class="faq-card">
+                <h3>¿Hay una versión gratuita?</h3>
+                <p>Sí, ofrecemos una versión gratuita con acceso limitado a ciertas funciones.</p>
+            </div>
+        </section>
     </main>
 
     <!-- Pie de página -->
