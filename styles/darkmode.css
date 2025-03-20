@@ -12,11 +12,15 @@
    ======================= */
 .dark-mode header,
 .dark-mode .nav-top {
+.dark-mode header,
+.dark-mode .nav-top {
     background-color: #000000;
+    border-bottom: 0.125rem solid #333;
     border-bottom: 0.125rem solid #333;
 }
 
 .dark-mode .nav-bottom {
+    border-top: 0.125rem solid #333;
     border-top: 0.125rem solid #333;
     background-color: #111111;
 }
@@ -51,6 +55,7 @@
     background: white;
     color: black;
     border: 0.0625rem solid white;
+    border: 0.0625rem solid white;
 }
 
 .dark-mode button:hover {
@@ -61,6 +66,7 @@
     background: transparent;
     color: white;
     border: 0.0625rem solid white;
+    border: 0.0625rem solid white;
 }
 
 .dark-mode .button-alt:hover {
@@ -70,15 +76,16 @@
 /* ================================
     TEXTO Y TÍTULOS EN MODO OSCURO
    ================================ */
-.dark-mode h1, 
-.dark-mode h2, 
-.dark-mode h3, 
-.dark-mode h4, 
-.dark-mode h5, 
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
 .dark-mode h6 {
     color: white;
 }
 
+/* Ajuste en el footer */
 /* Ajuste en el footer */
 .dark-mode .footer-column h3 {
     color: #f8f9fa;
@@ -101,10 +108,12 @@
 .dark-mode .footer {
     background-color: #111111;
     border-top: 0.125rem solid #333;
+    border-top: 0.125rem solid #333;
     color: white;
 }
 
 .dark-mode .footer-copyright {
     color: #ccc;
+    border-top: 0.0625rem solid #444;
     border-top: 0.0625rem solid #444;
 }
