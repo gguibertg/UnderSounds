@@ -3,15 +3,34 @@ h3 {
     font-size: 3.2vh;
 }
 
-button {
-    margin-top: 1%;
-    margin-bottom: 4%;
-    width: 40vh;
+.contenedor{
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-top: 2%;
+    display: grid;
+    width: auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    padding: 2%;
+}
+
+.contenedor div {
+    margin-bottom: 2%;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.compra-button {
+    border-radius: 20px;
+    width: 50vh;
     height: 7vh;
 }
 
 .box-button{
+    margin-top: 2%;
+    justify-content: center;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    margin-bottom: 10%;
+    gap: 13%;
 }
