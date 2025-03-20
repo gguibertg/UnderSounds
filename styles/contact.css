@@ -22,7 +22,7 @@ hr {
 
 .div-bg {
     margin: auto;
-    width: 97vw;
+    width: auto;
     height: auto;
     background-color: #111111;
     padding: 10px;
