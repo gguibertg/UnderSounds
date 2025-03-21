@@ -57,28 +57,33 @@
     <main>
         <section>
             <h2>Método de Pago</h2>
-            <div class="box-pay">
-                <div class="box-type-wallet">
+            <section class="box-pay">
+                <div>
+                    <section>
                         <ul>
-                            <li><label>Número de la tarjeta<input type="text" id="1" name="Número de la tarjeta" maxlength="16" maxlength="16" required placeholder="Número de tarjeta" class="large-input"/></label></li>
-                            <li><label>Fecha de expiración<input type="month" id="2" name="Fecha de expiración" maxlength="5" maxlength="5" required placeholder="mm/yy"/></label>
+                            <li class="li-tarjeta"><p></p><input type="checkbox" id="4" name="Seleccionar Tarjeta"><p></p><label><h3 style="margin-top: 1%;">Tarjeta de Crédito o Débito</h3></label><img></li>
+                            <li><p style="color: red; font-size: small;">Es obligatorio completar todos los campos</p></li>
+                            <li class="li-nombre"><label>Número de la tarjeta<input type="text" id="1" name="Número de la tarjeta" maxlength="16" maxlength="16" required placeholder="Número de tarjeta" class="large-input"/></label></li>
+                            <li class="li-fechacod"><label>Fecha de expiración<input type="month" id="2" name="Fecha de expiración" maxlength="5" maxlength="5" required placeholder="mm/yy"/></label>
                             <label class="right-input">Código de seguridad<input type="text" id="3" name="Código de seguridad" maxlength="3" maxlength="3"	 required placeholder="3 dígitos"/></label></li>
-                            <li><input type="checkbox" id="4" name="Guardar Tarjeta"><label class="size-label">Guardar datos para futuras compras. Si activas esta casilla se guardarán los datos de tu tarjeta para futuras compras. Podrás eliminar tu tarjeta cuando quieras.</label></li>
-                            <li><a href="carrito.html" class="left-botton" ><button style="width: 30vh;">Cancelar</button></a> <a href="TPV.html" class="right-botton"><button style="width: 30vh;">Pagar</button></a></li>
+                            <li class="li-check"><input type="checkbox" id="4" name="Guardar Tarjeta"><p></p><label class="size-label">Guardar datos para futuras compras. Si activas esta casilla se guardarán los datos de tu tarjeta para futuras compras. Podrás eliminar tu tarjeta cuando quieras.</label></li>
+                            <li class="li-button"><a href="carrito.html" class="left-botton" ><button style="width: 30vh;">Cancelar</button></a> <p></p> <a href="TPV.html" class="right-botton"><button style="width: 30vh;">Pagar</button></a></li>
                         </ul>
+                    </section>
                 </div>
-                <div class="box-type-resum">
-                    <h3>Resumen</h3>
-                    <ul>
-                        <li><p>Articulos1</p><p>....................</p><p>$12</p></li>
-                        <li><p>Articulos1</p><p>....................</p><p>$12</p></li>
-                        <li><p>Articulos1</p><p>....................</p><p>$12</p></li>
-                    </ul>
-                    <div class="pay-total">
-                        <p><b>SubTotal</b></p><p><b>...............</b></p><p><b>$12</b></p>
+                <p></p>
+                <div>
+                    <div>
+                        <h3>Resumen</h3>
+                        <ul>
+                            <li><p>Articulos1</p><p>....................</p><p>$12</p></li>
+                            <li><p>Articulos1</p><p>....................</p><p>$12</p></li>
+                            <li><p>Articulos1</p><p>....................</p><p>$12</p></li>
+                        </ul>
+                        <b><p>SubTotal</p><p>...............</p><p>$12</p></b>
                     </div>
                 </div>
-            </div>
+            </section>
         </section>
     </main>
 
