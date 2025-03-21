@@ -1,0 +1,125 @@
+hr {
+    width: 85%;
+    border: 1px solid #B1B2B5;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Background oscuro que todas las pantallas deberían llevar, independientemente de lo que sean */
+.div-bg {
+    width: 100%;
+    height: 100%;
+    background-color: #111111;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+}
+
+/* Dibuja un panel principal */
+.div-pannel {
+    margin: auto;
+    width: inherit;
+    height: auto;
+    background-color: #222222;
+    border-color: #aaaaaa;
+    padding: 1rem 1rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 15px;
+}
+
+/* Dibuja un panel secundario más clarito */
+.div-pannel-sub {
+    margin: auto;
+    width: inherit;
+    height: auto;
+    background-color: #333333;
+    border-color: #aaaaaa;
+    padding: 1rem 1rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 15px;
+}
+
+/* Organiza los contenidos en columnas */
+.div-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    word-wrap: break-word;
+}
+
+/* Organiza los contenidos en columnas + sin gap + ligero margen interor */
+.div-content-narrow {
+    width: auto;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    word-wrap: break-word;
+}
+
+/* Organiza los contenidos en filas + gap 2 + ligero margen interor */
+.div-content-narrow-row {
+    width: inherit;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+    gap: 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    word-wrap: break-word;
+}
+
+/* A partir de aquí, los estilos son específicos de la pantalla de perfil */
+
+/* Contenedor genérico */
+.grid-container {
+    width: inherit;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+}
+
+/* Contenedor genérico para forms */
+.grid-form {
+    width: inherit;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) 0.5fr;
+    grid-template-rows: 1fr 2fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+/* Contenedor genérico para la zona de peligro */
+.grid-warn-zone {
+    width: inherit;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+}
+
+/* Copia del input para blackmode desde style.css */
+input {
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #B1B2B5;
+}
+
+/* pequeño hack para hacer el texto label más grande */
+label {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
