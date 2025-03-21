@@ -34,3 +34,7 @@ h3 {
     margin-bottom: 10%;
     gap: 13%;
 }
+
+.dark-mode .contenedor{
+    border: 2px solid white;
+}
