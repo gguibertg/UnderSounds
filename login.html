@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
+    <meta name="author" content="L1-G4">
+    <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
+    <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/styles/login.css"> <!-- Hoja de estilo de modo oscuro -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
+    <link rel="manifest" href="/images/favicon/site.webmanifest" />
+</head>
+
+<body>
+    <main>
+        <button onclick="window.history.back()" class="button-back">←</button>
+
+        <div class="login">
+            <br>
+            <h1>Inicia sesión en <span>Logo</span></h1>
+            <br>
+            <button type="button" class="button-alt">Iniciar sesión con Google</button>
+            <br>
+            <hr>
+            <form class="form">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" placeholder="Correo electrónico">
+                <br>
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="Contraseña">
+                <br>
+                <button type="submit">Iniciar sesión</button>
+                <button type="button" class="button-alt">Registrarse</button>
+            </form>
+            <br>
+        </div>
+    </main>
+
+    <script src="scripts/darkmode.js"></script>
+
+</body>
+
+</html>

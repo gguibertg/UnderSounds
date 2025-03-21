@@ -64,6 +64,16 @@ button:hover {
     transform: scale(1.05);
 }
 
+.button-alt {
+    background: transparent;
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.button-alt:hover {
+    background: transparent;
+}
+
 /* ===========================
     ENLACES - ESTILO GENERAL
    =========================== */
