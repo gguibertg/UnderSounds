@@ -140,6 +140,7 @@ header {
     border: none;
     padding: 8px;
     cursor: pointer;
+    border-radius: 0px;
 }
 
 .nav-bottom {

@@ -32,6 +32,18 @@
     color: black;
 }
 
+/* Logo */
+.dark-mode .nav-top .logo {
+    background-color: white;
+    color: black;
+}
+
+.dark-mode .italic-text {
+    background: white;
+    color: black;
+}
+
+
 /* ========================
     BOTONES EN MODO OSCURO
    ======================== */
