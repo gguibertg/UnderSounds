@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="L1-G4">
-    <title>TPV</title> <!-- Título que aparece en la pestaña del navegador -->
-    <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
-    <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
-    <link rel="stylesheet" href="/styles/song.css">
+    <title>TPV</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/darkmode.css">
+    <link rel="stylesheet" href="styles/tpv.css">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
@@ -16,56 +19,15 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="UnderSounds" />
     <link rel="manifest" href="/images/favicon/site.webmanifest" />
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items:center;
-            background-image: url('ghost-white-background.PNG');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .timer {
-            font-size: 20px;
-            font-weight: bold;
-            background: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-top: 30vh;
-        }
-    </style>
 </head>
+
 <body>
     <div class="timer" id="timer">
         00:00
     </div>
-    <script>
-        function startTimer(duration, display) {
-            let timer = duration, minutes, seconds;
-            const interval = setInterval(function () {
-                minutes = parseInt((timer % 3600) / 60, 10);
-                seconds = parseInt(timer % 60, 10);
 
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                display.textContent = minutes + ":" + seconds;
-
-                if (--timer < 0) {
-                    clearInterval(interval);
-                    window.location.href = "index.html"; // Cambia la URL a la página deseada
-                }
-            }, 1000);
-        }
-
-        window.onload = function () {
-            let duration = 60; // Temporizador de 1 min
-            let display = document.getElementById('timer');
-            startTimer(duration, display);
-        };
-    </script>
+    <!-- Script externo -->
+    <script src="scripts/tpv.js"></script>
 </body>
+
 </html>
