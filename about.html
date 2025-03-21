@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
+    <meta name="author" content="L1-G4">
+    <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
+    <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/styles/about.css"> <!-- Hoja de estilo Acerca de y Copyright -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
+    <link rel="manifest" href="/images/favicon/site.webmanifest" />
+</head>
+
+<body>
+
+    <!-- Barra de navegación -->
+    <header>
+        <nav class="navbar">
+
+            <!-- Sección superior: Logo, barra de búsqueda y botones -->
+            <div class="nav-top">
+                <a href="index.html" class="logo" aria-label="Inicio - Under Sounds">Under Sounds</a>
+
+                <form class="search-bar" role="search" aria-label="Buscar contenido">
+                    <input type="text" placeholder="Buscar..." aria-label="Campo de búsqueda">
+                    <button type="submit" class="search-button" aria-label="Buscar">🔍</button>
+                </form>
+
+                <div class="auth-buttons">
+                    <button class="login-btn" onclick="window.location.href='login.html'">Iniciar Sesión</button>
+                    <button class="signup-btn" onclick="window.location.href='register.html'">Registro</button>
+                </div>                
+            </div>
+
+            <!-- Sección inferior: Menú de navegación -->
+            <div class="nav-bottom">
+                <ul>
+                    <li><a href="collection.html">Biblioteca</a></li>
+                    <li><a href="following.html">Seguidos</a></li>
+                    <li><a href="newSong.html">Subir Canción</a></li>
+                    <li><a href="newAlbum.html">Subir Álbum</a></li>
+                </ul>
+            </div>
+
+        </nav>
+    </header>
+
+    <style>
+        p, h1, h2, h3, li {
+            margin-bottom: 20px; /* Espacio inferior de 20px */
+            text-align: justify;
+        }
+    </style>
+
+    <!-- Contenido principal -->
+    <main>
+        <div class="parent">
+          <div class="div1"> 
+            <p>Con UnderSounds es facilísimo encontrar la música o podcasts perfectos para cada momento, en el ordenador, el teléfono, la tablet y más dispositivos.</p>
+            <p>En UnderSounds encontrarás millones de canciones y episodios. Así, tanto si estás conduciendo como si estás haciendo ejercicio, de fiesta o tomándote un descanso, siempre tendrás a mano la música y podcasts que más van contigo. Elige lo que quieres escuchar o déjate sorprender por UnderSounds.</p>
+            <p>También puedes explorar las colecciones de amigos, artistas y famosos, o crear una emisora de radio y escucharla a tus anchas.</p>
+            <p>Pon banda sonora a tu vida con UnderSounds. Suscríbete o escucha contenido gratis.</p>
+            <h2>Copyright</h2>
+            <p><strong>Copyright © 2025 [UnderSounds]. Todos los derechos reservados.</strong></p>
+            <p>El contenido de esta plataforma, incluidos pero no limitados a música, imágenes y textos, está protegido por las leyes de propiedad intelectual. Queda prohibida la reproducción, distribución o transmisión de cualquier material sin el consentimiento previo de los titulares de los derechos. Todos los nombres, logotipos y marcas son propiedad de sus respectivos propietarios.</p>
+           </div>
+            <div class="div2">
+            <h3>Servicio de asistencia y atención al cliente</h3>
+                <li><strong>Sitio de ayuda.</strong> Echa un vistazo a nuestro sitio de ayuda, donde puedes encontrar respuestas a tus preguntas y descubrir cómo sacarle el máximo partido a UnderSounds.</li>
+                <li><strong>Comunidad.</strong> Recibe asistencia rápida de usuarios expertos de UnderSounds. Si no encuentras respuesta a tu pregunta, publicala y alguien te responderá rápidamente. También puedes sugerir o votar nuevas ideas para Spotify o simplemente hablar de música con otros fans.</li>
+                <li><strong>Contacto.</strong> Si no consigues encontrar la solución en el sitio de asistencia ni en la comunidad, ponte en contacto con nuestro servicio de atención al cliente.</li>
+                <li><strong>@UnderSoundsAyuda.</strong> ¿Prefieres usar las redes sociales? Solo tienes que enviar un turf a nuestro equipo y ellos te echarán una mano.</li>
+            </div>
+        </div>    
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="footer">
+        <div class="footer-container">
+
+            <!-- Sección de enlaces -->
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>Navegación</h3>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="profile.html">Perfil</a></li>
+                        <li><a href="shop.html">Tienda</a></li>
+                        <li><a href="studio.html">Studio</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Social</h3>
+                    <ul>
+                        <li><a href="https://www.youtube.com/">YouTube</a></li>
+                        <li><a href="https://www.facebook.com">Facebook</a></li>
+                        <li><a href="https://www.instagram.com/">Instagram</a></li>
+                        <li><a href="https://x.com">Twitter</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Contacto</h3>
+                    <ul>
+                        <li><a href="about.html">Acerca de y Copyright</a></li>
+                        <li><a href="faqs.html">FAQs</a></li>
+                        <li><a href="contact.html">Contáctanos</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Sección de logo e idioma -->
+            <div class="footer-brand">
+                <div class="logo">
+                    <span class="italic-text">Under Sounds</span>
+                </div>
+                <div class="settings">
+                    <button class="language-btn">Idioma: Español</button>
+                    <button class="contrast-btn">Contraste</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-copyright">
+            <p>Copyright © 2025 <strong>[UnderSounds]</strong>. Todos los derechos reservados.</p>
+        </div>
+
+    </footer>
+
+    <script src="scripts/darkmode.js"></script>
+
+</body>
+
+</html>
