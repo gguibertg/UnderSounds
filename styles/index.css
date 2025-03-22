@@ -1,0 +1,95 @@
+h1{
+    text-align: left;
+    font-size: 3.2vh;
+    margin-left: 5px; 
+}
+
+h2 {
+    text-align: left;
+    font-size: 2.6vh;
+    margin-left: 5px;
+    margin-top: 25px;
+}
+
+.banner {
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-top: 2%;
+    width: auto;
+    padding: 2%;
+}
+
+.banner div {
+    display: block;
+    position: relative;
+}
+
+.compra-button {
+    border-radius: 20px;
+    width: 50vh;
+    height: 7vh;
+}
+
+.box-button{
+    margin-top: 2%;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10%;
+    gap: 13%;
+}
+
+.dark-mode .contenedor,
+.dark-mode .banner {
+    border: 2px solid white;
+}
+
+.button-comprar-entradas{
+    position: absolute;
+    bottom: 30px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.contenedor {
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-top: 2%;
+    display: grid;
+    width: auto;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas de igual tamaño */
+    grid-template-rows: auto;
+    padding: 2%;
+    gap: 20px; /* Espacio entre los elementos del grid */
+}
+
+.contenedor div {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los elementos horizontalmente */
+    justify-content: center; /* Centra los elementos verticalmente */
+    text-align: center;
+    border-radius: 3px;
+}
+
+.contenedor div img {
+    display: block;
+    margin-bottom: 10px; /* Espacio entre la imagen y el botón */
+}
+
+.contenedor div p {
+    width: 200px;
+    word-wrap: break-word;
+}
+
+.button-comprar-item {
+    padding: 10px;
+    cursor: pointer;
+    width: 100px; /* Ancho del botón */
+    text-align: center;
+    margin-top: 10px;
+}

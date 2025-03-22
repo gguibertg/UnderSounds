@@ -12,6 +12,8 @@
    ======================= */
 .dark-mode header,
 .dark-mode .nav-top {
+.dark-mode header,
+.dark-mode .nav-top {
     background-color: #000000;
     border-bottom: 0.125rem solid #333;
 }
@@ -79,6 +81,7 @@
     color: white;
 }
 
+/* Ajuste en el footer */
 /* Ajuste en el footer */
 .dark-mode .footer-column h3 {
     color: #f8f9fa;
