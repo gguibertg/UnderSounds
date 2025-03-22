@@ -136,6 +136,26 @@ body {
   .checkout-btn:hover {
     background: #218838;
   }
+
+  .dark-mode main {
+    background: #272626;
+}
+
+.dark-mode .item-description {
+    color: #b2b2b2;
+}
+
+.dark-mode .item-author {
+    color: #b2b2b2;
+}
+
+.dark-mode .checkout-btn:hover {
+    background: #d5d5d5
+}
+
+.dark-mode .remove-btn:hover {
+    background: #d5d5d5;
+}
   
   /* Responsive */
   @media (max-width: 600px) {
