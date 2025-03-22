@@ -3,7 +3,6 @@
    ========================================================= */
 
    * {
-   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -35,7 +34,6 @@ h5,
 h6 {
     text-wrap: balance;
     color: #007bff;
-    color: #007bff;
 }
 
 img,
@@ -66,16 +64,6 @@ button:hover {
     transform: scale(1.05);
 }
 
-.button-alt {
-    background: transparent;
-    color: #007bff;
-    border: 1px solid #007bff;
-}
-
-.button-alt:hover {
-    background: transparent;
-}
-
 /* ===========================
     ENLACES - ESTILO GENERAL
    =========================== */
@@ -103,14 +91,11 @@ header {
 
 .nav-top,
 .nav-bottom {
-.nav-top,
-.nav-bottom {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 1.25rem;
     margin: auto;
-    background-color: white;
     background-color: white;
 }
 
@@ -155,8 +140,6 @@ header {
     border: none;
     padding: 8px;
     cursor: pointer;
-    border-radius: 0px;
-    border-radius: 0px;
 }
 
 .nav-bottom {
@@ -186,7 +169,6 @@ main {
    ========================================================== */
 
 .footer {
-    background-color: #f8f9fa;
     background-color: #f8f9fa;
     color: #333;
     padding: 2.5rem 3.75rem;
