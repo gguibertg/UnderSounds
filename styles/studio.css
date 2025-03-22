@@ -61,6 +61,10 @@
     margin-top: 20px;
 }
 
+.dark-mode .songs-cell {
+    background-color: #666666;
+}
+
 /* Diseño responsive */
 @media (max-width: 1200px) {
     .parent {
