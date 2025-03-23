@@ -1,28 +1,3 @@
-/* Estilos globales */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #f4f4f4;
-    color: #333;
-  }
-  
-  header {
-    background: #333;
-    color: #fff;
-    padding: 15px;
-    text-align: center;
-  }
-  
-  main {
-    width: 90%;
-    max-width: 800px;
-    margin: 20px auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-  }
-  
   /* Lista de productos */
   .cart-list {
     margin-bottom: 30px;
@@ -96,11 +71,12 @@ body {
   
   /* Resumen del carrito */
   .cart-summary {
-    text-align: left;
-    align-self:auto;
+    text-align: center;
+    align-self:center;
   }
   
   .summary-table {
+    align-self: center;
     width: 100%;
     max-width: 300px;
     margin-left: auto;
@@ -121,6 +97,7 @@ body {
   }
   
   .checkout-btn {
+    width: 200px;
     background: #28a745;
     color: #fff;
     border: none;
@@ -128,13 +105,32 @@ body {
     font-size: 16px;
     border-radius: 4px;
     margin-top: 10px;
-    margin-left: 350px;
     cursor: pointer;
   }
   
   .checkout-btn:hover {
     background: #218838;
   }
+
+  .dark-mode main {
+    background: #272626;
+}
+
+.dark-mode .item-description {
+    color: #b2b2b2;
+}
+
+.dark-mode .item-author {
+    color: #b2b2b2;
+}
+
+.dark-mode .checkout-btn:hover {
+    background: #d5d5d5
+}
+
+.dark-mode .remove-btn:hover {
+    background: #d5d5d5;
+}
   
   /* Responsive */
   @media (max-width: 600px) {
