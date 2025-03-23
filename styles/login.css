@@ -11,39 +11,19 @@ button {
     width: 300px;
 }
 
-.button-back {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    background-color: black;
-    color: white;
-    border: 1px solid white;
-    border-radius: 50%;
-    text-align: center;
-    cursor: pointer;
-    position: fixed;
-    top: 20px;
-    left: 20px;
-}
-
-input {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    width: 300px;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #B1B2B5;
-}
-
 .login {
     margin: auto;
     width: 30%;
-    background-color: #111111;
+    background-color: #DDDDDD;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     border-radius: 15px;
+}
+
+.dark-mode .login {
+    background-color: #111111;
 }
 
 .form {

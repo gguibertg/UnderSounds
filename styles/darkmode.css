@@ -96,3 +96,29 @@
     color: #ccc;
     border-top: 0.0625rem solid #444;
 }
+
+/* ========================
+    PANELES EN MODO OSCURO
+   ======================== */
+
+   /* Background oscuro que todas las pantallas deberían llevar, independientemente de lo que sean */
+.dark-mode .div-bg {
+    background-color: #111111;
+}
+
+/* Dibuja un panel principal */
+.dark-mode .div-pannel {
+    background-color: #222222;
+    border-color: #aaaaaa;
+}
+
+/* Dibuja un panel secundario más clarito */
+.dark-mode .div-pannel-sub {
+    background-color: #333333;
+    border-color: #aaaaaa;
+}
+
+/* Linea horizontal blanca */
+.dark-mode hr {
+    border: 1px solid #B1B2B5;
+}

@@ -64,6 +64,24 @@ button:hover {
     transform: scale(1.05);
 }
 
+.button-alt {
+    background: white;
+    color: #0056b3;
+    border: none;
+    padding: 0.5rem 0.875rem;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.2s ease;
+    border: 0.0625rem solid #0056b3;
+}
+
+.button-alt:hover {
+    background: white;
+    transform: scale(1.05);
+}
+
 /* ===========================
     ENLACES - ESTILO GENERAL
    =========================== */
@@ -78,6 +96,19 @@ a {
 
 a:hover {
     color: #0056b3;
+}
+
+/* ==========================================================
+    ------------------------ OTRO GENERAL -------------------
+   ========================================================== */
+
+input {
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #B1B2B5;
+    color: black;
+    background-color: white;
 }
 
 /* ==========================================================
@@ -233,4 +264,127 @@ main {
     border-top: 1px solid #ccc;
     padding-top: 15px;
     font-size: 1rem;
+}
+
+/* ==========================================================
+    ------------------------ PANELES ------------------------
+   ========================================================== */
+
+/* Background oscuro que todas las pantallas deberían llevar, independientemente de lo que sean */
+.div-bg {
+    width: 100%;
+    height: 100%;
+    background-color: #CCCCCC;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+}
+
+/* Dibuja un panel principal */
+.div-pannel {
+    margin: auto;
+    width: inherit;
+    height: auto;
+    background-color: #AAAAAA;
+    padding: 1rem 1rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 15px;
+}
+
+/* Dibuja un panel secundario más clarito */
+.div-pannel-sub {
+    margin: auto;
+    width: inherit;
+    height: auto;
+    background-color: #888888;
+    border-color: #aaaaaa;
+    padding: 1rem 1rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 15px;
+}
+
+/* Linea horizontal blanca */
+hr {
+    width: 85%;
+    border: 1px solid #B1B2B5;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* ==========================================================
+    ------------------------- GRIDS -------------------------
+   ========================================================== */
+
+/* Organiza los contenidos en columnas */
+.div-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    word-wrap: break-word;
+}
+
+/* Organiza los contenidos en columnas + sin gap + ligero margen interor */
+.div-content-narrow {
+    width: auto;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    word-wrap: break-word;
+}
+
+/* Organiza los contenidos en filas + gap 2 + ligero margen interor */
+.div-content-narrow-row {
+    width: inherit;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+    gap: 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    word-wrap: break-word;
+}
+
+/* Contenedor genérico para forms */
+.grid-form {
+    width: inherit;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) 0.5fr;
+    grid-template-rows: 1fr 2fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+/* ==========================================================
+    ------------------------- OTROS -------------------------
+   ========================================================== */
+
+/* Botón de volver atrás */
+.button-back {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+}
+
+/* pequeño hack para hacer el texto label más grande */
+label {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
 }
