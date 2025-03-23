@@ -1,0 +1,36 @@
+hr {
+    width: 85%;
+    border: 1px solid #B1B2B5;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 300px;
+}
+
+.login {
+    margin: auto;
+    width: 30%;
+    background-color: #DDDDDD;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.dark-mode .login {
+    background-color: #111111;
+}
+
+.form {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
