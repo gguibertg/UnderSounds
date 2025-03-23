@@ -2,6 +2,7 @@
     ---------------------- MODO OSCURO ----------------------
    ========================================================== */
 
+/* Aplica el modo oscuro cuando el body tenga la clase "dark-mode" */
    .dark-mode {
     background-color: #000000;
     color: white;
@@ -96,6 +97,8 @@
     color: #ccc;
     border-top: 0.0625rem solid #444;
 }
+
+
 
 /* ========================
     PANELES EN MODO OSCURO
