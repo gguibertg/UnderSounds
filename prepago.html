@@ -55,35 +55,33 @@
 
     <!-- Contenido principal -->
     <main>
-        <div class="div-bg">
-            <h2>Método de Pago</h2>
-            <section class="box-pay">
+        <h2>Método de Pago</h2>
+        <div class="box-pay">
+            <div>
+                <section>
+                    <ul>
+                        <li class="li-tarjeta"><p></p><input type="checkbox" id="4" name="Seleccionar Tarjeta"><p></p><label><h3>Tarjeta de Crédito o Débito</h3></label><img></li>
+                        <li><p style="color: red; font-size: small;">Es obligatorio completar todos los campos</p></li>
+                        <li class="li-nombre"><label style="font-size:medium;">Número de la tarjeta<input type="text" id="1" name="Número de la tarjeta" maxlength="16" maxlength="16" required placeholder="Número de tarjeta"/></label></li>
+                        <li class="li-fechacod"><label style="font-size:medium;">Fecha de expiración<input type="month" id="2" name="Fecha de expiración" maxlength="5" maxlength="5" required placeholder="mm/yy"/></label>
+                        <label style="font-size:medium;">Código de seguridad<input type="text" id="3" name="Código de seguridad" maxlength="3" maxlength="3" required placeholder="3 dígitos"/></label></li>
+                        <li class="li-check"><input type="checkbox" id="4" name="Guardar Tarjeta"><p></p><label style="font-size: small;">Guardar datos para futuras compras. Si activas esta casilla se guardarán los datos de tu tarjeta para futuras compras. Podrás eliminar tu tarjeta cuando quieras.</label></li>
+                        <li class="li-button"><a href="carrito.html" class="left-botton" ><button style="width: 30vh;">Cancelar</button></a> <p></p> <a href="TPV.html" class="right-botton"><button style="width: 30vh;">Pagar</button></a></li>
+                    </ul>
+                </section>
+            </div>
+            <p></p>
+            <div>
                 <div>
-                    <section>
-                        <ul>
-                            <li class="li-tarjeta"><p></p><input type="checkbox" id="4" name="Seleccionar Tarjeta"><p></p><label><h3 style="margin-top: 1%;">Tarjeta de Crédito o Débito</h3></label><img></li>
-                            <li><p style="color: red; font-size: small;">Es obligatorio completar todos los campos</p></li>
-                            <li class="li-nombre"><label>Número de la tarjeta<input type="text" id="1" name="Número de la tarjeta" maxlength="16" maxlength="16" required placeholder="Número de tarjeta" class="large-input"/></label></li>
-                            <li class="li-fechacod"><label>Fecha de expiración<input type="month" id="2" name="Fecha de expiración" maxlength="5" maxlength="5" required placeholder="mm/yy"/></label>
-                            <label class="right-input">Código de seguridad<input type="text" id="3" name="Código de seguridad" maxlength="3" maxlength="3"	 required placeholder="3 dígitos"/></label></li>
-                            <li class="li-check"><input type="checkbox" id="4" name="Guardar Tarjeta"><p></p><label class="size-label">Guardar datos para futuras compras. Si activas esta casilla se guardarán los datos de tu tarjeta para futuras compras. Podrás eliminar tu tarjeta cuando quieras.</label></li>
-                            <li class="li-button"><a href="carrito.html" class="left-botton" ><button style="width: 30vh;">Cancelar</button></a> <p></p> <a href="TPV.html" class="right-botton"><button style="width: 30vh;">Pagar</button></a></li>
-                        </ul>
-                    </section>
+                    <h3>Resumen</h3>
+                    <ul>
+                        <li><p>Articulos1</p><p>....................</p><p>$12</p></li>
+                        <li><p>Articulos1</p><p>....................</p><p>$12</p></li>
+                        <li><p>Articulos1</p><p>....................</p><p>$12</p></li>
+                    </ul>
+                    <b><p>SubTotal</p><p>...............</p><p>$12</p></b>
                 </div>
-                <p></p>
-                <div>
-                    <div>
-                        <h3>Resumen</h3>
-                        <ul>
-                            <li><p>Articulos1</p><p>....................</p><p>$12</p></li>
-                            <li><p>Articulos1</p><p>....................</p><p>$12</p></li>
-                            <li><p>Articulos1</p><p>....................</p><p>$12</p></li>
-                        </ul>
-                        <b><p>SubTotal</p><p>...............</p><p>$12</p></b>
-                    </div>
-                </div>
-            </section>
+            </div>
         </div>
     </main>
 
@@ -98,7 +96,7 @@
                     <ul>
                         <li><a href="index.html">Inicio</a></li>
                         <li><a href="profile.html">Perfil</a></li>
-                        <li><a href="merchandising.html">Tienda</a></li>
+                        <li><a href="shop.html">Tienda</a></li>
                         <li><a href="studio.html">Studio</a></li>
                     </ul>
                 </div>
