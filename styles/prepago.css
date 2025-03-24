@@ -40,118 +40,103 @@ main {
 
 .box-pay {
     display: grid;
-    grid-template-columns: 50% 20% 30%;
-    grid-template-rows: auto;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 0px;
+    height: 60vh;
 }
 
-.box-pay div {
-    display: grid;
-    grid-template-columns: 90% 10%;
-}
+
 
 /* =====================
     ----CAJA TARJETA----
    ===================== */
 
-.box-pay div section {
+.div-tarjeta {
+    grid-area: 1 / 1 / 6 / 3;
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr 0.5fr repeat(4, 1fr);
+    grid-column-gap: 20px;
     background: #f9f9f9aa;
     border-radius: 10px;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     border: 1px solid #ddd;
-    height: 55vh;
+    padding-bottom: 1rem;
 }
 
 /* =============================
-    ----CAJA TARJETA GRID UL----
+    ----CAJA TARJETA - ROWS----
    ============================= */
 
-.box-pay div section ul {
+.div1 { 
+    grid-area: 1 / 1 / 2 / 3; 
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 13% 10% 20% 15% 20% 17%;
-    height: auto;
-}
-
-.box-pay div section ul .li-tarjeta {
-    display: grid;
-    grid-template-columns: 2% 3% 3% 82% 10%;
+    grid-template-columns: 2% 79% 11%;
+    grid-column-gap: 3%;
+    padding-left: 2%;
     background: #000000d9;
     border-radius: 7px;
+    align-items: center;
 }
 
-.box-pay div section ul .li-tarjeta label{
-    color:#ffffff;
+.div3 {
+    grid-area: 3 / 1 / 4 / 3;
+    padding-left: 2%;
+    padding-right: 2%;
 }
 
-.box-pay div section ul .li-nombre {
-    margin-right: 10%;
-    margin-left: 2%;
+.div4 {
+    grid-area: 4 / 1 / 5 / 2;
+    padding-left: 5%;
 }
 
-.box-pay div section ul .li-fechacod {
+.div5 {
+    grid-area: 4 / 2 / 5 / 3;
+    padding-right: 5%;
+}
+
+.div6{
+    grid-area: 5 / 1 / 6 / 3;
     display: grid;
-    grid-template-columns: 42% 42%;
-    grid-column-gap: 28px;
-    margin-left: 2%;
+    grid-template-columns: 2% 93%;
+    grid-column-gap: 3%;
+    padding-left: 2%;
+    align-items: center;
 }
 
-.box-pay div section ul .li-check {
-    display: grid;
-    grid-template-columns: 3% 3% 92%;
-    margin-left: 2%;
-}
-
-.box-pay div section ul .li-check label {
-    padding: 4%;
-}
-
-.box-pay div section ul .li-button {
-    display: grid;
-    grid-template-columns: 45% 10% 45%;
-}
 
 /* =====================
     ----CAJA RESUMEN----
    ===================== */
-
-.box-pay div div {
+.div-resumen{
+    grid-area: 1 / 4 / 3 / 6;
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 20% 60% 20%;
+    grid-template-rows: 1fr 2.5fr 1.5fr;
     background: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     border: 1px solid #ddd;
-    height: 25vh;
 }
 
-.box-pay div div h3{
-    display: grid;
-    border-bottom: 1px solid black;
-}
-
-.box-pay div div b{
+.div-articulos{
+    grid-area: 2 / 1 / 5 / 3;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    text-align: center;
+    justify-items: center;
+}
+
+.div-subtotal{
+    grid-area: 5 / 1 / 6 / 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     border-top: 1px solid black;
+    padding-left: 5%;
+    padding-bottom: 3%;
+    padding-top: 2%;
 }
 
-.box-pay div div ul{
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 25% 25% 25% 25%;
-    height: auto;
-    text-align: center;
-}
-
-.box-pay div div ul li{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-}
 
 /* ===============
     ----LISTAS----
@@ -162,11 +147,6 @@ main {
     padding: 0.1%;
 }
 
-.box-type-resum ul li {
-    display: flex;
-    justify-content: space-around;
-    margin-left: 10%;
-}
 
 /* ================
     ----BOTONES----
@@ -184,39 +164,35 @@ main {
     margin-top: 4vh;
 }
 
-.dark-mode h3 {
-    color: #ffffff;
-}
-
 /* ===========================
     BOX EN MODO OSCURO - PAGO
    =========================== */
 
-.dark-mode .box-pay div section {
+.dark-mode .div-tarjeta {
     border-top: 2px solid #333;
     background-color: #111111;
 }
 
-.dark-mode .box-pay div section ul .li-tarjeta {
+.dark-mode .div-tarjeta .div1 {
     background: #ffffff;
 }
 
-.dark-mode .box-pay div section ul .li-tarjeta h3 {
+.dark-mode .div-tarjeta .div1 label {
     color: #000000;
 }
 
 /* ==============================
     BOX EN MODO OSCURO - RESUMEN
    ============================== */
-.dark-mode .box-pay div div h3{
+.dark-mode .div-resumen h3{
     border-bottom: 1px solid rgb(255, 255, 255);
 }
 
-.dark-mode .box-pay div div b{
+.dark-mode .div-resumen b{
     border-top: 1px solid rgb(255, 255, 255);
 }
 
-.dark-mode .box-pay div div {
+.dark-mode .div-resumen{
     border-top: 2px solid #333;
     background-color: #111111;
 }
