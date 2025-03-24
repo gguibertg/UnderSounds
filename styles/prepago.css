@@ -77,88 +77,17 @@ input{
     ----CAJA PRINCIPAL----
    ======================= */
 
-.box-pay {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    grid-column-gap: 20px;
-    grid-row-gap: 0px;
-    height: 60vh;
-}
-
-
-
 /* =====================
     ----CAJA TARJETA----
    ===================== */
-
-.div-tarjeta {
-    grid-area: 1 / 1 / 6 / 3;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 1fr 0.5fr repeat(4, 1fr);
-    grid-column-gap: 20px;
-    background: #f9f9f9aa;
-    border-radius: 10px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
-    padding-bottom: 1rem;
-}
 
 /* =============================
     ----CAJA TARJETA - ROWS----
    ============================= */
 
-.div1 { 
-    grid-area: 1 / 1 / 2 / 3; 
-    display: grid;
-    grid-template-columns: 2% 79% 11%;
-    grid-column-gap: 3%;
-    padding-left: 2%;
-    background: #000000d9;
-    border-radius: 7px;
-    align-items: center;
-}
-
-.div3 {
-    grid-area: 3 / 1 / 4 / 3;
-    padding-left: 2%;
-    padding-right: 2%;
-}
-
-.div4 {
-    grid-area: 4 / 1 / 5 / 2;
-    padding-left: 5%;
-}
-
-.div5 {
-    grid-area: 4 / 2 / 5 / 3;
-    padding-right: 5%;
-}
-
-.div6{
-    grid-area: 5 / 1 / 6 / 3;
-    display: grid;
-    grid-template-columns: 2% 93%;
-    grid-column-gap: 3%;
-    padding-left: 2%;
-    align-items: center;
-}
-
-
 /* =====================
     ----CAJA RESUMEN----
    ===================== */
-.div-resumen{
-    grid-area: 1 / 4 / 3 / 6;
-    display: grid;
-    grid-template-rows: 1fr 2.5fr 1.5fr;
-    background: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
-}
-
 .div-articulos{
     grid-area: 2 / 1 / 5 / 3;
     display: grid;
@@ -189,18 +118,6 @@ input{
 /* ================
     ----BOTONES----
    ================ */
-
-.right-botton {
-    display: flex;
-    margin-right: 6vh;
-    margin-top: 4vh;
-}
-
-.left-botton {
-    display: flex;
-    margin-left: 6vh; 
-    margin-top: 4vh;
-}
 
 /* ===========================
     BOX EN MODO OSCURO - PAGO
