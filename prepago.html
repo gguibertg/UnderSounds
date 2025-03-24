@@ -37,7 +37,7 @@
                 <div class="auth-buttons">
                     <button class="login-btn" onclick="window.location.href='login.html'">Iniciar Sesión</button>
                     <button class="signup-btn" onclick="window.location.href='register.html'">Registro</button>
-                </div>                
+                </div>
             </div>
 
             <!-- Sección inferior: Menú de navegación -->
@@ -55,49 +55,96 @@
 
     <!-- Contenido principal -->
     <main>
-        <h2>Método de Pago</h2>
-        <div class="box-pay">
-            <div class="div-tarjeta">
-                <div class="div1">
-                    <input type="checkbox" id="4" name="Seleccionar Tarjeta">
-                    <label><p style=" color:#ffffff; font-size: larger;">Tarjeta de Crédito o Débito</p></label>
-                    <img>
+
+        <div class="div-bg">
+            <div class="grid-container">
+                <div class="grid-area: 1 / 1 / 2 / 2;">
+                    <div class="div-pannel" style="width:80%; align-self: self-end;">
+
+                        <h2>Método de Pago</h2>
+                        <br>
+                        <div class="div-top div-pannel-sub">
+                            <div class="div-row">
+                                <input type="checkbox" id="4" name="Seleccionar Tarjeta">
+                                <label>
+                                    <h2 class="h2-inv">Tarjeta de Crédito o Débito</h2>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="div-pannel-sub" style="border-start-start-radius: 0px; border-start-end-radius: 0px;">
+                            <div class="grid-container2">
+                                <p style="color: red; font-size: small;">Es obligatorio completar todos los campos</p>
+                                <div style="grid-area: 1 / 1 / 2 / 3;">
+                                    <label style="font-size:medium;">Número de la tarjeta<input type="text" id="1"
+                                            name="Número de la tarjeta" maxlength="16" maxlength="16" required
+                                            placeholder="Número de tarjeta" /></label>
+                                </div>
+                                <div style="grid-area: 2 / 1 / 3 / 2;">
+                                    <label style="font-size:medium;">Fecha de expiración<input type="month" id="2"
+                                            name="Fecha de expiración" maxlength="5" maxlength="5" required
+                                            placeholder="mm/yy" /></label>
+                                </div>
+                                <div style="grid-area: 2 / 2 / 3 / 3;">
+                                    <label style="font-size:medium;">Código de seguridad<input type="text" id="3"
+                                            name="Código de seguridad" maxlength="3" maxlength="3" required
+                                            placeholder="3 dígitos" /></label>
+                                </div>
+                                <div style="grid-area: 3 / 1 / 4 / 3;">
+                                    <div class="div-row">
+                                        <input type="checkbox" id="4" name="Guardar Tarjeta"><label
+                                        style="font-size: small;">Guardar datos para futuras compras. Si activas esta
+                                        casilla se guardarán los datos de tu tarjeta para futuras compras. Podrás
+                                        eliminar tu tarjeta cuando quieras.</label>
+                                    </div>
+                                </div>
+                                <div style="grid-area: 4 / 1 / 5 / 2; align-self: center; justify-self: center;">
+                                    <a href="carrito.html">
+                                        <button style="width: 30vh;">Cancelar</button>
+                                    </a>
+                                </div>
+                                <div style="grid-area: 4 / 2 / 5 / 3;  align-self: center; justify-self: center;">
+                                    <a href="TPV.html">
+                                        <button style="width: 30vh;">Pagar</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div style="grid-area: 2 / 1 / 3 / 3;">
-                    <p style="color: red; font-size: small;">Es obligatorio completar todos los campos</p>
-                </div>
-                <div class="div3">
-                    <label style="font-size:medium;">Número de la tarjeta<input type="text" id="1" name="Número de la tarjeta" maxlength="16" maxlength="16" required placeholder="Número de tarjeta" /></label>
-                </div>
-                <div class="div4">
-                    <label style="font-size:medium;">Fecha de expiración<input type="month" id="2" name="Fecha de expiración" maxlength="5" maxlength="5" required placeholder="mm/yy"/></label>
-                </div>
-                <div class="div5">
-                    <label style="font-size:medium;">Código de seguridad<input type="text" id="3" name="Código de seguridad" maxlength="3" maxlength="3" required placeholder="3 dígitos"/></label>
-                </div>
-                <div class="div6">
-                    <input type="checkbox" id="4" name="Guardar Tarjeta"><label style="font-size: small;">Guardar datos para futuras compras. Si activas esta casilla se guardarán los datos de tu tarjeta para futuras compras. Podrás eliminar tu tarjeta cuando quieras.</label>
-                </div>
-                <div style="grid-area: 6 / 1 / 7 / 2; justify-items: center;">
-                    <a href="carrito.html" class="left-botton" ><button style="width: 30vh;">Cancelar</button></a>
-                </div>
-                <div style="grid-area: 6 / 2 / 7 / 3; justify-items: center;">
-                    <a href="TPV.html" class="right-botton"><button style="width: 30vh;">Pagar</button></a>
-                </div>
-            </div>
-            <div class="div-resumen">
-                <div style="border-bottom: 1px solid black; grid-area: 1 / 1 / 2 / 3;">
-                    <h3>Resumen</h3>
-                </div>
-                <div class="div-articulos">
-                        <p>Articulos1</p><p>.....................</p><p>$12</p>
-                        <p>Articulos2</p><p>.....................</p><p>$8</p>
-                        <p>Articulos3</p><p>.....................</p><p>$10</p>
-                </div>
-                <div class="div-subtotal">
-                    <b><p>SubTotal</p></b>
-                    <b><p>...................</p></b>
-                    <b><p>$12</p></b>
+                <div class="grid-area: 1 / 1 / 2 / 2;">
+                    <div class="div-pannel" style="width:80%;">
+
+                        <div class="div-pannel-sub">
+                            <div style="grid-area: 1 / 1 / 2 / 3;">
+                                <h3>Resumen</h3>
+                            </div>
+                            <hr>
+                            <div class="div-articulos">
+                                <p>Articulos1</p>
+                                <p>.....................</p>
+                                <p>$12</p>
+                                <p>Articulos2</p>
+                                <p>.....................</p>
+                                <p>$8</p>
+                                <p>Articulos3</p>
+                                <p>.....................</p>
+                                <p>$10</p>
+                            </div>
+                            <hr>
+                            <div class="div-subtotal">
+                                <b>
+                                    <p>SubTotal</p>
+                                </b>
+                                <b>
+                                    <p>...................</p>
+                                </b>
+                                <b>
+                                    <p>$12</p>
+                                </b>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
