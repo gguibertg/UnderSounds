@@ -54,58 +54,89 @@
 
     <!-- Contenido principal -->
     <main>
-        <!-- Lista de productos -->
-        <section class="cart-list">
-            <div class="cart-item">
-                <img src="images/carritoicons/imagealbum.jpg" alt="Canción 1" class="item-image">
-                <div class="item-info">
-                    <h3 class="item-title">Título de la Canción</h3>
-                    <p class="item-description">Descripción breve del producto.</p>
-                    <p class="item-author">Autor: <span>Nombre del Autor</span></p>
-                </div>
-                <div class="item-actions">
-                    <p class="item-price">$1.99</p>
-                    <button class="remove-btn">Eliminar</button>
-                </div>
-            </div>
-            <div class="cart-item">
-                <img src="images/carritoicons/imagealbum1.jpg" alt="Canción 2" class="item-image">
-                <div class="item-info">
-                    <h3 class="item-title">Otra Canción</h3>
-                    <p class="item-description">Otra descripción del producto.</p>
-                    <p class="item-author">Autor: <span>Otro Autor</span></p>
-                </div>
-                <div class="item-actions">
-                    <p class="item-price">$2.49</p>
-                    <button class="remove-btn">Eliminar</button>
-                </div>
-            </div>
-            <!-- Se pueden agregar más productos de forma similar -->
-        </section>
 
-        <!-- Resumen del carrito -->
-        <section class="cart-summary">
-            <table class="summary-table">
-                <tr>
-                    <td>Producto 1</td>
-                    <td>$1.99</td>
-                </tr>
-                <tr>
-                    <td>Producto 2</td>
-                    <td>$2.49</td>
-                </tr>
-                <tr class="separator">
-                    <td colspan="2"></td>
-                </tr>
-                <tr class="total">
-                    <td>Total:</td>
-                    <td><strong>$4.48</strong></td>
-                </tr>
-            </table>
-            <a href="prepago.html">
-                <button class="checkout-btn">Comprar</button>
-            </a>
-        </section>
+        <div class="div-bg">
+            <div class="grid-container">
+                <div class="grid-area: 1 / 1 / 2 / 2;">
+                    <div class="div-pannel" style="width:100%; align-self: self-end;">
+                        <h2> Carrito </h2>
+                        <br>
+                        <div class="grid-carrito-items">
+
+                            <!-- Código de Rubén -->
+                            <!-- Lista de productos -->
+
+                            <div class="div-pannel-sub div-row">
+                                <div class="cart-item">
+                                    <img src="images/carritoicons/imagealbum.jpg" alt="Canción 1" class="item-image">
+                                    <div class="item-info">
+                                        <h3 class="item-title">Título de la Canción</h3>
+                                        <p class="item-description">Descripción breve del producto.</p>
+                                        <p class="item-author">Autor: <span>Nombre del Autor</span></p>
+                                    </div>
+                                </div>
+                                <div class="item-actions">
+                                    <p class="item-price">$1.99</p>
+                                    <button class="remove-btn">Eliminar</button>
+                                </div>
+                            </div>
+                            
+                            <div class="div-pannel-sub div-row">
+                                <div class="cart-item">
+                                    <img src="images/carritoicons/imagealbum1.jpg" alt="Canción 2" class="item-image">
+                                    <div class="item-info">
+                                        <h3 class="item-title">Otra Canción</h3>
+                                        <p class="item-description">Otra descripción del producto.</p>
+                                        <p class="item-author">Autor: <span>Otro Autor</span></p>
+                                    </div>
+                                </div>
+                                <div class="item-actions">
+                                        <p class="item-price">$2.49</p>
+                                        <button class="remove-btn">Eliminar</button>
+                                    </div>
+                            </div>
+
+                            <!-- Se pueden agregar más productos de forma similar -->
+                        
+                        </div>
+
+                    </div>
+                </div>
+                <div class="grid-area: 1 / 1 / 2 / 2;">
+                    <div class="div-pannel" style="width:100%;">
+                        <h2> Resumen </h2>
+                        <br>
+                        <div class="div-pannel-sub">
+                            <div style="grid-area: 1 / 1 / 2 / 3; width: 100%;">
+                            <!-- Código de Rubén -->
+                            <!-- Resumen del carrito -->
+                            <hr>
+                            <div class="grid-lista">
+                                <p>Articulos1</p>
+                                <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
+                                <p>$12</p>
+                                <p>Articulos2</p>
+                                <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
+                                <p>$8</p>
+                                <p>Articulos3</p>
+                                <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
+                                <p>$10</p>
+                            </div>
+                            <hr>
+                            <div class="grid-lista">
+                                <b><p>SubTotal</p></b>
+                                <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
+                                <b><p>$12</p></b>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <a href="prepago.html" style="align-self: center; width: 50%;">
+                        <button class="checkout-btn">Comprar</button>
+                    </a>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Pie de página -->
