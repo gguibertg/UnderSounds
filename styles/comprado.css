@@ -14,7 +14,7 @@ h3 {
     padding: 2%;
 }
 
-.contenedor div {
+.contenedor {
     margin-bottom: 2%;
     border-radius: 3px;
     text-align: center;
@@ -22,17 +22,19 @@ h3 {
 
 .compra-button {
     border-radius: 20px;
-    width: 50vh;
-    height: 7vh;
+    width: 100%;
+    height: 100%;
 }
 
 .box-button{
-    margin-top: 2%;
+    width: 100%;
+
     justify-content: center;
     display: flex;
     flex-direction: row;
-    margin-bottom: 10%;
-    gap: 13%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    gap: 7%;
 }
 
 .dark-mode .contenedor{
