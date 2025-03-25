@@ -71,18 +71,3 @@ hr {
 input{
     display: block;
 }
-
-/* =============================================
-    ----DIVS (en realidad son grids jeje) ------
-   ============================================= */
-
-.div-lista {
-    display: grid;
-    grid-template-columns: minmax(10px, auto) minmax(1px, 70%) minmax(10px, auto);
-    justify-items: center;
-    font-size: 1.1rem;
-    row-gap: 1.5rem;
-    justify-content: space-evenly;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
