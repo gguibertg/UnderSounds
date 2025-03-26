@@ -54,38 +54,58 @@
 
     <!-- Contenido principal -->
     <main>
-        <section>
-            <h1><i>Conciertos y festivales</i></h1>
-            <section class="banner">
-                <div>
-                    <img src="images/lanzamientos/tomorrowland.jpg" width="100%">
-                    <button class="button-comprar-entradas">Comprar entradas</button>
+
+        <div class="div-bg">
+            <section>
+                <h1><i>Conciertos y festivales</i></h1>
+                <br>
+                <div class="div-pannel">
+                    <div class="grid-entradas">
+                        <div style="grid-area: 1 / 1 / 2 / 2;">
+                            <img src="images/lanzamientos/tomorrowland.jpg" width="100%">
+                        </div>
+                        <div style="grid-area: 1 / 2 / 2 / 3;">
+                            <div class="grid-info div-pannel-sub">
+                                <h1>Tomorrowland</h1>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                <button class="button-comprar-entradas">Comprar entradas</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <h1><i>Nuevos lanzamientos</i></h1>
+                <br>
+                <div class="div-pannel">
+                    <div class="grid-entradas" style="display: flex; flex-direction: row; width: 100%; justify-content: space-evenly;">
+                        <div style="margin-right: 1rem; margin-left: 1rem;">
+                            <img src="images/lanzamientos/Espresso_.jpg" width="150px" height="150px">
+                            <p>Espresso</p>
+                            <button class="button-comprar-item">Añadir</button>
+                        </div>
+                        <div style="margin-right: 1rem; margin-left: 1rem;">
+                            <img src="images/lanzamientos/Fein.jpg" width="150px" height="150px">
+                            <p>Fein</p>
+                            <button class="button-comprar-item">Añadir</button>
+                        </div>
+                        <div style="margin-right: 1rem; margin-left: 1rem;">
+                            <img src="images/lanzamientos/donde quiero estar.jpg" width="150px" height="150px">
+                            <p>Donde quiero estar</p>
+                            <button class="button-comprar-item">Añadir</button>
+                        </div>
+                        <div style="margin-right: 1rem; margin-left: 1rem;">
+                            <img src="images/lanzamientos/debi.jpg" width="150px" height="150px">
+                            <p>Debi</p>
+                            <button class="button-comprar-item">Añadir</button>
+                        </div>
+                    </div>
                 </div>
             </section>
-            <h2><i>Nuevos lanzamientos</i></h2>
-            <section class="contenedor">
-                <div>
-                    <img src="images/lanzamientos/Espresso_.jpg" width="150px" height="150px">
-                    <p>Espresso</p>
-                    <button class="button-comprar-item">Añadir</button>
-                </div>
-                <div>
-                    <img src="images/lanzamientos/Fein.jpg" width="150px" height="150px">
-                    <p>Fein</p>
-                    <button class="button-comprar-item">Añadir</button>
-                </div>
-                <div>
-                    <img src="images/lanzamientos/donde quiero estar.jpg" width="150px" height="150px">
-                    <p>Donde quiero estar</p>
-                    <button class="button-comprar-item">Añadir</button>
-                </div>
-                <div>
-                    <img src="images/lanzamientos/debi.jpg" width="150px" height="150px">
-                    <p>Debi</p>
-                    <button class="button-comprar-item">Añadir</button>
-                </div>
-            </section>
-        </section>
+        </div>
+
+
     </main>
 
     <!-- Pie de página -->
