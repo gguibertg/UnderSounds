@@ -31,6 +31,16 @@
     background: transparent;
 }
 
+/* ========================
+    INPUTS EN MODO OSCURO
+   ======================== */
+
+.dark-mode input {
+    background: #1a1a1a;
+    color: white;
+    border: 1px solid #444;
+}
+
 /* ================================
     TEXTO Y TÍTULOS EN MODO OSCURO
    ================================ */
