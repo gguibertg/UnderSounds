@@ -96,20 +96,10 @@
 }
 
 .review {
-    background: #f8f9fa;
     /* Color de fondo en modo claro */
     border-radius: 10px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
     text-align: center;
-    border: 1px solid #ccc;
-}
-
-.dark-mode .review {
-    background: #1e1e1e;
-    /* Color de fondo en modo oscuro */
-    box-shadow: 0px 2px 6px rgba(255, 255, 255, 0.05);
-    border: 1px solid #444;
 }
 
 .review h3 {
