@@ -5,8 +5,9 @@
     <meta charset="UTF-8"> <!-- Codificación de caracteres -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
     <meta name="author" content="L1-G4">
-    <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
+    <title>Merchandising</title> <!-- Título que aparece en la pestaña del navegador -->
     <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilo de la barra de navegación -->
     <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
     <link rel="stylesheet" href="/styles/index.css"> <!-- Hoja de estilo del inicio -->
     
@@ -22,36 +23,7 @@
 <body>
 
     <!-- Barra de navegación -->
-    <header>
-        <nav class="navbar">
-
-            <!-- Sección superior: Logo, barra de búsqueda y botones -->
-            <div class="nav-top">
-                <a href="index.html" class="logo" aria-label="Inicio - Under Sounds">Under Sounds</a>
-
-                <form class="search-bar" role="search" aria-label="Buscar contenido">
-                    <input type="text" placeholder="Buscar..." aria-label="Campo de búsqueda">
-                    <button type="submit" class="search-button" aria-label="Buscar">🔍</button>
-                </form>
-
-                <div class="auth-buttons">
-                    <button class="login-btn" onclick="window.location.href='login.html'">Iniciar Sesión</button>
-                    <button class="signup-btn" onclick="window.location.href='register.html'">Registro</button>
-                </div>
-            </div>
-
-            <!-- Sección inferior: Menú de navegación -->
-            <div class="nav-bottom">
-                <ul>
-                    <li><a href="collection.html">Biblioteca</a></li>
-                    <li><a href="following.html">Seguidos</a></li>
-                    <li><a href="newSong.html">Subir Canción</a></li>
-                    <li><a href="newAlbum.html">Subir Álbum</a></li>
-                </ul>
-            </div>
-
-        </nav>
-    </header>
+    <div id="header-placeholder"></div>
 
     <!-- Contenido principal -->
     <main>
@@ -163,6 +135,7 @@
     </footer>
 
     <script src="scripts/darkmode.js"></script>
+    <script src="scripts/header.js"></script>
 
 </body>
 
