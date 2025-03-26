@@ -237,6 +237,17 @@ main {
     border-radius: 15px;
 }
 
+.div-carrusel {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 2%;
+}
+
 /* Linea horizontal blanca */
 hr {
     width: 85%;

@@ -100,3 +100,7 @@
 .dark-mode hr {
     border: 1px solid #B1B2B5;
 }
+
+.dark-mode .div-carrusel {
+    border: 2px solid white;
+}
