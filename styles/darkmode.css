@@ -3,34 +3,9 @@
    ========================================================== */
 
 /* Aplica el modo oscuro cuando el body tenga la clase "dark-mode" */
-   .dark-mode {
+.dark-mode {
     background-color: #000000;
     color: white;
-}
-
-/* =======================
-    HEADER EN MODO OSCURO
-   ======================= */
-.dark-mode header,
-.dark-mode .nav-top {
-    background-color: #000000;
-    border-bottom: 0.125rem solid #333;
-}
-
-.dark-mode .nav-bottom {
-    border-top: 0.125rem solid #333;
-    background-color: #111111;
-}
-
-/* Logo */
-.dark-mode .nav-top .logo {
-    background-color: white;
-    color: black;
-}
-
-.dark-mode .italic-text {
-    background: white;
-    color: black;
 }
 
 /* ========================
@@ -59,11 +34,11 @@
 /* ================================
     TEXTO Y TÍTULOS EN MODO OSCURO
    ================================ */
-.dark-mode h1, 
-.dark-mode h2, 
-.dark-mode h3, 
-.dark-mode h4, 
-.dark-mode h5, 
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
 .dark-mode h6 {
     color: white;
 }
@@ -104,7 +79,7 @@
     PANELES EN MODO OSCURO
    ======================== */
 
-   /* Background oscuro que todas las pantallas deberían llevar, independientemente de lo que sean */
+/* Background oscuro que todas las pantallas deberían llevar, independientemente de lo que sean */
 .dark-mode .div-bg {
     background-color: #111111;
 }
