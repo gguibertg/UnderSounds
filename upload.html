@@ -26,49 +26,55 @@
     <div id="header-placeholder"></div>
 
     <!-- Contenido principal -->
-    <main class="upload-page">
-        <h1 class="upload-title">Subir Canción</h1>
+    <main>
+        <div class="div-bg">
+            <br>
+            <div class="div-pannel upload-page">
+                <h1 class="upload-title">Subir Canción</h1>
 
-        <form class="upload-form">
-            <div class="upload-group">
-                <label for="title">Título</label>
-                <input type="text" id="title" name="title">
+                <form class="upload-form">
+                    <div class="div-pannel-sub upload-group" style="width: auto;">
+                        <label for="title">Título</label>
+                        <input type="text" id="title" name="title">
 
-                <label for="album">Álbum</label>
-                <input type="text" id="album" name="album">
+                        <label for="album">Álbum</label>
+                        <input type="text" id="album" name="album">
+                    </div>
+
+                    <div class="div-pannel-sub upload-checkbox-group" style="width: auto;">
+                        <label>Géneros</label>
+                        <div><input type="checkbox" id="rock"><label for="rock">Rock</label></div>
+                        <div><input type="checkbox" id="pop"><label for="pop">Pop</label></div>
+                        <div><input type="checkbox" id="jazz"><label for="jazz">Jazz</label></div>
+                        <div><input type="checkbox" id="hiphop"><label for="hiphop">Hip Hop</label></div>
+                        <div><input type="checkbox" id="electronic"><label for="electronic">Electrónica</label></div>
+                        <div><input type="checkbox" id="reggae"><label for="reggae">Reggae</label></div>
+                    </div>
+
+                    <div class="div-pannel-sub upload-checkbox-group" style="width: auto;">
+                        <label>Subgéneros</label>
+                        <div><input type="checkbox" id="punk"><label for="punk">Punk Rock</label></div>
+                        <div><input type="checkbox" id="metal"><label for="metal">Heavy Metal</label></div>
+                        <div><input type="checkbox" id="indie"><label for="indie">Indie Pop</label></div>
+                        <div><input type="checkbox" id="trap"><label for="trap">Trap</label></div>
+                        <div><input type="checkbox" id="techno"><label for="techno">Techno</label></div>
+                        <div><input type="checkbox" id="ska"><label for="ska">Ska</label></div>
+                    </div>
+
+                    <div class="div-pannel-sub upload-cover" style="width: auto;">
+                        <label>Portada</label>
+                        <img id="cover-preview" src="images/logo.png" alt="Portada del álbum">
+                        <input type="file" id="cover-upload" accept="image/*" hidden>
+                        <button type="button" class="upload-cover-button" onclick="document.getElementById('cover-upload').click();">Seleccionar portada</button>
+                    </div>
+                </form>
+
+                <div class="div-pannel-sub upload-song" style="width: auto;">
+                    <label for="song-upload">Seleccionar canción</label>
+                    <input type="file" id="song-upload" accept="audio/*">
+                </div>
             </div>
-
-            <div class="upload-checkbox-group">
-                <label>Géneros</label>
-                <div><input type="checkbox" id="rock"><label for="rock">Rock</label></div>
-                <div><input type="checkbox" id="pop"><label for="pop">Pop</label></div>
-                <div><input type="checkbox" id="jazz"><label for="jazz">Jazz</label></div>
-                <div><input type="checkbox" id="hiphop"><label for="hiphop">Hip Hop</label></div>
-                <div><input type="checkbox" id="electronic"><label for="electronic">Electrónica</label></div>
-                <div><input type="checkbox" id="reggae"><label for="reggae">Reggae</label></div>
-            </div>
-
-            <div class="upload-checkbox-group">
-                <label>Subgéneros</label>
-                <div><input type="checkbox" id="punk"><label for="punk">Punk Rock</label></div>
-                <div><input type="checkbox" id="metal"><label for="metal">Heavy Metal</label></div>
-                <div><input type="checkbox" id="indie"><label for="indie">Indie Pop</label></div>
-                <div><input type="checkbox" id="trap"><label for="trap">Trap</label></div>
-                <div><input type="checkbox" id="techno"><label for="techno">Techno</label></div>
-                <div><input type="checkbox" id="ska"><label for="ska">Ska</label></div>
-            </div>
-
-            <div class="upload-cover">
-                <label>Portada</label>
-                <img id="cover-preview" src="images/logo.png" alt="Portada del álbum">
-                <input type="file" id="cover-upload" accept="image/*" hidden>
-                <button type="button" class="upload-cover-button" onclick="document.getElementById('cover-upload').click();">Seleccionar portada</button>
-            </div>
-        </form>
-
-        <div class="upload-song">
-            <label for="song-upload">Seleccionar canción</label>
-            <input type="file" id="song-upload" accept="audio/*">
+            <br>
         </div>
     </main>
 
