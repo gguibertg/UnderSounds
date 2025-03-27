@@ -5,12 +5,13 @@
     <meta charset="UTF-8"> <!-- Codificación de caracteres -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
     <meta name="author" content="L1-G4">
-    <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
+    <title>Contacto</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
     <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
-    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilos de la barra de navegación -->
     <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilo del header -->
+    <link rel="stylesheet" href="/styles/footer.css"> <!-- Hoja de estilo del footer -->
     <link rel="stylesheet" href="/styles/contact.css"> <!-- Hoja de estilos principal -->
-
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
@@ -28,13 +29,15 @@
     <!-- Contenido principal -->
     <main>
         <div class="div-bg">
-            <h1 style="align-self: self-start; margin-left: 10px; margin-top: 10px;">Contactar con el soporte al cliente de UnderSounds</h1>
+            <h1 style="align-self: self-start; margin-left: 10px; margin-top: 10px;">Contactar con el soporte al cliente
+                de UnderSounds</h1>
             <br>
             <div class="grid-container">
 
                 <div style="grid-area: 1 / 1 / 2 / 2;">
                     <div class="div-pannel">
-                        <img src="/images/favicon/web-app-manifest-512x512.png" alt="Logo de la página" style="width: 35%; align-self: center;">
+                        <img src="/images/favicon/web-app-manifest-512x512.png" alt="Logo de la página"
+                            style="width: 35%; align-self: center;">
                     </div>
                     <br>
                     <div class="div-pannel">
@@ -61,7 +64,8 @@
                             <form class="grid-form">
                                 <div class="grid-content-narrow" style="grid-area: 1 / 1 / 2 / 3;">
                                     <label for="name">Nombre completo</label>
-                                    <input style="width: 100%;" type="text" id="name" name="name" placeholder="Nombre y apellidos">
+                                    <input style="width: 100%;" type="text" id="name" name="name"
+                                        placeholder="Nombre y apellidos">
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 2 / 1 / 3 / 2;">
                                     <label for="email">Correo electrónico</label>
@@ -73,12 +77,13 @@
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 3 / 1 / 4 / 3;">
                                     <label for="msg">Mensaje</label>
-                                    <input style="height: 80%;"type="text" id="msg" name="msg" placeholder="Mensaje">
+                                    <input style="height: 80%;" type="text" id="msg" name="msg" placeholder="Mensaje">
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 4 / 1 / 5 / 3;">
                                     <checkbox>
                                         <input type="checkbox" id="terms" name="terms">
-                                        <label for="terms">Estoy de acuerdo con que UnderSounds procese mis datos personales para llevar a cabo esta comunicación (obligatorio)</label>
+                                        <label for="terms">Estoy de acuerdo con que UnderSounds procese mis datos
+                                            personales para llevar a cabo esta comunicación (obligatorio)</label>
                                     </checkbox>
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 5 / 1 / 6 / 3;">
@@ -94,62 +99,10 @@
     </main>
 
     <!-- Pie de página -->
-    <footer class="footer">
-        <div class="footer-container">
+    <div id="footer-placeholder"></div>
 
-            <!-- Sección de enlaces -->
-            <div class="footer-links">
-                <div class="footer-column">
-                    <h3>Navegación</h3>
-                    <ul>
-                        <li><a href="index.html">Inicio</a></li>
-                        <li><a href="profile.html">Perfil</a></li>
-                        <li><a href="merchandising.html">Tienda</a></li>
-                        <li><a href="studio.html">Studio</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Social</h3>
-                    <ul>
-                        <li><a href="https://www.youtube.com/">YouTube</a></li>
-                        <li><a href="https://www.facebook.com">Facebook</a></li>
-                        <li><a href="https://www.instagram.com/">Instagram</a></li>
-                        <li><a href="https://x.com">Twitter</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Contacto</h3>
-                    <ul>
-                        <li><a href="about.html">Acerca de</a> y <a href="#">Copyright</a></li>
-                        <li><a href="faqs.html">FAQs</a></li>
-                        <li><a href="contact.html">Contáctanos</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Sección de logo e idioma -->
-            <div class="footer-brand">
-                <div class="logo">
-                    <span class="italic-text">Under Sounds</span>
-                </div>
-                <div class="settings">
-                    <button class="language-btn">Idioma: Español</button>
-                    <button class="contrast-btn">Contraste</button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Copyright -->
-        <div class="footer-copyright">
-            <p>Copyright © 2025 <strong>[UnderSounds]</strong>. Todos los derechos reservados.</p>
-        </div>
-
-    </footer>
-
-    <script src="scripts/darkmode.js"></script>
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/dark-mode.js"></script>
     <script src="scripts/header.js"></script>
 
 </body>

@@ -70,22 +70,6 @@
 }
 
 /* ========================
-    FOOTER EN MODO OSCURO
-   ======================== */
-.dark-mode .footer {
-    background-color: #111111;
-    border-top: 0.125rem solid #333;
-    color: white;
-}
-
-.dark-mode .footer-copyright {
-    color: #ccc;
-    border-top: 0.0625rem solid #444;
-}
-
-
-
-/* ========================
     PANELES EN MODO OSCURO
    ======================== */
 

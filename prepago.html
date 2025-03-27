@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
     <meta name="author" content="L1-G4">
     <title>Prepago</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
     <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
-    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilos de la barra de navegación -->
     <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
-    <link rel="stylesheet" href="/styles/prepago.css">
-
+    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilo del header -->
+    <link rel="stylesheet" href="/styles/footer.css"> <!-- Hoja de estilo del footer -->
+    <link rel="stylesheet" href="/styles/prepago.css"> <!-- Hoja de estilo de la página de prepago -->
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
@@ -43,8 +44,9 @@
                                 </label>
                             </div>
                         </div>
-                        
-                        <div class="div-pannel-sub" style="border-start-start-radius: 0px; border-start-end-radius: 0px;">
+
+                        <div class="div-pannel-sub"
+                            style="border-start-start-radius: 0px; border-start-end-radius: 0px;">
                             <div class="grid-container2">
                                 <p style="color: red; font-size: small;">Es obligatorio completar todos los campos</p>
                                 <div style="grid-area: 1 / 1 / 2 / 3;">
@@ -65,9 +67,10 @@
                                 <div style="grid-area: 3 / 1 / 4 / 3;">
                                     <div class="div-row">
                                         <input type="checkbox" id="4" name="Guardar Tarjeta"><label
-                                        style="font-size: small;">Guardar datos para futuras compras. Si activas esta
-                                        casilla se guardarán los datos de tu tarjeta para futuras compras. Podrás
-                                        eliminar tu tarjeta cuando quieras.</label>
+                                            style="font-size: small;">Guardar datos para futuras compras. Si activas
+                                            esta
+                                            casilla se guardarán los datos de tu tarjeta para futuras compras. Podrás
+                                            eliminar tu tarjeta cuando quieras.</label>
                                     </div>
                                 </div>
                                 <div style="grid-area: 4 / 1 / 5 / 2; align-self: center; justify-self: center;">
@@ -104,9 +107,13 @@
                                 </div>
                                 <hr>
                                 <div class="grid-lista">
-                                    <b><p>SubTotal</p></b>
+                                    <b>
+                                        <p>SubTotal</p>
+                                    </b>
                                     <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
-                                    <b><p>$12</p></b>
+                                    <b>
+                                        <p>$12</p>
+                                    </b>
                                 </div>
                             </div>
                         </div>
@@ -117,62 +124,10 @@
     </main>
 
     <!-- Pie de página -->
-    <footer class="footer">
-        <div class="footer-container">
+    <div id="footer-placeholder"></div>
 
-            <!-- Sección de enlaces -->
-            <div class="footer-links">
-                <div class="footer-column">
-                    <h3>Navegación</h3>
-                    <ul>
-                        <li><a href="index.html">Inicio</a></li>
-                        <li><a href="profile.html">Perfil</a></li>
-                        <li><a href="shop.html">Tienda</a></li>
-                        <li><a href="studio.html">Studio</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Social</h3>
-                    <ul>
-                        <li><a href="https://www.youtube.com/">YouTube</a></li>
-                        <li><a href="https://www.facebook.com">Facebook</a></li>
-                        <li><a href="https://www.instagram.com/">Instagram</a></li>
-                        <li><a href="https://x.com">Twitter</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Contacto</h3>
-                    <ul>
-                        <li><a href="about.html">Acerca de</a> y <a href="#">Copyright</a></li>
-                        <li><a href="faqs.html">FAQs</a></li>
-                        <li><a href="contact.html">Contáctanos</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Sección de logo e idioma -->
-            <div class="footer-brand">
-                <div class="logo">
-                    <span class="italic-text">Under Sounds</span>
-                </div>
-                <div class="settings">
-                    <button class="language-btn">Idioma: Español</button>
-                    <button class="contrast-btn">Contraste</button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Copyright -->
-        <div class="footer-copyright">
-            <p>Copyright © 2025 <strong>[UnderSounds]</strong>. Todos los derechos reservados.</p>
-        </div>
-
-    </footer>
-
-    <script src="scripts/darkmode.js"></script>
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/dark-mode.js"></script>
     <script src="scripts/header.js"></script>
 
 </body>

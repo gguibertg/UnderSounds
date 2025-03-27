@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
     <meta name="author" content="L1-G4">
     <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
-    <link rel="stylesheet" href="/styles/comprado.css">
+    <!-- Estilos -->
     <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
-    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilo de la barra de navegación -->
     <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
-
+    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilo de la barra de navegación -->
+    <link rel="stylesheet" href="/styles/footer.css"> <!-- Hoja de estilo del pie de página -->
+    <link rel="stylesheet" href="/styles/comprado.css"> <!-- Hoja de estilo de la página de compra -->
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
@@ -26,21 +27,25 @@
     <div id="header-placeholder"></div>
 
     <!-- Contenido principal -->
-    <main> 
+    <main>
         <div class="div-bg">
-            <div class="div-pannel-sub" style="width: 60%; margin: 0px; padding: 0px; align-items: center; margin-top: 1rem; margin-bottom: 1rem;">
+            <div class="div-pannel-sub"
+                style="width: 60%; margin: 0px; padding: 0px; align-items: center; margin-top: 1rem; margin-bottom: 1rem;">
                 <br>
                 <h3>Su compra ha sido realizada con éxito</h3>
                 <br>
                 <div class="box-button">
-                    <a href="carrito.html" style="width: 30%; height: 3rem;"><button class="compra-button">Volver al carrito</button></a>
-                    <a href="index.html" style="width: 30%; height: 3rem;"><button class="compra-button">Seguir comprando</button></a>
+                    <a href="carrito.html" style="width: 30%; height: 3rem;"><button class="compra-button">Volver al
+                            carrito</button></a>
+                    <a href="index.html" style="width: 30%; height: 3rem;"><button class="compra-button">Seguir
+                            comprando</button></a>
                 </div>
                 <br>
             </div>
             <br>
             <br>
-            <div class="div-pannel" style="width: 80%; margin: 0px; padding: 0px; align-items: center; margin-top: 1rem; margin-bottom: 1rem;">
+            <div class="div-pannel"
+                style="width: 80%; margin: 0px; padding: 0px; align-items: center; margin-top: 1rem; margin-bottom: 1rem;">
                 <br>
                 <h3><i>Podría gustarte</i></h3>
                 <div class="div-pannel">
@@ -73,62 +78,10 @@
     </main>
 
     <!-- Pie de página -->
-    <footer class="footer">
-        <div class="footer-container">
+    <div id="footer-placeholder"></div>
 
-            <!-- Sección de enlaces -->
-            <div class="footer-links">
-                <div class="footer-column">
-                    <h3>Navegación</h3>
-                    <ul>
-                        <li><a href="index.html">Inicio</a></li>
-                        <li><a href="profile.html">Perfil</a></li>
-                        <li><a href="merchandising.html">Tienda</a></li>
-                        <li><a href="studio.html">Studio</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Social</h3>
-                    <ul>
-                        <li><a href="https://www.youtube.com/">YouTube</a></li>
-                        <li><a href="https://www.facebook.com">Facebook</a></li>
-                        <li><a href="https://www.instagram.com/">Instagram</a></li>
-                        <li><a href="https://x.com">Twitter</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Contacto</h3>
-                    <ul>
-                        <li><a href="about.html">Acerca de y Copyright</a></li>
-                        <li><a href="faqs.html">FAQs</a></li>
-                        <li><a href="contact.html">Contáctanos</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Sección de logo e idioma -->
-            <div class="footer-brand">
-                <div class="logo">
-                    <span class="italic-text">Under Sounds</span>
-                </div>
-                <div class="settings">
-                    <button class="language-btn">Idioma: Español</button>
-                    <button class="contrast-btn">Contraste</button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Copyright -->
-        <div class="footer-copyright">
-            <p>Copyright © 2025 <strong>[UnderSounds]</strong>. Todos los derechos reservados.</p>
-        </div>
-
-    </footer>
-
-    <script src="scripts/darkmode.js"></script>
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/dark-mode.js"></script>
     <script src="scripts/header.js"></script>
 
 </body>

@@ -5,12 +5,13 @@
     <meta charset="UTF-8"> <!-- Codificación de caracteres -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
     <meta name="author" content="L1-G4">
-    <title>Song</title> <!-- Título que aparece en la pestaña del navegador -->
+    <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
     <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
-    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilos de la barra de navegación -->
     <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilo del header -->
+    <link rel="stylesheet" href="/styles/footer.css"> <!-- Hoja de estilo del footer -->
     <link rel="stylesheet" href="/styles/song.css"> <!-- Hoja de estilos de la página de canción -->
-
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
@@ -57,28 +58,32 @@
                     <div class="reviews-grid">
                         <article class="div-pannel-sub review">
                             <h3>¡Un clásico atemporal!</h3>
-                            <p>Rick Astley nos regaló un himno inolvidable. Esta canción siempre trae una sonrisa a mi rostro.
+                            <p>Rick Astley nos regaló un himno inolvidable. Esta canción siempre trae una sonrisa a mi
+                                rostro.
                             </p>
                             <p class="review-user"><strong>Juan Pérez</strong></p>
                         </article>
 
                         <article class="div-pannel-sub review">
                             <h3>No pasa de moda</h3>
-                            <p>Es increíble cómo esta canción sigue siendo tan popular después de tantos años. Definitivamente
+                            <p>Es increíble cómo esta canción sigue siendo tan popular después de tantos años.
+                                Definitivamente
                                 un éxito eterno.</p>
                             <p class="review-user"><strong>María López</strong></p>
                         </article>
 
                         <article class="div-pannel-sub review">
                             <h3>Perfecta para cualquier momento</h3>
-                            <p>La melodía, la letra y la energía de Rick Astley la convierten en una de mis favoritas. ¡No puedo
+                            <p>La melodía, la letra y la energía de Rick Astley la convierten en una de mis favoritas.
+                                ¡No puedo
                                 dejar de escucharla!</p>
                             <p class="review-user"><strong>Carlos Mendoza</strong></p>
                         </article>
 
                         <article class="div-pannel-sub review">
                             <h3>Siempre en mi playlist</h3>
-                            <p>Desde que la escuché por primera vez, se convirtió en una de mis canciones imprescindibles.
+                            <p>Desde que la escuché por primera vez, se convirtió en una de mis canciones
+                                imprescindibles.
                                 ¡Nunca decepciona!</p>
                             <p class="review-user"><strong>Laura Gómez</strong></p>
                         </article>
@@ -89,64 +94,12 @@
     </main>
 
     <!-- Pie de página -->
-    <footer class="footer">
-        <div class="footer-container">
+    <div id="footer-placeholder"></div>
 
-            <!-- Sección de enlaces -->
-            <div class="footer-links">
-                <div class="footer-column">
-                    <h3>Navegación</h3>
-                    <ul>
-                        <li><a href="index.html">Inicio</a></li>
-                        <li><a href="profile.html">Perfil</a></li>
-                        <li><a href="merchandising.html">Tienda</a></li>
-                        <li><a href="studio.html">Studio</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Social</h3>
-                    <ul>
-                        <li><a href="https://www.youtube.com/">YouTube</a></li>
-                        <li><a href="https://www.facebook.com">Facebook</a></li>
-                        <li><a href="https://www.instagram.com/">Instagram</a></li>
-                        <li><a href="https://x.com">Twitter</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Contacto</h3>
-                    <ul>
-                        <li><a href="about.html">Acerca de y Copyright</a></li>
-                        <li><a href="faqs.html">FAQs</a></li>
-                        <li><a href="contact.html">Contáctanos</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Sección de logo e idioma -->
-            <div class="footer-brand">
-                <div class="logo">
-                    <span class="italic-text">Under Sounds</span>
-                </div>
-                <div class="settings">
-                    <button class="language-btn">Idioma: Español</button>
-                    <button class="contrast-btn">Contraste</button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Copyright -->
-        <div class="footer-copyright">
-            <p>Copyright © 2025 <strong>[UnderSounds]</strong>. Todos los derechos reservados.</p>
-        </div>
-
-    </footer>
-
-    <script src="scripts/darkmode.js"></script>
-    <script src="scripts/song.js"></script>
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/dark-mode.js"></script>
     <script src="scripts/header.js"></script>
+
 </body>
 
 </html>
