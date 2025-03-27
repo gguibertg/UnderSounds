@@ -26,10 +26,10 @@
             <br>
             <h1>Registrarse en <span>UnderSounds</span></h1>
             <br>
-            <button type="button" class="button-alt">Registrarse con Google</button>
+            <button type="button" class="button-alt">Registrarse con Google</button> <!-- Este botón no está dentro de un formulario, ¡No enviará nada!. TODO: Cambiar cuando se haga el backend.-->
             <br>
             <hr>
-            <form class="form">
+            <form class="form" action="profile.html" method="get">
                 <label for="text">Nombre de usuario</label>
                 <input type="text" id="text" name="text" placeholder="Nombre de usuario">
                 <br>
@@ -39,7 +39,10 @@
                 <label for="password">Contraseña</label>
                 <input type="password" id="password" name="password" placeholder="Contraseña">
                 <br>
-                <button type="submit">Registrarse</button>
+                <label for="password">Reescribir contraseña</label>
+                <input type="password" id="password" name="password" placeholder="Contraseña">
+                <br>
+                <button type="submit">Continuar</button>
             </form>
             <br>
         </div>

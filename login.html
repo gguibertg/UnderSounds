@@ -26,10 +26,10 @@
             <br>
             <h1>Inicia sesión en <span>Logo</span></h1>
             <br>
-            <button type="button" class="button-alt">Iniciar sesión con Google</button>
+            <button type="button" class="button-alt">Iniciar sesión con Google</button> <!-- Este botón no está dentro de un formulario, ¡No enviará nada!. TODO: Cambiar cuando se haga el backend.-->
             <br>
             <hr>
-            <form class="form">
+            <form class="form" action="profile.html" method="get">
                 <label for="email">Correo electrónico</label>
                 <input type="email" id="email" name="email" placeholder="Correo electrónico">
                 <br>
@@ -37,7 +37,7 @@
                 <input type="password" id="password" name="password" placeholder="Contraseña">
                 <br>
                 <button type="submit">Iniciar sesión</button>
-                <button type="button" class="button-alt">Registrarse</button>
+                <button type="button" class="button-alt" onclick="window.location.href='registrar.html'">Registrarse</button>
             </form>
             <br>
         </div>
