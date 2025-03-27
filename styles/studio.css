@@ -1,28 +1,41 @@
 .parent {
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* 6 columnas iguales */
-    grid-auto-rows: 1fr;  /* Asegura que las filas tengan la misma altura */
-    gap: 10px;
-    align-items: stretch; /* Asegura que todas las celdas tengan la misma altura */
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); /* Ajusta dinámicamente el número de columnas */
+    gap: 20px; /* Espaciado entre filas y columnas */
+    align-items: center; /* Centra los elementos verticalmente */
+    justify-items: center; /* Centra los elementos horizontalmente */
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
 }
 
 .songs-cell {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Alinea los elementos a la izquierda */
-    justify-content: flex-start;
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    min-height: 250px; /* Fija una altura mínima para que las celdas no se vean pequeñas */
+    flex-direction: column; /* Organiza los elementos en una sola columna */
+    align-items: center;
+    max-width: 20rem;
+    min-width: auto;
 }
 
 .songs-image {
-    width: 100px;
-    height: auto;
-    margin-right: 15px; /* Espacio entre la imagen y los demás elementos */
+    width: 90%;
+    border-radius: 15px;
+    border: 2px solid #111;
+}
+
+.dark-mode .songs-image {
+    border: 2px solid #fff;
+}
+
+.song-info {
+    display: grid;
+    grid-template-rows: 2fr 1fr; /* La primera fila es el doble de alta que la segunda */
+    grid-auto-flow: column; /* Infinitas columnas */
+    column-gap: 5px; /* Espaciado entre los elementos */
+    align-items: center; /* Centra los elementos verticalmente */
+    justify-items: center; /* Centra los elementos horizontalmente */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    min-width: auto;
+    overflow-wrap: break-word; /* Evita que el contenido se desborde */
 }
 
 .songs-icons {
@@ -58,65 +71,11 @@
     font-weight: bold;
     text-align: center;
     margin-bottom: 20px;
-    margin-top: 20px;
-}
-
-.dark-mode .songs-cell {
-    background-color: #666666;
-}
-
-/* Diseño responsive */
-@media (max-width: 1200px) {
-    .parent {
-        grid-template-columns: repeat(4, 1fr); /* Para pantallas medianas, 4 columnas */
-    }
-
-    .songs-image {
-        width: 80px; /* Reducimos el tamaño de la imagen en pantallas más pequeñas */
-    }
-
-    .songs-cell {
-        min-height: 200px; /* Menor altura en pantallas pequeñas */
-    }
-}
-
-@media (max-width: 800px) {
-    .parent {
-        grid-template-columns: repeat(2, 1fr); /* Para pantallas más pequeñas, 2 columnas */
-    }
-
-    .songs-cell {
-        min-height: 180px; /* Ajustamos la altura */
-    }
-
-    .songs-image {
-        width: 60px; /* Reducimos aún más el tamaño de la imagen */
-    }
-}
-
-@media (max-width: 500px) {
-    .parent {
-        grid-template-columns: 1fr; /* En pantallas muy pequeñas, una sola columna */
-    }
-
-    .songs-cell {
-        min-height: 150px; /* Ajustamos la altura para pantallas más pequeñas */
-    }
-
-    .songs-image {
-        width: 50px; /* Imagen más pequeña en pantallas muy pequeñas */
-    }
-
-    .songs-icons {
-        gap: 5px; /* Reducimos el espacio entre los íconos */
-    }
-
-    .songs-values {
-        font-size: 12px; /* Reducimos el tamaño de la fuente en pantallas pequeñas */
-    }
 }
 
 
 
-    
-    
+
+
+
+
