@@ -130,15 +130,12 @@ header {
     background-color: white;
 }
 
-.nav-top .logo {
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-    padding: 10px 15px;
-    text-transform: uppercase;
-    border-radius: 5px;
-    font-size: 1rem;
-    display: inline-block;
+/* Estilo general para el logo */
+.logo img {
+    max-height: 250px;       /* Altura máxima para que no ocupe demasiado */
+    width: auto;            /* Mantiene proporción */
+    display: block;
+    object-fit: contain;    /* Se ajusta al contenedor sin recortarse */
 }
 
 .search-bar {
@@ -229,13 +226,8 @@ main {
     gap: 8px;
 }
 
-.footer-brand {
-    display: flex;
-    flex-direction: column;
-    align-self: center;
-    align-items: flex-end;
-    text-align: right;
-    width: 30%;
+.footer .logo img {
+    max-height: 40px;
 }
 
 .italic-text {
