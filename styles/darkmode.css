@@ -8,6 +8,10 @@
     color: white;
 }
 
+.dark-mode main {
+    background-color: #000000;
+}
+
 /* ========================
     BOTONES EN MODO OSCURO
    ======================== */
@@ -81,13 +85,15 @@
 /* Dibuja un panel principal */
 .dark-mode .div-pannel {
     background-color: #222222;
-    border-color: #aaaaaa;
+    border: 1px solid #555555;
+    box-shadow: 0 0 10px #444444;
 }
 
 /* Dibuja un panel secundario más clarito */
 .dark-mode .div-pannel-sub {
     background-color: #333333;
-    border-color: #aaaaaa;
+    border: 1px solid #555555;
+    box-shadow: 0 0 10px #444444;
 }
 
 /* Linea horizontal blanca */
