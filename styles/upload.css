@@ -47,7 +47,6 @@
 .upload-group label,
 .upload-checkbox-group label {
     font-weight: bold;
-    color: black;
     /* En modo claro */
 }
 
@@ -173,8 +172,8 @@
 }
 
 .upload-song input[type="file"]::file-selector-button {
-    background: #007bff;
-    color: white;
+    background: white;
+    color: black;
     border: none;
     padding: 10px 14px;
     border-radius: 5px;
