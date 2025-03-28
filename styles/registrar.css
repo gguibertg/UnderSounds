@@ -11,10 +11,9 @@ button {
     width: 300px;
 }
 
-.login {
+.div-pannel-sub {
     margin: auto;
     width: 30%;
-    background-color: #DDDDDD;
     padding: 10px;
     display: flex;
     flex-direction: column;
