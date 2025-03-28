@@ -71,19 +71,6 @@
     border: 1px solid #444;
 }
 
-.upload-checkbox-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 1.5rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 60px;
-    /* Aumentar separación entre columnas */
-    width: 100%;
-}
-
 .upload-checkbox-group {
     display: flex;
     flex-direction: column;

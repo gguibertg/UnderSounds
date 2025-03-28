@@ -38,34 +38,6 @@
     overflow-wrap: break-word; /* Evita que el contenido se desborde */
 }
 
-.songs-icons {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.songs-icons img {
-    width: 25px;
-    height: auto;
-}
-
-.songs-values {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    font-size: 14px;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-.songs-configuration {
-    width: 30px;
-    height: auto;
-    margin-left: auto;
-    margin-top: 10px; /* Asegura que el ícono de configuración esté al final */
-}
-
 .songs-title {
     font-size: xx-large;
     font-weight: bold;

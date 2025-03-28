@@ -90,11 +90,6 @@ hr {
 }
 
 /* Resumen del carrito */
-.cart-summary {
-    text-align: center;
-    align-self: center;
-}
-
 .checkout-btn {
     width: 100%;
 }
