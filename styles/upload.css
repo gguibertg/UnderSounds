@@ -88,9 +88,11 @@
 .upload-checkbox-group {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 3px;
     /* Más espacio entre opciones */
     text-align: left;
+    justify-content: center;
+    align-items: center;
 }
 
 .upload-cover {
