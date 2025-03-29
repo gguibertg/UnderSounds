@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const interval = setInterval(() => {
         const contrastButton = document.querySelector(".contrast-btn");
         const logo = document.querySelector(".logo"); // Seleccionar el logo
+        const shop = document.querySelector(".shop"); // Seleccionar el carrito
 
         if (contrastButton && logo) {
             clearInterval(interval); // Detener la búsqueda cuando encontramos los elementos
@@ -11,9 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (modo === "dark") {
                     document.body.classList.add("dark-mode");
                     logo.src = "/images/logooscuro.png"; // Cambiar al logo oscuro
+                    shop.src = "/images/carritoicons/shopping_oscuro.png"; // Cambiar al carrito oscuro
                 } else {
                     document.body.classList.remove("dark-mode");
                     logo.src = "/images/logoclaro.png"; // Cambiar al logo claro
+                    shop.src = "/images/carritoicons/shopping_claro.png"; // Cambiar al carrito oscuro
                 }
                 localStorage.setItem("theme", modo); // Guardar preferencia
             };
