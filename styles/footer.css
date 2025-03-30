@@ -69,6 +69,13 @@
     font-size: 1rem;
 }
 
+.footer-logo {
+    height: 100px;
+    width: 170px;
+    margin-right: 20%;
+    transition: transform 0.3s ease-in-out;
+}
+
 /* ========================
     FOOTER EN MODO OSCURO
    ======================== */
@@ -81,4 +88,10 @@
 .dark-mode .footer-copyright {
     color: #ccc;
     border-top: 0.0625rem solid #444;
+}
+
+.dark-mode .footer-logo {
+    height: 100px;
+    width: 170px;
+    transition: transform 0.3s ease-in-out;
 }

@@ -29,7 +29,7 @@
     display: grid;
     grid-template-rows: 2fr 1fr; /* La primera fila es el doble de alta que la segunda */
     grid-auto-flow: column; /* Infinitas columnas */
-    column-gap: 5px; /* Espaciado entre los elementos */
+    column-gap: 15px; /* Espaciado entre los elementos */
     align-items: center; /* Centra los elementos verticalmente */
     justify-items: center; /* Centra los elementos horizontalmente */
     margin-top: 10px;
@@ -43,6 +43,54 @@
     font-weight: bold;
     text-align: center;
     margin-bottom: 20px;
+}
+
+.song-love {
+    height: 45px;
+    width: 45px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.dark-mode .song-love {
+    height: 45px;
+    width: 45px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.song-comment{
+    height: 40px; 
+    width: 40px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.dark-mode .song-comment {
+    height: 40px;
+    width: 40px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.song-view {
+    height: 40px; 
+    width: 40px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.dark-mode .song-view {
+    height: 40px;
+    width: 40px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.song-info .song-visible {
+    height: 45px;
+    width: 45px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.dark-mode .song-visible {
+    height: 45px;
+    width: 45px;
+    transition: transform 0.3s ease-in-out;
 }
 
 

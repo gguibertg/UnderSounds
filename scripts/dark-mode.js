@@ -2,32 +2,51 @@ document.addEventListener("DOMContentLoaded", () => {
     const interval = setInterval(() => {
         const contrastButton = document.querySelector(".contrast-btn");
         const logo = document.querySelector(".logo"); // Seleccionar el logo
+        const fLogo = document.querySelector(".footer-logo"); // Seleccionar el logo
         const shop = document.querySelector(".shop"); // Seleccionar el carrito
-
-        if (contrastButton && logo) {
+        
+        // Elementos a modificar
+        const elementos = [
+            { className: "song-love", icon: "favouriteicon" },
+            { className: "song-comment", icon: "commenticon" },
+            { className: "song-view", icon: "viewsicon" },
+            { className: "song-visible", icon: "isvisibleicon" }
+        ];
+        
+        if (contrastButton && logo && shop) {
             clearInterval(interval); // Detener la búsqueda cuando encontramos los elementos
 
-            // Función para actualizar el tema y el logo
+            // Función para actualizar el tema y los iconos
             const actualizarModo = (modo) => {
-                if (modo === "dark") {
-                    document.body.classList.add("dark-mode");
-                    logo.src = "/images/logooscuro.png"; // Cambiar al logo oscuro
-                    shop.src = "/images/carritoicons/shopping_oscuro.png"; // Cambiar al carrito oscuro
-                } else {
-                    document.body.classList.remove("dark-mode");
-                    logo.src = "/images/logoclaro.png"; // Cambiar al logo claro
-                    shop.src = "/images/carritoicons/shopping_claro.png"; // Cambiar al carrito oscuro
-                }
+                const esOscuro = modo === "dark";
+                document.body.classList.toggle("dark-mode", esOscuro);
+                
+                logo.src = esOscuro ? "/images/logooscuro.png" : "/images/logoclaro.png";
+                fLogo.src = esOscuro ? "/images/logooscuro.png" : "/images/logoclaro.png";
+                shop.src = esOscuro ? "/images/carritoicons/shopping_oscuro.png" : "/images/carritoicons/shopping_claro.png";
+                
+                elementos.forEach(({ className, icon }) => {
+                    document.querySelectorAll(`.${className}`).forEach(elemento => {
+                        elemento.src = `images/studioicons/${icon}${esOscuro ? "_oscuro" : ""}.png`;
+                    });
+                });
+                
                 localStorage.setItem("theme", modo); // Guardar preferencia
             };
 
+            // Observar cambios en el DOM para actualizar imágenes dinámicamente
+            const observer = new MutationObserver(() => {
+                const userTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+                actualizarModo(userTheme);
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
+
             // Verificar la preferencia del usuario o usar la del sistema
             const userTheme = localStorage.getItem("theme");
-
             if (userTheme) {
                 actualizarModo(userTheme);
             } else {
-                // Si no hay preferencia guardada, usar la del sistema
                 const sistemaOscuro = window.matchMedia("(prefers-color-scheme: dark)").matches;
                 actualizarModo(sistemaOscuro ? "dark" : "light");
             }
