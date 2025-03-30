@@ -160,12 +160,12 @@ main {
 /* Dibuja un panel secundario más clarito */
 .div-pannel-sub {
     margin: auto;
-    width: inherit;
+    width: auto; 
     height: auto;
     background-color: #FFFFFF;
     border: 1px solid #aaaaaa;
     box-shadow: 0 0 10px #aaaaaa;
-    padding: 1rem 1rem 1rem 1rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;

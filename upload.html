@@ -2,16 +2,16 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="L1-G4">
-    <title>Nueva Canción</title> <!-- Título que aparece en la pestaña del navegador -->
+    <title>Nueva Canción</title>
     <!-- Estilos -->
-    <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
-    <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
-    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilo del header -->
-    <link rel="stylesheet" href="/styles/footer.css"> <!-- Hoja de estilo del footer -->
-    <link rel="stylesheet" href="/styles/upload.css"> <!-- Hoja de estilo de la página de subir canción -->
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/darkmode.css">
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="/styles/upload.css">
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
@@ -23,10 +23,8 @@
 
 <body>
 
-    <!-- Barra de navegación -->
     <div id="header-placeholder"></div>
 
-    <!-- Contenido principal -->
     <main>
         <div class="div-bg">
             <br>
@@ -34,34 +32,95 @@
                 <h1 class="upload-title">Subir Canción</h1>
 
                 <form class="upload-form">
+
                     <div class="div-pannel-sub upload-group" style="width: auto;">
                         <label for="title">Título</label>
                         <input type="text" id="title" name="title">
 
-                        <label for="album">Álbum</label>
-                        <input type="text" id="album" name="album">
+                        <label for="author">Autor</label>
+                        <input type="text" id="author" name="author">
+
+                        <label for="collaborators">Colaboradores</label>
+                        <input type="text" id="collaborators" name="collaborators"
+                            placeholder="Añade colaboradores separados por coma">
                     </div>
 
-                    <div class="div-pannel-sub upload-checkbox-group" style="width: auto;">
-                        <h2>Géneros</h2>
-                        <br>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="rock"><label for="rock">Rock</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="pop"><label for="pop">Pop</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="jazz"><label for="jazz">Jazz</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="hiphop"><label for="hiphop">Hip Hop</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="electronic"><label for="electronic">Electrónica</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="reggae"><label for="reggae">Reggae</label></div>
+                    <div class="div-pannel-sub upload-group" style="width: auto;">
+                        <label for="album-select">Álbum</label>
+                        <select id="album-select" name="album">
+                            <option value="">Selecciona un álbum</option>
+                            <option value="album1">Álbum 1</option>
+                            <option value="album2">Álbum 2</option>
+                            <option value="album3">Álbum 3</option>
+                        </select>
+
+                        <label for="description">Descripción</label>
+                        <textarea id="description" name="description" rows="4"
+                            placeholder="Escribe una breve descripción..."></textarea>
                     </div>
 
-                    <div class="div-pannel-sub upload-checkbox-group" style="width: auto;">
-                        <h2>Subgéneros</h2>
-                        <br>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="punk"><label for="punk">Punk Rock</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="metal"><label for="metal">Heavy Metal</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="indie"><label for="indie">Indie Pop</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="trap"><label for="trap">Trap</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="techno"><label for="techno">Techno</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="ska"><label for="ska">Ska</label></div>
+                    <div class="div-pannel-sub upload-checkbox-container" style="width:auto;">
+                        <h2>Géneros y Subgéneros</h2>
+                    
+                        <div style="display: flex; gap: 40px;">
+                            <!-- Géneros -->
+                            <div>
+                                <h3>Géneros</h3>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="rock">
+                                    <label for="rock">Rock</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pop">
+                                    <label for="pop">Pop</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="metal">
+                                    <label for="metal">Metal</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="jazz">
+                                    <label for="jazz">Jazz</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="blues">
+                                    <label for="blues">Blues</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="flamenco">
+                                    <label for="flamenco">Flamenco</label>
+                                </div>
+                            </div>
+                    
+                            <!-- Subgéneros -->
+                            <div>
+                                <h3>Subgéneros</h3>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="punk-rock">
+                                    <label for="punk-rock">Punk Rock</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="heavy-metal">
+                                    <label for="heavy-metal">Heavy Metal</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="indie-pop">
+                                    <label for="indie-pop">Indie Pop</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="trap">
+                                    <label for="trap">Trap</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="techno">
+                                    <label for="techno">Techno</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="ska">
+                                    <label for="ska">Ska</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="div-pannel-sub upload-cover" style="width: auto;">
@@ -71,19 +130,19 @@
                         <button type="button" class="upload-cover-button"
                             onclick="document.getElementById('cover-upload').click();">Seleccionar portada</button>
                     </div>
+
                 </form>
 
                 <div class="div-pannel-sub upload-song" style="width: auto;">
                     <label for="song-upload">Seleccionar canción</label>
                     <input type="file" id="song-upload" accept="audio/*">
                 </div>
-                <button type="submit" style="width: 30%">Subir canción</button> <!-- Este botón no está dentro de un formulario, ¡No enviará nada!. TODO: Cambiar cuando se haga el backend.-->
+                <button type="submit" style="width: 30%">Subir canción</button>
             </div>
             <br>
         </div>
     </main>
 
-    <!-- Pie de página -->
     <div id="footer-placeholder"></div>
 
     <script src="scripts/footer.js"></script>
