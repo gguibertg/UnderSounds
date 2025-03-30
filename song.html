@@ -1,31 +1,30 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
-    <meta name="author" content="L1-G4">
+    <meta charset="utf-8" /> <!-- Codificación de caracteres -->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" /> <!-- Escalabilidad de la página -->
+    <meta content="L1-G4" name="author" />
     <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
     <!-- Estilos -->
-    <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
-    <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
-    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilo del header -->
-    <link rel="stylesheet" href="/styles/footer.css"> <!-- Hoja de estilo del footer -->
-    <link rel="stylesheet" href="/styles/song.css"> <!-- Hoja de estilos de la página de canción -->
+    <link href="/styles/style.css" rel="stylesheet" /> <!-- Hoja de estilos principal -->
+    <link href="/styles/darkmode.css" rel="stylesheet" /> <!-- Hoja de estilo de modo oscuro -->
+    <link href="/styles/header.css" rel="stylesheet" /> <!-- Hoja de estilo del header -->
+    <link href="/styles/footer.css" rel="stylesheet" /> <!-- Hoja de estilo del footer -->
+    <link href="/styles/song.css" rel="stylesheet" /> <!-- Hoja de estilos de la página de canción -->
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
-    <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
-    <link rel="manifest" href="/images/favicon/site.webmanifest" />
+    <link href="/images/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png" />
+    <link href="/images/favicon/favicon.svg" rel="icon" type="image/svg+xml" />
+    <link href="/images/favicon/favicon.ico" rel="shortcut icon" />
+    <link href="/images/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
+    <meta content="UnderSounds" name="apple-mobile-web-app-title" />
+    <link href="/images/favicon/site.webmanifest" rel="manifest" />
 </head>
 
 <body>
-
     <!-- Barra de navegación -->
     <div id="header-placeholder"></div>
-
     <!-- Contenido principal -->
     <main>
         <div class="div-bg">
@@ -33,73 +32,98 @@
                 <section class="song-top">
                     <div class="div-pannel song-info">
                         <h2 class="song-title">Never Gonna Give you Up</h2>
-                        <p class="song-author">Rick Astley </p>
-                        <p class="song-album">Whenever You Need Somebody</p>
-
+                        <p><strong>Autor:</strong> Rick Astley</p>
+                        <p><strong>Álbum:</strong> Whenever You Need Somebody</p>
+                        <p><strong>Descripción:</strong> Una de las canciones más icónicas de los 80, conocida
+                            mundialmente por el famoso "Rickroll".</p>
+                        <div class="song-stats">
+                            <p><strong>Likes:</strong> 12.345</p>
+                            <p><strong>Visualizaciones:</strong> 567.890</p>
+                        </div>
                         <div class="song-buttons">
                             <button class="btn download-btn">Descargar</button>
-                            <button class="btn fav-btn">♡</button>
+                            <button class="btn fav-btn" title="Añadir a favoritos">
+                                <img alt="Favorito" class="fav-icon" src="images/studioicons/favouriteicon.png" />
+                            </button>
                         </div>
                     </div>
-
                     <div class="div-pannel song-image" style="width: auto;">
-                        <img src="images/logo.png" alt="Portada del álbum">
+                        <img alt="Portada del álbum" src="images/rickroll.png" />
                     </div>
-
                     <div class="div-pannel review-form">
                         <h3>Reseña nueva</h3>
                         <textarea placeholder="Escribe tu reseña aquí..."></textarea>
                         <button class="btn publish-btn">Publicar</button>
                     </div>
                 </section>
-
                 <section class="div-pannel reviews" style="align-items: center;">
                     <h2>Reseñas</h2>
                     <div class="reviews-grid">
-                        <article class="div-pannel-sub review">
-                            <h3>¡Un clásico atemporal!</h3>
+                        <details class="review" open>
+                            <summary><img alt="Desplegar" class="chevron" height="16"
+                                    src="images/icons/drop-down_icon.svg" width="16" /><strong>Juan Pérez</strong> —
+                                ¡Un clásico atemporal!</summary>
                             <p>Rick Astley nos regaló un himno inolvidable. Esta canción siempre trae una sonrisa a mi
-                                rostro.
-                            </p>
-                            <p class="review-user"><strong>Juan Pérez</strong></p>
-                        </article>
-
-                        <article class="div-pannel-sub review">
-                            <h3>No pasa de moda</h3>
+                                rostro.</p>
+                            <div class="review-actions">
+                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                        src="images/icons/edit_icon.svg" width="20" /></button>
+                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                        src="images/icons/delete_icon.svg" width="20" /></button>
+                            </div>
+                        </details>
+                        <details class="review">
+                            <summary><img alt="Desplegar" class="chevron" height="16"
+                                    src="images/icons/drop-down_icon.svg" width="16" /><strong>María López</strong> —
+                                No pasa de moda</summary>
                             <p>Es increíble cómo esta canción sigue siendo tan popular después de tantos años.
                                 Definitivamente
                                 un éxito eterno.</p>
-                            <p class="review-user"><strong>María López</strong></p>
-                        </article>
-
-                        <article class="div-pannel-sub review">
-                            <h3>Perfecta para cualquier momento</h3>
+                            <div class="review-actions">
+                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                        src="images/icons/edit_icon.svg" width="20" /></button>
+                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                        src="images/icons/delete_icon.svg" width="20" /></button>
+                            </div>
+                        </details>
+                        <details class="review">
+                            <summary><img alt="Desplegar" class="chevron" height="16"
+                                    src="images/icons/drop-down_icon.svg" width="16" /><strong>Carlos
+                                    Mendoza</strong> — Perfecta para cualquier momento</summary>
                             <p>La melodía, la letra y la energía de Rick Astley la convierten en una de mis favoritas.
                                 ¡No puedo
                                 dejar de escucharla!</p>
-                            <p class="review-user"><strong>Carlos Mendoza</strong></p>
-                        </article>
-
-                        <article class="div-pannel-sub review">
-                            <h3>Siempre en mi playlist</h3>
+                            <div class="review-actions">
+                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                        src="images/icons/edit_icon.svg" width="20" /></button>
+                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                        src="images/icons/delete_icon.svg" width="20" /></button>
+                            </div>
+                        </details>
+                        <details class="review">
+                            <summary><img alt="Desplegar" class="chevron" height="16"
+                                    src="images/icons/drop-down_icon.svg" width="16" /><strong>Laura Gómez</strong> —
+                                Siempre en mi playlist</summary>
                             <p>Desde que la escuché por primera vez, se convirtió en una de mis canciones
                                 imprescindibles.
                                 ¡Nunca decepciona!</p>
-                            <p class="review-user"><strong>Laura Gómez</strong></p>
-                        </article>
+                            <div class="review-actions">
+                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                        src="images/icons/edit_icon.svg" width="20" /></button>
+                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                        src="images/icons/delete_icon.svg" width="20" /></button>
+                            </div>
+                        </details>
                     </div>
                 </section>
             </div>
         </div>
     </main>
-
     <!-- Pie de página -->
     <div id="footer-placeholder"></div>
-
     <script src="scripts/footer.js"></script>
     <script src="scripts/dark-mode.js"></script>
     <script src="scripts/header.js"></script>
-
 </body>
 
 </html>

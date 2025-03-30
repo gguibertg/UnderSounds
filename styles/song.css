@@ -1,7 +1,3 @@
-/* ==========================================================
-    ---------------------- SONG PAGE ----------------------
-   ========================================================== */
-
 .song-page {
     display: flex;
     flex-direction: column;
@@ -13,9 +9,6 @@
     text-align: center;
 }
 
-/* ===========================
-    SECCIÓN SUPERIOR DE LA CANCIÓN
-   =========================== */
 .song-top {
     display: flex;
     flex-direction: row;
@@ -35,14 +28,12 @@
 .song-album {
     margin-bottom: 5px;
     color: #007bff;
-    /* En modo claro */
 }
 
 .dark-mode .song-title,
 .dark-mode .song-author,
 .dark-mode .song-album {
     color: white;
-    /* En modo oscuro */
 }
 
 .song-image img {
@@ -77,90 +68,198 @@
     border: 1px solid #444;
 }
 
-/* ===========================
-    SECCIÓN DE RESEÑAS
-   =========================== */
-.reviews {
-    width: 100%;
-}
-
 .reviews h2 {
     margin-bottom: 0.9375rem;
-}
-
-.reviews-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.25rem;
-    justify-content: center;
-}
-
-.review {
-    /* Color de fondo en modo claro */
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
 }
 
 .review h3 {
     font-size: min(4vw, 1.125rem);
     font-weight: bold;
     color: #007bff;
-    /* En modo claro */
     margin-bottom: 0.5rem;
     text-align: center;
 }
 
 .dark-mode .review h3 {
     color: white;
-    /* Corregido a blanco en modo oscuro */
 }
 
-.review p {
-    font-size: 1rem;
-    color: #333;
-    /* En modo claro */
-    line-height: 1.5;
-    text-align: justify;
-}
-
-.dark-mode .review p {
-    color: #bbb;
-    /* En modo oscuro */
-}
-
-.review-user {
+.dark-mode .review-user {
     font-size: 0.875rem;
     color: #666;
-    /* En modo claro */
     margin-top: 0.625rem;
     font-weight: bold;
 }
 
 .dark-mode .review-user {
     color: #bbb;
-    /* En modo oscuro */
 }
 
-@media (max-width: 768px) {
-    .song-page {
-        max-width: 95%;
-        padding: 1.5rem;
-    }
+.review-actions button svg,
+.song-buttons button svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    vertical-align: middle;
+    pointer-events: none;
+}
 
-    .song-top {
-        flex-direction: column;
-        align-items: center;
-        gap: 1.25rem;
-        text-align: center;
-    }
+.song-buttons .fav-btn,
+.review-actions .button-alt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+}
 
-    .song-image img {
-        width: 180px;
-        height: 180px;
-    }
+.song-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
 
-    .reviews-grid {
-        grid-template-columns: 1fr;
-    }
+.song-info p {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.song-stats p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+}
+
+.song-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.reviews-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.fav-icon {
+    width: 24px;
+    height: 24px;
+    filter: drop-shadow(0 0 1px #00000044);
+}
+
+.review summary::-webkit-details-marker {
+    display: none;
+}
+
+.review[open] {
+    background-color: #e9e9e9;
+}
+
+.review-actions {
+    margin-top: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+}
+
+.dark-mode .dark-mode .review[open] {
+    background-color: #444;
+}
+
+.dark-mode .review p {
+    color: #ccc;
+}
+
+.review summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.review .chevron {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.review[open] .chevron {
+    transform: rotate(90deg);
+}
+
+.reviews-grid .review {
+    max-width: 750px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.reviews {
+    max-width: 850px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+
+.review {
+    background-color: #f4f4f4;
+    color: #222;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.review[open] {
+    background-color: #e9e9e9;
+}
+
+.review summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    list-style: none;
+}
+
+.review summary::-webkit-details-marker {
+    display: none;
+}
+
+.review p {
+    margin: 0.5rem 0;
+    text-align: justify;
+    font-size: 0.95rem;
+}
+
+.review-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.review .chevron {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.review[open] .chevron {
+    transform: rotate(90deg);
+}
+
+/* MODO OSCURO */
+.dark-mode .review {
+    background-color: #333;
+    color: #eee;
+    border-color: #555;
+}
+
+.dark-mode .review[open] {
+    background-color: #444;
+}
+
+.dark-mode .review p {
+    color: #ccc;
 }
