@@ -102,7 +102,7 @@ a:hover {
     ------------------------ OTRO GENERAL -------------------
    ========================================================== */
 
-input {
+input, textarea {
     width: 100%;
     background-color: white;
     padding: 12px;

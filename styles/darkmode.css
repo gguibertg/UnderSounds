@@ -39,7 +39,7 @@
     INPUTS EN MODO OSCURO
    ======================== */
 
-.dark-mode input {
+.dark-mode input, textarea {
     background: #1a1a1a;
     color: white;
     border: 1px solid #444;
