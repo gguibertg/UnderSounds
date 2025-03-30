@@ -21,7 +21,6 @@
 }
 
 .button-comprar-entradas{
-    justify-self: center;
     width: 60%;
     height: 5vh;
 }
@@ -57,3 +56,21 @@ h2 {
     text-align: center;
     margin-top: 10px;
 }
+
+.foto-producto {
+    width: 150px;
+    height: 150px;
+    border-radius: 25px;  /* Esto hace la imagen con bordes circulares */
+    object-fit: cover;   /* Ajusta la imagen sin deformarla */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra suave */
+    margin-bottom: 10px;  
+}
+
+.foto-producto:hover {
+    transform: scale(1.05);
+    transition: 0.4s;
+}
+
+.texto-producto {
+    font-size: 1.2rem;
+ }

@@ -54,6 +54,49 @@ h2 {
     padding: 10px;
     cursor: pointer;
     width: 100px; /* Ancho del botón */
+    border-radius: 25px;
     text-align: center;
     margin-top: 10px;
+}
+
+.foto-artista {
+    width: 150px;
+    height: 150px;
+    border-radius: 25px;  /* Esto hace la imagen con bordes circulares */
+    object-fit: cover;   /* Ajusta la imagen sin deformarla */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra suave */
+    margin-bottom: 10px;  
+}
+
+.foto-artista:hover {
+    transform: scale(1.05);
+    transition: 0.4s;
+}
+
+.foto-genero {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;  /* Esto hace la imagen circular */
+    object-fit: cover;   /* Ajusta la imagen sin deformarla */
+    border: 3px solid black;  /* Borde opcional */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra suave */
+    margin-bottom: 10px;
+}
+
+.foto-genero:hover {
+    transform: scale(1.05);
+    transition: 0.4s;
+}
+
+.button-ver-más {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 25px;
+    width: 100px; 
+    text-align: center;
+    margin-top: 10px;
+}
+
+.texto-producto {
+   font-size: 1.2rem;
 }
