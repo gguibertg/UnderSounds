@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const contrastButton = document.querySelector(".contrast-btn");
-    const logo = document.querySelector(".logo");
-    const fLogo = document.querySelector(".footer-logo");
-    const shop = document.querySelector(".shop");
+    const isLoginPage = document.body.classList.contains("login-page");
+
+    let logo = null;
+    let fLogo = null;
+    let shop = null;
 
     const elementos = [
         { className: "song-love", icon: "favouriteicon" },
@@ -15,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const esOscuro = modo === "dark";
         document.body.classList.toggle("dark-mode", esOscuro);
 
-        // Solo cambia imágenes si existen
         if (logo) logo.src = esOscuro ? "/images/logooscuro.png" : "/images/logoclaro.png";
         if (fLogo) fLogo.src = esOscuro ? "/images/logooscuro.png" : "/images/logoclaro.png";
         if (shop) shop.src = esOscuro ? "/images/carritoicons/shopping_oscuro.png" : "/images/carritoicons/shopping_claro.png";
@@ -33,27 +33,45 @@ document.addEventListener("DOMContentLoaded", () => {
         const userTheme = localStorage.getItem("theme");
         if (userTheme) {
             actualizarModo(userTheme);
-        } else {
-            const sistemaOscuro = window.matchMedia("(prefers-color-scheme: dark)").matches;
-            actualizarModo(sistemaOscuro ? "dark" : "light");
         }
     };
 
-    // Siempre aplica el modo preferido
+    const vincularBoton = () => {
+        const contrastButton = document.querySelector(".contrast-btn");
+        if (contrastButton && !contrastButton.dataset.listenerAttached) {
+            contrastButton.addEventListener("click", () => {
+                const esModoOscuro = document.body.classList.contains("dark-mode");
+                actualizarModo(esModoOscuro ? "light" : "dark");
+            });
+            contrastButton.dataset.listenerAttached = "true";
+        }
+    };
+
+    const capturarElementos = () => {
+        logo = document.querySelector(".logo");
+        fLogo = document.querySelector(".footer-logo");
+        shop = document.querySelector(".shop");
+    };
+
     aplicarModoPreferido();
 
-    // Si hay botón de contraste, lo hace interactivo
-    if (contrastButton) {
-        contrastButton.addEventListener("click", () => {
-            const isDark = document.body.classList.toggle("dark-mode");
-            actualizarModo(isDark ? "dark" : "light");
+    if (isLoginPage) {
+        capturarElementos();
+        vincularBoton();
+    } else {
+        document.addEventListener("headerLoaded", () => {
+            capturarElementos();
+            aplicarModoPreferido(); // Aplicar modo cuando header ya está listo
         });
 
-        const observer = new MutationObserver(() => {
-            const userTheme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-            actualizarModo(userTheme);
+        document.addEventListener("footerLoaded", () => {
+            vincularBoton(); // Conectar el botón de contraste del footer
         });
 
-        observer.observe(document.body, { childList: true, subtree: true });
+        // Extra: intento por si ya están en el DOM antes de que se dispare el evento
+        setTimeout(() => {
+            capturarElementos();
+            vincularBoton();
+        }, 500);
     }
 });
