@@ -35,14 +35,18 @@
 
                     <div class="div-pannel-sub upload-group" style="width: auto;">
                         <label for="title">Título</label>
-                        <input type="text" id="title" name="title">
+                        <input type="text" id="title" name="title" required>
 
                         <label for="author">Autor</label>
-                        <input type="text" id="author" name="author">
+                        <input type="text" id="author" name="author" required>
 
                         <label for="collaborators">Colaboradores</label>
                         <input type="text" id="collaborators" name="collaborators"
-                            placeholder="Separados por coma">
+                            placeholder="Separados por coma" required>
+
+                        <label for="price">Precio</label>
+                        <input type="text" id="price" name="price"
+                            placeholder="Precio de la canción" required>
                     </div>
 
                     <div class="div-pannel-sub upload-group" style="width: auto;">
@@ -56,7 +60,7 @@
 
                         <label for="description">Descripción</label>
                         <textarea id="description" name="description" rows="4"
-                            placeholder="Escribe una breve descripción..."></textarea>
+                            placeholder="Escribe una breve descripción..." required></textarea>
                     </div>
 
                     <div class="div-pannel-sub upload-checkbox-container" style="width:auto;">
