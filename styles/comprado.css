@@ -40,3 +40,12 @@ h3 {
 .dark-mode .contenedor{
     border: 2px solid white;
 }
+
+.foto-artista {
+    width: 150px;
+    height: 150px;
+    border-radius: 25px;  /* Esto hace la imagen con bordes circulares */
+    object-fit: cover;   /* Ajusta la imagen sin deformarla */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra suave */
+    margin-bottom: 10px;  
+}
