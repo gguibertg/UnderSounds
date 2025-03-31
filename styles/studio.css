@@ -93,7 +93,20 @@
     transition: transform 0.3s ease-in-out;
 }
 
+.delete-btn {
+    align-self: flex-end;
+    margin: -10px -10px 10px 0px;
+    background-color: #ff4646;
+    height: 38px;
+    width: 38px;
+    transition: transform 0.3s ease-in-out;
+    text-align: left;
+    padding-left: 9px; /* Shift text inside the button 9 pixels to the left */
+}
 
+.dark-mode .delete-btn {
+    background-color: #ff4646;
+}
 
 
 
