@@ -43,31 +43,70 @@
 
                         <label for="album">Descripción</label>
                         <textarea id="desc" name="desc" rows="6" cols="40" style="resize: none;"></textarea>
-
-                        <label for="album">Fecha de creación</label>
-                        <input type="date" id="creation-date" name="creation-date">
                     </div>
 
-                    <div class="div-pannel-sub upload-checkbox-group" style="width: auto;">
-                        <h2>Géneros</h2>
-                        <br>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="rock"><label for="rock">Rock</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="pop"><label for="pop">Pop</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="jazz"><label for="jazz">Jazz</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="hiphop"><label for="hiphop">Hip Hop</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="electronic"><label for="electronic">Electrónica</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="reggae"><label for="reggae">Reggae</label></div>
-                    </div>
-
-                    <div class="div-pannel-sub upload-checkbox-group" style="width: auto;">
-                        <h2>Subgéneros</h2>
-                        <br>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="punk"><label for="punk">Punk Rock</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="metal"><label for="metal">Heavy Metal</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="indie"><label for="indie">Indie Pop</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="trap"><label for="trap">Trap</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="techno"><label for="techno">Techno</label></div>
-                        <div class="upload-checkbox-group"><input type="checkbox" id="ska"><label for="ska">Ska</label></div>
+                    <div class="div-pannel-sub upload-checkbox-container" style="width:auto;">
+                        <h2>Géneros y Subgéneros</h2>
+                    
+                        <div style="display: flex; gap: 40px;">
+                            <!-- Géneros -->
+                            <div>
+                                <h3>Géneros</h3>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="rock">
+                                    <label for="rock">Rock</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pop">
+                                    <label for="pop">Pop</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="metal">
+                                    <label for="metal">Metal</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="jazz">
+                                    <label for="jazz">Jazz</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="blues">
+                                    <label for="blues">Blues</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="flamenco">
+                                    <label for="flamenco">Flamenco</label>
+                                </div>
+                            </div>
+                    
+                            <!-- Subgéneros -->
+                            <div>
+                                <h3>Subgéneros</h3>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="punk-rock">
+                                    <label for="punk-rock">Punk Rock</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="heavy-metal">
+                                    <label for="heavy-metal">Heavy Metal</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="indie-pop">
+                                    <label for="indie-pop">Indie Pop</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="trap">
+                                    <label for="trap">Trap</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="techno">
+                                    <label for="techno">Techno</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="ska">
+                                    <label for="ska">Ska</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="div-pannel-sub upload-cover" style="width: auto;">

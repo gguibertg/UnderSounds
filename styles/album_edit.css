@@ -1,6 +1,4 @@
-/* ==========================================================
-    ---------------------- UPLOAD PAGE ----------------------
-   ========================================================== */
+/* ==================== ALBUM EDIT PAGE ==================== */
 
 .upload-page {
     display: flex;
@@ -40,39 +38,115 @@
 }
 
 .upload-group label,
-.upload-checkbox-group label {
+.upload-checkbox-container label,
+.upload-song label {
     font-weight: bold;
+    color: #222;
 }
 
 .dark-mode .upload-group label,
-.dark-mode .upload-checkbox-group label {
+.dark-mode .upload-checkbox-container label,
+.dark-mode .upload-song label {
     color: white;
 }
 
-.upload-group input[type="text"] {
+.upload-group input[type="text"],
+.upload-group select,
+.upload-group textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background: white;
+    background-color: white;
     color: black;
+    font-size: 16px;
+    box-sizing: border-box;
 }
 
-.dark-mode .upload-group input[type="text"] {
-    background: #222;
+.upload-group textarea {
+    resize: vertical;
+}
+
+.dark-mode .upload-group input[type="text"],
+.dark-mode .upload-group select,
+.dark-mode .upload-group textarea {
+    background-color: #222;
     color: white;
     border: 1px solid #444;
 }
 
-.upload-checkbox-group {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    text-align: left;
-    justify-content: center;
-    align-items: center;
+.upload-group textarea::placeholder,
+.upload-group input[type="text"]::placeholder {
+    color: #888;
 }
 
+.dark-mode .upload-group textarea::placeholder,
+.dark-mode .upload-group input[type="text"]::placeholder {
+    color: #bbb;
+}
+
+.upload-group select option {
+    background: white;
+    color: black;
+}
+
+.dark-mode .upload-group select option {
+    background: #222;
+    color: white;
+}
+
+/* Géneros y Subgéneros */
+.upload-checkbox-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 1rem;
+    text-align: left;
+}
+
+.upload-checkbox-container h2 {
+    font-size: 1.25rem;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.dark-mode .upload-checkbox-container h2 {
+    color: white;
+}
+
+.upload-checkbox-container h3 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.dark-mode .upload-checkbox-container h3 {
+    color: #ddd;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin: 0;
+    width: auto;
+}
+
+.checkbox-item label {
+    font-size: 1rem;
+    font-weight: normal;
+    color: #222;
+}
+
+.dark-mode .checkbox-item label {
+    color: #fff;
+}
+
+/* Cover */
 .upload-cover {
     display: flex;
     flex-direction: column;
@@ -90,7 +164,6 @@
 
 .upload-cover-button {
     max-width: 150px;
-    text-align: center;
     background: #007bff;
     color: white;
     border: none;
@@ -115,6 +188,7 @@
     background: #ccc;
 }
 
+/* Canción */
 .upload-song {
     display: flex;
     flex-direction: column;
@@ -123,8 +197,32 @@
     margin-top: 30px;
 }
 
-.upload-song label {
+.upload-song input[type="file"] {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #007bff;
+    color: white;
+    font-size: 14px;
     font-weight: bold;
+}
+
+.dark-mode .upload-song input[type="file"] {
+    background: #222;
+    color: white;
+    border: 1px solid #444;
+}
+
+.upload-song input[type="file"]::file-selector-button {
+    background: white;
+    color: black;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
 }
 
 .grid-biblioteca {
