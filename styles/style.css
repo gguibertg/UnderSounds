@@ -181,8 +181,8 @@ main {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    overflow: scroll;
-    width: 75%;
+    overflow: auto;
+    width: 100%;
     justify-content: space-evenly;
     align-items: center;
     border: 2px solid gray;
