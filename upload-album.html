@@ -29,34 +29,23 @@
         <div class="div-bg">
             <br>
             <div class="div-pannel upload-page">
-                <h1 class="upload-title">Editar Canción</h1>
+                <h1 class="upload-title">Subir Álbum</h1>
 
                 <form class="upload-form">
 
                     <div class="div-pannel-sub upload-group" style="width: auto;">
                         <label for="title">Título</label>
-                        <input type="text" id="title" name="title" required placeholder="Título de la canción">
+                        <input type="text" id="title" name="title" required placeholder="Título del álbum">
 
                         <label for="author">Autor</label>
-                        <input type="text" id="author" name="author" required placeholder="Autor de la cacnión">
+                        <input type="text" id="author" name="author" required placeholder="Autor del álbum">
 
                         <label for="collaborators">Colaboradores</label>
                         <input type="text" id="collaborators" name="collaborators" placeholder="Separados por coma"
                             required>
 
                         <label for="price">Precio</label>
-                        <input type="text" id="price" name="price" placeholder="Precio de la canción" required>
-                    </div>
-
-                    <div class="div-pannel-sub upload-group" style="width: auto;">
-                        <label for="album-select">Álbum</label>
-                        <select id="album-select" name="album">
-                            <option value="">Selecciona un álbum</option>
-                            <option value="album1">Álbum 1</option>
-                            <option value="album2">Álbum 2</option>
-                            <option value="album3">Álbum 3</option>
-                        </select>
-
+                        <input type="text" id="price" name="price" placeholder="Precio del álbum" required>
                         <label for="description">Descripción</label>
                         <textarea id="description" name="description" rows="4"
                             placeholder="Escribe una breve descripción..." required></textarea>
@@ -135,8 +124,9 @@
                     </div>
 
                 </form>
+                
                 <a href="studio.html">
-                    <button type="submit">Guardar cambios</button>
+                    <button type="submit">Subir</button>
                 </a>
             </div>
             <br>
