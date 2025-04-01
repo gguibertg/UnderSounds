@@ -29,10 +29,21 @@ header {
     padding-left: 20px;
 }
 
+.profile-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .nav-top .logo {
     height: 65px;
     transition: transform 0.3s ease-in-out;
-    /*box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3); descomentar si lo preferís con sombra*/
+}
+
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 .nav-top .shop {

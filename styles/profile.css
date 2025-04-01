@@ -70,3 +70,18 @@
     text-align: center;
     margin-bottom: 20px;
 }
+
+.textarea {
+    background-color: white;  /* Establece un fondo claro */
+    color: black;             /* Establece el color del texto */
+    border: 1px solid #ccc;   /* Borde estándar */
+    padding: 10px;            /* Espaciado interno */
+}
+
+.dark-mode .textarea {
+    background-color: #1a1a1a;  /* Establece un fondo claro */
+    color: white;             /* Establece el color del texto */
+    border: 1px solid #444444;   /* Borde estándar */
+    padding: 10px;            /* Espaciado interno */
+}
+
