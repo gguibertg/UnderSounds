@@ -90,6 +90,11 @@ hr {
     background: #c82333;
 }
 
+.shopmore-btn {
+    width: 50%;
+    margin-left: 25%;
+}
+
 /* Resumen del carrito */
 .checkout-btn {
     width: 100%;

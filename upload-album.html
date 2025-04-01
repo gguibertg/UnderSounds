@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="L1-G4">
+    <title>Nueva Canción</title>
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/darkmode.css">
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="/styles/upload.css">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
+    <link rel="manifest" href="/images/favicon/site.webmanifest" />
+</head>
+
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="div-bg">
+            <br>
+            <div class="div-pannel upload-page">
+                <h1 class="upload-title">Subir Álbum</h1>
+
+                <form class="upload-form">
+
+                    <div class="div-pannel-sub upload-group" style="width: auto;">
+                        <label for="title">Título</label>
+                        <input type="text" id="title" name="title" required placeholder="Título del álbum">
+
+                        <label for="author">Autor</label>
+                        <input type="text" id="author" name="author" required placeholder="Autor del álbum">
+
+                        <label for="collaborators">Colaboradores</label>
+                        <input type="text" id="collaborators" name="collaborators" placeholder="Separados por coma"
+                            required>
+
+                        <label for="price">Precio</label>
+                        <input type="text" id="price" name="price" placeholder="Precio del álbum" required>
+                        <label for="description">Descripción</label>
+                        <textarea id="description" name="description" rows="4"
+                            placeholder="Escribe una breve descripción..." required></textarea>
+                    </div>
+
+                    <div class="div-pannel-sub upload-checkbox-container" style="width:auto;">
+                        <h2>Géneros y Subgéneros</h2>
+
+                        <div style="display: flex; gap: 40px;">
+                            <!-- Géneros -->
+                            <div>
+                                <h3>Géneros</h3>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="rock">
+                                    <label for="rock">Rock</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pop">
+                                    <label for="pop">Pop</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="metal">
+                                    <label for="metal">Metal</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="jazz">
+                                    <label for="jazz">Jazz</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="blues">
+                                    <label for="blues">Blues</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="flamenco">
+                                    <label for="flamenco">Flamenco</label>
+                                </div>
+                            </div>
+
+                            <!-- Subgéneros -->
+                            <div>
+                                <h3>Subgéneros</h3>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="punk-rock">
+                                    <label for="punk-rock">Punk Rock</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="heavy-metal">
+                                    <label for="heavy-metal">Heavy Metal</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="indie-pop">
+                                    <label for="indie-pop">Indie Pop</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="trap">
+                                    <label for="trap">Trap</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="techno">
+                                    <label for="techno">Techno</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="ska">
+                                    <label for="ska">Ska</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="div-pannel-sub upload-cover" style="width: auto;">
+                        <label>Portada</label>
+                        <img id="cover-preview" src="images/logo.png" alt="Portada del álbum">
+                        <input type="file" id="cover-upload" accept="image/*" hidden>
+                        <button type="button" class="upload-cover-button"
+                            onclick="document.getElementById('cover-upload').click();">Seleccionar portada</button>
+                    </div>
+
+                </form>
+                
+                <a href="studio.html">
+                    <button type="submit">Subir</button>
+                </a>
+            </div>
+            <br>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/dark-mode.js"></script>
+    <script src="scripts/header.js"></script>
+    <script src="scripts/upload-song-image.js"></script>
+
+</body>
+
+</html>
