@@ -1,0 +1,265 @@
+.song-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 2.5rem 1.25rem;
+    max-width: 85%;
+    margin: auto;
+    text-align: center;
+}
+
+.song-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    text-align: left;
+    gap: 2.5rem;
+}
+
+.song-info {
+    flex: 1;
+}
+
+.song-title,
+.song-author,
+.song-album {
+    margin-bottom: 5px;
+    color: #007bff;
+}
+
+.dark-mode .song-title,
+.dark-mode .song-author,
+.dark-mode .song-album {
+    color: white;
+}
+
+.song-image img {
+    width: 250px;
+    height: 250px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.review-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    align-items: center;
+}
+
+.review-form textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+
+.dark-mode .review-form textarea {
+    background-color: #222;
+    color: white;
+    border: 1px solid #444;
+}
+
+.reviews h2 {
+    margin-bottom: 0.9375rem;
+}
+
+.review h3 {
+    font-size: min(4vw, 1.125rem);
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.dark-mode .review h3 {
+    color: white;
+}
+
+.dark-mode .review-user {
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.625rem;
+    font-weight: bold;
+}
+
+.dark-mode .review-user {
+    color: #bbb;
+}
+
+.review-actions button svg,
+.song-buttons button svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    vertical-align: middle;
+    pointer-events: none;
+}
+
+.song-buttons .fav-btn,
+.review-actions .button-alt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+}
+
+.song-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.song-info p {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.song-stats p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+}
+
+.song-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.reviews-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.fav-icon {
+    width: 24px;
+    height: 24px;
+    filter: drop-shadow(0 0 1px #00000044);
+}
+
+.review summary::-webkit-details-marker {
+    display: none;
+}
+
+.review[open] {
+    background-color: #e9e9e9;
+}
+
+.review-actions {
+    margin-top: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+}
+
+.dark-mode .dark-mode .review[open] {
+    background-color: #444;
+}
+
+.dark-mode .review p {
+    color: #ccc;
+}
+
+.review summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.review .chevron {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.review[open] .chevron {
+    transform: rotate(90deg);
+}
+
+.reviews-grid .review {
+    max-width: 750px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.reviews {
+    max-width: 850px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+
+.review {
+    background-color: #f4f4f4;
+    color: #222;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.review[open] {
+    background-color: #e9e9e9;
+}
+
+.review summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    list-style: none;
+}
+
+.review summary::-webkit-details-marker {
+    display: none;
+}
+
+.review p {
+    margin: 0.5rem 0;
+    text-align: justify;
+    font-size: 0.95rem;
+}
+
+.review-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.review .chevron {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.review[open] .chevron {
+    transform: rotate(90deg);
+}
+
+/* MODO OSCURO */
+.dark-mode .review {
+    background-color: #333;
+    color: #eee;
+    border-color: #555;
+}
+
+.dark-mode .review[open] {
+    background-color: #444;
+}
+
+.dark-mode .review p {
+    color: #ccc;
+}

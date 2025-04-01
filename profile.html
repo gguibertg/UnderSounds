@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
+    <meta name="author" content="L1-G4">
+    <title>Perfil</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilo del header -->
+    <link rel="stylesheet" href="/styles/footer.css"> <!-- Hoja de estilo del footer -->
+    <link rel="stylesheet" href="/styles/profile.css"> <!-- Hoja de estilo del perfil -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
+    <link rel="manifest" href="/images/favicon/site.webmanifest" />
+</head>
+
+<body>
+
+    <!-- Barra de navegación -->
+    <div id="header-placeholder"></div>
+
+    <!-- Contenido principal -->
+    <main>
+        <div class="div-bg">
+            <div class="grid-container">
+
+                <div style="grid-area: 1 / 1 / 2 / 2;">
+                    <div class="div-pannel" style="height: 100%;">
+                        <div class="grid-content">
+                            <p style="font-size: 10rem; word-break: break-all;">Panel dinámico</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="grid-area: 1 / 2 / 2 / 3;">
+
+                    <div class="grid-content-narrow-row" style="justify-content: flex-start;">
+                        <img src="/images/logo.png" alt="Imagen de perfil" style="width: 96px;">
+                        <h1 style="font-size: 3rem;">Bienvenido de vuelta, USER</h1>
+                        <button style="margin: 20px 20px 20px 20px; width: 12%; background-color: #ff4646;">Cerrar sesión</button>
+                    </div>
+                    <br>
+
+                    <div class="div-pannel">
+                        <div class="grid-content">
+                            <h1>Información personal</h1>
+
+                            <form class="grid-form">
+                                <div class="grid-content-narrow" style="grid-area: 1 / 1 / 2 / 2;">
+                                    <label for="name">Nombre completo</label>
+                                    <input style="width: 100%;" type="text" id="name" name="name"
+                                        placeholder="Nombre y apellidos">
+                                </div>
+                                <div class="grid-content-narrow" style="grid-area: 1 / 2 / 2 / 3;">
+                                    <label for="email">Correo electrónico</label>
+                                    <input type="email" id="email" name="email" placeholder="Correo electrónico">
+                                </div>
+                                <div class="grid-content-narrow" style="grid-area: 1 / 3 / 2 / 4;">
+                                    <label for="telf">Enlaces sociales</label>
+                                    <input type="tel" id="telf" name="telf" placeholder="+1 234 56 78 90">
+                                </div>
+                                <div class="grid-content-narrow" style="grid-area: 1 / 4 / 2 / 5; align-items: center;">
+                                    <img src="/images/ph.png" alt="Imagen de perfil" style="width: 96px;">
+                                </div>
+                                <div class="grid-content-narrow" style="grid-area: 2 / 1 / 3 / 5;">
+                                    <label for="msg">Acerca de mi</label>
+                                    <textarea id="desc" name="desc" rows="6" cols="40" style="resize: none;"></textarea>
+                                    <br>
+                                    <button style="align-self: center; width: 30%;" type="submit">Guardar
+                                        cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="div-pannel">
+                        <div class="grid-content">
+                            <h1>Mi biblioteca</h1>
+                            <div class="grid-biblioteca">
+                                <div class="div-pannel-sub songs-cell">
+                                    <img src="images/studioicons/imagealbum.jpg" class="songs-image" alt="Song Image">
+                                    <h3>Título canción</h3>
+                                    <p>Álbum · Artista</p>
+                                    <a href="song.html" style="width: 100%;"><button style="width: 100%;">Ver canción</button></a>
+                                </div>
+                                <div class="div-pannel-sub songs-cell">
+                                    <img src="images/studioicons/imagealbum.jpg" class="songs-image" alt="Song Image">
+                                    <h3>Título canción</h3>
+                                    <p>Álbum · Artista</p>
+                                    <a href="song.html" style="width: 100%;"><button style="width: 100%;">Ver canción</button></a>
+                                </div>
+                                <div class="div-pannel-sub songs-cell">
+                                    <img src="images/studioicons/imagealbum.jpg" class="songs-image" alt="Song Image">
+                                    <h3>Título canción</h3>
+                                    <p>Álbum · Artista</p>
+                                    <a href="song.html" style="width: 100%;"><button style="width: 100%;">Ver canción</button></a>
+                                </div>
+                                <div class="div-pannel-sub songs-cell">
+                                    <img src="images/studioicons/imagealbum.jpg" class="songs-image" alt="Song Image">
+                                    <h3>Título canción</h3>
+                                    <p>Álbum · Artista</p>
+                                    <a href="song.html" style="width: 100%;"><button style="width: 100%;">Ver canción</button></a>
+                                </div>
+                                <div class="div-pannel-sub songs-cell">
+                                    <img src="images/studioicons/imagealbum.jpg" class="songs-image" alt="Song Image">
+                                    <h3>Título canción</h3>
+                                    <p>Álbum · Artista</p>
+                                    <a href="song.html" style="width: 100%;"><button style="width: 100%;">Ver canción</button></a>
+                                </div>
+                                <div class="div-pannel-sub songs-cell">
+                                    <img src="images/studioicons/imagealbum.jpg" class="songs-image" alt="Song Image">
+                                    <h3>Título canción</h3>
+                                    <p>Álbum · Artista</p>
+                                    <a href="song.html" style="width: 100%;"><button style="width: 100%;">Ver canción</button></a>
+                                </div>
+                                <div class="div-pannel-sub songs-cell">
+                                    <img src="images/studioicons/imagealbum.jpg" class="songs-image" alt="Song Image">
+                                    <h3>Título canción</h3>
+                                    <p>Álbum · Artista</p>
+                                    <a href="song.html" style="width: 100%;"><button style="width: 100%;">Ver canción</button></a>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="div-pannel">
+                        <div class="grid-content">
+                            <h1>Listas de reproducción</h1>
+                            <br>
+                            <h2>MiLista</h2>
+                            <div class="div-carrusel div-pannel-sub">
+                                <div class="grid-content-narrow-row">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                </div>
+                            </div>
+                            <br>
+                            <h2>MiLista2</h2>
+                            <div class="div-carrusel div-pannel-sub">
+                                <div class="grid-content-narrow-row">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                </div>
+                            </div>
+                            <br>
+                            <h2>MiLista3</h2>
+                            <div class="div-carrusel div-pannel-sub">
+                                <div class="grid-content-narrow-row">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                    <img src="/images/ph.png" alt="placeholder" style="width: 96px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="div-pannel">
+                        <div class="grid-content">
+                            <h1>Ajustes de seguridad</h1>
+                            <br>
+                            <div class="grid-warn-zone">
+                                <div style="grid-area: 1 / 1 / 2 / 2;">
+                                    <button style="width: 100%;">Cambiar contraseña</button>
+                                </div>
+                                <div style="grid-area: 1 / 2 / 2 / 3;">
+                                    <label>Solicita un cambio de contraseña a tu correo electrónico.</label>
+                                </div>
+                                <div style="grid-area: 2 / 1 / 3 / 2;">
+                                    <button style="width: 100%;">Cambiar correo electrónico</button>
+                                </div>
+                                <div style="grid-area: 2 / 2 / 3 / 3;">
+                                    <label>Solicita un cambio de correo electrónico. Necesitarás acceso a tu correo
+                                        electrónico anterior.</label>
+                                </div>
+                                <div style="grid-area: 3 / 1 / 4 / 2;">
+                                    <button style="width: 100%; background-color: #ff4646;">Cerrar cuenta</button>
+                                </div>
+                                <div style="grid-area: 3 / 2 / 4 / 3;">
+                                    <label>Cierra la cuenta permanentemente y elimina todos tus datos. Tendrás 14 días
+                                        de margen antes de la eliminación sea efectiva por si cambias de
+                                        opinión.</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <div id="footer-placeholder"></div>
+
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/dark-mode.js"></script>
+    <script src="scripts/header.js"></script>
+
+</body>
+
+</html>

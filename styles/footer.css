@@ -1,0 +1,97 @@
+/* ==========================================================
+    ------------------------ FOOTER ------------------------
+   ========================================================== */
+
+.footer {
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 2.5rem 3.75rem;
+    font-size: 1rem;
+    border-top: 2px solid #ccc;
+}
+
+.footer-container {
+    display: flex;
+}
+
+.footer-links {
+    display: flex;
+    gap: 60px;
+    flex-grow: 1;
+}
+
+.footer-column h3 {
+    gap: 12px;
+}
+
+.footer-column ul {
+    list-style: none;
+}
+
+.footer-column ul li {
+    gap: 8px;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    align-items: flex-end;
+    text-align: right;
+    width: 30%;
+}
+
+.italic-text {
+    font-style: italic;
+    font-size: min(5vw, 1.5rem);
+    font-weight: bold;
+    background: #007bff;
+    color: white;
+    padding: 15px 40px;
+    display: inline-block;
+    border-radius: 5px;
+    text-align: center;
+    width: 100%;
+    margin: auto;
+}
+
+.settings {
+    margin-top: 15px;
+    display: flex;
+    gap: 12px;
+}
+
+.footer-copyright {
+    text-align: center;
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 15px;
+    font-size: 1rem;
+}
+
+.footer-logo {
+    height: 100px;
+    width: 170px;
+    margin-right: 20%;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* ========================
+    FOOTER EN MODO OSCURO
+   ======================== */
+.dark-mode .footer {
+    background-color: #111111;
+    border-top: 0.125rem solid #333;
+    color: white;
+}
+
+.dark-mode .footer-copyright {
+    color: #ccc;
+    border-top: 0.0625rem solid #444;
+}
+
+.dark-mode .footer-logo {
+    height: 100px;
+    width: 170px;
+    transition: transform 0.3s ease-in-out;
+}

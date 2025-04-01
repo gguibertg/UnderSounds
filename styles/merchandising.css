@@ -1,0 +1,76 @@
+.grid-entradas {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: auto;
+    padding: 2%;
+}
+
+.dark-mode .grid-entradas {
+    border: 2px solid white;
+}
+
+.grid-info {
+    display: grid;
+    grid-auto-rows: minmax(10px, auto); /* Cada fila puede tener un tamaño independiente */
+    grid-row-gap: 2rem;
+}
+
+.button-comprar-entradas{
+    width: 60%;
+    height: 5vh;
+}
+
+h1{
+    text-align: left;
+    font-size: 4.5vh;
+    margin-left: 5px; 
+}
+
+h2 {
+    text-align: left;
+    font-size: 2.6vh;
+    margin-left: 5px;
+    margin-top: 25px;
+}
+
+.compra-button {
+    border-radius: 20px;
+    width: 50vh;
+    height: 7vh;
+}
+
+.dark-mode .contenedor,
+.dark-mode .banner {
+    border: 2px solid white;
+}
+
+.button-comprar-item {
+    padding: 10px;
+    cursor: pointer;
+    width: 100px; /* Ancho del botón */
+    text-align: center;
+    margin-top: 10px;
+}
+
+.foto-producto {
+    width: 150px;
+    height: 150px;
+    border-radius: 25px;  /* Esto hace la imagen con bordes circulares */
+    object-fit: cover;   /* Ajusta la imagen sin deformarla */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra suave */
+    margin-bottom: 10px;  
+}
+
+.foto-producto:hover {
+    transform: scale(1.05);
+    transition: 0.4s;
+}
+
+.texto-producto {
+    font-size: 1.2rem;
+ }

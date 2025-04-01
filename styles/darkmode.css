@@ -4,50 +4,60 @@
 
 /* Aplica el modo oscuro cuando el body tenga la clase "dark-mode" */
 .dark-mode {
-    background-color: #121212;
+    background-color: #000000;
     color: white;
 }
 
-/* =======================
-    HEADER EN MODO OSCURO
-   ======================= */
-.dark-mode header {
-    background-color: #1e1e1e;
-    border-bottom: 2px solid #333;
-}
-
-/* Barra de navegación inferior */
-.dark-mode .nav-bottom {
-    border-top: 2px solid #333;
-    background-color: #1e1e1e;
+.dark-mode main {
+    background-color: #000000;
 }
 
 /* ========================
     BOTONES EN MODO OSCURO
    ======================== */
 .dark-mode button {
-    background: #007bff;
-    color: white;
-    border: 1px solid #007bff;
+    background: white;
+    color: black;
+    border: 0.0625rem solid white;
 }
 
 .dark-mode button:hover {
-    background: #0056b3;
+    background: white;
+}
+
+.dark-mode .button-alt {
+    background: transparent;
+    color: white;
+    border: 0.0625rem solid white;
+}
+
+.dark-mode .button-alt:hover {
+    background: transparent;
+}
+
+/* ========================
+    INPUTS EN MODO OSCURO
+   ======================== */
+
+.dark-mode input, textarea {
+    background: #1a1a1a;
+    color: white;
+    border: 1px solid #444;
 }
 
 /* ================================
     TEXTO Y TÍTULOS EN MODO OSCURO
    ================================ */
-.dark-mode h1, 
-.dark-mode h2, 
-.dark-mode h3, 
-.dark-mode h4, 
-.dark-mode h5, 
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
 .dark-mode h6 {
     color: white;
 }
 
-/* Corregir colores en títulos del footer para mejor visibilidad */
+/* Ajuste en el footer */
 .dark-mode .footer-column h3 {
     color: #f8f9fa;
 }
@@ -63,17 +73,34 @@
     color: #f8f9fa;
 }
 
-
 /* ========================
-    FOOTER EN MODO OSCURO
+    PANELES EN MODO OSCURO
    ======================== */
-.dark-mode .footer {
-    background-color: #1e1e1e;
-    border-top: 2px solid #333;
+
+/* Background oscuro que todas las pantallas deberían llevar, independientemente de lo que sean */
+.dark-mode .div-bg {
+    background-color: #111111;
 }
 
-/* Copyright en modo oscuro */
-.dark-mode .footer-copyright {
-    color: #ccc;
-    border-top: 1px solid #444;
+/* Dibuja un panel principal */
+.dark-mode .div-pannel {
+    background-color: #222222;
+    border: 1px solid #555555;
+    box-shadow: 0 0 10px #444444;
+}
+
+/* Dibuja un panel secundario más clarito */
+.dark-mode .div-pannel-sub {
+    background-color: #333333;
+    border: 1px solid #555555;
+    box-shadow: 0 0 10px #444444;
+}
+
+/* Linea horizontal blanca */
+.dark-mode hr {
+    border: 1px solid #B1B2B5;
+}
+
+.dark-mode .div-carrusel {
+    border: 2px solid white;
 }

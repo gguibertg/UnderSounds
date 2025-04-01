@@ -1,0 +1,95 @@
+/* ==========================================================
+    ------------------------ HEADER ------------------------
+   ========================================================== */
+
+header {
+    background-color: white;
+    border-bottom: 2px solid #ccc;
+}
+
+.nav-top,
+.nav-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    margin: auto;
+    background-color: white;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav-top .container {
+    width: 15%;
+    height: auto;
+    padding-left: 20px;
+}
+
+.nav-top .logo {
+    height: 65px;
+    transition: transform 0.3s ease-in-out;
+    /*box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3); descomentar si lo preferís con sombra*/
+}
+
+.nav-top .shop {
+    width: 42px;
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
+    padding-right: 8px;
+}
+
+.search-bar {
+    border: 1px solid #ccc;
+    background-color: white;
+    box-shadow: none;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    max-width: 35%;
+    width: 100%;
+}
+
+.search-bar input {
+    padding: 8px;
+}
+
+.search-bar button {
+    padding: 8px;
+}
+
+.nav-bottom {
+    justify-content: flex-start;
+    border-top: 2px solid #ccc;
+}
+
+.nav-bottom ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+/* =======================
+    HEADER EN MODO OSCURO
+   ======================= */
+.dark-mode header,
+.dark-mode .nav-top {
+    background-color: #000000;
+    border-bottom: 0.125rem solid #333;
+}
+
+.dark-mode .nav-bottom {
+    border-top: 0.125rem solid #333;
+    background-color: #111111;
+}
+
+.dark-mode .italic-text {
+    background: white;
+    color: black;
+}

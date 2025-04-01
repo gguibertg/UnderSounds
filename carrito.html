@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
+    <meta name="author" content="L1-G4">
+    <title>Carrito</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilos de la barra de navegación -->
+    <link rel="stylesheet" href="/styles/footer.css"> <!-- Hoja de estilos del pie de página -->
+    <link rel="stylesheet" href="/styles/carrito.css"> <!-- Hoja de estilos de la página studio -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
+    <link rel="manifest" href="/images/favicon/site.webmanifest" />
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <div id="header-placeholder"></div>
+
+    <!-- Contenido principal -->
+    <main>
+
+        <div class="div-bg">
+            <div class="grid-container">
+                <div class="grid-area: 1 / 1 / 2 / 2;">
+                    <div class="div-pannel" style="width:80%; align-self: self-end;">
+                        <h2> Carrito </h2>
+                        <br>
+                        <div class="grid-carrito-items">
+
+                            <!-- Código de Rubén -->
+                            <!-- Lista de productos -->
+
+                            <div class="div-pannel-sub div-row">
+                                <div class="cart-item">
+                                    <img src="images/carritoicons/imagealbum.jpg" alt="Canción 1" class="item-image">
+                                    <div class="item-info">
+                                        <h3 class="item-title">Título de la Canción</h3>
+                                        <p class="item-description">Descripción breve del producto.</p>
+                                        <p class="item-author">Autor: <span>Nombre del Autor</span></p>
+                                    </div>
+                                </div>
+                                <div class="item-actions">
+                                    <p class="item-price">$1.99</p>
+                                    <button class="remove-btn">Eliminar</button>
+                                </div>
+                            </div>
+                            
+                            <div class="div-pannel-sub div-row">
+                                <div class="cart-item">
+                                    <img src="images/carritoicons/imagealbum1.jpg" alt="Canción 2" class="item-image">
+                                    <div class="item-info">
+                                        <h3 class="item-title">Otra Canción</h3>
+                                        <p class="item-description">Otra descripción del producto.</p>
+                                        <p class="item-author">Autor: <span>Otro Autor</span></p>
+                                    </div>
+                                </div>
+                                <div class="item-actions">
+                                        <p class="item-price">$2.49</p>
+                                        <button class="remove-btn">Eliminar</button>
+                                    </div>
+                            </div>
+
+                            <!-- Se pueden agregar más productos de forma similar -->
+                        
+                        </div>
+
+                    </div>
+                </div>
+                <div class="grid-area: 1 / 1 / 2 / 2;">
+                    <div class="div-pannel" style="width:80%;">
+                        <h2> Resumen </h2>
+                        <br>
+                        <div class="div-pannel-sub" style="width: inherit;">
+                            <div style="grid-area: 1 / 1 / 2 / 3; width: 100%;">
+                            <!-- Código de Rubén -->
+                            <!-- Resumen del carrito -->
+                            <hr>
+                            <div class="grid-lista">
+                                <p>Articulos1</p>
+                                <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
+                                <p>$12</p>
+                                <p>Articulos2</p>
+                                <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
+                                <p>$8</p>
+                                <p>Articulos3</p>
+                                <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
+                                <p>$10</p>
+                            </div>
+                            <hr>
+                            <div class="grid-lista">
+                                <b><p>SubTotal</p></b>
+                                <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
+                                <b><p>$12</p></b>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <a href="prepago.html" style="align-self: center; width: 50%;">
+                        <button class="checkout-btn">Comprar</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <div id="footer-placeholder"></div>
+
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/dark-mode.js"></script>
+    <script src="scripts/header.js"></script>
+
+</body>
+
+</html>

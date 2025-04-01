@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
+    <meta name="author" content="L1-G4">
+    <title>Studio</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilo del header -->
+    <link rel="stylesheet" href="/styles/footer.css"> <!-- Hoja de estilo del footer -->
+    <link rel="stylesheet" href="/styles/studio.css"> <!-- Hoja de estilos de la página studio -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
+    <link rel="manifest" href="/images/favicon/site.webmanifest" />
+</head>
+
+<body>
+
+    <!-- Barra de navegación -->
+    <div id="header-placeholder"></div>
+
+    <!-- Contenido principal -->
+    <main>
+        <div class="div-bg">
+            <div class="div-pannel" style="width: 100%; align-items: center;">
+                <p class="songs-title">Tus Canciones</p>
+                <div class="parent">
+                    
+                    <div class="div-pannel-sub songs-cell">
+                        <button class="delete-btn">🗑️</button>
+                        <img src="images/studioicons/imagealbum.jpg" class="songs-image" alt="Song Image">
+                        <b style="font-size: 1.3rem;">Título canción</b>
+                        <p>Álbum · Artista</p>
+                        <div class="song-info">
+                            <img src="images/studioicons/favouriteicon.png" class="song-love" alt="Favourites">
+                            <span>120</span> <!-- Número de favoritos -->
+                            <img src="images/studioicons/commenticon.png" class="song-comment" alt="Comments">
+                            <span>45</span> <!-- Número de comentarios -->
+                            <img src="images/studioicons/viewsicon.png" class="song-view" alt="Views">
+                            <span>1000</span> <!-- Número de reproducciones -->
+                            <img src="images/studioicons/isvisibleicon.png" class="song-visible" alt="Visibility">
+                            <span>Visible</span> <!-- Cancion Visible? -->
+                        </div>
+                        <a href="song-edit.html" style="width: 100%;"><button style="width: 100%;">Editar canción</button></a>
+                    </div>
+
+                </div>
+                <br>
+            </div>
+            <br>
+            <div class="div-pannel" style="width: 100%; align-items: center;">
+                <p class="songs-title">Tus Álbumes</p>
+                <div class="parent">
+                    
+                    <div class="div-pannel-sub songs-cell">
+                        <button class="delete-btn">🗑️</button>
+                        <img src="images/studioicons/imagealbum.jpg" class="songs-image" alt="Song Image">
+                        <b style="font-size: 1.3rem;">Título álbum</b>
+                        <p>Artista</p>
+                        <div class="song-info">
+                            <img src="images/studioicons/favouriteicon.png" class="song-love" alt="Favourites">
+                            <span>120</span> <!-- Número de favoritos -->
+                            <img src="images/studioicons/viewsicon.png" class="song-view" alt="Views">
+                            <span>1000</span> <!-- Número de reproducciones -->
+                        </div>
+                        <a href="album_edit.html" style="width: 100%;"><button style="width: 100%;">Editar álbum</button></a>
+                    </div>
+                    
+                    
+            </div>
+            <br>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <div id="footer-placeholder"></div>
+
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/dark-mode.js"></script>
+    <script src="scripts/header.js"></script>
+
+</body>
+
+</html>

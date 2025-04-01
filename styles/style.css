@@ -2,20 +2,12 @@
     ---------------------- RESET CSS ----------------------
    ========================================================= */
 
-/* Eliminar márgenes y paddings predeterminados */
-* {
+   * {
     margin: 0;
     padding: 0;
-}
-
-/* Box-sizing consistente */
-*,
-*::before,
-*::after {
     box-sizing: border-box;
 }
 
-/* El body ocupa toda la pantalla */
 body {
     min-height: 100dvh;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -23,7 +15,6 @@ body {
     flex-direction: column;
 }
 
-/* Heredar la fuente en los inputs y botones para coherencia */
 input,
 button,
 textarea,
@@ -31,7 +22,6 @@ select {
     font: inherit;
 }
 
-/* Ajustar el comportamiento del texto */
 p {
     text-wrap: pretty;
 }
@@ -43,9 +33,9 @@ h4,
 h5,
 h6 {
     text-wrap: balance;
+    color: #007bff;
 }
 
-/* Imágenes y videos responsivos */
 img,
 video,
 svg {
@@ -61,115 +51,66 @@ button {
     background: #007bff;
     color: white;
     border: none;
-    padding: 8px 14px;
+    padding: 0.5rem 0.875rem;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 1rem;
     border-radius: 5px;
     font-weight: 500;
     transition: background 0.3s ease, transform 0.2s ease;
 }
 
-/* Efecto hover en botones */
 button:hover {
     background: #0056b3;
     transform: scale(1.05);
-    /* Efecto de crecimiento */
+}
+
+.button-alt {
+    background: white;
+    color: #0056b3;
+    border: none;
+    padding: 0.5rem 0.875rem;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.2s ease;
+    border: 0.0625rem solid #0056b3;
+}
+
+.button-alt:hover {
+    background: white;
+    transform: scale(1.05);
 }
 
 /* ===========================
     ENLACES - ESTILO GENERAL
    =========================== */
 
-/* Todos los enlaces tendrán el mismo estilo */
 a {
     text-decoration: none;
     color: #007bff;
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 500;
-    /* Hace que el texto se vea más grueso */
     transition: color 0.3s ease;
 }
 
-/* Efecto hover en enlaces */
 a:hover {
     color: #0056b3;
 }
 
 /* ==========================================================
-    ------------------------ HEADER ------------------------
+    ------------------------ OTRO GENERAL -------------------
    ========================================================== */
 
-/* Contenedor general del header */
-header {
+input, textarea {
+    width: 100%;
     background-color: white;
-    border-bottom: 2px solid #ccc;
-}
-
-.nav-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 20px;
-    margin: auto;
-}
-
-/* Logo */
-.nav-top .logo {
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-    padding: 10px 15px;
-    text-transform: uppercase;
-    border-radius: 5px;
-    font-size: 14px;
-    display: inline-block;
-}
-
-/* Barra de búsqueda */
-.search-bar {
-    display: flex;
-    align-items: center;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    overflow: hidden;
-    max-width: 300px;
-    width: 100%;
-}
-
-.search-bar input {
-    flex: 1;
-    border: none;
-    padding: 8px;
-    outline: none;
-}
-
-.search-bar button {
-    background: white;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-}
-
-/* Barra de navegación inferior */
-.nav-bottom {
-    display: flex;
-    justify-content: flex-start;
-    /* Alinea los elementos a la izquierda */
-    padding: 12px 20px;
-    border-top: 2px solid #ccc;
-    /* Línea superior */
-    background-color: white;
-    margin: auto;
-}
-
-/* Lista de navegación */
-.nav-bottom ul {
-    list-style: none;
-    display: flex;
-    gap: 25px;
-    /* Espacio uniforme */
-    padding: 0;
-    margin: 0;
+    color: #222;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 /* ==========================================================
@@ -177,95 +118,172 @@ header {
    ========================================================== */
 
 main {
+    background-color: #efefef;
     padding: 20px;
     flex: 1;
-    /* Permite que el main ocupe el espacio disponible */
     display: flex;
     flex-direction: column;
 }
 
 /* ==========================================================
-    ------------------------ FOOTER ------------------------
+    ------------------------ PANELES ------------------------
    ========================================================== */
+/* Los paneles o divs son aquellos que dibujan algo, cualquier cosa, en el navegador. Su uso es muy recomendado, sino imperativo. */
 
-/* Estilos generales del footer */
-.footer {
-    background-color: #f8f9fa;
-    /* Fondo claro */
-    color: #333;
-    /* Texto oscuro */
-    padding: 40px 60px;
-    font-size: 14px;
-    border-top: 2px solid #ccc;
-    /* Línea superior */
-}
-
-/* Contenedor principal */
-.footer-container {
-    display: flex;
-}
-
-/* Sección de enlaces */
-.footer-links {
-    display: flex;
-    gap: 60px;
-    flex-grow: 1;
-}
-
-.footer-column h3 {
-    margin-bottom: 12px;
-}
-
-.footer-column ul {
-    list-style: none;
-}
-
-.footer-column ul li {
-    margin-bottom: 8px;
-}
-
-/* Sección del logo y configuraciones */
-.footer-brand {
+/* Background oscuro que todas las pantallas deberían llevar, independientemente de lo que sean */
+.div-bg {
+    width: 100%;
+    height: 100%;
+    background-color: #DDDDDD;
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    align-self: center;
-    align-items: flex-end;
-    text-align: right;
-    flex-grow: 0.3;
-    /* Reduce el espacio vacío */
+    align-items: center;
+    border-radius: 15px;
 }
 
-.italic-text {
-    font-style: italic;
-    font-size: 24px;
-    /* Tamaño más grande */
-    font-weight: bold;
-    background: #007bff;
-    color: white;
-    padding: 15px 40px;
-    /* Más padding para hacerlo más largo */
-    display: inline-block;
-    border-radius: 5px;
-    text-align: center;
-    width: 100%;
-    /* Hace que ocupe todo el ancho disponible */
+/* Dibuja un panel principal */
+.div-pannel {
     margin: auto;
-    /* Centra horizontalmente */
+    width: inherit;
+    height: auto;
+    background-color: #F4F4F4;
+    border: 1px solid #aaaaaa;
+    box-shadow: 0 0 10px #aaaaaa;
+    padding: 1rem 1rem 1rem 1rem;
+    display: flex;  
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 15px;
 }
 
-/* Botones de idioma y contraste */
-.settings {
-    margin-top: 15px;
+/* Dibuja un panel secundario más clarito */
+.div-pannel-sub {
+    margin: auto;
+    width: auto; 
+    height: auto;
+    background-color: #FFFFFF;
+    border: 1px solid #aaaaaa;
+    box-shadow: 0 0 10px #aaaaaa;
+    padding: 1rem;
     display: flex;
-    gap: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 15px;
 }
 
+.div-carrusel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow: auto;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 2%;
+}
 
-/* Copyright */
-.footer-copyright {
+/* Linea horizontal blanca */
+hr {
+    width: 85%;
+    border: 1px solid #B1B2B5;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* ==========================================================
+    ------------------------- GRIDS -------------------------
+   ========================================================== */
+/* Los grids son divs que no dibujan nada en el navegador. Solo sirven para organizar contenido. No es imperativo usarlas. */
+
+/* Organiza los contenidos en columnas */
+.grid-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    word-wrap: break-word;
+}
+
+/* Organiza los contenidos en columnas + sin gap + ligero margen interor */
+.grid-content-narrow {
+    width: auto;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    word-wrap: break-word;
+}
+
+/* Organiza los contenidos en filas + gap 2 + ligero margen interor */
+.grid-content-narrow-row {
+    width: inherit;
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+    gap: 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    word-wrap: break-word;
+}
+
+/* Contenedor genérico de dos columnas de igual tamaño */
+.grid-container {
+    width: inherit;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+}
+
+/* Contenedor genérico para forms */
+.grid-form {
+    width: inherit;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) 0.5fr;
+    grid-template-rows: 1fr 2fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+/* Contenedor genérico para listas de 3 elementos estilo prepago/carrito */
+.grid-lista {
+    display: grid;
+    grid-template-columns: minmax(10px, auto) minmax(1px, 70%) minmax(10px, auto);
+    justify-items: center;
+    font-size: 1.1rem;
+    row-gap: 1.5rem;
+    justify-content: space-evenly;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* ==========================================================
+    ------------------------- OTROS -------------------------
+   ========================================================== */
+
+/* Botón de volver atrás */
+.button-back {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
     text-align: center;
-    margin-top: 20px;
-    border-top: 1px solid #ccc;
-    padding-top: 15px;
-    font-size: 14px;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+}
+
+/* pequeño hack para hacer el texto label más grande */
+label {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
 }

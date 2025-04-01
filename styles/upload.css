@@ -1,0 +1,226 @@
+/* ==================== UPLOAD PAGE ==================== */
+
+.upload-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding: 40px 20px;
+    max-width: 60%;
+    margin: auto;
+    text-align: center;
+}
+
+.upload-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.dark-mode .upload-title {
+    color: white;
+}
+
+.upload-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    gap: 1rem;
+}
+
+.upload-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+}
+
+.upload-group label,
+.upload-checkbox-container label,
+.upload-song label {
+    font-weight: bold;
+    color: #222;
+}
+
+.dark-mode .upload-group label,
+.dark-mode .upload-checkbox-container label,
+.dark-mode .upload-song label {
+    color: white;
+}
+
+.upload-group input[type="text"],
+.upload-group select,
+.upload-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.upload-group textarea {
+    resize: vertical;
+}
+
+.dark-mode .upload-group input[type="text"],
+.dark-mode .upload-group select,
+.dark-mode .upload-group textarea {
+    background-color: #222;
+    color: white;
+    border: 1px solid #444;
+}
+
+.upload-group textarea::placeholder,
+.upload-group input[type="text"]::placeholder {
+    color: #888;
+}
+
+.dark-mode .upload-group textarea::placeholder,
+.dark-mode .upload-group input[type="text"]::placeholder {
+    color: #bbb;
+}
+
+.upload-group select option {
+    background: white;
+    color: black;
+}
+
+.dark-mode .upload-group select option {
+    background: #222;
+    color: white;
+}
+
+/* Géneros y Subgéneros */
+.upload-checkbox-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 1rem;
+    text-align: left;
+}
+
+.upload-checkbox-container h2 {
+    font-size: 1.25rem;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.dark-mode .upload-checkbox-container h2 {
+    color: white;
+}
+
+.upload-checkbox-container h3 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.dark-mode .upload-checkbox-container h3 {
+    color: #ddd;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin: 0;
+    width: auto;
+}
+
+.checkbox-item label {
+    font-size: 1rem;
+    font-weight: normal;
+    color: #222;
+}
+
+.dark-mode .checkbox-item label {
+    color: #fff;
+}
+
+/* Cover */
+.upload-cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.upload-cover img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+.upload-cover-button {
+    max-width: 150px;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.upload-cover-button:hover {
+    background: #0056b3;
+}
+
+.dark-mode .upload-cover-button {
+    background: white;
+    color: black;
+}
+
+.dark-mode .upload-cover-button:hover {
+    background: #ccc;
+}
+
+/* Canción */
+.upload-song {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.upload-song input[type="file"] {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #007bff;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dark-mode .upload-song input[type="file"] {
+    background: #222;
+    color: white;
+    border: 1px solid #444;
+}
+
+.upload-song input[type="file"]::file-selector-button {
+    background: white;
+    color: black;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}

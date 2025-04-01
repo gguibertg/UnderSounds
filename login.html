@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
+    <meta name="author" content="L1-G4">
+    <title>Iniciar Sesión</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/styles/login.css"> <!-- Hoja de estilo de modo oscuro -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
+    <link rel="manifest" href="/images/favicon/site.webmanifest" />
+</head>
+
+<body class="login-page">
+    <main>
+        <button onclick="window.history.back()" class="button-back">←</button>
+
+        <div class="div-pannel-sub">
+            <br>
+            <h1>Inicia sesión en <span>UnderSounds</span></h1>
+            <br>
+            <button type="button" class="button-alt">Iniciar sesión con Google</button>
+            <!-- Este botón no está dentro de un formulario, ¡No enviará nada!. TODO: Cambiar cuando se haga el backend.-->
+            <br>
+            <hr>
+            <form class="form" action="profile.html" method="get">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" placeholder="Correo electrónico">
+                <br>
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="Contraseña">
+                <br>
+                <button type="submit">Iniciar sesión</button>
+                <button type="button" class="button-alt"
+                    onclick="window.location.href='registrar.html'">Registrarse</button>
+            </form>
+            <br>
+        </div>
+        <!-- ✅ Botón para cambiar el modo de contraste -->
+        <button class="contrast-btn" aria-label="Cambiar modo oscuro/claro">
+            <img src="/images/icons/day-night_icon.svg" alt="Modo claro/oscuro" width="24" height="24">
+        </button>
+    </main>
+
+    <script src="scripts/dark-mode.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" /> <!-- Codificación de caracteres -->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" /> <!-- Escalabilidad de la página -->
+    <meta content="L1-G4" name="author" />
+    <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
+    <link href="/styles/style.css" rel="stylesheet" /> <!-- Hoja de estilos principal -->
+    <link href="/styles/darkmode.css" rel="stylesheet" /> <!-- Hoja de estilo de modo oscuro -->
+    <link href="/styles/header.css" rel="stylesheet" /> <!-- Hoja de estilo del header -->
+    <link href="/styles/footer.css" rel="stylesheet" /> <!-- Hoja de estilo del footer -->
+    <link href="/styles/song.css" rel="stylesheet" /> <!-- Hoja de estilos de la página de canción -->
+    <!-- Favicon -->
+    <link href="/images/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png" />
+    <link href="/images/favicon/favicon.svg" rel="icon" type="image/svg+xml" />
+    <link href="/images/favicon/favicon.ico" rel="shortcut icon" />
+    <link href="/images/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
+    <meta content="UnderSounds" name="apple-mobile-web-app-title" />
+    <link href="/images/favicon/site.webmanifest" rel="manifest" />
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <div id="header-placeholder"></div>
+    <!-- Contenido principal -->
+    <main>
+        <div class="div-bg">
+            <div class="song-page">
+                <section class="song-top">
+                    <div class="div-pannel song-info">
+                        <h2 class="song-title">Never Gonna Give you Up</h2>
+                        <p><strong>Autor:</strong> Rick Astley</p>
+                        <p><strong>Álbum:</strong> Whenever You Need Somebody</p>
+                        <p><strong>Descripción:</strong> Una de las canciones más icónicas de los 80, conocida
+                            mundialmente por el famoso "Rickroll".</p>
+                        <div class="song-stats">
+                            <p><strong>Likes:</strong> 12.345</p>
+                            <p><strong>Visualizaciones:</strong> 567.890</p>
+                        </div>
+                        <div class="song-stats">
+                            <p><strong>Precio:</strong> 12$</p>
+                        </div>
+                        <div class="song-buttons">
+                            <button class="btn download-btn">Descargar</button>
+                            <button class="btn fav-btn" title="Añadir a favoritos">
+                                <img alt="Favorito" class="fav-icon" src="images/studioicons/favouriteicon.png" />
+                            </button>
+                            <p style="align-self: center;"><strong>Precio:</strong> 12$</p>
+                        </div>
+                    </div>
+                    <div class="div-pannel song-image" style="width: auto;">
+                        <img alt="Portada del álbum" src="images/rickroll.png" />
+                    </div>
+                    <div class="div-pannel review-form">
+                        <h3>Reseña nueva</h3>
+                        <textarea placeholder="Escribe tu reseña aquí..."></textarea>
+                        <button class="btn publish-btn">Publicar</button>
+                    </div>
+                </section>
+                <section class="div-pannel reviews" style="align-items: center;">
+                    <h2>Reseñas</h2>
+                    <div class="reviews-grid">
+                        <details class="review" open>
+                            <summary><img alt="Desplegar" class="chevron" height="16"
+                                    src="images/icons/drop-down_icon.svg" width="16" /><strong>Juan Pérez</strong> —
+                                ¡Un clásico atemporal!</summary>
+                            <p>Rick Astley nos regaló un himno inolvidable. Esta canción siempre trae una sonrisa a mi
+                                rostro.</p>
+                            <div class="review-actions">
+                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                        src="images/icons/edit_icon.svg" width="20" /></button>
+                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                        src="images/icons/delete_icon.svg" width="20" /></button>
+                            </div>
+                        </details>
+                        <details class="review">
+                            <summary><img alt="Desplegar" class="chevron" height="16"
+                                    src="images/icons/drop-down_icon.svg" width="16" /><strong>María López</strong> —
+                                No pasa de moda</summary>
+                            <p>Es increíble cómo esta canción sigue siendo tan popular después de tantos años.
+                                Definitivamente
+                                un éxito eterno.</p>
+                            <div class="review-actions">
+                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                        src="images/icons/edit_icon.svg" width="20" /></button>
+                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                        src="images/icons/delete_icon.svg" width="20" /></button>
+                            </div>
+                        </details>
+                        <details class="review">
+                            <summary><img alt="Desplegar" class="chevron" height="16"
+                                    src="images/icons/drop-down_icon.svg" width="16" /><strong>Carlos
+                                    Mendoza</strong> — Perfecta para cualquier momento</summary>
+                            <p>La melodía, la letra y la energía de Rick Astley la convierten en una de mis favoritas.
+                                ¡No puedo
+                                dejar de escucharla!</p>
+                            <div class="review-actions">
+                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                        src="images/icons/edit_icon.svg" width="20" /></button>
+                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                        src="images/icons/delete_icon.svg" width="20" /></button>
+                            </div>
+                        </details>
+                        <details class="review">
+                            <summary><img alt="Desplegar" class="chevron" height="16"
+                                    src="images/icons/drop-down_icon.svg" width="16" /><strong>Laura Gómez</strong> —
+                                Siempre en mi playlist</summary>
+                            <p>Desde que la escuché por primera vez, se convirtió en una de mis canciones
+                                imprescindibles.
+                                ¡Nunca decepciona!</p>
+                            <div class="review-actions">
+                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                        src="images/icons/edit_icon.svg" width="20" /></button>
+                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                        src="images/icons/delete_icon.svg" width="20" /></button>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    <!-- Pie de página -->
+    <div id="footer-placeholder"></div>
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/dark-mode.js"></script>
+    <script src="scripts/header.js"></script>
+</body>
+
+</html>

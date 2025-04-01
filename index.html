@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
     <meta name="author" content="L1-G4">
     <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
     <link rel="stylesheet" href="/styles/style.css"> <!-- Hoja de estilos principal -->
     <link rel="stylesheet" href="/styles/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
-
+    <link rel="stylesheet" href="/styles/header.css"> <!-- Hoja de estilo del header -->
+    <link rel="stylesheet" href="/styles/footer.css"> <!-- Hoja de estilo del footer -->
+    <link rel="stylesheet" href="/styles/index.css"> <!-- Hoja de estilo del inicio -->
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
@@ -21,102 +24,95 @@
 <body>
 
     <!-- Barra de navegación -->
-    <header>
-        <nav class="navbar">
-
-            <!-- Sección superior: Logo, barra de búsqueda y botones -->
-            <div class="nav-top">
-                <a href="index.html" class="logo" aria-label="Inicio - Under Sounds">Under Sounds</a>
-
-                <form class="search-bar" role="search" aria-label="Buscar contenido">
-                    <input type="text" placeholder="Buscar..." aria-label="Campo de búsqueda">
-                    <button type="submit" class="search-button" aria-label="Buscar">🔍</button>
-                </form>
-
-                <div class="auth-buttons">
-                    <button class="login-btn" onclick="window.location.href='login.html'">Iniciar Sesión</button>
-                    <button class="signup-btn" onclick="window.location.href='register.html'">Registro</button>
-                </div>                
-            </div>
-
-            <!-- Sección inferior: Menú de navegación -->
-            <div class="nav-bottom">
-                <ul>
-                    <li><a href="collection.html">Biblioteca</a></li>
-                    <li><a href="following.html">Seguidos</a></li>
-                    <li><a href="newSong.html">Subir Canción</a></li>
-                    <li><a href="newAlbum.html">Subir Álbum</a></li>
-                </ul>
-            </div>
-
-        </nav>
-    </header>
+    <div id="header-placeholder"></div>
 
     <!-- Contenido principal -->
     <main>
-        <section>
-            <h2>Bienvenido a Under Sounds</h2>
-            <p>Explora nuestra biblioteca de música.</p>
-        </section>
+        <div class="div-bg">
+            <section>
+                <h1><i>Conciertos y festivales</i></h1>
+                <br>
+                <div class="div-pannel">
+                    <div class="grid-entradas">
+                        <div style="grid-area: 1 / 1 / 2 / 2;">
+                            <img src="images/lanzamientos/tomorrowland.jpg" width="100%">
+                        </div>
+                        <div style="grid-area: 1 / 2 / 2 / 3; text-align: justify;">
+                            <div class="grid-info div-pannel-sub">
+                                <h1>Tomorrowland</h1>
+                                <p>El momento del año que estabas esperando ha llegado.</p>
+                                <p> No pierdas la oportunidad de ser parte del festival de música electrónica más mágico del mundo. Donde los escenarios de ensueño, los artistas más legendarios y una comunidad global te esperan para crear recuerdos inolvidables.</p>
+                                <p>✈️ ¡El viaje comienza ahora! Asegura tu lugar en Tomorrowland 2024 y sé parte de la historia.</p>
+                                <p>Compra tus entradas hoy. The People of Tomorrow te esperan… ¿Estás listo? </p>
+                                <button onclick="window.location.href='https://www.tomorrowland.com/home/'" class="button-comprar-entradas">Comprar entradas</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <h1><i>Nuevos lanzamientos</i></h1>
+                <br>
+                <div class="div-carrusel div-pannel">
+                    <div style="margin-right: 1rem; margin-left: 1rem;">
+                        <a href="song.html"><img src="images/lanzamientos/Espresso_.jpg" class="foto-artista"></a>
+                        <p class="texto-producto">Espresso</p>
+                        <button class="button-comprar-item">Añadir</button>
+                    </div>
+                    <div style="margin-right: 1rem; margin-left: 1rem;">
+                        <a href="song.html"><img src="images/lanzamientos/Fein.jpg" class="foto-artista"></a>
+                        <p class="texto-producto">FE!N</p>
+                        <button class="button-comprar-item">Añadir</button>
+                    </div>
+                    <div style="margin-right: 1rem; margin-left: 1rem;">
+                        <a href="song.html"><img src="images/lanzamientos/donde quiero estar.jpg" class="foto-artista"></a>
+                        <p class="texto-producto">Donde quiero estar</p>
+                        <button class="button-comprar-item">Añadir</button>
+                    </div>
+                    <div style="margin-right: 1rem; margin-left: 1rem;">
+                        <a href="song.html"><img src="images/lanzamientos/debi.jpg" class="foto-artista"></a>
+                        <p class="texto-producto">Debi</p>
+                        <button class="button-comprar-item">Añadir</button>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <h1><i>Géneros que te podrían interesar</i></h1>
+                <br>
+                <div class="div-carrusel div-pannel">
+                    <div style="margin-right: 1rem; margin-left: 1rem;">
+                        <img src="images/lanzamientos/Pop-musica.avif" class="foto-genero">
+                        <p class="texto-producto">Pop</p>
+                        <button class="button-ver-más">Ver más</button>
+                    </div>
+                    <div style="margin-right: 1rem; margin-left: 1rem;">
+                        <img src="images/lanzamientos/Rock.jpg" class="foto-genero">
+                        <p class="texto-producto">Rock</p>
+                        <button class="button-ver-más">Ver más</button>
+                    </div>
+                    <div style="margin-right: 1rem; margin-left: 1rem;">
+                        <img src="images/lanzamientos/Rap.png" class="foto-genero">
+                        <p class="texto-producto">Trap</p>
+                        <button class="button-ver-más">Ver más</button>
+                    </div>
+                    <div style="margin-right: 1rem; margin-left: 1rem;">
+                        <img src="images/lanzamientos/jazz.jpg" class="foto-genero">
+                        <p class="texto-producto">Jazz</p>
+                        <button class="button-ver-más">Ver más</button>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
 
     <!-- Pie de página -->
-    <footer class="footer">
-        <div class="footer-container">
+    <div id="footer-placeholder"></div>
 
-            <!-- Sección de enlaces -->
-            <div class="footer-links">
-                <div class="footer-column">
-                    <h3>Navegación</h3>
-                    <ul>
-                        <li><a href="index.html">Inicio</a></li>
-                        <li><a href="profile.html">Perfil</a></li>
-                        <li><a href="shop.html">Tienda</a></li>
-                        <li><a href="studio.html">Studio</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Social</h3>
-                    <ul>
-                        <li><a href="https://www.youtube.com/">YouTube</a></li>
-                        <li><a href="https://www.facebook.com">Facebook</a></li>
-                        <li><a href="https://www.instagram.com/">Instagram</a></li>
-                        <li><a href="https://x.com">Twitter</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Contacto</h3>
-                    <ul>
-                        <li><a href="about.html">Acerca de</a> y <a href="#">Copyright</a></li>
-                        <li><a href="faqs.html">FAQs</a></li>
-                        <li><a href="contact.html">Contáctanos</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Sección de logo e idioma -->
-            <div class="footer-brand">
-                <div class="logo">
-                    <span class="italic-text">Under Sounds</span>
-                </div>
-                <div class="settings">
-                    <button class="language-btn">Idioma: Español</button>
-                    <button class="contrast-btn">Contraste</button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Copyright -->
-        <div class="footer-copyright">
-            <p>Copyright © 2025 <strong>[UnderSounds]</strong>. Todos los derechos reservados.</p>
-        </div>
-
-    </footer>
-
-    <script src="scripts/darkmode.js"></script>
+    <script src="scripts/footer.js"></script>
+    <script src="scripts/dark-mode.js"></script>
+    <script src="scripts/header.js"></script>
 
 </body>
 
