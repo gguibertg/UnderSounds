@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
+    <meta name="author" content="L1-G4">
+    <title>UnderSounds</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/static/css/base/style.css"> <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="/static/css/base/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/static/css/base/header.css"> <!-- Hoja de estilo del header -->
+    <link rel="stylesheet" href="/static/css/base/footer.css"> <!-- Hoja de estilo del footer -->
+    <link rel="stylesheet" href="/static/css/shop/purchased.css"> <!-- Hoja de estilo de la página de compra -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/icons/favicons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/static/icons/favicons/favicon.svg" />
+    <link rel="shortcut icon" href="/static/icons/favicons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
+    <link rel="manifest" href="/static/icons/favicons/site.webmanifest" />
+</head>
+
+<body>
+
+    <!-- Barra de navegación -->
+    <div id="header-placeholder"></div>
+
+    <!-- Contenido principal -->
+    <main>
+        <div class="div-bg">
+            <div class="div-pannel-sub"
+                style="width: 60%; margin: 0px; padding: 0px; align-items: center; margin-top: 1rem; margin-bottom: 1rem;">
+                <br>
+                <h3>Su compra ha sido realizada con éxito</h3>
+                <br>
+                <div class="box-button">
+                    <a href="/view/templates/shop/cart.html" style="width: 30%; height: 3rem;"><button class="compra-button">Volver al
+                            carrito</button></a>
+                    <a href="/view/templates/shop/merch.html" style="width: 30%; height: 3rem;"><button class="compra-button">Seguir
+                            comprando</button></a>
+                </div>
+                <br>
+            </div>
+            <br>
+            <br>
+            <div class="div-pannel"
+                style="width: 80%; margin: 0px; padding: 0px; align-items: center; margin-top: 1rem; margin-bottom: 1rem;">
+                <br>
+                <h3><i>Podría gustarte</i></h3>
+                <div class="div-carrusel div-pannel">
+                    <div style="margin-right: 1rem; margin-left: 1rem;">
+                        <a href="/view/templates/music/song.html"><img src="/static/img/releases/release-03.webp" class="foto-artista"></a>
+                        <p>Espresso</p>
+                        <button class="button-comprar-item">Añadir</button>
+                    </div>
+                    <div style="margin-right: 1rem; margin-left: 1rem;">
+                        <a href="/view/templates/music/song.html"><img src="/static/img/releases/release-04.webp" class="foto-artista"></a>
+                        <p>Fein</p>
+                        <button class="button-comprar-item">Añadir</button>
+                    </div>
+                    <div style="margin-right: 1rem; margin-left: 1rem;">
+                        <a href="/view/templates/music/song.html"><img src="/static/img/releases/release-02.webp" class="foto-artista"></a>
+                        <p>Donde quiero estar</p>
+                        <button class="button-comprar-item">Añadir</button>
+                    </div>
+                    <div style="margin-right: 1rem; margin-left: 1rem;">
+                        <a href="/view/templates/music/song.html"><img src="/static/img/releases/release-01.webp" class="foto-artista"></a>
+                        <p>Debi</p>
+                        <button class="button-comprar-item">Añadir</button>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/static/js/header.js"></script>
+    <script src="/static/js/footer.js"></script>
+    <script src="/static/js/dark-mode.js"></script>
+
+</body>
+
+</html>

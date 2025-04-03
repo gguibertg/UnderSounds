@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" /> <!-- Codificación de caracteres -->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" /> <!-- Escalabilidad de la página -->
+    <meta content="L1-G4" name="author" />
+    <title>Canción</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/static/css/base/style.css"> <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="/static/css/base/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/static/css/base/header.css"> <!-- Hoja de estilo del header -->
+    <link rel="stylesheet" href="/static/css/base/footer.css"> <!-- Hoja de estilo del footer -->
+    <link rel="stylesheet" href="/static/css/music/song.css"> <!-- Hoja de estilo de la página de canción -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/icons/favicons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/static/icons/favicons/favicon.svg" />
+    <link rel="shortcut icon" href="/static/icons/favicons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
+    <link rel="manifest" href="/static/icons/favicons/site.webmanifest" />
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <div id="header-placeholder"></div>
+    <!-- Contenido principal -->
+    <main>
+        <div class="div-bg">
+            <div class="song-page">
+                <section class="song-top">
+                    <div class="div-pannel song-info">
+                        <h2 class="song-title">Never Gonna Give you Up</h2>
+                        <p><strong>Autor:</strong> Rick Astley</p>
+                        <p><strong>Álbum:</strong> Whenever You Need Somebody</p>
+                        <p><strong>Descripción:</strong> Una de las canciones más icónicas de los 80, conocida
+                            mundialmente por el famoso "Rickroll".</p>
+                        <div class="song-stats">
+                            <p><strong>Likes:</strong> 12.345</p>
+                            <p><strong>Visualizaciones:</strong> 567.890</p>
+                        </div>
+                        <div class="song-stats">
+                            <p><strong>Precio:</strong> 12$</p>
+                        </div>
+                        <div class="song-buttons">
+                            <button class="btn download-btn">Descargar</button>
+                            <button class="btn fav-btn" title="Añadir a favoritos">
+                                <img alt="Favorito" class="fav-icon"
+                                    src="/static/icons/site/favourite-icon-light.svg" />
+                            </button>
+                            <p style="align-self: center;"><strong>Precio:</strong> 12$</p>
+                        </div>
+                    </div>
+                    <div class="div-pannel song-image" style="width: auto;">
+                        <img alt="Portada del álbum" src="/static/img/utils/rickroll-poster.webp" />
+                    </div>
+                    <div class="div-pannel review-form">
+                        <h3>Reseña nueva</h3>
+                        <textarea placeholder="Escribe tu reseña aquí..."></textarea>
+                        <button class="btn publish-btn">Publicar</button>
+                    </div>
+                </section>
+                <section class="div-pannel reviews" style="align-items: center;">
+                    <h2>Reseñas</h2>
+                    <div class="reviews-grid">
+                        <details class="review" open>
+                            <summary><img alt="Desplegar" class="chevron" height="16"
+                                    src="/static/icons/site/dropdown-icon.svg" width="16" /><strong>Juan Pérez</strong>
+                                —
+                                ¡Un clásico atemporal!</summary>
+                            <p>Rick Astley nos regaló un himno inolvidable. Esta canción siempre trae una sonrisa a mi
+                                rostro.</p>
+                            <div class="review-actions">
+                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                        src="/static/icons/site/edit-icon.svg" width="20" /></button>
+                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                        src="/static/icons/site/delete-icon.svg" width="20" /></button>
+                            </div>
+                        </details>
+                        <details class="review">
+                            <summary><img alt="Desplegar" class="chevron" height="16"
+                                    src="/static/icons/site/dropdown-icon.svg" width="16" /><strong>María López</strong>
+                                —
+                                No pasa de moda</summary>
+                            <p>Es increíble cómo esta canción sigue siendo tan popular después de tantos años.
+                                Definitivamente
+                                un éxito eterno.</p>
+                            <div class="review-actions">
+                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                        src="/static/icons/site/edit-icon.svg" width="20" /></button>
+                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                        src="/static/icons/site/delete-icon.svg" width="20" /></button>
+                            </div>
+                        </details>
+                        <details class="review">
+                            <summary><img alt="Desplegar" class="chevron" height="16"
+                                    src="/static/icons/site/dropdown-icon.svg" width="16" /><strong>Carlos
+                                    Mendoza</strong> — Perfecta para cualquier momento</summary>
+                            <p>La melodía, la letra y la energía de Rick Astley la convierten en una de mis favoritas.
+                                ¡No puedo
+                                dejar de escucharla!</p>
+                            <div class="review-actions">
+                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                        src="/static/icons/site/edit-icon.svg" width="20" /></button>
+                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                        src="/static/icons/site/delete-icon.svg" width="20" /></button>
+                            </div>
+                        </details>
+                        <details class="review">
+                            <summary><img alt="Desplegar" class="chevron" height="16"
+                                    src="/static/icons/site/dropdown-icon.svg" width="16" /><strong>Laura Gómez</strong>
+                                —
+                                Siempre en mi playlist</summary>
+                            <p>Desde que la escuché por primera vez, se convirtió en una de mis canciones
+                                imprescindibles.
+                                ¡Nunca decepciona!</p>
+                            <div class="review-actions">
+                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                        src="/static/icons/site/edit-icon.svg" width="20" /></button>
+                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                        src="/static/icons/site/delete-icon.svg" width="20" /></button>
+                            </div>
+                        </details>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    <!-- Pie de página -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/static/js/header.js"></script>
+    <script src="/static/js/footer.js"></script>
+    <script src="/static/js/dark-mode.js"></script>
+</body>
+
+</html>
