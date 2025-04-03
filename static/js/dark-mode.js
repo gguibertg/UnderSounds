@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Íconos de acciones sobre la canción que deben cambiar según el tema
     const elementos = [
-        { className: "song-love", icon: "fav-icon" },
+        { className: "song-love", icon: "favourite-icon" },
         { className: "song-comment", icon: "comment-icon" },
         { className: "song-view", icon: "views-icon" },
         { className: "song-visible", icon: "visibility-icon" }
