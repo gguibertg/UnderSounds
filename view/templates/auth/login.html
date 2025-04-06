@@ -31,7 +31,7 @@
             <!-- Este botón no está dentro de un formulario, ¡No enviará nada!. TODO: Cambiar cuando se haga el backend.-->
             <br>
             <hr>
-            <form class="form" action="/view/templates/user/profile.html" method="get">
+            <form class="form" action="/profile" method="get">
                 <label for="email">Correo electrónico</label>
                 <input type="email" id="email" name="email" placeholder="Correo electrónico">
                 <br>
@@ -40,7 +40,7 @@
                 <br>
                 <button type="submit">Iniciar sesión</button>
                 <button type="button" class="button-alt"
-                    onclick="window.location.href='register.html'">Registrarse</button>
+                    onclick="window.location.href='/register'">Registrarse</button>
             </form>
             <br>
         </div>

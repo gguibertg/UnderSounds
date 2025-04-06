@@ -19,7 +19,7 @@ function startTimer(duration, display) {
 
         if (timer < 0) {
             clearInterval(interval);
-            window.location.href = "/view/templates/shop/purchased.html"; // Cambia la URL si hace falta
+            window.location.href = "/purchased"; // Cambia la URL si hace falta
         }
     }, 1000);
 }
