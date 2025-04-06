@@ -1,4 +1,4 @@
-from .dao.mongodb.collection import FirebaseDAOFactory #TODO: Cambiar a MongoDB
+from .dao.mongodb.mongodbDAOFactory import mongodbDAOFactory #TODO: Cambiar a MongoDB
 from .dto.song_dto import SongDTO, SongsDTO
 
 # La clase Model es la encargada de gestionar los datos y la lógica de negocio de la aplicación.
@@ -8,7 +8,7 @@ class Model ():
 
     # Al crear la clase definimos factores y DAOs que vamos a usar para interactuar con la base de datos.
     def __init__(self):
-        self.factory = FirebaseDAOFactory()
+        self.factory = mongodbDAOFactory()
         self.daoSong = self.factory.getSongDao()
         pass
 

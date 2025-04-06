@@ -1,5 +1,5 @@
-from ...factory import InterfaceDAOFactory 
-from .collection.mongodbDAOSong import FirebaseSongDAO
+from ...factory.interface_dao_factory import InterfaceDAOFactory
+from .collection.mongodbDAOSong import mongodbSongDAO
 #from firebase_admin import credentials, firestore, initialize_app, auth
 
 # -----------------------------------------------------------
@@ -7,7 +7,7 @@ from .collection.mongodbDAOSong import FirebaseSongDAO
 # Quien lo sepa mejor, que lo explique aquí:
 # -----------------------------------------------------------
 
-class MongoDBDAOFactory(InterfaceDAOFactory):
+class mongodbDAOFactory(InterfaceDAOFactory):
 
     def __init__(self):
 #         ## Conexion bd 
@@ -30,4 +30,4 @@ class MongoDBDAOFactory(InterfaceDAOFactory):
     def getSongDao(self):
 #         # collection = self.db.collection("songs") (Firebase)
         collection = self.db["songs"] # (Local)
-        return MongoDBSongDAO(collection)
+        return mongodbSongDAO(collection)

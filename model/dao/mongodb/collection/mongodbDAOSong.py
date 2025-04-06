@@ -1,7 +1,7 @@
 from ...interfaceDAOSong import InterfaceSongDAO
 
 # Esta clase es una implementación de la interfaz InterfaceSongDAO para interactuar con MongoDB.
-class MongoDBSongDAO(InterfaceSongDAO):
+class mongodbSongDAO(InterfaceSongDAO):
 
     # En el constructor de la clase, se recibe la colección de MongoDB que se va a usar para interactuar con la base de datos.
     def __init__(self, collection):
