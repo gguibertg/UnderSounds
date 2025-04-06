@@ -15,7 +15,7 @@
 .grid-form {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(5, 1fr); /* Asegura que todas las filas sean del mismo tamaño */
+    grid-template-rows: auto auto auto auto auto; /* Permite que cada fila tenga un tamaño independiente */
     grid-column-gap: 0px;
     grid-row-gap: 0px;
 }
