@@ -1,0 +1,42 @@
+[
+    {
+        "question": "¿Cómo puedo crear una cuenta?",
+        "answer": "Haz clic en 'Registro' en la parte superior y completa el formulario con tus datos personales."
+    },
+    {
+        "question": "¿Olvidé mi contraseña, qué hago?",
+        "answer": "Haz clic en '¿Olvidaste tu contraseña?' y sigue las instrucciones para recuperarla por correo electrónico."
+    },
+    {
+        "question": "¿Puedo cambiar mi dirección de correo?",
+        "answer": "Sí, accede a tu perfil y selecciona la opción 'Editar correo electrónico'."
+    },
+    {
+        "question": "¿Es gratuita la plataforma?",
+        "answer": "Sí, la mayoría de las funcionalidades son gratuitas. Algunas funciones avanzadas requieren suscripción."
+    },
+    {
+        "question": "¿Puedo eliminar mi cuenta permanentemente?",
+        "answer": "Sí. Desde tu perfil, en configuración, encontrarás la opción para eliminar tu cuenta de forma definitiva."
+    },
+    {
+        "question": "¿Cómo contacto con soporte técnico?",
+        "answer": "Puedes escribirnos desde la sección de 'Contacto' o enviando un correo a soporte@example.com."
+    },
+    {
+        "question": "¿Dónde puedo consultar los términos y condiciones?",
+        "answer": "Están disponibles en el pie de página, en el enlace 'Términos y condiciones'."
+    },
+    {
+        "question": "¿Cómo puedo personalizar mi perfil?",
+        "answer": "Entra en tu perfil y pulsa en 'Editar perfil' para cambiar tu nombre, imagen y datos públicos."
+    },
+    {
+        "question": "¿Cuáles son los métodos de pago disponibles?",
+        "answer": "Aceptamos tarjetas de crédito, PayPal y Bizum."
+    },
+    {
+        "question": "¿Puedo usar la plataforma desde el móvil?",
+        "answer": "Sí, está optimizada para móviles y también disponemos de una app para iOS y Android."
+    }
+]

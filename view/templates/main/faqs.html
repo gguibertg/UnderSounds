@@ -36,39 +36,12 @@
                 <h2>Preguntas Frecuentes</h2>
                 <br>
                 <section class="faqs-grid">
+                    {% for faq in faqs %}
                     <div class="div-pannel-sub faq-card">
-                        <h3>¿Cómo puedo crear una cuenta?</h3>
-                        <p>Para crear una cuenta, haz clic en "Registro" en la parte superior derecha e introduce tus
-                            datos.</p>
+                        <h3>{{ faq.question }}</h3>
+                        <p>{{ faq.answer }}</p>
                     </div>
-
-                    <div class="div-pannel-sub faq-card">
-                        <h3>¿Cómo puedo recuperar mi contraseña?</h3>
-                        <p>Si olvidaste tu contraseña, ve a la página de inicio de sesión y haz clic en "Olvidé mi
-                            contraseña".</p>
-                    </div>
-
-                    <div class="div-pannel-sub faq-card">
-                        <h3>¿Cuáles son los métodos de pago aceptados?</h3>
-                        <p>Aceptamos tarjetas de crédito/débito, PayPal y transferencias bancarias.</p>
-                    </div>
-
-                    <div class="div-pannel-sub faq-card">
-                        <h3>¿Puedo eliminar mi cuenta?</h3>
-                        <p>Sí, puedes eliminar tu cuenta en la configuración de usuario, pero ten en cuenta que esta
-                            acción es irreversible.</p>
-                    </div>
-
-                    <div class="div-pannel-sub faq-card">
-                        <h3>¿Cómo puedo contactar con soporte?</h3>
-                        <p>Puedes enviarnos un mensaje a través de la página de contacto o escribirnos a
-                            soporte@ejemplo.com.</p>
-                    </div>
-
-                    <div class="div-pannel-sub faq-card">
-                        <h3>¿Hay una versión gratuita?</h3>
-                        <p>Sí, ofrecemos una versión gratuita con acceso limitado a ciertas funciones.</p>
-                    </div>
+                    {% endfor %}
                 </section>
             </div>
         </div>
