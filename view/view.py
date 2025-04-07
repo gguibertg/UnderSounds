@@ -28,5 +28,5 @@ class View():
         return templates.TemplateResponse("songs.html", {"request" :request, "songs" : songs_list})
 
 
-    def get_contact_view(self, success: int = 1): 
-        return templates.TemplateResponse("main/contact.html", {"success" : 1})
+    def get_contact_view(self, request : Request, success: int = 0): 
+        return templates.TemplateResponse("main/contact.html", {"request" : request, "success" : success})

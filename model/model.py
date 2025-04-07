@@ -38,4 +38,6 @@ class Model ():
         return mySongsDTO.songlist_to_json()
 
 
-    # Continuar añadiendo funciones para interactuar con la base de datos y obtener los datos que se necesiten...
+    # TODO: Esta función se va a usar para guardar el mensaje de contacto en la base de datos.
+    def save_contact_msg(self, name: str, email: str, telf: str, msg: str):
+        return True

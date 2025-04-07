@@ -4,6 +4,7 @@ from view.view import View
 from model.model import Model
 from pathlib import Path
 from fastapi.responses import JSONResponse
+from fastapi.responses import RedirectResponse
 # Inicializamos la app
 
 app = FastAPI()
@@ -46,9 +47,11 @@ def getsongs(request: Request):
 
 # Carga la página contact.html
 @app.get("/contact")
-def index(request: Request): 
-    # Delegamos el trabajo de renderizar la template a la clase View.
-    return view.get_contact_view(1)
+def index(request: Request, success: int = 0): 
+    # success = -1 --> Error al enviar el mensaje
+    # success = 0 --> No hay que renderizar nada
+    # success = 1 --> Mensaje enviado correctamente
+    return view.get_contact_view(request, success)
 
 
 # Responde al endpoint API /api/contact/send
@@ -74,6 +77,14 @@ async def index(request: Request):
     
     # Devolver la respuesta al cliente
     if success:
-        return view.get_contact_view(1)
+        return JSONResponse(
+            content={"status": "ok", "message": "Mensaje enviado correctamente"},
+            status_code=200,
+            headers={"Content-Type": "application/json"}
+        )
     else:
-        return view.get_contact_view(-1)
+        return JSONResponse(
+            content={"status": "error", "message": "Error al enviar el mensaje"},
+            status_code=500,
+            headers={"Content-Type": "application/json"}
+        )

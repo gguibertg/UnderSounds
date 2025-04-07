@@ -28,18 +28,17 @@
 
     <!-- Contenido principal -->
     <main>
-        <div class="div-bg">
-            {{ success }}
-            {% if success == 0 %}
-            <div class="div-success">
-                <p>Mensaje enviado correctamente.</p>
-            </div>
-            {% elif success == -1 %}
-            <div class="div-error">
-                <p>Mensaje no enviado.</p>
-            </div>
-            {% endif %}
+        {% if success == 1 %}
+        <div class="div-success">
+            <p>Mensaje enviado correctamente. Contactaremos con usted lo antes posible.</p>
+        </div>
+        {% elif success == -1 %}
+        <div class="div-error">
+            <p>Ha ocurrido un error al enviar el mensaje. Pruebe de nuevo más tarde.</p>
+        </div>
+        {% endif %}
 
+        <div class="div-bg">
             <h1 style="align-self: self-start; margin-left: 10px; margin-top: 10px;">Contactar con el soporte al cliente
                 de UnderSounds</h1>
             <br>
@@ -102,7 +101,7 @@
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 5 / 1 / 6 / 3;">
                                     <br>
-                                    <input style="align-self: center; width: 50%;" type="submit" formaction="/api/contact/send" formmethod="post">
+                                    <button style="align-self: center; width: 50%;" type="button" onclick="submitForm()">Enviar</button>
                                 </div>
                             </form>
 
@@ -112,6 +111,28 @@
             </div>
         </div>
     </main>
+
+    <script>
+        function submitForm() {
+            const form = document.querySelector('.grid-form');
+            fetch('/api/contact/send', {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/contact?success=1';
+                } else {
+                    window.location.href = '/contact?success=-1';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al enviar el mensaje. Inténtelo de nuevo más tarde.');
+            });
+        }
+    </script>
+
 
     <!-- Pie de página -->
     <div id="footer-placeholder"></div>
