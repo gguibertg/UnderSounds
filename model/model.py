@@ -39,5 +39,7 @@ class Model ():
 
 
     # TODO: Esta función se va a usar para guardar el mensaje de contacto en la base de datos.
+    # La función recibe el nombre, el email, el teléfono y el mensaje del contacto.
+    # La función devuelve True si se ha guardado correctamente y False si ha habido un error.
     def save_contact_msg(self, name: str, email: str, telf: str, msg: str):
         return True
