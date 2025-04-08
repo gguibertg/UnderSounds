@@ -72,7 +72,7 @@ def getsongs(request: Request):
 #     return view.get_faqs_view(request, faqs_raw)
 
 # ! Descomentar el siguiente bloque para usar JSON local hasta que se implemente MongoDB
-# Una vez que se implemente MongoDB, este bloque se puede eliminar junto con la carpeta data y el import de json.
+# * Una vez que se implemente MongoDB, este bloque se puede eliminar junto con la carpeta data y el import de json.
 
 @app.get("/faqs", description="Muestra FAQs desde JSON para pruebas.")
 def get_faqs(request: Request):

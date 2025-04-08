@@ -1,6 +1,6 @@
 """
 Fábrica DAO para MongoDB.
-Permite obtener instancias DAO específicas para diferentes entidades como canciones o FAQs.
+Permite obtener instancias DAO específicas para diferentes entidades.
 """
 
 from pymongo import MongoClient
