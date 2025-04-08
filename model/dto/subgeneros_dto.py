@@ -1,7 +1,5 @@
 from pydantic import BaseModel
 
-class Tienda(BaseModel):
+class Subgenero(BaseModel):
     id: str | None
-    
-    
-    
+    nombre: str
