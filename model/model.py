@@ -8,7 +8,7 @@ class Model ():
 
     # Al crear la clase definimos factores y DAOs que vamos a usar para interactuar con la base de datos.
     def __init__(self):
-        self.factory = mongodbDAOFactory()
+        self.db
         self.daoSong = self.factory.getSongDao()
         pass
 
