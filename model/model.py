@@ -1,5 +1,5 @@
-from .dao.mongodb.mongodbDAOFactory import mongodbDAOFactory #TODO: Cambiar a MongoDB
-from .dto.song_dto import SongDTO, SongsDTO
+from model.dao.mongodb.database import db
+from .dto.cancion_dto import SongDTO, SongsDTO
 
 # La clase Model es la encargada de gestionar los datos y la lógica de negocio de la aplicación.
 # Esta clase nos permite interactuar con la base de datos y obtener los datos que necesitamos para la aplicación,
