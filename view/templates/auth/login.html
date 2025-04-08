@@ -50,6 +50,66 @@
         </button>
     </main>
 
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC6aVHZ7U0KAxycGmtmz-vv7iMW3DDvEC4",
+            authDomain: "undersounds-6821f.firebaseapp.com",
+            projectId: "undersounds-6821f",
+            storageBucket: "undersounds-6821f.firebasestorage.app",
+            messagingSenderId: "215500896495",
+            appId: "1:215500896495:web:2a382b9af3a3cb71bcc31a"
+        };
+        
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        document.getElementById("form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            console.log(email)
+            auth.signInWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    return userCredential.user.getIdToken();
+                })
+                .then(token => {
+                    console.log(token);
+                    return fetch("http://localhost:8000/login-credentials", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ token })
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = "/perfil";
+                    }
+                })
+                .catch(error => console.error("Error en el login:", error));
+        });
+        
+        document.getElementById("google-login").addEventListener("click", function() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then(result => result.user.getIdToken())
+                .then(token => {
+                    return fetch("http://localhost:8000/login-google", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ token })
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = "/perfil";
+                    }
+                })
+                .catch(error => console.error("Error en el login con Google:", error));
+        });
+    </script>
+
     <!-- Scripts -->
     <script src="/static/js/dark-mode.js"></script>
 
