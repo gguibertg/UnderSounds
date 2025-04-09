@@ -1,33 +1,27 @@
+from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
 from ...factory.interface_dao_factory import InterfaceDAOFactory
 from .collection.mongodbDAOSong import mongodbSongDAO
 #from firebase_admin import credentials, firestore, initialize_app, auth
 
 # -----------------------------------------------------------
-# No se muy bien para que sirve esta clase.
-# Quien lo sepa mejor, que lo explique aquí:
+# Clase para inicializar la Base de Datos con MongoDB
 # -----------------------------------------------------------
 
 class mongodbDAOFactory(InterfaceDAOFactory):
 
     def __init__(self):
-#         ## Conexion bd 
-        self.db = {"songs" : [
-         {'album': 'A Night at the Opera', 'author': 'Queen', 'id': 'EGDjQKq3kMroVWapLhoG', 'duration': '5:55', 'musicgenre': 'Rock', 'price': 1.99, 'rating': 5, 'release': '1975-10-30 23:00:00.215000+00:00', 'title': 'Bohemian Rhapsody'}, 
-          {'album': 'Thriller', 'author': 'Michael Jackson', 'id': 'MuT75L6x43aWumwAEwYc', 'duration': 0, 'musicgenre': 'Pop', 'price': 1.99, 'rating': '5', 'release': '1983-01-01 23:00:00.408000+00:00', 'title': 'Billie Jean'}
-         ]
-         } # (Local)
-#         """
-#         Código para la conexión con firebase
-#         try:
-#             self.credentials = credentials.Certificate("model//dao//firebase//credentials.json")
-#             initialize_app(self.credentials)
-#             self.db = firestore.client()
-#             print("Connection to Firebase Firestore initialized successfully.")
-#         except Exception as e:
-#             print("Error in connecting with db")
-#             print(e)
-#         """
+        try:
+            client = MongoClient("mongodb+srv://cliente:PIL1G4@piproyect.anlag1u.mongodb.net/?retryWrites=true&w=majority&appName=PIProyect", serverSelectionTimeoutMS=3000)
+            client.admin.command("ping")  # Lanzamos ping al servidor
+            print("El cliente se ha conectado a MongoDB correctamente")
+            self.db = client["UnderSoundsData"]
+        except ConnectionFailure:
+            print("El cliente no se pudo conectar a MongoDB")
+            self.db = None
+
+
     def getSongDao(self):
 #         # collection = self.db.collection("songs") (Firebase)
-        collection = self.db["songs"] # (Local)
+        collection = self.db.Cancion # (Local)
         return mongodbSongDAO(collection)
