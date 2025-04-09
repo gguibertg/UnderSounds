@@ -25,6 +25,12 @@ class View():
         # Renderizar la template con los parametros adecuados y devolverla al cliente.
         return templates.TemplateResponse("songs.html", {"request" :request, "songs" : songs_list})
     
+    # Renderizar la template login.html
+    def get_login_view(self, request: Request):
+        return templates.TemplateResponse("auth/login.html", {"request": request})
 
-    
-    # Seguir añadiendo funciones para renderizar las templates que se necesiten...
+    # Renderizar la template profile.html
+    # Necesita un user_info completo, no se contempla otro caso.
+    def get_perfil_view(self, request: Request, user_info):
+        #return templates.TemplateResponse("user/profile.html", {"request": request, "user": user_info})
+        return templates.TemplateResponse("auth/login-test.html", {"request": request, "user": user_info}) # INDEV TEST

@@ -1,0 +1,56 @@
+{
+    "usuarios": {
+        "IurMDVtB4kYyPhCwZhohxmP6pbD3": {
+            "nombre": "José Manuel",
+            "email": "jtorresgn@alumnos.unex",
+            "edad": 21,
+            "pais": "fentanilo",
+            "canciones": [
+                {
+                    "titulo": "Despacito",
+                    "artista": "Luis Fonsi",
+                    "album": "Vida",
+                    "anio": 2019
+                },
+                {
+                    "titulo": "Vivir Mi Vida",
+                    "artista": "Marc Anthony",
+                    "album": "3.0",
+                    "anio": 2013
+                },
+                {
+                    "titulo": "Bailando",
+                    "artista": "Enrique Iglesias",
+                    "album": "Sex and Love",
+                    "anio": 2014
+                }
+            ]
+        },
+        "J2ZjwgmY4FdLiOyL6v57MpYBQhr2": {
+           "nombre": "nombre",
+            "email": "email",
+            "edad": 99,
+            "pais": "nnnnnn",
+            "canciones": [
+                {
+                    "titulo": "Shape of You",
+                    "artista": "Ed Sheeran",
+                    "album": "Divide",
+                    "anio": 2017
+                },
+                {
+                    "titulo": "Blinding Lights",
+                    "artista": "The Weeknd",
+                    "album": "After Hours",
+                    "anio": 2020
+                },
+                {
+                    "titulo": "Levitating",
+                    "artista": "Dua Lipa",
+                    "album": "Future Nostalgia",
+                    "anio": 2020
+                }
+            ]
+        }
+    }
+}
