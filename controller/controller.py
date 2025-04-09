@@ -10,6 +10,7 @@ from firebase_admin import auth, credentials
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
+WARN = "\033[93mWARN\033[0m |"
 
 # Inicializamos la app
 app = FastAPI()
@@ -91,6 +92,11 @@ async def login_post(data: dict, response: Response, provider: str):
         print(PCTRL, "\tUser user_id: ", user_id)
         print(PCTRL, "\tUser provider: ", provider)
 
+        # Comprobar que el usuario existe en la base de datos (simulada)
+        if user_id not in user_data["usuarios"]:
+            print(PCTRL, "User is not registered. Logon failed")
+            return {"success": False, "error": "User is not registered"}
+
         # Creamos una sesión para el usuario
         session_id = str(uuid.uuid4())
         #Faltaría asignar vigencia a la sesión
@@ -133,13 +139,21 @@ def register(request: Request):
 @app.post("/register")
 async def register_post(data: dict, response: Response, provider: str):
     token = data.get("token")
+
     try:
         # Verificamos el token de Firebase dado por el usuario
         decoded_token = auth.verify_id_token(token)
         # Identificador único del usuario otorgado por Firebase que podemos usar como identificador del usuario en nuestra base de datos
+        
+        if provider == "credentials":
+            username = data.get("username")  # Recogemos el campo username del JSON
+        else:
+            username = decoded_token["name"]  # Recogemos el nombre del token de Google
+        
         user_id = decoded_token["uid"]
         user_email = decoded_token["email"]
         print(PCTRL, "User registering:")
+        print(PCTRL, "\tUser username: ", username)
         print(PCTRL, "\tUser email: ", user_email)
         print(PCTRL, "\tUser user_id: ", user_id)
         print(PCTRL, "\tUser provider: ", provider)
@@ -147,7 +161,7 @@ async def register_post(data: dict, response: Response, provider: str):
         # Registrar usuario en la base de datos (simulada)
         if user_id not in user_data["usuarios"]:
             user_data["usuarios"][user_id] = {
-                "nombre": user_id,
+                "nombre": username,  # Guardamos el username proporcionado
                 "email": user_email,
                 "edad": 0,
                 "pais": "Desconocido",
@@ -192,22 +206,36 @@ async def deregister(request: Request, response: Response):
 # Ruta para cargar la vista de perfil (prueba)
 @app.get("/perfil")
 async def perfil(request: Request):
+    # Comprobamos si el usuario tiene una sesión activa
     session_id = request.cookies.get("session_id")
-
-    if not session_id or session_id not in sessions:
+    if not isUserSessionValid(session_id):
         return Response("No autorizado", status_code=401)
     
-    if session_id in sessions:
-        user_id = sessions[session_id]["user_id"]
-        user_name = sessions[session_id]["name"]
+    # Accedemos a los datos de la sesión del usuario
+    session_data = getSessionData(session_id)
+    if session_data:
+        user_id = session_data["user_id"]
+        user_name = session_data["name"]
         print(PCTRL, "User", user_name, "requested access to profile")
-        user_info = user_data["usuarios"].get(user_id)
+
+        # Accedemos a los datos del usuario en la base de datos (simulada)
+        user_info = user_data["usuarios"].get(user_id) # TODO ACCESO A DB REAL
+
         if user_info:
             return view.get_perfil_view(request, user_info)
         else:
-            print(PCTRL, "User", user_name, "with id", user_id, "not found in user_data")
+            print(PCTRL, WARN, "User", user_name, "with id", user_id, "not found in user_data")
         
     return Response("No autorizado", status_code=401)
 
 
 
+# --------------------------- MÉTODOS AUXILIARES --------------------------- #
+def isUserSessionValid(session_id : str):
+    return session_id and session_id in sessions and sessions[session_id]["user_id"] in user_data["usuarios"]
+
+# Un session contiene un name, 
+def getSessionData(session_id: str):
+    if session_id in sessions:
+        return sessions[session_id]
+    return None
