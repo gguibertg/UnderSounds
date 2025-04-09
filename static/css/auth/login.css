@@ -8,12 +8,13 @@ hr {
 button {
     margin-top: 5px;
     margin-bottom: 5px;
-    width: 300px;
+    width: 70%;
 }
 
 .div-pannel-sub {
     margin: auto;
-    width: 30%;
+    max-width: 70%;
+    min-width: 30%;
     padding: 10px;
     display: flex;
     flex-direction: column;

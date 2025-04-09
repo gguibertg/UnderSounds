@@ -27,11 +27,11 @@
             <br>
             <h1>Registrarse en <span>UnderSounds</span></h1>
             <br>
-            <button type="button" class="button-alt">Registrarse con Google</button>
+            <button id="google-register" type="button" class="button-alt">Registrarse con Google</button>
             <!-- Este botón no está dentro de un formulario, ¡No enviará nada!. TODO: Cambiar cuando se haga el backend.-->
             <br>
             <hr>
-            <form class="form" action="/profile" method="get">
+            <form id="register-form" class="form" action="/profile" method="get">
                 <label for="text">Nombre de usuario</label>
                 <input type="text" id="text" name="text" placeholder="Nombre de usuario">
                 <br>
@@ -53,6 +53,100 @@
             <img src="/static/icons/site/day-night-icon.svg" alt="Modo claro/oscuro" width="24" height="24">
         </button>
     </main>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC6aVHZ7U0KAxycGmtmz-vv7iMW3DDvEC4",
+            authDomain: "undersounds-6821f.firebaseapp.com",
+            projectId: "undersounds-6821f",
+            storageBucket: "undersounds-6821f.firebasestorage.app",
+            messagingSenderId: "215500896495",
+            appId: "1:215500896495:web:2a382b9af3a3cb71bcc31a"
+        };
+        
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        function displayError(message) {
+            // Eliminar el div de error existente si ya existe
+            const existingErrorDiv = document.querySelector(".div-error");
+            if (existingErrorDiv) {
+                existingErrorDiv.remove();
+            }
+
+            // Crear un nuevo div de error
+            const errorDiv = document.createElement("div");
+            errorDiv.className = "div-error";
+            const errorMessage = document.createElement("p");
+            errorMessage.textContent = message;
+            errorDiv.appendChild(errorMessage);
+
+            // Insertar el div de error dentro de main, justo antes del botón de atrás
+            const mainElement = document.querySelector("main");
+            const backButton = mainElement.querySelector(".button-back");
+            mainElement.insertBefore(errorDiv, backButton);
+        }
+
+        document.getElementById("register-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            console.log("Usuario " + email + " registrándose...");
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(userCredential => {
+                const user = userCredential.user;
+                return user.getIdToken();
+            })
+            .then(token => {
+                console.log("Token obtenido: " + token);
+                return fetch("http://localhost:8000/register-credentials", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token })
+                });
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "/perfil";
+                } else {
+                    throw new Error(data.error || "Ocurrió un error desconocido");
+                }
+            })
+            .catch(error => {
+                console.error("Error durante el registro de credenciales:", error.code, error.message);
+                displayError("Error durante el registro: " + error.message);
+            });
+        });
+        
+        document.getElementById("google-register").addEventListener("click", function() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            console.log("Usuario registrándose con Google...");
+            auth.signInWithPopup(provider)
+                .then(result => result.user.getIdToken())
+                .then(token => {
+                    console.log("Token del usuario: ", token);
+                    console.log("Solicitando acceso a la API...");
+                    return fetch("http://localhost:8000/register-google", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ token })
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = "/perfil";
+                    } else {
+                        throw new Error(data.error || "Ocurrió un error desconocido");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error durante el registro con Google:", error);
+                    displayError("Error durante el registro con Google: " + error.message);
+                });
+        });
+    </script>
 
     <!-- Scripts -->
     <script src="/static/js/dark-mode.js"></script>

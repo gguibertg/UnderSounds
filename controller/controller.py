@@ -11,7 +11,6 @@ from firebase_admin import auth, credentials
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
 
-
 # Inicializamos la app
 app = FastAPI()
 
@@ -81,15 +80,18 @@ def login(request: Request):
 async def login(data: dict, response: Response, provider: str):
     token = data.get("token")
     try:
+
+        # Verificamos el token de Firebase dado por el usuario
         decoded_token = auth.verify_id_token(token)
-        # Identificador único del usuario otorgado por Firebase
-        # que podemos usar como identificador del usuario en nuestra base de datos
+        # Identificador único del usuario otorgado por Firebase que podemos usar como identificador del usuario en nuestra base de datos
         user_id = decoded_token["uid"]
         user_email = decoded_token["email"]
         print(PCTRL, "User login:")
         print(PCTRL, "\tUser email: ", user_email)
         print(PCTRL, "\tUser user_id: ", user_id)
         print(PCTRL, "\tUser provider: ", provider)
+
+        # Creamos una sesión para el usuario
         session_id = str(uuid.uuid4())
         #Faltaría asignar vigencia a la sesión
         sessions[session_id] = {"name": user_email, "user_id": user_id, "type": provider}
@@ -104,7 +106,7 @@ async def login(data: dict, response: Response, provider: str):
 
 # Ruta para procesar la petición de login con credenciales clásicas
 @app.post("/login-credentials")
-async def login_google(data: dict, response: Response):
+async def login_credentials(data: dict, response: Response):
     return await login(data, response, "credentials")
 
 # Ruta para procesar la petición de login con credenciales de Google
@@ -112,16 +114,70 @@ async def login_google(data: dict, response: Response):
 async def login_google(data: dict, response: Response):
     return await login(data, response, "google")
 
+# Ruta para cargar vista login
+@app.get("/login")
+def login(request: Request):
+    return view.get_login_view(request)
+
+# Ruta para procesar la petición de login
+@app.post("/register")
+async def register(data: dict, response: Response, provider: str):
+    token = data.get("token")
+    try:
+        # Verificamos el token de Firebase dado por el usuario
+        decoded_token = auth.verify_id_token(token)
+        # Identificador único del usuario otorgado por Firebase que podemos usar como identificador del usuario en nuestra base de datos
+        user_id = decoded_token["uid"]
+        user_email = decoded_token["email"]
+        print(PCTRL, "User registering:")
+        print(PCTRL, "\tUser email: ", user_email)
+        print(PCTRL, "\tUser user_id: ", user_id)
+        print(PCTRL, "\tUser provider: ", provider)
+
+        # Registrar usuario en la base de datos (simulada)
+        if user_id not in user_data["usuarios"]:
+            user_data["usuarios"][user_id] = {
+                "nombre": user_id,
+                "email": user_email,
+                "edad": 0,
+                "pais": "Desconocido",
+                "canciones": []
+            }
+            # Guardar los datos en la base de datos (simulada)
+            with open("login-example.json", "w", encoding="utf-8") as f:
+                json.dump(user_data, f, indent=4)
+        else:
+            print(PCTRL, "User already registered")
+            return {"success": False, "error": "User already registered"}
+        
+        # Creamos una sesión para el usuario (login)
+        session_id = str(uuid.uuid4())
+        #Faltaría asignar vigencia a la sesión
+        sessions[session_id] = {"name": user_email, "user_id": user_id, "type": provider}
+        response.set_cookie(key="session_id", value=session_id, httponly=True)
+        print(PCTRL, "User logon successful")
+        return {"success": True}
+        
+    except Exception as e:
+        print("User register failed due to", str(e))
+        return {"success": False, "error": str(e)}
+
+
+# Ruta para procesar la petición de login con credenciales clásicas
+@app.post("/register-credentials")
+async def register_credentials(data: dict, response: Response):
+    return await register(data, response, "credentials")
+
+# Ruta para procesar la petición de login con credenciales de Google
+@app.post("/register-google")
+async def register_google(data: dict, response: Response):
+    return await register(data, response, "google")
+
 # Ruta para procesar la petición de logout
-@app.post("/logout")
-async def logout(request: Request, response: Response):
-    session_id = request.cookies.get("session_id")
-    print(PCTRL, "User session", session_id, "requested logout")
-    if session_id in sessions:
-        del sessions[session_id]
-    response.delete_cookie("session_id")
-    print(PCTRL, "User session terminated")
-    return {"success": True}
+@app.post("/deregister")
+async def deregister(request: Request, response: Response):
+   # TODO
+   return {"success": False, "error": "Not implemented"}
 
 # Ruta para cargar la vista de perfil (prueba)
 @app.get("/perfil")
@@ -145,8 +201,3 @@ async def perfil(request: Request):
 
 
 
-
-
-
-def pctrl(msg : str):
-    print("\033[96mCTRL\033[0m:\t ", msg)
