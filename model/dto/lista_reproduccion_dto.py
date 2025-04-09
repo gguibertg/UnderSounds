@@ -1,7 +1,7 @@
-from pydantic import BaseModel
-from dto import Cancion
+from pydantic import BaseModel, Field
+from model.dto import Cancion
 
 class Lista_reproduccion(BaseModel):
-    id: str | None
+    id: str = Field(default=None)
     cancion: Cancion
     

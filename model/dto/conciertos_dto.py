@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class Concierto(BaseModel):
-    id: str | None
+    id: str = Field(default=None)
     nombre: str
     precio: str

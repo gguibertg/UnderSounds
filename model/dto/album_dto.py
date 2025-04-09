@@ -1,11 +1,11 @@
-from pydantic import BaseModel
-from dto import Cancion
-from dto import Usuario
+from pydantic import BaseModel, Field
+from model.dto import Cancion
+from model.dto import Usuario
 from datetime import datetime
-from dto import Genero
+from model.dto import Genero
 
 class Album(BaseModel):
-    id: str | None
+    id: str = Field(default=None)
     title: str
     lista_canciones: Cancion
     portada: str

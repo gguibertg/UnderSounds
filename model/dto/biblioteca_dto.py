@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class Biblioteca(BaseModel):
-    id: str | None
+    id: str = Field(default=None)
     bio: str
     email: str
     imagen: str

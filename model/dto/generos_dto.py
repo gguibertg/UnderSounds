@@ -1,7 +1,7 @@
-from pydantic import BaseModel
-from dto import Subgenero
+from pydantic import BaseModel, Field
+from model.dto import Subgenero
 
 class Genero(BaseModel):
-    id: str | None
+    id: str = Field(default=None)
     nombre: str
     subgenero: Subgenero

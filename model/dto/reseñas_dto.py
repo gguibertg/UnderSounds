@@ -1,7 +1,7 @@
-from pydantic import BaseModel
-from dto import Usuario
+from pydantic import BaseModel, Field
+from model.dto import Usuario
 
 class Reseña(BaseModel):
-    id: str | None
+    id: str = Field(default=None)
     reseña: str
     usuario: Usuario
