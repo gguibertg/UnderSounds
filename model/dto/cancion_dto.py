@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field
-from model.dto import Genero
-from model.dto import Usuario
-from model.dto import Reseña
+from typing import Set, List
+from model.dto.generos_dto import Genero
+from model.dto.usuarios_dto import Usuario
+from model.dto.reseñas_dto import Reseña
 from datetime import datetime
 
 class Cancion(BaseModel):
@@ -14,11 +15,11 @@ class Cancion(BaseModel):
     genero: Genero
     precio: int
     titulo: str
-    colaboradores: Usuario
+    colaboradores: Set[Usuario]
     duracion: int
     fecha: datetime
     portada: str
-    lista_reseñas: Reseña
+    lista_reseñas: List[Reseña]
     
     
     

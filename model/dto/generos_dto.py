@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from model.dto import Subgenero
+from model.dto.subgeneros_dto import Subgenero
 
 class Genero(BaseModel):
     id: str = Field(default=None)

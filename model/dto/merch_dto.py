@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from model.dto import Usuario
+from model.dto.usuarios_dto import Usuario
 
 class Merch(BaseModel):
     id: str = Field(default=None)
