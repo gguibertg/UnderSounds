@@ -1,9 +1,7 @@
 from pydantic import BaseModel, Field
+from typing import Set
+from model.dto.cancion_dto import Cancion
 
 class Biblioteca(BaseModel):
     id: str = Field(default=None)
-    bio: str
-    email: str
-    imagen: str
-    url: str
-    telefono: int
+    canciones: Set[Cancion]
