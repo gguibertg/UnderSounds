@@ -34,3 +34,7 @@ class View():
     def get_perfil_view(self, request: Request, user_info):
         #return templates.TemplateResponse("user/profile.html", {"request": request, "user": user_info})
         return templates.TemplateResponse("auth/login-test.html", {"request": request, "user": user_info}) # INDEV TEST
+    
+    # Renderizar la template register.html
+    def get_register_view(self, request: Request):
+        return templates.TemplateResponse("auth/register.html", {"request": request})

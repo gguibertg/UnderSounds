@@ -77,7 +77,7 @@ def login(request: Request):
 
 # Ruta para procesar la petición de login
 @app.post("/login")
-async def login(data: dict, response: Response, provider: str):
+async def login_post(data: dict, response: Response, provider: str):
     token = data.get("token")
     try:
 
@@ -107,21 +107,31 @@ async def login(data: dict, response: Response, provider: str):
 # Ruta para procesar la petición de login con credenciales clásicas
 @app.post("/login-credentials")
 async def login_credentials(data: dict, response: Response):
-    return await login(data, response, "credentials")
+    return await login_post(data, response, "credentials")
 
 # Ruta para procesar la petición de login con credenciales de Google
 @app.post("/login-google")
 async def login_google(data: dict, response: Response):
-    return await login(data, response, "google")
+    return await login_post(data, response, "google")
+
+@app.post("/logout")
+async def logout(request: Request, response: Response):
+    session_id = request.cookies.get("session_id")
+    print(PCTRL, "User session", session_id, "is logging out")
+    if session_id in sessions:
+        del sessions[session_id]
+    print(PCTRL, "User session", session_id, "destroyed")
+    response.delete_cookie("session_id")
+    return {"success": True}
 
 # Ruta para cargar vista login
-@app.get("/login")
-def login(request: Request):
-    return view.get_login_view(request)
+@app.get("/register")
+def register(request: Request):
+    return view.get_register_view(request)
 
 # Ruta para procesar la petición de login
 @app.post("/register")
-async def register(data: dict, response: Response, provider: str):
+async def register_post(data: dict, response: Response, provider: str):
     token = data.get("token")
     try:
         # Verificamos el token de Firebase dado por el usuario
@@ -166,12 +176,12 @@ async def register(data: dict, response: Response, provider: str):
 # Ruta para procesar la petición de login con credenciales clásicas
 @app.post("/register-credentials")
 async def register_credentials(data: dict, response: Response):
-    return await register(data, response, "credentials")
+    return await register_post(data, response, "credentials")
 
 # Ruta para procesar la petición de login con credenciales de Google
 @app.post("/register-google")
 async def register_google(data: dict, response: Response):
-    return await register(data, response, "google")
+    return await register_post(data, response, "google")
 
 # Ruta para procesar la petición de logout
 @app.post("/deregister")
