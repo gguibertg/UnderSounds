@@ -198,7 +198,7 @@ async def register_google(data: dict, response: Response):
     return await register_post(data, response, "google")
 
 # Ruta para procesar la petición de logout
-@app.post("/deregister")
+@app.post("/unregister")
 async def deregister(request: Request, response: Response):
    # TODO
    return {"success": False, "error": "Not implemented"}
@@ -224,7 +224,7 @@ async def perfil(request: Request):
         if user_info:
             return view.get_perfil_view(request, user_info)
         else:
-            print(PCTRL, WARN, "User", user_name, "with id", user_id, "not found in user_data")
+            print(PCTRL, WARN, "User", user_name, "with id", user_id, "not found in database!")
         
     return Response("No autorizado", status_code=401)
 

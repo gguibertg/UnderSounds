@@ -36,7 +36,7 @@ class View():
     # Necesita un user_info completo, no se contempla otro caso.
     def get_perfil_view(self, request: Request, user_info):
         #return templates.TemplateResponse("user/profile.html", {"request": request, "user": user_info})
-        return templates.TemplateResponse("auth/login-test.html", {"request": request, "user": user_info, "API_CREDENTIALS" : apicreds}) # INDEV TEST
+        return templates.TemplateResponse("user/profile.html", {"request": request, "user": user_info, "API_CREDENTIALS" : apicreds}) # INDEV TEST
     
     # Renderizar la template register.html
     def get_register_view(self, request: Request):

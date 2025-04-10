@@ -19,6 +19,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicons/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="UnderSounds" />
     <link rel="manifest" href="/static/icons/favicons/site.webmanifest" />
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 </head>
 
 <body>
@@ -45,7 +47,7 @@
                         <img src="/static/img/utils/under-sounds-cover.webp" alt="Imagen de perfil"
                             style="width: 96px; border-radius: 50%;">
                         <h1 style="font-size: 3rem;">Bienvenido de vuelta, USER</h1>
-                        <button style="margin: 20px 20px 20px 20px; width: 50%; background-color: #ff4646;">Cerrar
+                        <button onclick="unregister()" style="margin: 20px 20px 20px 20px; width: 50%; background-color: #ff4646;">Cerrar
                             sesión</button>
                     </div>
                     <br>
@@ -292,7 +294,7 @@
                                         electrónico anterior.</label>
                                 </div>
                                 <div style="grid-area: 3 / 1 / 4 / 2;">
-                                    <button style="width: 100%; background-color: #ff4646;">Cerrar cuenta</button>
+                                    <button onclick="unregister()" style="width: 100%; background-color: #ff4646;">Cerrar cuenta</button>
                                 </div>
                                 <div style="grid-area: 3 / 2 / 4 / 3;">
                                     <label>Cierra la cuenta permanentemente y elimina todos tus datos. Tendrás 14 días
@@ -316,6 +318,59 @@
     <script src="/static/js/header.js"></script>
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "{{ API_CREDENTIALS.API_KEY }}",
+            authDomain: "{{ API_CREDENTIALS.AUTH_DOMAIN }}",
+            projectId: "{{ API_CREDENTIALS.PROJECT_ID }}",
+            storageBucket: "{{ API_CREDENTIALS.STORAGE_BUCKET }}",
+            messagingSenderId: "{{ API_CREDENTIALS.MESSAGING_SENDER_ID }}",
+            appId: "{{ API_CREDENTIALS.APP_ID }}",
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        function logout() {
+            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+            fetch("/logout", { method: "POST" })
+                .then(response => response.json())
+                .then(data => {
+                if (data.success) {
+                    auth.signOut().then(() => {});
+                    window.location.href = "/";
+                }
+                }).catch(error => {
+                console.error("Error al cerrar sesión en Firebase:", error);
+                });
+            }
+        }
+
+        function unregister() {
+            if (confirm('¿Estás seguro de que deseas cerrar tu cuenta? Esta acción es irreversible.')) {
+            fetch("/unregister", { 
+                method: "POST", 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ confirm: true })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                alert('Tu cuenta ha sido cerrada exitosamente.');
+                window.location.href = "/";
+                } else {
+                alert('Hubo un problema al cerrar tu cuenta. Inténtalo de nuevo más tarde.');
+                }
+            })
+            .catch(error => {
+                console.error("Error al cerrar la cuenta:", error);
+                alert('Ocurrió un error inesperado. Inténtalo de nuevo más tarde.');
+            });
+            }
+        }
+
+    </script>
 
 </body>
 
