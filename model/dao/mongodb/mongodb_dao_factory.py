@@ -17,7 +17,7 @@ class MongodbDAOFactory(InterfaceDAOFactory):
         """
         pass
 
-    def get_faq_dao(self):
+    def createFaqDAO(self):
         """
         Devuelve una instancia funcional del DAO de FAQs.
 
