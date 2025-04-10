@@ -15,5 +15,9 @@ class InterfaceDAOFactory(ABC):
     @abstractmethod
     def getSongDao(self):
         pass
+    
+    @abstractmethod
+    def createFaqDAO(self):
+        pass
 
     # Seguir añadiendo métodos abstractos para los diferentes DAOs que se necesiten...
