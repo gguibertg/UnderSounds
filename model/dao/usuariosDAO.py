@@ -1,5 +1,5 @@
 from fastapi import FastAPI, status, HTTPException
-from model.dao.mongodb.database import db
+from model.dao.mongodb.mongodb_connector import db
 from model.dto.usuarios_dto import Usuario
 
 app = FastAPI()

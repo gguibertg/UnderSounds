@@ -1,64 +1,57 @@
-"""
-Interfaz DAO para acceder a las preguntas frecuentes (FAQs).
-Define los métodos CRUD que cualquier implementación debe cumplir.
-"""
-
 from abc import ABC, abstractmethod
-from typing import List
-from model.dto.faq_dto import FaqDTO
-
 
 class InterfaceFaqDAO(ABC):
     """
-    Interfaz abstracta para operaciones CRUD sobre FAQs.
+    Interfaz abstracta para acceder y manipular FAQs en la base de datos.
+
+    Esta interfaz define las operaciones CRUD que deben implementar todas
+    las clases DAO concretas que trabajen con FAQs.
     """
 
     @abstractmethod
-    def get_all_faqs(self) -> List[FaqDTO]:
+    def get_faqs(self):
         """
-        Recupera todas las FAQs.
-
-        :return: Lista de objetos FaqDTO
+        Recupera todas las FAQs almacenadas.
         """
         pass
 
     @abstractmethod
-    def get_faq_by_id(self, faq_id: str) -> FaqDTO:
+    def get_faq_by_id(self, faq_id):
         """
-        Recupera una FAQ específica por su ID.
+        Recupera una FAQ a partir de su ID.
 
-        :param faq_id: ID de la FAQ
-        :return: Objeto FaqDTO o None si no se encuentra
-        """
-        pass
-
-    @abstractmethod
-    def insert_faq(self, faq: FaqDTO) -> str:
-        """
-        Inserta una nueva FAQ.
-
-        :param faq: Objeto FaqDTO
-        :return: ID generado de la nueva FAQ
+        Args:
+            faq_id: Identificador de la FAQ a buscar.
         """
         pass
 
     @abstractmethod
-    def update_faq(self, faq_id: str, faq: FaqDTO) -> bool:
+    def insert_faq(self, faq):
         """
-        Actualiza una FAQ existente.
+        Inserta una nueva FAQ en la base de datos.
 
-        :param faq_id: ID de la FAQ
-        :param faq: Objeto FaqDTO con los nuevos datos
-        :return: True si se actualizó, False si no se encontró
+        Args:
+            faq: Objeto FaqDTO o diccionario con los datos de la FAQ.
         """
         pass
 
     @abstractmethod
-    def delete_faq(self, faq_id: str) -> bool:
+    def update_faq(self, faq_id, updated_faq):
         """
-        Elimina una FAQ por su ID.
+        Actualiza los datos de una FAQ existente.
 
-        :param faq_id: ID de la FAQ
-        :return: True si se eliminó, False si no se encontró
+        Args:
+            faq_id: Identificador de la FAQ a actualizar.
+            updated_faq: Objeto o datos nuevos de la FAQ.
+        """
+        pass
+
+    @abstractmethod
+    def delete_faq(self, faq_id):
+        """
+        Elimina una FAQ de la base de datos.
+
+        Args:
+            faq_id: Identificador de la FAQ a eliminar.
         """
         pass

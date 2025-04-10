@@ -1,33 +1,36 @@
-"""
-Fábrica DAO para MongoDB.
-Permite obtener instancias DAO específicas para diferentes entidades.
-"""
-
-from pymongo import MongoClient
 from ...factory.interface_dao_factory import InterfaceDAOFactory
-from .collection.mongodbDAOSong import mongodbSongDAO
 from .collection.mongodb_faq_dao import MongodbFaqDAO
+
 
 class MongodbDAOFactory(InterfaceDAOFactory):
     """
-    Fábrica de DAOs para MongoDB.
+    Fábrica de DAOs que utiliza MongoDB como sistema de persistencia.
+
+    Esta clase implementa la interfaz InterfaceDAOFactory y proporciona instancias
+    de DAOs que se conectan a MongoDB, permitiendo el acceso estructurado a los datos.
     """
 
     def __init__(self):
-        client = MongoClient("mongodb://localhost:27017")
-        self.db = client["undersounds"]
+        """
+        Constructor de la fábrica. No requiere inicialización explícita
+        ya que los DAOs gestionan internamente sus propias conexiones.
+        """
+        pass
 
-    def get_song_dao(self):
+    def get_faq_dao(self):
         """
-        Devuelve el DAO para canciones.
+        Devuelve una instancia funcional del DAO de FAQs.
+
+        Returns:
+            MongodbFaqDAO: DAO configurado para trabajar con la colección 'faqs'.
         """
-        return mongodbSongDAO(self.db["songs"])
+        return MongodbFaqDAO()
 
     def getSongDao(self):
-        return MongodbSongDAO()
+        """
+        Método de marcador requerido por la interfaz.
 
-    def get_dao_faq(self):
+        Returns:
+            None
         """
-        Devuelve el DAO para preguntas frecuentes.
-        """
-        return MongodbFaqDAO(self.db)
+        return None

@@ -50,15 +50,17 @@ class View():
     
     # Seguir añadiendo funciones para renderizar las templates que se necesiten...
 
-    def get_faqs_view(self, request: Request, faqs):
+    def get_faqs_view(self, request: Request, faqs: str):
         """
-        Renderiza la vista de preguntas frecuentes.
+        Renderiza la vista de preguntas frecuentes a partir de una cadena JSON.
 
-        :param request: Objeto Request
-        :param faqs: Lista serializada de FAQs
-        :return: Plantilla HTML renderizada
+        Args:
+            request (Request): Objeto de la petición HTTP.
+            faqs (str): Preguntas frecuentes en formato JSON (string).
+
+        Returns:
+            TemplateResponse: Plantilla HTML renderizada con las FAQs.
         """
-        return templates.TemplateResponse("main/faqs.html", {"request": request, "faqs": faqs})
-
-
-    
+        import json
+        faqs_list = json.loads(faqs)
+        return templates.TemplateResponse("main/faqs.html", {"request": request, "faqs": faqs_list})

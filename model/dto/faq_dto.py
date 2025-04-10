@@ -1,91 +1,128 @@
-"""
-Módulo DTO para representar preguntas frecuentes (FAQs).
-Define clases para transportar y estructurar los datos de una o varias FAQs.
-"""
-
 import json
-
 
 class FaqsDTO:
     """
-    Contenedor de objetos FaqDTO.
-
-    Esta clase almacena múltiples preguntas frecuentes y permite
-    transformarlas a un formato JSON.
+    Clase que representa una colección de objetos FaqDTO.
+    
+    Atributos:
+        faqsList (list): Lista que almacena objetos FaqDTO serializados como diccionarios.
     """
 
     def __init__(self):
-        """Inicializa la lista de FAQs vacía."""
-        self.faq_list = []
+        """
+        Inicializa una lista vacía para almacenar objetos FAQ.
+        """
+        self.faqsList = []
 
     def insert_faq(self, faq):
         """
-        Añade una FAQ a la lista.
+        Inserta un objeto FAQ (como diccionario) en la lista de FAQs.
 
-        :param faq: Objeto de tipo FaqDTO
+        Args:
+            faq (dict): Diccionario que representa un objeto FaqDTO.
         """
-        self.faq_list.append(faq)
+        self.faqsList.append(faq)
 
-    def faqs_to_json(self):
+    def faqList_to_json(self):
         """
-        Devuelve las FAQs en formato JSON.
+        Convierte la lista de FAQs a formato JSON.
 
-        :return: Cadena JSON con las FAQs
+        Returns:
+            str: Representación en cadena JSON de la lista de FAQs.
         """
-        return json.dumps([faq.faq_to_dict() for faq in self.faq_list])
+        return json.dumps(self.faqsList)
 
 
 class FaqDTO:
     """
-    Representa una pregunta frecuente individual.
-    Contiene campos para el identificador, la pregunta y la respuesta.
+    Clase que representa un objeto FAQ individual con ID, pregunta y respuesta.
+
+    Atributos:
+        id (int): Identificador único del FAQ.
+        question (str): Pregunta del FAQ.
+        answer (str): Respuesta asociada a la pregunta.
     """
 
     def __init__(self):
-        """Inicializa los atributos como None."""
+        """
+        Inicializa un FAQ con valores None por defecto.
+        """
         self.id = None
         self.question = None
         self.answer = None
 
     def is_empty(self):
         """
-        Comprueba si todos los campos están vacíos.
+        Verifica si el objeto FAQ está vacío (sin datos).
 
-        :return: True si todos los atributos son None, False en caso contrario
+        Returns:
+            bool: True si todos los campos están en None, False en caso contrario.
         """
         return self.id is None and self.question is None and self.answer is None
 
     def get_id(self):
-        """Devuelve el ID de la FAQ."""
+        """
+        Obtiene el ID del FAQ.
+
+        Returns:
+            int: El identificador del FAQ.
+        """
         return self.id
 
-    def set_id(self, id_):
-        """Establece el ID de la FAQ."""
-        self.id = id_
+    def set_id(self, id):
+        """
+        Establece el ID del FAQ.
+
+        Args:
+            id (int): El nuevo identificador.
+        """
+        self.id = id
 
     def get_question(self):
-        """Devuelve la pregunta de la FAQ."""
+        """
+        Obtiene la pregunta del FAQ.
+
+        Returns:
+            str: La pregunta.
+        """
         return self.question
 
     def set_question(self, question):
-        """Establece la pregunta de la FAQ."""
+        """
+        Establece la pregunta del FAQ.
+
+        Args:
+            question (str): La nueva pregunta.
+        """
         self.question = question
 
     def get_answer(self):
-        """Devuelve la respuesta de la FAQ."""
+        """
+        Obtiene la respuesta del FAQ.
+
+        Returns:
+            str: La respuesta.
+        """
         return self.answer
 
     def set_answer(self, answer):
-        """Establece la respuesta de la FAQ."""
+        """
+        Establece la respuesta del FAQ.
+
+        Args:
+            answer (str): La nueva respuesta.
+        """
         self.answer = answer
 
-    def faq_to_dict(self):
+    def faqdto_to_dict(self):
         """
-        Convierte la FAQ a un diccionario, útil para la base de datos.
+        Convierte el objeto FAQ a un diccionario.
 
-        :return: Diccionario con 'question' y 'answer'
+        Returns:
+            dict: Diccionario con las claves 'id', 'question' y 'answer'.
         """
         return {
+            "id": self.id,
             "question": self.question,
             "answer": self.answer
         }

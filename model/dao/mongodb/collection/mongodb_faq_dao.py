@@ -1,87 +1,114 @@
-"""
-Implementación de InterfaceFaqDAO usando MongoDB con pymongo.
-"""
-
-from bson import ObjectId
-from model.dao.interface_faq_dao import InterfaceFaqDAO
-from model.dto.faq_dto import FaqDTO
+from ....dao.interface_faq_dao import InterfaceFaqDAO
+from ....dto.faq_dto import FaqDTO, FaqsDTO
+from ..mongodb_connector import db
 
 
 class MongodbFaqDAO(InterfaceFaqDAO):
     """
-    DAO para la colección 'faqs' de MongoDB.
-    Implementa operaciones CRUD básicas.
+    Implementación del DAO de FAQs utilizando MongoDB.
+
+    Esta clase implementa las operaciones CRUD definidas en la interfaz InterfaceFaqDAO
+    y accede directamente a la colección 'faqs' de la base de datos MongoDB.
     """
 
-    def __init__(self, db):
+    def __init__(self):
         """
-        Inicializa el DAO con la colección de FAQs.
+        Constructor que establece la conexión con la colección 'faqs' en MongoDB.
+        Lanza una excepción si no se ha podido establecer la conexión.
+        """
+        if db is None:
+            raise ConnectionError("❌ No se pudo conectar a MongoDB.")
+        self.collection = db["Preguntas"]
 
-        :param db: Objeto pymongo.database.Database
+    def get_faqs(self):
         """
-        self.collection = db["faqs"]
+        Recupera todas las FAQs almacenadas en la colección.
 
-    def get_all_faqs(self):
+        Returns:
+            str: FAQs en formato JSON (serializadas desde FaqsDTO).
         """
-        Recupera todas las FAQs de la colección.
+        faqs = FaqsDTO()
+        try:
+            cursor = self.collection.find()
+            for doc in cursor:
+                faq_dto = FaqDTO()
+                faq_dto.set_id(doc.get("id", str(doc.get("_id"))))
+                faq_dto.set_question(doc.get("question", ""))
+                faq_dto.set_answer(doc.get("answer", ""))
+                faqs.insert_faq(faq_dto.faqdto_to_dict())
+        except Exception as e:
+            print(f"Error al recuperar FAQs: {e}")
+        return faqs.faqList_to_json()
 
-        :return: Lista de objetos FaqDTO
+    def get_faq_by_id(self, faq_id):
         """
-        faqs = []
-        for doc in self.collection.find():
-            faq = FaqDTO()
-            faq.set_id(str(doc["_id"]))
-            faq.set_question(doc.get("question"))
-            faq.set_answer(doc.get("answer"))
-            faqs.append(faq)
-        return faqs
+        Busca una FAQ por su ID.
 
-    def get_faq_by_id(self, faq_id: str) -> FaqDTO:
-        """
-        Recupera una FAQ por ID.
+        Args:
+            faq_id (int): ID de la FAQ a buscar.
 
-        :param faq_id: ID de la FAQ
-        :return: Objeto FaqDTO o None si no se encuentra
+        Returns:
+            dict or None: Diccionario con los datos de la FAQ si se encuentra, None en caso contrario.
         """
-        doc = self.collection.find_one({"_id": ObjectId(faq_id)})
-        if doc:
-            faq = FaqDTO()
-            faq.set_id(str(doc["_id"]))
-            faq.set_question(doc.get("question"))
-            faq.set_answer(doc.get("answer"))
-            return faq
+        try:
+            doc = self.collection.find_one({"id": faq_id})
+            if doc:
+                faq_dto = FaqDTO()
+                faq_dto.set_id(doc.get("id"))
+                faq_dto.set_question(doc.get("question", ""))
+                faq_dto.set_answer(doc.get("answer", ""))
+                return faq_dto.faqdto_to_dict()
+        except Exception as e:
+            print(f"Error al obtener FAQ por ID: {e}")
         return None
 
-    def insert_faq(self, faq: FaqDTO) -> str:
+    def insert_faq(self, faq):
         """
-        Inserta una nueva FAQ.
+        Inserta una nueva FAQ en la colección.
 
-        :param faq: Objeto FaqDTO
-        :return: ID generado
+        Args:
+            faq (FaqDTO): Objeto con los datos de la FAQ.
         """
-        result = self.collection.insert_one(faq.faq_to_dict())
-        return str(result.inserted_id)
+        try:
+            faq_dict = faq.faqdto_to_dict()
+            self.collection.insert_one(faq_dict)
+        except Exception as e:
+            print(f"Error al insertar FAQ: {e}")
 
-    def update_faq(self, faq_id: str, faq: FaqDTO) -> bool:
+    def update_faq(self, faq_id, updated_faq):
         """
-        Actualiza una FAQ por su ID.
+        Actualiza una FAQ existente por su ID.
 
-        :param faq_id: ID del documento
-        :param faq: Datos nuevos
-        :return: True si se modificó, False si no
-        """
-        result = self.collection.update_one(
-            {"_id": ObjectId(faq_id)},
-            {"$set": faq.faq_to_dict()}
-        )
-        return result.modified_count > 0
+        Args:
+            faq_id (int): ID de la FAQ a actualizar.
+            updated_faq (FaqDTO): Objeto con los nuevos datos.
 
-    def delete_faq(self, faq_id: str) -> bool:
+        Returns:
+            bool: True si la actualización fue exitosa, False en caso contrario.
         """
-        Elimina una FAQ por ID.
+        try:
+            result = self.collection.update_one(
+                {"id": faq_id},
+                {"$set": updated_faq.faqdto_to_dict()}
+            )
+            return result.modified_count > 0
+        except Exception as e:
+            print(f"Error al actualizar FAQ: {e}")
+            return False
 
-        :param faq_id: ID del documento
-        :return: True si se eliminó, False si no
+    def delete_faq(self, faq_id):
         """
-        result = self.collection.delete_one({"_id": ObjectId(faq_id)})
-        return result.deleted_count > 0
+        Elimina una FAQ por su ID.
+
+        Args:
+            faq_id (int): ID de la FAQ a eliminar.
+
+        Returns:
+            bool: True si se eliminó correctamente, False si no se encontró.
+        """
+        try:
+            result = self.collection.delete_one({"id": faq_id})
+            return result.deleted_count > 0
+        except Exception as e:
+            print(f"Error al eliminar FAQ: {e}")
+            return False
