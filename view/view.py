@@ -21,12 +21,6 @@ class View():
     def get_index_view(self, request: Request): 
         return templates.TemplateResponse("main/index.html", {"request" : request})
     
-    # Esta función se va a usar para renderizar la template songs.html
-    def get_songs_view(self, request: Request, songs):
-        songs_list = json.loads(songs)
-        # print(songs_list)
-        # Renderizar la template con los parametros adecuados y devolverla al cliente.
-        return templates.TemplateResponse("songs.html", {"request" :request, "songs" : songs_list})
     
     # Renderizar la template login.html
     def get_login_view(self, request: Request):
@@ -35,8 +29,7 @@ class View():
     # Renderizar la template profile.html
     # Necesita un user_info completo, no se contempla otro caso.
     def get_perfil_view(self, request: Request, user_info):
-        #return templates.TemplateResponse("user/profile.html", {"request": request, "user": user_info})
-        return templates.TemplateResponse("user/profile.html", {"request": request, "user": user_info, "API_CREDENTIALS" : apicreds}) # INDEV TEST
+        return templates.TemplateResponse("user/profile.html", {"request": request, "user": user_info, "API_CREDENTIALS" : apicreds})
     
     # Renderizar la template register.html
     def get_register_view(self, request: Request):

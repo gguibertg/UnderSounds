@@ -104,7 +104,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        window.location.href = "/perfil";
+                        window.location.href = "/profile";
                     } else {
                         throw new Error(data.error || "Ocurrió un error desconocido");
                     }
@@ -133,7 +133,7 @@
                 .then(data => {
                     console.log("Cuerpo de la respuesta: ", data);
                     if (data.success) {
-                        window.location.href = "/perfil";
+                        window.location.href = "/profile";
                     } else {
                         throw new Error(data.error || "Ocurrió un error desconocido");
                     }

@@ -46,8 +46,8 @@
                     <div class="grid-content-narrow-row" style="justify-content: flex-start;">
                         <img src="/static/img/utils/under-sounds-cover.webp" alt="Imagen de perfil"
                             style="width: 96px; border-radius: 50%;">
-                        <h1 style="font-size: 3rem;">Bienvenido de vuelta, USER</h1>
-                        <button onclick="unregister()" style="margin: 20px 20px 20px 20px; width: 50%; background-color: #ff4646;">Cerrar
+                        <h1 style="font-size: 3rem;">Bienvenido de vuelta, {{ user.nombre }}</h1>
+                        <button onclick="logout()" style="margin: 20px 20px 20px 20px; width: 15%; background-color: #ff4646;">Cerrar
                             sesión</button>
                     </div>
                     <br>
@@ -59,27 +59,25 @@
                                 <div class="grid-content-narrow" style="grid-area: 1 / 1 / 2 / 2;">
                                     <label for="name">Nombre completo</label>
                                     <input style="width: 100%;" type="text" id="name" name="name"
-                                        placeholder="Nombre y apellidos">
+                                        placeholder="Nombre y apellidos" value="{{ user.nombre }}">
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 1 / 2 / 2 / 3;">
                                     <label for="email">Correo electrónico</label>
-                                    <input type="email" id="email" name="email" placeholder="Correo electrónico">
+                                    <input type="email" id="email" name="email" placeholder="Correo electrónico" value="{{ user.email }}">
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 1 / 3 / 2 / 4;">
                                     <label for="telf">Enlaces sociales</label>
-                                    <input type="tel" id="telf" name="telf" placeholder="+1 234 56 78 90">
+                                    <input type="tel" id="telf" name="telf" placeholder="+1 234 56 78 90" value="{{ user.social }}">
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 1 / 4 / 2 / 5; align-items: center;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="Imagen de perfil"
-                                        style="width: 96px;">
+                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="Imagen de perfil" style="width: 96px;">
+                                    Subir imagen
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 2 / 1 / 3 / 5;">
                                     <label for="msg">Acerca de mi</label>
-                                    <textarea class="textarea" rows="6" cols="40" style="resize: none;"
-                                        placeholder="Cuéntanos sobre ti"></textarea>
+                                    <textarea class="textarea" rows="6" cols="40" style="resize: none;"placeholder="Cuéntanos sobre ti">{{ user.bio }}</textarea>
                                     <br>
-                                    <button style="align-self: center; width: 30%;" type="submit">Guardar
-                                        cambios</button>
+                                    <button style="align-self: center; width: 30%;" type="submit">Guardar cambios</button>
                                 </div>
                             </form>
                         </div>

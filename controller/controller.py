@@ -204,7 +204,7 @@ async def deregister(request: Request, response: Response):
    return {"success": False, "error": "Not implemented"}
 
 # Ruta para cargar la vista de perfil (prueba)
-@app.get("/perfil")
+@app.get("/profile")
 async def perfil(request: Request):
     # Comprobamos si el usuario tiene una sesión activa
     session_id = request.cookies.get("session_id")
