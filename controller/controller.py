@@ -200,8 +200,45 @@ async def register_google(data: dict, response: Response):
 # Ruta para procesar la petición de logout
 @app.post("/unregister")
 async def deregister(request: Request, response: Response):
-   # TODO
-   return {"success": False, "error": "Not implemented"}
+    # Verificar si el usuario tiene una sesión activa
+    session_id = request.cookies.get("session_id")
+    if not isUserSessionValid(session_id):
+        return Response("No autorizado", status_code=401)
+
+    # Obtener los datos de la sesión del usuario
+    session_data = getSessionData(session_id)
+    if session_data:
+        user_id = session_data["user_id"]
+        user_name = session_data["name"]
+        print(PCTRL, "User", user_name, "requested account deletion")
+
+        # Verificar si el usuario existe en la base de datos (simulada)
+        if user_id in user_data["usuarios"]:
+            try:
+                # Eliminar al usuario de Firebase Auth
+                auth.delete_user(user_id)
+                print(PCTRL, "User", user_name, "deleted from Firebase Auth")
+
+                # Eliminar al usuario de la base de datos (simulada)
+                del user_data["usuarios"][user_id]
+                with open("login-example.json", "w", encoding="utf-8") as f:
+                    json.dump(user_data, f, indent=4)
+                print(PCTRL, "User", user_name, "deleted from local database")
+
+                # Eliminar la sesión del usuario
+                del sessions[session_id]
+                response.delete_cookie("session_id")
+                print(PCTRL, "User session", session_id, "destroyed")
+
+                return {"success": True, "message": "User account deleted successfully"}
+            except Exception as e:
+                print(PCTRL, "Error deleting user:", str(e))
+                return {"success": False, "error": str(e)}
+        else:
+            print(PCTRL, WARN, "User", user_name, "with id", user_id, "not found in database!")
+            return {"success": False, "error": "User not found in database"}
+    
+    return Response("No autorizado", status_code=401)
 
 # Ruta para cargar la vista de perfil (prueba)
 @app.get("/profile")

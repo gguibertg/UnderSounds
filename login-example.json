@@ -1,31 +1,5 @@
 {
     "usuarios": {
-        "IurMDVtB4kYyPhCwZhohxmP6pbD3": {
-            "nombre": "Jos\u00e9 Manuel",
-            "email": "jtorresgn@alumnos.unex",
-            "edad": 21,
-            "pais": "fentanilo",
-            "canciones": [
-                {
-                    "titulo": "Despacito",
-                    "artista": "Luis Fonsi",
-                    "album": "Vida",
-                    "anio": 2019
-                },
-                {
-                    "titulo": "Vivir Mi Vida",
-                    "artista": "Marc Anthony",
-                    "album": "3.0",
-                    "anio": 2013
-                },
-                {
-                    "titulo": "Bailando",
-                    "artista": "Enrique Iglesias",
-                    "album": "Sex and Love",
-                    "anio": 2014
-                }
-            ]
-        },
         "J2ZjwgmY4FdLiOyL6v57MpYBQhr2": {
             "nombre": "nombre",
             "email": "email",
@@ -76,6 +50,13 @@
         "pVMOJQwbANd8zKiJbLOTelO4ub63": {
             "nombre": "Jos\u00e9 Manuel Torres Dom\u00ednguez",
             "email": "jmdetorresd01@educarex.es",
+            "edad": 0,
+            "pais": "Desconocido",
+            "canciones": []
+        },
+        "Bc7b7x6mhvgN8NWOp9M8fTkslA22": {
+            "nombre": "Jos\u00e9 Manuel de Torres Dom\u00ednguez",
+            "email": "jtorresgn@alumnos.unex.es",
             "edad": 0,
             "pais": "Desconocido",
             "canciones": []
