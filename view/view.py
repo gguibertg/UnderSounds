@@ -9,22 +9,12 @@ templates = Jinja2Templates(directory="view/templates") # Esta ruta es la que se
 # Esta clase es la que se va a usar para renderizar las templates.
 class View():
 
-
-    # Al crear la clase no tenemos que hacer nada.
     def __init__(self): 
         pass
 
-    # Esta función se va a usar para renderizar la template index.html
     def get_index_view(self, request: Request): 
         return templates.TemplateResponse("main/index.html", {"request" : request})
     
-    # Esta función se va a usar para renderizar la template songs.html
-    def get_songs_view(self, request: Request, songs):
-        songs_list = json.loads(songs)
-        # print(songs_list)
-        # Renderizar la template con los parametros adecuados y devolverla al cliente.
-        return templates.TemplateResponse("songs.html", {"request" :request, "songs" : songs_list})
+    def get_about_view(self, request: Request):
+        return templates.TemplateResponse("main/about.html", {"request" : request})
     
-
-    
-    # Seguir añadiendo funciones para renderizar las templates que se necesiten...
