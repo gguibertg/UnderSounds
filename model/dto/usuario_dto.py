@@ -1,6 +1,6 @@
 import json
 
-class Usuarios():
+class UsuariosDTO():
     def _init_(self):
         self.userlist = []
         
@@ -14,7 +14,7 @@ class Usuarios():
         return json.dumps(self.userlist)
         
         
-class Usuario():
+class UsuarioDTO():
     def _init_(self):
         self.id = None
         self.bio = None

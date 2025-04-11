@@ -1,5 +1,5 @@
-from .dao.mongodb.mongodbDAOFactory import mongodbDAOFactory #TODO: Cambiar a MongoDB
-from .dto.song_dto import SongDTO, SongsDTO
+from .dao.mongodb.mongodbDAOFactory import mongodbDAOFactory
+from .dto.usuario_dto import UsuarioDTO, UsuariosDTO
 
 # La clase Model es la encargada de gestionar los datos y la lógica de negocio de la aplicación.
 # Esta clase nos permite interactuar con la base de datos y obtener los datos que necesitamos para la aplicación,
@@ -9,7 +9,7 @@ class Model ():
     # Al crear la clase definimos factores y DAOs que vamos a usar para interactuar con la base de datos.
     def __init__(self):
         self.factory = mongodbDAOFactory()
-        self.daoSong = self.factory.getSongDao()
+        self.daoUsuario = self.factory.getUsuarioDao()
         pass
 
     # Cuando alguien utilice la función get_songs, se va a llamar a la función get_songs de la clase DAO.
@@ -36,6 +36,15 @@ class Model ():
             song_dto.release = song_data.get("release", "")
             mySongsDTO.insertSong(song_dto.songdto_to_dict())  # Agregar la canción a la lista
         return mySongsDTO.songlist_to_json()
+    
+    def get_usuario(self):
+        # Primero definimos un objeto de la clase UsuariosDTO, que es la que se va a usar para almacenar los usuarios.
+        myUsuarioDTO = UsuarioDTO()
+        # Luego llamamos a la función get_songs de la clase DAO, que nos va a devolver una lista de canciones.
+        usuarios = self.daoUsuario.getAllUsuarios()
+        # Por último, por cada canción que nos ha devuelto la DAO, creamos un objeto de la clase SongDTO y lo añadimos a la lista de canciones.
+        for u in usuarios:
+            user_data = u
 
 
     # Continuar añadiendo funciones para interactuar con la base de datos y obtener los datos que se necesiten...

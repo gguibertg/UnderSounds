@@ -1,4 +1,4 @@
-from .mongodbDAOUsuario import InterfaceUsuarioDAO
+from ...intefaceDAOUsuario import InterfaceUsuarioDAO
 
 # Esta clase es una implementación de la interfaz InterfaceSongDAO para interactuar con MongoDB.
 class mongodbUsuarioDAO(InterfaceUsuarioDAO):
@@ -11,23 +11,17 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
     # Este método estaba definido como abstracto en la interfaz InterfaceSongDAO, como podréis recordar.
     def getAllUsuarios(self):
         try:
-#             query = self.collection.stream() # (Firebase)
             query = self.collection # (Local)
-#             print(query)
         except Exception as e:
             print(e)
         
         return query
 
     def getUsuario(self, email):
-        return
+        try:
+            query = self.collection # (Local)
+        except Exception as e:
+            print(e)
         
-
-    def login(sel):
-        pass
-
-    def register(self):
-        pass
+        return query
     
-
-    # Continuamos añadiendo implementaciones de las abstract methods de la interfaz InterfaceSongDAO...

@@ -8,12 +8,7 @@ class InterfaceUsuarioDAO(ABC):
     @abstractmethod
     def getUsuario(self, email):
         pass
+    
     @abstractmethod
     def getAllUsuarios(self):
-        pass
-    @abstractmethod   
-    def login(sel):
-        pass
-    @abstractmethod 
-    def register(self):
         pass
