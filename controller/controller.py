@@ -24,12 +24,6 @@ if not Path("credentials.json").is_file():
 cred = credentials.Certificate("credentials.json")
 firebase_admin.initialize_app(cred)
 
-# Almacenamiento en memoria para sesiones
-sessions = {}
-
-## TODO: CARGA DE DATOS DE PRUEBA, REEMPLAZAR CON DB REAL
-user_data = {}
-
 # TODO: CARGA DE DATOS DE PRUEBA, REEMPLAZAR CON DB REAL
 with open("login-example.json", "r", encoding="utf-8") as f:
     user_data = json.load(f)
@@ -49,6 +43,12 @@ app.mount(
 # Inicializamos el controlador y el modelo
 view = View()
 model = Model()
+
+# Almacenamiento en memoria para sesiones
+sessions = {}
+
+# Cargamos los datos de usuarios desde el modelo
+user_data = model.get_usuarios()
 
 
 # ------------------ DEFINICIÓN DE RUTAS ------------------ #
@@ -93,9 +93,9 @@ async def login_post(data: dict, response: Response, provider: str):
         print(PCTRL, "\tUser provider: ", provider)
 
         # Comprobar que el usuario existe en la base de datos (simulada)
-        if user_id not in user_data["usuarios"]:
-            print(PCTRL, "User is not registered. Logon failed")
-            return {"success": False, "error": "User is not registered"}
+        if not any(u["id"] == user_id for u in user_data):
+            print(PCTRL, WARN, "User is logged into Firebase, but not registered in database! Logon failed")
+            return {"success": False, "error": "User is not registered in database"}
 
         # Creamos una sesión para el usuario
         session_id = str(uuid.uuid4())
@@ -159,17 +159,10 @@ async def register_post(data: dict, response: Response, provider: str):
         print(PCTRL, "\tUser provider: ", provider)
 
         # Registrar usuario en la base de datos (simulada)
-        if user_id not in user_data["usuarios"]:
-            user_data["usuarios"][user_id] = {
-                "nombre": username,  # Guardamos el username proporcionado
-                "email": user_email,
-                "edad": 0,
-                "pais": "Desconocido",
-                "canciones": []
-            }
-            # Guardar los datos en la base de datos (simulada)
-            with open("login-example.json", "w", encoding="utf-8") as f:
-                json.dump(user_data, f, indent=4)
+        #TODO
+        if True:
+            print(PCTRL, "User already registered")
+            return {"success": False, "error": "User already registered"}
         else:
             print(PCTRL, "User already registered")
             return {"success": False, "error": "User already registered"}
@@ -213,17 +206,17 @@ async def deregister(request: Request, response: Response):
         print(PCTRL, "User", user_name, "requested account deletion")
 
         # Verificar si el usuario existe en la base de datos (simulada)
-        if user_id in user_data["usuarios"]:
+        if any(user["id"] == user_id for user in user_data):
             try:
                 # Eliminar al usuario de Firebase Auth
                 auth.delete_user(user_id)
                 print(PCTRL, "User", user_name, "deleted from Firebase Auth")
 
-                # Eliminar al usuario de la base de datos (simulada)
-                del user_data["usuarios"][user_id]
-                with open("login-example.json", "w", encoding="utf-8") as f:
-                    json.dump(user_data, f, indent=4)
-                print(PCTRL, "User", user_name, "deleted from local database")
+                # Eliminar al usuario de la base de datos (simulada) TODO
+                #del user_data["usuarios"][user_id]
+                #with open("login-example.json", "w", encoding="utf-8") as f:
+                #    json.dump(user_data, f, indent=4)
+                #print(PCTRL, "User", user_name, "deleted from local database")
 
                 # Eliminar la sesión del usuario
                 del sessions[session_id]
@@ -256,7 +249,7 @@ async def perfil(request: Request):
         print(PCTRL, "User", user_name, "requested access to profile")
 
         # Accedemos a los datos del usuario en la base de datos (simulada)
-        user_info = user_data["usuarios"].get(user_id) # TODO ACCESO A DB REAL
+        user_info = next((u for u in user_data if u["id"] == user_id), None)
 
         if user_info:
             return view.get_perfil_view(request, user_info)
@@ -269,7 +262,8 @@ async def perfil(request: Request):
 
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
 def isUserSessionValid(session_id : str):
-    return session_id and session_id in sessions and sessions[session_id]["user_id"] in user_data["usuarios"]
+    return session_id and session_id in sessions and any(user["id"] == sessions[session_id]["user_id"] for user in user_data
+    )
 
 # Un session contiene un name, 
 def getSessionData(session_id: str):

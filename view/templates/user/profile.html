@@ -44,7 +44,7 @@
                 <div style="grid-area: 1 / 2 / 2 / 3;">
 
                     <div class="grid-content-narrow-row" style="justify-content: flex-start;">
-                        <img src="/static/img/utils/under-sounds-cover.webp" alt="Imagen de perfil"
+                        <img src=" {{ user.imagen }}" alt="Imagen de perfil"
                             style="width: 96px; border-radius: 50%;">
                         <h1 style="font-size: 3rem;">Bienvenido de vuelta, {{ user.nombre }}</h1>
                         <button onclick="logout()" style="margin: 20px 20px 20px 20px; width: 15%; background-color: #ff4646;">Cerrar
@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 1 / 3 / 2 / 4;">
                                     <label for="telf">Enlaces sociales</label>
-                                    <input type="tel" id="telf" name="telf" placeholder="+1 234 56 78 90" value="{{ user.social }}">
+                                    <input type="tel" id="telf" name="telf" placeholder="Enlace de red social" value="{{ user.url }}">
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 1 / 4 / 2 / 5; align-items: center;">
                                     <img src="/static/img/utils/under-sounds-cover.webp" alt="Imagen de perfil" style="width: 96px;">

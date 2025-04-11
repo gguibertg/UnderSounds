@@ -1,4 +1,5 @@
-from ...intefaceDAOUsuario import InterfaceUsuarioDAO
+from ...intefaceUsuarioDAO import InterfaceUsuarioDAO
+from ....dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 
 # Esta clase es una implementación de la interfaz InterfaceSongDAO para interactuar con MongoDB.
 class mongodbUsuarioDAO(InterfaceUsuarioDAO):
@@ -7,21 +8,27 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
     def __init__(self, collection):
         self.collection = collection
     
-    # Definimos un método que se va a usar para obtener las canciones de la base de datos.
-    # Este método estaba definido como abstracto en la interfaz InterfaceSongDAO, como podréis recordar.
-    def getAllUsuarios(self):
-        try:
-            query = self.collection # (Local)
-        except Exception as e:
-            print(e)
-        
-        return query
+    def get_all_usuarios(self):
+        users = UsuariosDTO()
 
-    def getUsuario(self, email):
         try:
-            query = self.collection # (Local)
+            query = self.collection.find()
+
+            # doc ya es un diccionario en MongoDB.
+            for doc in query:
+                user_dto = UsuarioDTO()
+                user_dto.set_id(str(doc.get("_id")))
+                user_dto.set_url(doc.get("url"))
+                user_dto.set_nombre(doc.get("nombre"))
+                user_dto.set_email(doc.get("email"))
+                user_dto.set_bio(doc.get("bio"))
+                user_dto.set_esArtista(doc.get("esArtista"))
+                user_dto.set_imagen(doc.get("imagen"))
+
+                users.insertUser(user_dto)
+
         except Exception as e:
-            print(e)
-        
-        return query
+            print(f"Error retrieving Users: {e}")
+
+        return [user.usuario_to_dict() for user in users.userlist]
     
