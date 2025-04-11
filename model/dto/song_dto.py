@@ -2,7 +2,6 @@ import json
 
 # La clase SongsDTO es la que se va a usar para almacenar las canciones que se van a devolver al cliente.
 class SongsDTO():
-
     # Al crear la clase definimos una lista vacía que se va a usar para almacenar las canciones.
     def __init__(self):
         self.songlist = []

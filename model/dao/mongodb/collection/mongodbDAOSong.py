@@ -1,4 +1,4 @@
-from ...albumDAO import InterfaceSongDAO
+from ...interfaceDAOSong import InterfaceSongDAO
 
 # Esta clase es una implementación de la interfaz InterfaceSongDAO para interactuar con MongoDB.
 class mongodbSongDAO(InterfaceSongDAO):
