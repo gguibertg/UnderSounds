@@ -24,7 +24,7 @@ class MongoConnector:
             print("Database connection is not initialized.")
         return self.db
 
-    def get_faq_collection(self):
+    def post_faq_collection(self):
         print("GET FAQS COLLECTION")
         if self.db is None:
             print("Database connection is not initialized.")

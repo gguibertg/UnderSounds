@@ -11,6 +11,11 @@ class FaqsDTO:
         return json.dumps(self.faqsList)
 
 class FaqDTO:
+
+    id: str
+    question: str
+    answer: str
+
     def __init__(self):
         self.id = None
         self.question = None

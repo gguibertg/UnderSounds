@@ -31,11 +31,6 @@ model = Model()
 def index(request: Request):
     return view.get_index_view(request)
 
-@app.get("/getsongs", description="Listado de canciones")
-def getsongs(request: Request):
-    songs = model.get_songs()
-    return view.get_songs_view(request, songs)
-
 @app.get("/faqs", description="Muestra preguntas frecuentes desde MongoDB")
 def get_faqs(request: Request):
     faqs_json = model.get_faqs()
