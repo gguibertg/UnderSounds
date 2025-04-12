@@ -8,6 +8,9 @@ from pathlib import Path
 import firebase_admin
 from firebase_admin import auth, credentials
 from model.dto.usuarioDTO import UsuarioDTO, UsuariosDTO
+from fastapi.responses import JSONResponse
+import base64
+from fastapi.responses import HTMLResponse
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
@@ -64,7 +67,6 @@ sessions = {}
 def index(request: Request): 
     # Delegamos el trabajo de renderizar la template a la clase View.
     return view.get_index_view(request)
-
 
 # ----------------------------- LOGIN ------------------------------ #
 
@@ -338,3 +340,138 @@ def getSessionData(session_id: str) -> str:
     if session_id in sessions:
         return sessions[session_id]
     return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@app.get("/👌")
+def ok(request: Request):
+    return HTMLResponse(content="<img src=http://pgnweb.ddns.net/yoinki.png>", status_code=200)
