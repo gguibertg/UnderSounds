@@ -91,6 +91,8 @@ async def login_post(data: dict, response: Response, provider: str):
 
         # Comprobar que el usuario existe en la base de datos
         if not model.get_usuario(user_id):
+            # Eliminar al usuario de Firebase Auth
+            auth.delete_user(user_id)
             print(PCTRL_WARN, "User is logged into Firebase, but not registered in database! Logon failed")
             return {"success": False, "error": "User is not registered in database"}
 
