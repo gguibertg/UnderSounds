@@ -3,7 +3,11 @@ import pymongo.results
 from ...intefaceUsuarioDAO import InterfaceUsuarioDAO
 from ....dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 
-# Esta clase es una implementación de la interfaz InterfaceSongDAO para interactuar con MongoDB.
+PDAO = "\033[95mDAO\033[0m:\t "
+PDAO_ERROR = "\033[96mDAO\033[0m|\033[91mERROR\033[0m:\t "
+
+# Esta clase implementa los métodos que se usaran en las llamadas del Model.
+# En concreto, esta es la clase destinada para lo relacionado con la colección de Usuarios en MongoDB.
 class mongodbUsuarioDAO(InterfaceUsuarioDAO):
 
     # En el constructor de la clase, se recibe la colección de MongoDB que se va a usar para interactuar con la base de datos.
@@ -12,11 +16,9 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
     
     def get_all_usuarios(self):
         users = UsuariosDTO()
-
         try:
             query = self.collection.find()
 
-            # doc ya es un diccionario en MongoDB.
             for doc in query:
                 user_dto = UsuarioDTO()
                 user_dto.set_id(str(doc.get("_id")))
@@ -30,7 +32,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
                 users.insertUser(user_dto)
 
         except Exception as e:
-            print(f"Error retrieving Users: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar los usuarios: {e}")
 
         return [user.usuario_to_dict() for user in users.userlist]
 
@@ -52,7 +54,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
                 user.set_imagen(query.get("imagen"))
 
         except Exception as e:
-            print(f"Error retrieving User: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar el usuario: {e}")
 
         return user.usuario_to_dict() if user else None
     
@@ -65,7 +67,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
             return result.inserted_id == user_dict["_id"]
         
         except Exception as e:
-            print(f"Error adding User: {e}")
+            print(f"{PDAO_ERROR}Error al agregar el usuario: {e}")
             return False
         
 
@@ -77,7 +79,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
             return result.modified_count == 1
         
         except Exception as e:
-            print(f"Error updating User: {e}")
+            print(f"{PDAO_ERROR}Error al actualizar el usuario: {e}")
             return False
     
 
@@ -87,5 +89,5 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
             return result.deleted_count == 1
         
         except Exception as e:
-            print(f"Error deleting User: {e}")
+            print(f"{PDAO_ERROR}Error al eliminar el usuario: {e}")
             return False

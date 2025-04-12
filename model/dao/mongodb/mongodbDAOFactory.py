@@ -2,10 +2,7 @@ from ...factory.interfaceDAOFactory import InterfaceDAOFactory
 from .mongodbConnector import MongoConnector
 from .collection.mongodbDAOUsuario import mongodbUsuarioDAO
 
-# -----------------------------------------------------------
-# No se muy bien para que sirve esta clase.
-# Quien lo sepa mejor, que lo explique aquí:
-# -----------------------------------------------------------
+# Esta es la clase que implementa el patrón DAO Factory, que genera los DAOs de MongoDB.
 
 class mongodbDAOFactory(InterfaceDAOFactory):
 

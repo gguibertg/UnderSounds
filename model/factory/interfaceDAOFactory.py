@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 
 class InterfaceDAOFactory(ABC):
 
-# Colecciones de la base de datos (por DAO)
+# Un método por cada colección existente en la base de datos.
 
     @abstractmethod
     def getUsuariosDAO(self):

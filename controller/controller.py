@@ -11,7 +11,13 @@ from model.dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
-WARN = "\033[93mWARN\033[0m |"
+PCTRL_WARN = "\033[96mCTRL\033[0m|\033[93mWARN\033[0m:\t "
+
+
+
+# ===============================================================================
+# ========================= INICIALIZACIÓN DE LA APP ============================
+# ===============================================================================
 
 # Inicializamos la app
 app = FastAPI()
@@ -46,7 +52,9 @@ sessions = {}
 
 
 
-# ------------------ DEFINICIÓN DE RUTAS ------------------ #
+# ===============================================================================
+# =========================== DEFINICIÓN DE RUTAS ===============================
+# ===============================================================================
 
 # Con el decorador @app.get() le decimos a FastAPI que esta función se va a usar para manejar las peticiones GET a la ruta X.
 # En este caso, la ruta es la raíz de la app ("/").
@@ -58,13 +66,7 @@ def index(request: Request):
     return view.get_index_view(request)
 
 
-# En este caso servimos la template songs.html al cliente cuando se hace una petición GET a la ruta "/getsongs".
-@app.get("/getsongs", description="Hola esto es una descripcion")
-def getsongs(request: Request):
-    # Vamos a llamar al Model para que nos devuelva la lista de canciones en formato JSON.
-    songs = model.get_songs() # JSON
-    # Luego se lo pasamos al View para que lo renderice y lo devuelva al cliente.
-    return view.get_songs_view(request,songs)
+# ----------------------------- LOGIN ------------------------------ #
 
 # Ruta para cargar vista login
 @app.get("/login")
@@ -89,7 +91,7 @@ async def login_post(data: dict, response: Response, provider: str):
 
         # Comprobar que el usuario existe en la base de datos
         if not model.get_usuario(user_id):
-            print(PCTRL, WARN, "User is logged into Firebase, but not registered in database! Logon failed")
+            print(PCTRL_WARN, "User is logged into Firebase, but not registered in database! Logon failed")
             return {"success": False, "error": "User is not registered in database"}
 
         # Creamos una sesión para el usuario
@@ -124,6 +126,9 @@ async def logout(request: Request, response: Response):
     print(PCTRL, "User session", session_id, "destroyed")
     response.delete_cookie("session_id")
     return {"success": True}
+
+
+# ----------------------------- REGISTER ------------------------------ #
 
 # Ruta para cargar vista login
 @app.get("/register")
@@ -176,7 +181,7 @@ async def register_post(data: dict, response: Response, provider: str):
         if model.add_usuario(user):
             print(PCTRL, "User registered in database")
         else:
-            print(PCTRL, WARN, "User registration failed in database!")
+            print(PCTRL_WARN, "User registration failed in database!")
             return {"success": False, "error": "User registration failed"}
         
         # Creamos una sesión para el usuario (login)
@@ -228,7 +233,7 @@ async def deregister(request: Request, response: Response):
                 if model.delete_usuario(user_id):
                     print(PCTRL, "User", user_name, "deleted from database")
                 else:
-                    print(PCTRL, WARN, "User", user_name, "not deleted from database!")
+                    print(PCTRL_WARN, "User", user_name, "not deleted from database!")
                     return {"success": False, "error": "User not deleted from database"}
 
                 # Eliminar la sesión del usuario
@@ -241,12 +246,15 @@ async def deregister(request: Request, response: Response):
                 print(PCTRL, "Error deleting user:", str(e))
                 return {"success": False, "error": str(e)}
         else:
-            print(PCTRL, WARN, "User", user_name, "with id", user_id, "not found in database!")
+            print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")
             return {"success": False, "error": "User not found in database"}
     
     return Response("No autorizado", status_code=401)
 
-# Ruta para cargar la vista de perfil (prueba)
+
+# ----------------------------- PERFIL ------------------------------ #
+
+# Ruta para cargar la vista de perfil
 @app.get("/profile")
 async def perfil(request: Request):
     # Comprobamos si el usuario tiene una sesión activa
@@ -267,7 +275,7 @@ async def perfil(request: Request):
         if user_info:
             return view.get_perfil_view(request, user_info)
         else:
-            print(PCTRL, WARN, "User", user_name, "with id", user_id, "not found in database!")
+            print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")
         
     return Response("No autorizado", status_code=401)
 
@@ -310,7 +318,7 @@ async def update_profile(request: Request, response: Response):
         print(PCTRL, "User", user_name, "updated in database")
         return {"success": True, "message": "User updated successfully"}
     else:
-        print(PCTRL, WARN, "User", user_name, "not updated in database!")
+        print(PCTRL_WARN, "User", user_name, "not updated in database!")
         return {"success": False, "error": "User not updated in database"}
     
 

@@ -1,6 +1,11 @@
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 
+PCONN = "\033[95mCONN\033[0m:\t "
+PCONN_ERR = "\033[96mCTRL\033[0m|\033[91mERROR\033[0m:\t "
+
+# Aquí se conecta a la base de datos de MongoDB Atlas y se obtienen las colecciones necesarias.
+
 class MongoConnector:
     mongo_initialized = False
 
@@ -13,25 +18,20 @@ class MongoConnector:
                 )
                 self.client.admin.command("ping")  # Verifica la conexión
                 self.db = self.client["UnderSoundsData"]
-                print("Conexión con MongoDB Atlas exitosa.")
+                print(PCONN, "Conexión con MongoDB Atlas exitosa.")
                 MongoConnector.mongo_initialized = True
         except ConnectionFailure:
-            print("No se pudo conectar con MongoDB.")
+            print(PCONN_ERR, "No se pudo conectar con MongoDB.")
             self.db = None
 
     def get_db(self):
+        print(PCONN, "Descargando base de datos...")
         if self.db is None:
-            print("Database connection is not initialized.")
+            print(PCONN_ERR, "Database connection is not initialized.")
         return self.db
-
-    def get_faq_collection(self):
-        print("GET FAQS COLLECTION")
-        if self.db is None:
-            print("Database connection is not initialized.")
-        return self.db.Preguntas
     
     def get_usuario_collection(self):
-        print("GET USER COLLECTION")
+        print(PCONN, "Descargando usuarios...")
         if self.db is None:
-            print("Database connection is not initialized.")
+            print(PCONN_ERR, "Database connection is not initialized.")
         return self.db.Usuarios
