@@ -259,27 +259,11 @@ async def deregister(request: Request, response: Response):
 # Ruta para cargar la vista de perfil
 @app.get("/profile")
 async def perfil(request: Request):
-    # Comprobamos si el usuario tiene una sesión activa
-    session_id = request.cookies.get("session_id")
-    if not isUserSessionValid(session_id):
-        return Response("No autorizado", status_code=401)
+    res = handleAndGetUserDictDBData(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error
     
-    # Accedemos a los datos de la sesión del usuario
-    session_data = getSessionData(session_id)
-    if session_data:
-        user_id = session_data["user_id"]
-        user_name = session_data["name"]
-        print(PCTRL, "User", user_name, "requested access to profile")
-
-        # Accedemos a los datos del usuario en la base de datos
-        user_info = model.get_usuario(user_id)
-
-        if user_info:
-            return view.get_perfil_view(request, user_info)
-        else:
-            print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")
-        
-    return Response("No autorizado", status_code=401)
+    return view.get_perfil_view(request, res)  # Si es un dict, pasamos los datos del usuario
 
 # Ruta para actualizar el perfil del usuario
 @app.post("/update-profile")
@@ -323,6 +307,17 @@ async def update_profile(request: Request, response: Response):
         print(PCTRL_WARN, "User", user_name, "not updated in database!")
         return {"success": False, "error": "User not updated in database"}
 
+# -------------------------------- INCLUDES -------------------------------- #
+@app.get("/includes/header")
+def header(request: Request):
+    res = handleAndGetUserDictDBData(request)
+    if isinstance(res, Response):
+        return view.get_header_view(request, None) # Si es un Response, devolvemos la vista de guest
+    
+    return view.get_header_view(request, res)  # Si es un dict, pasamos los datos del usuario
+
+
+
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
 
 def isUserSessionValid(session_id : str) -> bool:
@@ -333,6 +328,33 @@ def getSessionData(session_id: str) -> str:
     if session_id in sessions:
         return sessions[session_id]
     return None
+
+# Este método automatiza la obtención de datos del usuario a partir de la sesión activa.
+# Conveniente para rutas sencillas que solo requieran la info del usuario.
+# Si todo es correcto -> Devuelve user_info (dict)
+# Si no -> Devuelve un Response y escribe a consola
+def handleAndGetUserDictDBData(request : Request):
+    # Comprobamos si el usuario tiene una sesión activa
+    session_id = request.cookies.get("session_id")
+    if not isUserSessionValid(session_id):
+        return Response("No autorizado", status_code=401)
+    
+    # Accedemos a los datos de la sesión del usuario
+    session_data = getSessionData(session_id)
+    if session_data:
+        user_id = session_data["user_id"]
+        user_name = session_data["name"]
+        print(PCTRL, "User", user_name, "requested access to user data")
+
+        # Accedemos a los datos del usuario en la base de datos
+        user_info = model.get_usuario(user_id)
+
+        if user_info:
+            return user_info
+        else:
+            print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")
+        
+    return Response("No autorizado", status_code=401)
 
 # --------------------------- FAQS --------------------------- #
 

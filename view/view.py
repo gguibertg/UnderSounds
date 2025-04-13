@@ -24,7 +24,7 @@ class View():
 
     # Renderizar la template profile.html
     # Necesita un user_info completo, no se contempla otro caso.
-    def get_perfil_view(self, request: Request, user_info):
+    def get_perfil_view(self, request: Request, user_info : dict):
         return templates.TemplateResponse("user/profile.html", {"request": request, "user": user_info, "API_CREDENTIALS" : apicreds})
     
     # Renderizar la template register.html
@@ -37,3 +37,7 @@ class View():
             "request": request,
             "faqs": faqs
         })
+    
+    # Renderizar la template header.html
+    def get_header_view(self, request: Request, user_info : dict):
+        return templates.TemplateResponse("main/header.html", {"request": request, "user": user_info})
