@@ -13,7 +13,7 @@ from abc import abstractmethod, ABC
 class InterfaceDAOFactory(ABC):
 
     @abstractmethod
-    def getSongDao(self):
+    def getSongsDAO(self):
         pass
 
     # Seguir añadiendo métodos abstractos para los diferentes DAOs que se necesiten...
