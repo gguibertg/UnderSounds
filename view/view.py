@@ -30,7 +30,8 @@ class View():
     # Renderizar la template register.html
     def get_register_view(self, request: Request):
         return templates.TemplateResponse("auth/register.html", {"request": request, "API_CREDENTIALS" : apicreds})
-
+    
+    # Renderizar la template faqs.html
     def get_faqs_view(self, request: Request, faqs):
         return templates.TemplateResponse("main/faqs.html", {
             "request": request,
