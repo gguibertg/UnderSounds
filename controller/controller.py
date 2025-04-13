@@ -1,4 +1,3 @@
-import json
 import uuid
 from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
@@ -7,10 +6,7 @@ from model.model import Model
 from pathlib import Path
 import firebase_admin
 from firebase_admin import auth, credentials
-from model.dto.usuarioDTO import UsuarioDTO, UsuariosDTO
-from fastapi.responses import JSONResponse
-import base64
-from fastapi.responses import HTMLResponse
+from model.dto.usuarioDTO import UsuarioDTO
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
