@@ -17,6 +17,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicons/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="UnderSounds" />
     <link rel="manifest" href="/static/icons/favicons/site.webmanifest" />
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 </head>
 
 <body class="auth-page">
@@ -27,11 +29,10 @@
             <br>
             <h1>Inicia sesión en <span>UnderSounds</span></h1>
             <br>
-            <button type="button" class="button-alt">Iniciar sesión con Google</button>
-            <!-- Este botón no está dentro de un formulario, ¡No enviará nada!. TODO: Cambiar cuando se haga el backend.-->
+            <button id="google-login" type="button" class="button-alt">Iniciar sesión con Google</button>
             <br>
             <hr>
-            <form class="form" action="/profile" method="get">
+            <form id="login-form" class="form" action="/profile" method="get">
                 <label for="email">Correo electrónico</label>
                 <input type="email" id="email" name="email" placeholder="Correo electrónico">
                 <br>
@@ -49,6 +50,100 @@
             <img src="/static/icons/site/day-night-icon.svg" alt="Modo claro/oscuro" width="24" height="24">
         </button>
     </main>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "{{ API_CREDENTIALS.API_KEY }}",
+            authDomain: "{{ API_CREDENTIALS.AUTH_DOMAIN }}",
+            projectId: "{{ API_CREDENTIALS.PROJECT_ID }}",
+            storageBucket: "{{ API_CREDENTIALS.STORAGE_BUCKET }}",
+            messagingSenderId: "{{ API_CREDENTIALS.MESSAGING_SENDER_ID }}",
+            appId: "{{ API_CREDENTIALS.APP_ID }}",
+        };
+        
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        function displayError(message) {
+            // Eliminar el div de error existente si ya existe
+            const existingErrorDiv = document.querySelector(".div-error");
+            if (existingErrorDiv) {
+                existingErrorDiv.remove();
+            }
+
+            // Crear un nuevo div de error
+            const errorDiv = document.createElement("div");
+            errorDiv.className = "div-error";
+            const errorMessage = document.createElement("p");
+            errorMessage.textContent = message;
+            errorDiv.appendChild(errorMessage);
+
+            // Insertar el div de error dentro de main, justo antes del botón de atrás
+            const mainElement = document.querySelector("main");
+            const backButton = mainElement.querySelector(".button-back");
+            mainElement.insertBefore(errorDiv, backButton);
+        }
+
+        document.getElementById("login-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            console.log("Usuario " + email + " iniciando sesión...");
+            auth.signInWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    return userCredential.user.getIdToken();
+                })
+                .then(token => {
+                    console.log("Token obtenido: " + token);
+                    return fetch("http://localhost:8000/login-credentials", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ token })
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = "/profile";
+                    } else {
+                        throw new Error(data.error || "Ocurrió un error desconocido");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error durante el inicio de sesión con credenciales:", error);
+                    displayError("Error durante el inicio de sesión: " + error.message);
+                });
+        });
+        
+        document.getElementById("google-login").addEventListener("click", function() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            console.log("Usuario iniciando sesión con Google...");
+            auth.signInWithPopup(provider)
+                .then(result => result.user.getIdToken())
+                .then(token => {
+                    console.log("Token del usuario: ", token);
+                    console.log("Solicitando acceso a la API...");
+                    return fetch("http://localhost:8000/login-google", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ token })
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Cuerpo de la respuesta: ", data);
+                    if (data.success) {
+                        window.location.href = "/profile";
+                    } else {
+                        throw new Error(data.error || "Ocurrió un error desconocido");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error durante el inicio de sesión con Google:", error);
+                    displayError("Error durante el inicio de sesión con Google: " + error.message);
+                });
+        });
+    </script>
 
     <!-- Scripts -->
     <script src="/static/js/dark-mode.js"></script>
