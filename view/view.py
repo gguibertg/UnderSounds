@@ -9,15 +9,11 @@ templates = Jinja2Templates(directory="view/templates") # Esta ruta es la que se
 
 apicreds = API_CREDENTIALS() # Cargamos las credenciales de la API de Firebase
 
-# Esta clase es la que se va a usar para renderizar las templates.
 class View():
 
-
-    # Al crear la clase no tenemos que hacer nada.
     def __init__(self): 
         pass
 
-    # Esta función se va a usar para renderizar la template index.html
     def get_index_view(self, request: Request): 
         return templates.TemplateResponse("main/index.html", {"request" : request})
     
@@ -34,3 +30,9 @@ class View():
     # Renderizar la template register.html
     def get_register_view(self, request: Request):
         return templates.TemplateResponse("auth/register.html", {"request": request, "API_CREDENTIALS" : apicreds})
+
+    def get_faqs_view(self, request: Request, faqs):
+        return templates.TemplateResponse("main/faqs.html", {
+            "request": request,
+            "faqs": faqs
+        })

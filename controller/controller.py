@@ -1,9 +1,12 @@
 import uuid
+
 from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
+
 from view.view import View
 from model.model import Model
 from pathlib import Path
+
 import firebase_admin
 from firebase_admin import auth, credentials
 from model.dto.usuarioDTO import UsuarioDTO
@@ -19,6 +22,9 @@ PCTRL_WARN = "\033[96mCTRL\033[0m|\033[93mWARN\033[0m:\t "
 # ===============================================================================
 
 # Inicializamos la app
+from model.dto.faqDTO import FaqDTO, FaqsDTO
+
+# Instancia principal de la app
 app = FastAPI()
 
 # Inicializar Firebase
@@ -31,6 +37,7 @@ cred = credentials.Certificate("credentials.json")
 firebase_admin.initialize_app(cred)
 
 # Montamos directorios estáticos para servir archivos CSS, JS, imágenes, etc.
+# Montaje de archivos estáticos
 app.mount(
     "/static",
     StaticFiles(directory=Path(__file__).parent.parent.absolute() / "static"),
@@ -39,10 +46,10 @@ app.mount(
 app.mount(
     "/includes",
     StaticFiles(directory=Path(__file__).parent.parent.absolute() / "view/templates/includes"),
-    name="static",
+    name="includes",
 )
 
-# Inicializamos el controlador y el modelo
+# Inicializamos el controlador y el modelo# Inicialización de la vista y del modelo
 view = View()
 model = Model()
 
@@ -55,13 +62,8 @@ sessions = {}
 # =========================== DEFINICIÓN DE RUTAS ===============================
 # ===============================================================================
 
-# Con el decorador @app.get() le decimos a FastAPI que esta función se va a usar para manejar las peticiones GET a la ruta X.
-# En este caso, la ruta es la raíz de la app ("/").
-# La función index se va a usar para renderizar la template index.html.
 @app.get("/")
-# El objeto request es un objeto que contiene toda la información de la petición HTTP que se ha hecho al servidor.
-def index(request: Request): 
-    # Delegamos el trabajo de renderizar la template a la clase View.
+def index(request: Request):
     return view.get_index_view(request)
 
 # ----------------------------- LOGIN ------------------------------ #
@@ -320,14 +322,9 @@ async def update_profile(request: Request, response: Response):
     else:
         print(PCTRL_WARN, "User", user_name, "not updated in database!")
         return {"success": False, "error": "User not updated in database"}
-    
-
-
-
-
-
 
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
+
 def isUserSessionValid(session_id : str) -> bool:
     return session_id and session_id in sessions and model.get_usuario(sessions[session_id]["user_id"])
 
@@ -336,3 +333,10 @@ def getSessionData(session_id: str) -> str:
     if session_id in sessions:
         return sessions[session_id]
     return None
+
+# --------------------------- FAQS --------------------------- #
+
+@app.get("/faqs", description="Muestra preguntas frecuentes desde MongoDB")
+def get_faqs(request: Request):
+    faqs_json = model.get_faqs()
+    return view.get_faqs_view(request, faqs_json)

@@ -8,3 +8,7 @@ class InterfaceDAOFactory(ABC):
     def getUsuariosDAO(self):
         pass
 
+    @abstractmethod
+    def getFaqsDAO(self):
+        pass
+

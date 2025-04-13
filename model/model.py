@@ -7,6 +7,7 @@ class Model ():
     def __init__(self):
         self.factory = mongodbDAOFactory()
         self.daoUsuario = self.factory.getUsuariosDAO()
+        self.faqsDAO = self.factory.getFaqsDAO()
         pass
     
     def get_usuario(self, id):
@@ -24,3 +25,5 @@ class Model ():
     def get_usuarios(self):
         return self.daoUsuario.get_all_usuarios()
 
+    def get_faqs(self):
+        return self.faqsDAO.get_all_faqs()
