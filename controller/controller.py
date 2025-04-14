@@ -340,3 +340,11 @@ def getSessionData(session_id: str) -> str:
 def get_faqs(request: Request):
     faqs_json = model.get_faqs()
     return view.get_faqs_view(request, faqs_json)
+
+# --------------------------- CARRITO ------------------------ #
+
+# app.get("/cart", description="Muestra los artñiculos de tu cesta")
+# def get_carrito(request : Request):
+#     carrito_json = model.get_carrito()
+#     return view.get_carrito_view(request, carrito_json)
+

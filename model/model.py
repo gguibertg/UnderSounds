@@ -1,5 +1,6 @@
 from .dao.mongodb.mongodbDAOFactory import mongodbDAOFactory
 from .dto.usuarioDTO import UsuarioDTO, UsuariosDTO
+from .dto.articuloCestaDTO import ArticuloCestaDTO, ArticulosCestaDTO
 
 # La clase Model tiene los métodos que hacen puente entre controller y la base de datos.
 class Model ():
@@ -8,6 +9,7 @@ class Model ():
         self.factory = mongodbDAOFactory()
         self.daoUsuario = self.factory.getUsuariosDAO()
         self.faqsDAO = self.factory.getFaqsDAO()
+        #self.carrito = self.factory.getCarritoDAO()
         pass
     
     def get_usuario(self, id):
@@ -27,3 +29,6 @@ class Model ():
 
     def get_faqs(self):
         return self.faqsDAO.get_all_faqs()
+    
+    #def get_carrito(self):
+    #    return self.carrito.get_all_articulos()
