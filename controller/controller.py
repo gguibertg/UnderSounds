@@ -308,7 +308,7 @@ async def update_profile(request: Request, response: Response):
         return {"success": False, "error": "User not updated in database"}
 
 # -------------------------------- INCLUDES -------------------------------- #
-@app.get("/includes/header")
+@app.get("/header")
 def header(request: Request):
     res = handleAndGetUserDictDBData(request)
     if isinstance(res, Response):

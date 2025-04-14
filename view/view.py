@@ -1,7 +1,6 @@
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
 from API_KEYS import API_CREDENTIALS
-import json
 
 templates = Jinja2Templates(directory="view/templates") # Esta ruta es la que se va a usar para renderizar las plantillas
 # Las templates se cargaran y podrán incluir entradas especiales para cargar variables.
@@ -40,4 +39,4 @@ class View():
     
     # Renderizar la template header.html
     def get_header_view(self, request: Request, user_info : dict):
-        return templates.TemplateResponse("main/header.html", {"request": request, "user": user_info})
+        return templates.TemplateResponse("includes/header.html", {"request": request, "user": user_info})

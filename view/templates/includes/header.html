@@ -13,22 +13,19 @@
             </form>
 
             <div class="auth-buttons">
-                {{ if user }}
+                {% if user %}
                 <div class="profile-container">
-                    <a href="/profile">
-                        <img class="profile-picture" src="/static/img/utils/under-sounds-cover.webp"
-                            alt="Foto de perfil">
-                        <p>Perfil</p>
-                    </a>
+                    <a href="/profile"><img class="profile-picture" src="{{ user.imagen }}" alt="Foto de perfil"></a>
+                    <a href="/profile"><p>{{ user.nombre }}</p></a>
                 </div>
                 <a href="/cart">
                     <img class="shop" src="/static/icons/site/cart-icon-light.svg" alt="carrito">
                 </a>
                 <button class="logout-btn" onclick="window.location.href='/logout'">Cerrar Sesión</button>
-                {{ else }}
+                {% else %}
                 <button class="login-btn" onclick="window.location.href='/login'">Iniciar Sesión</button>
                 <button class="signup-btn" onclick="window.location.href='/register'">Registrarse</button>
-                {{ endif }}
+                {% endif %}
 
             </div>
         </div>
