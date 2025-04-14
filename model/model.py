@@ -9,7 +9,7 @@ class Model ():
         self.factory = mongodbDAOFactory()
         self.daoUsuario = self.factory.getUsuariosDAO()
         self.faqsDAO = self.factory.getFaqsDAO()
-        #self.carrito = self.factory.getCarritoDAO()
+        self.carrito = self.factory.getCarritoDAO()
         pass
     
     def get_usuario(self, id):
@@ -30,5 +30,5 @@ class Model ():
     def get_faqs(self):
         return self.faqsDAO.get_all_faqs()
     
-    #def get_carrito(self):
-    #    return self.carrito.get_all_articulos()
+    def get_carrito(self):
+       return self.carrito.get_all_articulos()

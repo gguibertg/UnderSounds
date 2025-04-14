@@ -17,6 +17,6 @@ class mongodbDAOFactory(InterfaceDAOFactory):
     def getFaqsDAO(self):
         return MongodbFaqDAO(self.connector.post_faq_collection())
     
-    #def getCarritoDAO(self):
-    #    return mongodbCarritoDAO(self.connector.get_articulos_carrito())
+    def getCarritoDAO(self):
+       return mongodbCarritoDAO(self.connector.get_articulos_carrito())
 

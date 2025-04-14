@@ -12,7 +12,7 @@ class InterfaceDAOFactory(ABC):
     def getFaqsDAO(self):
         pass
     
-    #@abstractmethod
-    #def getCarritoDAO (self):
-    #    pass
+    @abstractmethod
+    def getCarritoDAO (self):
+       pass
 
