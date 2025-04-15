@@ -26,9 +26,11 @@ class MongodbSongDAO(InterfaceSongDAO):
                 song_dto.set_artist(doc.get("artist"))
                 song_dto.set_collaborators(doc.get("collaborators"))
                 song_dto.set_date(doc.get("date"))
+                song_dto.set_description(query.get("description"))
                 song_dto.set_duration(doc.get("duration"))
                 song_dto.set_genres(doc.get("genres"))
                 song_dto.set_likes(str(doc.get("likes")))
+                song_dto.set_portada(query.get("portada"))
                 song_dto.set_price(doc.get("price"))
                 song_dto.set_review_list(doc.get("review_list"))
 
@@ -53,10 +55,12 @@ class MongodbSongDAO(InterfaceSongDAO):
                 song.set_artist(query.get("artist"))
                 song.set_collaborators(query.get("collaborators"))
                 song.set_date(query.get("date"))
+                song.set_description(query.get("description"))
                 song.set_duration(query.get("duration"))
                 song.set_genres(query.get("genres"))
                 song.set_likes(str(query.get("likes")))
                 song.set_price(query.get("price"))
+                song.set_portada(query.get("portada"))
                 song.set_review_list(query.get("review_list"))
 
         except Exception as e:

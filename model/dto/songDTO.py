@@ -21,9 +21,11 @@ class SongDTO():
         self.artist = None
         self.collaborators = None
         self.date = None
+        self.description = None
         self.duration = None 
         self.genres = None
         self.likes = None
+        self.portada = None
         self.price = None
         self.review_list = None
         self.title = None
@@ -31,9 +33,9 @@ class SongDTO():
 
     def is_Empty(self):
         return (self.id is None and self.album is None and self.artist is None and 
-                self.collaborators is None and self.date is None and self.duration is None and
-                self.genres is None and self.likes is None and self.price is None and
-                self.review_list is None and self.title is None is None and  self.views)
+                self.collaborators is None and self.date is None and self.description is None and 
+                self.duration is None and self.genres is None and self.likes is None and self.portada is None and 
+                self.price is None and self.review_list is None and self.title is None is None and  self.views)
 
     def get_id(self):
         return self.id
@@ -65,6 +67,12 @@ class SongDTO():
     def set_date(self, date):
         self.date = date
 
+    def get_description(self):
+        return self.description
+
+    def set_description(self, description):
+        self.description = description
+
     def get_duration(self):
         return self.duration
 
@@ -82,6 +90,12 @@ class SongDTO():
 
     def set_likes(self, likes):
         self.likes = likes
+
+    def get_portada(self):
+        return self.portada
+
+    def set_portada(self, portada):
+        self.portada = portada
 
     def get_price(self):
         return self.price
@@ -115,9 +129,11 @@ class SongDTO():
             "artist": self.artist,
             "collaborators": self.collaborators,
             "date": self.date,
+            "description": self.description,
             "duration": self.duration,
             "genres": self.genres,
             "likes": self.likes,
+            "portada": self.portada,
             "price": self.price,
             "review_list": self.review_list,
             "title": self.title,
