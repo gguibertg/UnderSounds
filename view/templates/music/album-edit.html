@@ -54,7 +54,7 @@
                             <div>
                                 <h3>Géneros</h3>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="rock" {%if ??? %}checked{%end if%}>
+                                    <input type="checkbox" id="rock" {% if "Rock" in album.generos %} checked {% endif %}>
                                     <label for="rock">Rock</label>
                                 </div>
                                 <div class="checkbox-item">

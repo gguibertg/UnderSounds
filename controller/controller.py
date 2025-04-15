@@ -322,7 +322,6 @@ def get_faqs(request: Request):
 async def album(request: Request):
     #Leemos de la request el id del album y recogemos el album de la BD
     album_id = request.query_params.get("id")
-    album_info = model.get_album(album_id)
 
     res = handleAndGetUserDictDBData(request)
     if isinstance(res, Response):
@@ -330,10 +329,36 @@ async def album(request: Request):
     
     # Tenemos un usuario logeado. Bien. Ahora queremos saber si es artista y si es, en concreto, arista de ese album.
     # Verificamos si el usuario es artista y si el álbum pertenece al arista.
-    if not res["esArtista"] or not album_info or res[""]:
-        print(PCTRL_WARN, "User is not an artist, owner of the album, or the album does not exist.")
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    album_info = model.get_album(album_id)
+    #print(album_info)
+    if not album_info:
+        print(PCTRL_WARN, "Album does not exist")
+        return Response("No autorizado", status_code=403)
+    #print(res["studio_albumes"])
+    if album_id not in res["studio_albumes"]:
+        print(PCTRL_WARN, "Album not found in user albums")
         return Response("No autorizado", status_code=403)
 
+    # Ahora popularemos el album reemplazando las IDs (referencias) por los objetos reales
+    generos_out : list[dict] = []
+    for genero_id in album_info["generos"]:
+        genero = model.get_genero(genero_id)
+        if not genero:
+            print(PCTRL_WARN, "Genero", genero_id ,"not found in database")
+            return Response("Error del sistema", status_code=403)
+        generos_out.append(genero["nombre"])
+    album_info["generos"] = generos_out
+
+    canciones_out : list[dict] = []
+    for genero_id in album_info["canciones"]:
+        # TODO canciones_out.append(model.get_cancion(genero_id))    
+        pass
+    album_info["canciones"] = canciones_out
+
+    print(album_info)
     return view.get_album_edit_view(request, album_info)  # Si es un dict, pasamos los datos del usuario
 
 
