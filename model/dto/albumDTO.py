@@ -86,7 +86,7 @@ class AlbumDTO:
             "autor": self.autor,
             "descripcion": self.descripcion,
             "fecha": self.fecha,
-            "genero": self.generos,
+            "generos": self.generos,
             "canciones": self.canciones,
             "nVisualizaciones": self.nVisualizaciones,
             "portada": self.portada,

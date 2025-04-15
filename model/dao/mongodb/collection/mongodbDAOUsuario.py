@@ -44,6 +44,8 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
         try:
             query = self.collection.find_one({"_id": id})
 
+            
+
             if query:
                 user = UsuarioDTO()
                 user.set_id(str(query.get("_id")))
@@ -53,7 +55,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
                 user.set_bio(query.get("bio"))
                 user.set_esArtista(query.get("esArtista"))
                 user.set_imagen(query.get("imagen"))
-                user.set_studio_album = query.get("studio_album", [])
+                user.set_studio_albumes(query.get("studio_albumes", []))
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar el usuario: {e}")

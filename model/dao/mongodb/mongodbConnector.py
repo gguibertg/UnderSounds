@@ -46,7 +46,7 @@ class MongoConnector:
         print(PCONN, "Descargando albumes...")
         if self.db is None:
             print(PCONN_ERR, "Database connection is not initialized.")
-        return self.db.Albumes
+        return self.db.Albums
     
     def get_genero_collection(self):
         print(PCONN, "Descargando generos...")
