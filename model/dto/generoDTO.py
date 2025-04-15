@@ -9,14 +9,14 @@ class GeneroDTO:
     def set_id(self, id: str):
         self.id = id
 
-    def get_titulo(self) -> str:
-        return self.titulo
+    def get_nombre(self) -> str:
+        return self.nombre
 
-    def set_titulo(self, titulo: str):
-        self.titulo = titulo
+    def set_nombre(self, nombre: str):
+        self.nombre = nombre
 
     def genero_to_dict(self) -> dict:
         return {
             "id": self.id,
-            "titulo": self.titulo
+            "nombre": self.nombre
         }

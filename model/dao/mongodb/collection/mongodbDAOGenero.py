@@ -23,7 +23,7 @@ class mongodbGeneroDAO(InterfaceGeneroDAO):
             if query:
                 genero = GeneroDTO()
                 genero.set_id(query.get("_id"))
-                genero.set_titulo(query.get("titulo"))
+                genero.set_nombre(query.get("nombre"))
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar el género: {e}")
 
