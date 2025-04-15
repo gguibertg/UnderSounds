@@ -28,7 +28,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
                 user_dto.set_bio(doc.get("bio"))
                 user_dto.set_esArtista(doc.get("esArtista"))
                 user_dto.set_imagen(doc.get("imagen"))
-                user_dto.set_studio_album = query.get("studio_album", [])
+                user_dto.set_studio_albumes(query.get("studio_albumes", []))
 
                 users.insertUser(user_dto)
 
