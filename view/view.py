@@ -42,5 +42,5 @@ class View():
     def get_carrito_view(self, request: Request, carrito):
         return templates.TemplateResponse("shop/cart.html", {
             "request": request,
-            "carrito": carrito
+            "carrito": carrito,
         })

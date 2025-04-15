@@ -18,12 +18,14 @@ class ArticuloCestaDTO:
     articulo: ArticuloDTO
     artista: ArtistaDTO
     cantidad: int
+    usuario: str
 
     def __init__(self):
         self.id = None
         self.articulo = None
         self.artista = None
         self.cantidad = None
+        self.usuario = None
 
     def is_empty(self):
         return (self.id is None and self.articulo is None and self.artista is None and self.cantidad is None)
@@ -51,11 +53,18 @@ class ArticuloCestaDTO:
     
     def set_cantidad(self, cantidad):
         self.cantidad = cantidad
+        
+    def get_usuario(self):
+        return self.usuario
+    
+    def set_usuario(self, usuario):
+        self.usuario = usuario
 
     def articulocestadto_to_dict(self):
         return {
             "id": self.id,
             "articulo": self.articulo,
             "artista": self.artista,
-            "cantidad": self.cantidad
+            "cantidad": self.cantidad,
+            "usuario": self.usuario
         }

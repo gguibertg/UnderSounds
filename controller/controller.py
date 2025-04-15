@@ -344,7 +344,7 @@ def get_faqs(request: Request):
 
 # --------------------------- CARRITO ------------------------ #
 
-app.get("/cart", description="Muestra los artículos de tu cesta")
+@app.get("/cart", description="Muestra los artículos de tu cesta")
 def get_carrito(request : Request):
     carrito_json = model.get_carrito()
     return view.get_carrito_view(request, carrito_json)

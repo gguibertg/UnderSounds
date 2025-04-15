@@ -2,6 +2,8 @@ import pymongo
 import pymongo.results
 from ...interfaceCarritoDAO import InterfaceCarritoDAO
 from ....dto.articuloCestaDTO import ArticulosCestaDTO, ArticuloCestaDTO
+from ....dto.articuloDTO import ArticuloDTO
+from ....dto.artistaDTO import ArtistaDTO
 from bson import ObjectId
 
 PDAO = "\033[95mDAO\033[0m:\t "
@@ -15,23 +17,30 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
     def __init__(self, collection):
         self.collection = collection
     
-    def get_all_articulos(self):
+    def get_all_articulos(self, usuario):
         articulos = ArticulosCestaDTO()
         try:
-            query = self.collection.find()
+            # Filtramos los artículos que pertenecen a un usuario específico
+            query = self.collection.find({"usuario" : usuario})
 
             for doc in query:
-                articulo_dto = ArticuloCestaDTO()
-                articulo_dto.set_id(str(doc.get("_id")))
-                articulo_dto.set_articulo(doc.get("articulo"))
-                articulo_dto.set_artista(doc.get("artista"))
+                articulo_cesta_dto = ArticuloCestaDTO()
+                articulo_cesta_dto.set_id(str(doc.get("_id")))
 
-                articulos.insertArticuloCesta(articulo_dto)
+                articulo_dto = ArticuloDTO(**doc.get("articulo"))
+                artista_dto = ArtistaDTO(**doc.get("artista"))
+
+                articulo_cesta_dto.set_articulo(articulo_dto)
+                articulo_cesta_dto.set_artista(artista_dto)
+                articulo_cesta_dto.set_cantidad(doc.get("cantidad"))
+                articulo_cesta_dto.set_usuario(doc.get("usuario"))
+
+                articulo_cesta_dto.insertArticuloCesta(articulo_cesta_dto)
                 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar los articulos: {e}")
 
-        return [articulo.articulocestadto_to_dict() for articulo in articulos.articulosCestaList]    
+        return [articulo.articulocestadto_to_dict() for articulo in articulos.articulosCestaList]
 
     def insertArticulo(self, articulo) -> bool:
         try:
