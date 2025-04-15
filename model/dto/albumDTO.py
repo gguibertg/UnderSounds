@@ -5,9 +5,8 @@ class AlbumDTO:
         self.autor: str = None
         self.descripcion: str = None
         self.fecha: str = None
-        self.genero: list[str] = []
-        self.lista_canciones: list[str] = []
-        self.nCanciones: int = None
+        self.generos: list[str] = []
+        self.canciones: list[str] = []
         self.nVisualizaciones: int = None
         self.portada: str = None
         self.precio: float = None
@@ -42,25 +41,25 @@ class AlbumDTO:
     def set_fecha(self, fecha: str):
         self.fecha = fecha
 
+    def set_generos(self, generos: list[str]):
+        self.generos = generos
+
     def add_genero(self, genero_id: str):
-        self.genero.append(genero_id)
+        self.generos.append(genero_id)
 
     def remove_genero(self, genero_id: str):
-        if genero_id in self.genero:
-            self.genero.remove(genero_id)
+        if genero_id in self.generos:
+            self.generos.remove(genero_id)
 
-    def add_lista_cancion(self, cancion_id: str):
-        self.lista_canciones.append(cancion_id)
+    def set_canciones(self, canciones: list[str]):
+        self.canciones = canciones
 
-    def remove_lista_cancion(self, cancion_id: str):
-        if cancion_id in self.lista_canciones:
-            self.lista_canciones.remove(cancion_id)
+    def add_cancion(self, cancion_id: str):
+        self.canciones.append(cancion_id)
 
-    def get_nCanciones(self) -> int:
-        return self.nCanciones
-
-    def set_nCanciones(self, nCanciones: int):
-        self.nCanciones = nCanciones
+    def remove_cancion(self, cancion_id: str):
+        if cancion_id in self.canciones:
+            self.canciones.remove(cancion_id)
 
     def get_nVisualizaciones(self) -> int:
         return self.nVisualizaciones
@@ -87,9 +86,8 @@ class AlbumDTO:
             "autor": self.autor,
             "descripcion": self.descripcion,
             "fecha": self.fecha,
-            "genero": self.genero,
-            "lista_canciones": self.lista_canciones,
-            "nCanciones": self.nCanciones,
+            "genero": self.generos,
+            "canciones": self.canciones,
             "nVisualizaciones": self.nVisualizaciones,
             "portada": self.portada,
             "precio": self.precio
