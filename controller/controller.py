@@ -1,28 +1,22 @@
 import uuid
-
-from fastapi import FastAPI, Request, Response
-from fastapi.staticfiles import StaticFiles
-
-from view.view import View
-# from model.model import Model
 from pathlib import Path
 
 import firebase_admin
 from firebase_admin import auth, credentials
+from fastapi import FastAPI, Request, Response
+from fastapi.staticfiles import StaticFiles
+
 from model.dto.usuarioDTO import UsuarioDTO
+from model.model import Model
+from view.view import View
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
 PCTRL_WARN = "\033[96mCTRL\033[0m|\033[93mWARN\033[0m:\t "
 
-
-
 # ===============================================================================
 # ========================= INICIALIZACIÓN DE LA APP ============================
 # ===============================================================================
-
-# Inicializamos la app
-from model.dto.faqDTO import FaqDTO, FaqsDTO
 
 # Instancia principal de la app
 app = FastAPI()
@@ -51,13 +45,10 @@ app.mount(
 
 # Inicializamos el controlador y el modelo# Inicialización de la vista y del modelo
 view = View()
-#model = Model()
-
+model = Model()
 
 # Almacenamiento en memoria para sesiones
 sessions = {}
-
-
 
 # ===============================================================================
 # =========================== DEFINICIÓN DE RUTAS ===============================
@@ -67,7 +58,9 @@ sessions = {}
 def index(request: Request):
     return view.get_index_view(request)
 
+# ------------------------------------------------------------------ #
 # ----------------------------- LOGIN ------------------------------ #
+# ------------------------------------------------------------------ #
 
 # Ruta para cargar vista login
 @app.get("/login")
@@ -130,8 +123,9 @@ async def logout(request: Request, response: Response):
     response.delete_cookie("session_id")
     return {"success": True}
 
-
+# --------------------------------------------------------------------- #
 # ----------------------------- REGISTER ------------------------------ #
+# --------------------------------------------------------------------- #
 
 # Ruta para cargar vista login
 @app.get("/register")
@@ -254,8 +248,9 @@ async def deregister(request: Request, response: Response):
     
     return Response("No autorizado", status_code=401)
 
-
+# ------------------------------------------------------------------- #
 # ----------------------------- PERFIL ------------------------------ #
+# ------------------------------------------------------------------- #
 
 # Ruta para cargar la vista de perfil
 @app.get("/profile")
@@ -323,8 +318,10 @@ async def update_profile(request: Request, response: Response):
     else:
         print(PCTRL_WARN, "User", user_name, "not updated in database!")
         return {"success": False, "error": "User not updated in database"}
-
+    
+# -------------------------------------------------------------------------- #
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
+# -------------------------------------------------------------------------- #
 
 def isUserSessionValid(session_id : str) -> bool:
     return session_id and session_id in sessions and model.get_usuario(sessions[session_id]["user_id"])
@@ -334,14 +331,19 @@ def getSessionData(session_id: str) -> str:
     if session_id in sessions:
         return sessions[session_id]
     return None
-
+# ------------------------------------------------------------ #
 # --------------------------- FAQS --------------------------- #
+# ------------------------------------------------------------ #
 
 @app.get("/faqs", description="Muestra preguntas frecuentes desde MongoDB")
 def get_faqs(request: Request):
     faqs_json = model.get_faqs()
     return view.get_faqs_view(request, faqs_json)
 
-@app.get("/about")
+# ------------------------------------------------------------- #
+# --------------------------- About --------------------------- #
+# ------------------------------------------------------------- #
+
+@app.get("/about" , description="Muestra información sobre Undersounds")
 def about(request: Request):
     return view.get_about_view(request)
