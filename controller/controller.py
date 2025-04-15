@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 
 from view.view import View
-from model.model import Model
+# from model.model import Model
 from pathlib import Path
 
 import firebase_admin
@@ -51,7 +51,8 @@ app.mount(
 
 # Inicializamos el controlador y el modelo# Inicialización de la vista y del modelo
 view = View()
-model = Model()
+#model = Model()
+
 
 # Almacenamiento en memoria para sesiones
 sessions = {}
@@ -340,3 +341,7 @@ def getSessionData(session_id: str) -> str:
 def get_faqs(request: Request):
     faqs_json = model.get_faqs()
     return view.get_faqs_view(request, faqs_json)
+
+@app.get("/about")
+def about(request: Request):
+    return view.get_about_view(request)
