@@ -52,4 +52,4 @@ class MongoConnector:
         print(PCONN, "Descargando generos...")
         if self.db is None:
             print(PCONN_ERR, "Database connection is not initialized.")
-        return self.db.Generos
+        return self.db.Géneros
