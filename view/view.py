@@ -37,3 +37,11 @@ class View():
             "request": request,
             "faqs": faqs
         })
+    
+    # Renderizar la template album-edit.html
+    def get_album_edit_view(self, request: Request, album_info, song_list):
+        return templates.TemplateResponse("music/album-edit.html", {
+            "request": request,
+            "album": album_info
+        })
+

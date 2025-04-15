@@ -334,7 +334,7 @@ async def album(request: Request):
         print(PCTRL_WARN, "User is not an artist, owner of the album, or the album does not exist.")
         return Response("No autorizado", status_code=403)
 
-    return view.get_perfil_view(request, album_info)  # Si es un dict, pasamos los datos del usuario
+    return view.get_album_edit_view(request, album_info)  # Si es un dict, pasamos los datos del usuario
 
 
 

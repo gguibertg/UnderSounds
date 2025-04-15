@@ -32,19 +32,18 @@
         <div class="div-bg">
             <br>
             <div class="div-pannel upload-page">
-                <h1 class="upload-title">Editar Álbum</h1>
+                <h1 class="upload-title">Editar Álbum ({{ album.titulo }})</h1>
 
                 <form class="upload-form">
                     <div class="div-pannel-sub upload-group" style="width: auto;">
                         <label for="title">Título</label>
-                        <input type="text" id="title" name="title" placeholder="Título del álbum">
+                        <input type="text" id="title" name="title" placeholder="Título del álbum" value="{{ album.titulo }}">
 
                         <label for="album">Autor</label>
-                        <input type="text" id="author" name="author" placeholder="Autor del álbum">
+                        <input type="text" id="author" name="author" placeholder="Autor del álbum" value="{{ album.autor }}">
 
                         <label for="album">Descripción</label>
-                        <textarea id="desc" name="desc" rows="6" cols="40" style="resize: none;"
-                            placeholder="Descripción del álbum"></textarea>
+                        <textarea id="desc" name="desc" rows="6" cols="40" style="resize: none;" placeholder="Descripción del álbum">{{ album.descripcion }}</textarea>
                     </div>
 
                     <div class="div-pannel-sub upload-checkbox-container" style="width:auto;">
@@ -55,7 +54,7 @@
                             <div>
                                 <h3>Géneros</h3>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="rock">
+                                    <input type="checkbox" id="rock" {%if ??? %}checked{%end if%}>
                                     <label for="rock">Rock</label>
                                 </div>
                                 <div class="checkbox-item">
