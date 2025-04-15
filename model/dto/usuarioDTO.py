@@ -23,7 +23,7 @@ class UsuarioDTO():
         self.url: str = None
         self.nombre: str = None
         self.esArtista: bool = None
-        self.studio_album: list[str] = []
+        self.studio_albumes: list[str] = []
         
     def get_id(self) -> str:
         return self.id
@@ -67,15 +67,15 @@ class UsuarioDTO():
     def set_esArtista(self, esArtista: bool):
         self.esArtista = esArtista
 
-    def set_studio_album(self, studio_album: list[str]):
-        self.studio_album = studio_album
+    def set_studio_albumes(self, studio_albumes: list[str]):
+        self.studio_albumes = studio_albumes
 
     def add_studio_album(self, album_id: str):
-        self.studio_album.append(album_id)
+        self.studio_albumes.append(album_id)
 
     def remove_studio_album(self, album_id: str):
-        if album_id in self.studio_album:
-            self.studio_album.remove(album_id)
+        if album_id in self.studio_albumes:
+            self.studio_albumes.remove(album_id)
 
     def usuario_to_dict(self) -> dict:
         return {
@@ -86,5 +86,5 @@ class UsuarioDTO():
             "imagen": self.imagen,
             "url": self.url,
             "esArtista": self.esArtista,
-            "studio_album": self.studio_album
+            "studio_albumes": self.studio_albumes
         }
