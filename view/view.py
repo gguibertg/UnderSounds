@@ -13,7 +13,6 @@ class View():
     def __init__(self): 
         pass
 
-
     # Esta función se va a usar para renderizar la template index.html
     def get_index_view(self, request: Request): 
         return templates.TemplateResponse("main/index.html", {"request" : request})
@@ -41,17 +40,7 @@ class View():
     # Renderizar la template about.html
     def get_about_view(self, request: Request):
         return templates.TemplateResponse("main/about.html", {"request" : request})
-    
 
-    
-
-    # Esta función se va a usar para renderizar la template songs.html
-    def get_songs_view(self, request: Request, songs):
-        songs_list = json.loads(songs)
-        # print(songs_list)
-        # Renderizar la template con los parametros adecuados y devolverla al cliente.
-        return templates.TemplateResponse("songs.html", {"request" :request, "songs" : songs_list})
-
-
+    # Renderizar la template contact.html
     def get_contact_view(self, request : Request, success: int = 0): 
         return templates.TemplateResponse("main/contact.html", {"request" : request, "success" : success})
