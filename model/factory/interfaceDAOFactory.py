@@ -12,3 +12,12 @@ class InterfaceDAOFactory(ABC):
     def getFaqsDAO(self):
         pass
 
+    @abstractmethod
+    def getAlbumDAO(self):
+        pass
+
+    @abstractmethod
+    def getGeneroDAO(self):
+        pass
+
+
