@@ -32,8 +32,20 @@
 
         <div class="nav-bottom">
             <ul>
-                <li><a href="/profile">Biblioteca</a></li>
-                <li><a href="/upload-song">Subir Canción</a></li>
+                <li><a href="/profile">🏠 Inicio</a></li>
+                <li><a href="/merch">🎁 Tienda</a></li>
+                <li><a href="/about">ℹ Acerca de</a></li>
+                <li><a href="/contact">✉ Contáctanos</a></li>
+                <li><a href="/faqs">❔ FAQs</a></li>
+                {% if user %}
+                <li><a href="/profile">🎵 Biblioteca</a></li>
+                <li><a href="/cart">🛒 Carrito</a></li>
+                {% if user.esArtista %}
+                <li><a href="/studio">🎙 Studio</a></li>
+                <li><a href="/upload-song">🔼 Subir canción</a></li>
+                <li><a href="/upload-album">🔼 Subir álbum</a></li>
+                {% endif %}
+                {% endif %}
             </ul>
         </div>
     </nav>
