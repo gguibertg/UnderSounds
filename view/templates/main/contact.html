@@ -28,10 +28,21 @@
 
     <!-- Contenido principal -->
     <main>
+        {% if success == 1 %}
+        <div class="div-success">
+            <p>Mensaje enviado correctamente. Contactaremos con usted lo antes posible.</p>
+        </div>
+        {% elif success == -1 %}
+        <div class="div-error">
+            <p>Ha ocurrido un error al enviar el mensaje. Pruebe de nuevo más tarde.</p>
+        </div>
+        {% endif %}
+
         <div class="div-bg">
             <h1 style="align-self: self-start; margin-left: 10px; margin-top: 10px;">Contactar con el soporte al cliente
                 de UnderSounds</h1>
             <br>
+            
             <div class="grid-container">
 
                 <div style="grid-area: 1 / 1 / 2 / 2;">
@@ -64,25 +75,23 @@
                             <form class="grid-form">
                                 <div class="grid-content-narrow" style="grid-area: 1 / 1 / 2 / 3;">
                                     <label for="name">Nombre completo</label>
-                                    <input style="width: 100%;" type="text" id="name" name="name"
-                                        placeholder="Nombre y apellidos">
+                                    <input style="width: 100%;" type="text" id="name" name="name" placeholder="Nombre y apellidos" required>
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 2 / 1 / 3 / 2;">
                                     <label for="email">Correo electrónico</label>
-                                    <input type="email" id="email" name="email" placeholder="Correo electrónico">
+                                    <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 2 / 2 / 3 / 3;">
                                     <label for="telf">Teléfono</label>
-                                    <input type="tel" id="telf" name="telf" placeholder="+1 234 56 78 90">
+                                    <input type="tel" id="telf" name="telf" placeholder="+1 234 56 78 90" required>
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 3 / 1 / 4 / 3;">
                                     <label for="msg">Mensaje</label>
-                                    <textarea class="textarea" style="resize: none;"
-                                        placeholder="Escribe aquí tu mensaje"></textarea>
+                                    <textarea class="textarea" style="resize: none;" rows="7" type="text" id="msg" name="msg" placeholder="Escribe aquí tu mensaje" required></textarea>
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 4 / 1 / 5 / 3;">
                                     <checkbox>
-                                        <input type="checkbox" id="terms" name="terms">
+                                        <input type="checkbox" id="terms" name="terms" required>
                                         <label for="terms" style="font-size: smaller;">Estoy de acuerdo con que
                                             UnderSounds procese mis datos personales para llevar a cabo esta
                                             comunicación (obligatorio)
@@ -91,7 +100,8 @@
                                     </checkbox>
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 5 / 1 / 6 / 3;">
-                                    <button style="align-self: center; width: 50%;" type="submit">Enviar</button>
+                                    <br>
+                                    <button style="align-self: center; width: 50%;" type="button" onclick="submitForm()">Enviar</button>
                                 </div>
                             </form>
 
@@ -101,6 +111,28 @@
             </div>
         </div>
     </main>
+
+    <script>
+        function submitForm() {
+            const form = document.querySelector('.grid-form');
+            fetch('/api/contact/send', {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/contact?success=1';
+                } else {
+                    window.location.href = '/contact?success=-1';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al enviar el mensaje. Inténtelo de nuevo más tarde.');
+            });
+        }
+    </script>
+
 
     <!-- Pie de página -->
     <div id="footer-placeholder"></div>
