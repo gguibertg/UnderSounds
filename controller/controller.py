@@ -321,7 +321,13 @@ def get_faqs(request: Request):
 @app.get("/album-edit")
 async def album(request: Request):
     #Leemos de la request el id del album y recogemos el album de la BD
-    album_id = request.query_params.get("id")
+    #album_id = request.query_params.get("id") DEVELOPER
+
+    data = await request.json()
+    album_id = data["id"]
+    if not album_id:
+        print(PCTRL_WARN, "Album ID not provided in request")
+        return Response("No autorizado", status_code=400)
 
     res = handleAndGetUserDictDBData(request)
     if isinstance(res, Response):
