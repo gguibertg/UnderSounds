@@ -10,6 +10,7 @@ from pathlib import Path
 import firebase_admin
 from firebase_admin import auth, credentials
 from model.dto.usuarioDTO import UsuarioDTO
+from bson import ObjectId
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
@@ -344,8 +345,33 @@ def get_faqs(request: Request):
 
 # --------------------------- CARRITO ------------------------ #
 
-@app.get("/cart", description="Muestra los artículos de tu cesta")
-def get_carrito(request : Request):
+@app.api_route("/cart", methods=["GET", "POST"], description="Muestra los artículos de tu cesta")
+async def get_carrito(request: Request):
+    if request.method == "POST":
+        form_data = await request.form()
+        action = form_data.get("action", "add")  # Por defecto: añadir
+
+        if action == "delete":
+            item_id = form_data.get("item_id")
+            if not item_id:
+                return "Falta el ID del artículo para eliminarlo", 400
+            
+            # Eliminar el artículo del carrito
+            model.carrito.deleteArticulo(item_id)
+        
+        elif action == "add":
+            item_id = form_data.get('item_id')
+            item_name = form_data.get('item_name')
+            artist_name = form_data.get('artist_name')
+            
+            if not item_id or not item_name or not artist_name:
+                return "Faltan datos para añadir el artículo al carrito", 400
+
+            # Añadir el artículo al carrito
+            model.carrito.insertArticulo(item_id, item_name, artist_name)
+
+    # Si la petición es GET, mostrar el carrito
     carrito_json = model.get_carrito()
     return view.get_carrito_view(request, carrito_json)
+
 

@@ -18,6 +18,10 @@ class ArtistaDTO:
     def __init__(self):
         self.id = None
         self.nombre = None
+        
+    def __init__(self, id, nombre):
+        self.id = id
+        self.nombre = nombre
 
     def is_empty(self):
         return (self.id is None and self.nombre)

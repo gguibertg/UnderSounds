@@ -1,6 +1,6 @@
 import json
 
-class ArtiuculosDTO:
+class ArticulosDTO:
     def __init__(self):
         self.articulosList = []
 
@@ -22,6 +22,12 @@ class ArticuloDTO:
         self.precio = None
         self.nombre = None
         self.descripcion = None
+        
+    def __init__(self, id, precio, nombre, descripcion):
+        self.id = id
+        self.precio = precio
+        self.nombre = nombre
+        self.descripcion = descripcion
 
     def is_empty(self):
         return (self.id is None and self.precio is None and self.nombre is None and self.descripcion is None)

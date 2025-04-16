@@ -17,11 +17,11 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
     def __init__(self, collection):
         self.collection = collection
     
-    def get_all_articulos(self, usuario):
+    def get_all_articulos(self):
         articulos = ArticulosCestaDTO()
         try:
             # Filtramos los artículos que pertenecen a un usuario específico
-            query = self.collection.find({"usuario" : usuario})
+            query = self.collection.find()
 
             for doc in query:
                 articulo_cesta_dto = ArticuloCestaDTO()
@@ -35,7 +35,7 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
                 articulo_cesta_dto.set_cantidad(doc.get("cantidad"))
                 articulo_cesta_dto.set_usuario(doc.get("usuario"))
 
-                articulo_cesta_dto.insertArticuloCesta(articulo_cesta_dto)
+                articulos.insertArticuloCesta(articulo_cesta_dto)
                 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar los articulos: {e}")
@@ -55,7 +55,7 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
         
     def deleteArticulo(self, id) -> bool:
         try:
-            result : pymongo.results.DeleteResult = self.collection.delete_one({"_id": id})
+            result : pymongo.results.DeleteResult = self.collection.delete_one({"id": id})
             return result.deleted_count == 1
         
         except Exception as e:

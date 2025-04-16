@@ -45,5 +45,6 @@ class MongoConnector:
     def get_articulos_carrito(self):
         print(PCONN, "Descargando artículos del carrito...")
         if self.db is None:
-            print ("Database connection is not initialized.")
-        return self.db.ArticulosCarrito
+            print("Database connection is not initialized.")
+            return []
+        return self.db["ArticulosCesta"]
