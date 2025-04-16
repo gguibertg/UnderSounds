@@ -16,7 +16,9 @@
                 {% if user %}
                 <div class="profile-container">
                     <a href="/profile"><img class="profile-picture" src="{{ user.imagen }}" alt="Foto de perfil"></a>
-                    <a href="/profile"><p>{{ user.nombre }}</p></a>
+                    <a href="/profile">
+                        <p>{{ user.nombre }}</p>
+                    </a>
                 </div>
                 <a href="/cart">
                     <img class="shop" src="/static/icons/site/cart-icon-light.svg" alt="carrito">
@@ -32,14 +34,42 @@
 
         <div class="nav-bottom">
             <ul>
-                <li><a href="/profile">🏠 Inicio</a></li>
-                <li><a href="/merch">🎁 Tienda</a></li>
-                <li><a href="/about">ℹ Acerca de</a></li>
+                <li>
+                    <a href="/index">
+                        <img class="theme-icon" data-icon="home-icon" src="/static/icons/site/home-icon-light.svg"
+                            alt="FAQs">
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/merch">
+                        <img class="theme-icon" data-icon="store-icon" src="/static/icons/site/store-icon-light.svg"
+                            alt="FAQs">
+                        <span>Tienda</span>
+                    </a>
+                </li>
+                <li> <a href="/about">
+                        <img class="theme-icon" data-icon="about-icon" src="/static/icons/site/about-icon-light.svg"
+                            alt="FAQs">
+                        <span>About</span>
+                    </a></li>
                 <li><a href="/contact">✉ Contáctanos</a></li>
-                <li><a href="/faqs">❔ FAQs</a></li>
+                <li>
+                    <a href="/faqs">
+                        <img class="theme-icon" data-icon="faqs-icon" src="/static/icons/site/faqs-icon-light.svg"
+                            alt="FAQs">
+                        <span>FAQs</span>
+                    </a>
+                </li>
                 {% if user %}
                 <li><a href="/profile">🎵 Biblioteca</a></li>
-                <li><a href="/cart">🛒 Carrito</a></li>
+                <li>
+                    <a href="/merch">
+                        <img class="theme-icon" data-icon="cart-icon" src="/static/icons/site/cart-icon-light.svg"
+                            alt="Carrito">
+                        <span>Inicio</span>
+                    </a>
+                </li>
                 {% if user.esArtista %}
                 <li><a href="/studio">🎙 Studio</a></li>
                 <li><a href="/upload-song">🔼 Subir canción</a></li>
