@@ -16,20 +16,20 @@ class SongsDTO():
 class SongDTO():
 
     def __init__(self):
-        self.id = None
-        self.album = None
-        self.artist = None
-        self.collaborators = None
-        self.date = None
-        self.description = None
-        self.duration = None 
-        self.genres = None
-        self.likes = None
-        self.portada = None
-        self.price = None
-        self.review_list = None
-        self.title = None
-        self.views = None
+        self.id: str = None
+        self.album: str = None
+        self.artist: str = None
+        self.collaborators: list[str] = []
+        self.date: str = None
+        self.description: str = None
+        self.duration: str = None 
+        self.genres: list[str] = []
+        self.likes: int = None
+        self.portada: str = None
+        self.price: float = None
+        self.review_list: list[str] = []
+        self.title: str = None
+        self.views: int = None
 
     def is_Empty(self):
         return (self.id is None and self.album is None and self.artist is None and 
@@ -37,92 +37,99 @@ class SongDTO():
                 self.duration is None and self.genres is None and self.likes is None and self.portada is None and 
                 self.price is None and self.review_list is None and self.title is None is None and  self.views)
 
-    def get_id(self):
+    def get_id(self) -> str:
         return self.id
 
-    def set_id(self, id):
+    def set_id(self, id: str):
         self.id = id
     
-    def get_album(self):
+    def get_album(self) -> str:
         return self.album
 
-    def set_album(self, album):
+    def set_album(self, album: str):
         self.album = album
 
-    def get_artist(self):
+    def get_artist(self) -> str:
         return self.artist
 
-    def set_artist(self, artist):
+    def set_artist(self, artist: str):
         self.artist = artist
 
-    def get_collaborators(self):
+    def get_collaborators(self) -> list[str]:
         return self.collaborators
 
-    def set_collaborators(self, collaborators):
+    def set_collaborators(self, collaborators: list[str]):
         self.collaborators = collaborators
 
-    def get_date(self):
+    def get_date(self) -> str:
         return self.date
 
-    def set_date(self, date):
+    def set_date(self, date: str):
         self.date = date
 
-    def get_description(self):
+    def get_description(self) -> str:
         return self.description
 
-    def set_description(self, description):
+    def set_description(self, description: str):
         self.description = description
 
-    def get_duration(self):
+    def get_duration(self) -> str:
         return self.duration
 
-    def set_duration(self, duration):
+    def set_duration(self, duration: str):
         self.duration = duration
 
-    def get_genres(self):
+    def get_genres(self) -> list[str]:
         return self.genres
 
-    def set_genres(self, genres):
+    def add_genero(self, genero_id: str):
+        self.genres.append(genero_id)
+
+    def remove_genero(self, genero_id: str):
+        if genero_id in self.genres:
+            self.genres.remove(genero_id)
+
+    def set_genres(self, genres: list[str]):
         self.genres = genres
 
-    def get_likes(self):
+    def get_likes(self) -> int:
         return self.likes
 
-    def set_likes(self, likes):
+    def set_likes(self, likes: int):
         self.likes = likes
 
-    def get_portada(self):
+    def get_portada(self) -> str:
         return self.portada
 
-    def set_portada(self, portada):
+    def set_portada(self, portada: str):
         self.portada = portada
 
-    def get_price(self):
+    def get_price(self) -> float:
         return self.price
 
-    def set_price(self, price):
+    def set_price(self, price: float):
         self.price = price
 
-    def get_review_list(self):
+    def get_review_list(self) -> list[str]:
         return self.review_list
 
-    def set_review_list(self, review_list):
+    def set_review_list(self, review_list: list[str]):
         self.review_list = review_list
 
-    def get_title(self):
+    def get_title(self) -> str:
         return self.title
 
-    def set_title(self, title):
+    def set_title(self, title: str):
         self.title = title
 
-    def get_views(self):
+    def get_views(self) -> int:
         return self.views
 
-    def set_views(self, views):
+    def set_views(self, views: int):
         self.views = views
 
     # Por último, definimos una función que se va a usar para convertir la canción a un diccionario.
-    def songdto_to_dict(self):
+    def songdto_to_dict(self) -> dict:
         return {
             "id": self.id,
             "album": self.album,

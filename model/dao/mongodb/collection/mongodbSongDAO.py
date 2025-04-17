@@ -69,19 +69,19 @@ class MongodbSongDAO(InterfaceSongDAO):
         return song.songdto_to_dict() if song else None
     
 
-    def add_song(self, song) -> bool:
+    def add_song(self, song: SongDTO) -> str:
         try:
             song_dict : dict = song.songdto_to_dict()
-            song_dict["_id"] = song_dict.pop("id", None)
+            song_dict.pop("id", None)
             result : pymongo.results.InsertOneResult = self.collection.insert_one(song_dict)
             return result.inserted_id == song_dict["_id"]
         
         except Exception as e:
             print(f"{PDAO_ERROR}Error al agregar el usuario: {e}")
-            return False
+            return None
         
 
-    def update_song(self, song) -> bool:
+    def update_song(self, song: SongDTO) -> bool:
         try:
             song_dict : dict = song.songdto_to_dict()
             song_dict["_id"] = song_dict.pop("id", None)
@@ -93,7 +93,7 @@ class MongodbSongDAO(InterfaceSongDAO):
             return False
     
 
-    def delete_song(self, id) -> bool:
+    def delete_song(self, id: str) -> bool:
         try:
             result : pymongo.results.DeleteResult = self.collection.delete_one({"_id": id})
             return result.deleted_count == 1

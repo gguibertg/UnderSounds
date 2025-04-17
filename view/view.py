@@ -21,5 +21,7 @@ class View():
     def get_song_view(self, request: Request, song_info):
         return templates.TemplateResponse("music/song.html", {"request": request, "song": song_info})
 
+    def get_edit_song_view(self, request: Request, song_info):
+        return templates.TemplateResponse("music/song-edit.html", {"request": request, "song": song_info})
     
     # Seguir añadiendo funciones para renderizar las templates que se necesiten...
