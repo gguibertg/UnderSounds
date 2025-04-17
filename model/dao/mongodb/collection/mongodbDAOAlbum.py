@@ -1,3 +1,4 @@
+from bson import ObjectId
 import pymongo
 import pymongo.results
 from ...intefaceAlbumDAO import InterfaceAlbumDAO
@@ -42,9 +43,9 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
     def add_album(self, album: AlbumDTO) -> str:
         try:
             album_dict: dict = album.album_to_dict()
-            album_dict["_id"] = album_dict.pop("id", None)
+            album_dict.pop("id", None) # id debería estar vacio, así que lo descartamos
             result: pymongo.results.InsertOneResult = self.collection.insert_one(album_dict)
-            return result.inserted_id
+            return str(result.inserted_id) # Devolvemos el nuevo _id del álbum
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al agregar el álbum: {e}")
@@ -54,7 +55,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
     def update_album(self, album: AlbumDTO) -> bool:
         try:
             album_dict: dict = album.album_to_dict()
-            album_dict["_id"] = album_dict.pop("id", None)
+            album_dict["_id"] = ObjectId(album_dict.pop("id", None))
             result: pymongo.results.UpdateResult = self.collection.update_one(
                 {"_id": album_dict["_id"]}, {"$set": album_dict}
             )
@@ -67,7 +68,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
 
     def delete_album(self, id: str) -> bool:
         try:
-            result: pymongo.results.DeleteResult = self.collection.delete_one({"_id": id})
+            result: pymongo.results.DeleteResult = self.collection.delete_one({"_id": ObjectId(id)})
             return result.deleted_count == 1
 
         except Exception as e:

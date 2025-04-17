@@ -44,8 +44,6 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
         try:
             query = self.collection.find_one({"_id": id})
 
-            
-
             if query:
                 user = UsuarioDTO()
                 user.set_id(str(query.get("_id")))
@@ -63,7 +61,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
         return user.usuario_to_dict() if user else None
     
 
-    def add_usuario(self, usuario) -> bool:
+    def add_usuario(self, usuario : UsuarioDTO) -> bool:
         try:
             user_dict : dict = usuario.usuario_to_dict()
             user_dict["_id"] = user_dict.pop("id", None)
