@@ -2,6 +2,7 @@ class GeneroDTO:
     def __init__(self):
         self.id: str = None
         self.nombre: str = None
+        self.esSubGen: bool = False
 
     def get_id(self) -> str:
         return self.id
@@ -15,8 +16,15 @@ class GeneroDTO:
     def set_nombre(self, nombre: str):
         self.nombre = nombre
 
+    def get_esSubGen(self) -> bool:
+        return self.esSubGen
+    
+    def set_esSubGen(self, esSubGen: bool):
+        self.esSubGen = esSubGen
+
     def genero_to_dict(self) -> dict:
         return {
             "id": self.id,
-            "nombre": self.nombre
+            "nombre": self.nombre,
+            "esSubGen": self.esSubGen
         }

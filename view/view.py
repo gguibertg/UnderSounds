@@ -15,33 +15,30 @@ class View():
         pass
 
     def get_index_view(self, request: Request): 
-        return templates.TemplateResponse("main/index.html", {"request" : request})
+        return templates.TemplateResponse("main/index.html", {"request" : request })
     
     
     # Renderizar la template login.html
     def get_login_view(self, request: Request):
-        return templates.TemplateResponse("auth/login.html", {"request": request, "API_CREDENTIALS" : apicreds})
+        return templates.TemplateResponse("auth/login.html", {"request": request, "API_CREDENTIALS" : apicreds })
 
     # Renderizar la template profile.html
     # Necesita un user_info completo, no se contempla otro caso.
     def get_perfil_view(self, request: Request, user_info):
-        return templates.TemplateResponse("user/profile.html", {"request": request, "user": user_info, "API_CREDENTIALS" : apicreds})
+        return templates.TemplateResponse("user/profile.html", {"request": request, "user": user_info, "API_CREDENTIALS" : apicreds })
     
     # Renderizar la template register.html
     def get_register_view(self, request: Request):
-        return templates.TemplateResponse("auth/register.html", {"request": request, "API_CREDENTIALS" : apicreds})
+        return templates.TemplateResponse("auth/register.html", {"request": request, "API_CREDENTIALS" : apicreds })
     
     # Renderizar la template faqs.html
     def get_faqs_view(self, request: Request, faqs):
-        return templates.TemplateResponse("main/faqs.html", {
-            "request": request,
-            "faqs": faqs
-        })
+        return templates.TemplateResponse("main/faqs.html", {"request": request, "faqs": faqs })
     
     # Renderizar la template album-edit.html
     def get_album_edit_view(self, request: Request, album_info):
-        return templates.TemplateResponse("music/album-edit.html", {
-            "request": request,
-            "album": album_info
-        })
+        return templates.TemplateResponse("music/album-edit.html", {"request": request, "album": album_info })
 
+    # Renderizar la template upload-album.html
+    def get_upload_album_view(self, request: Request):
+        return templates.TemplateResponse("music/upload-album.html", {"request": request })

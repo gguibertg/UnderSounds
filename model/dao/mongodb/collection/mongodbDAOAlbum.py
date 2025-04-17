@@ -39,16 +39,16 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
         return album.album_to_dict() if album else None
     
 
-    def add_album(self, album: AlbumDTO) -> bool:
+    def add_album(self, album: AlbumDTO) -> str:
         try:
             album_dict: dict = album.album_to_dict()
             album_dict["_id"] = album_dict.pop("id", None)
             result: pymongo.results.InsertOneResult = self.collection.insert_one(album_dict)
-            return result.inserted_id == album_dict["_id"]
+            return result.inserted_id
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al agregar el álbum: {e}")
-            return False
+            return None
 
 
     def update_album(self, album: AlbumDTO) -> bool:

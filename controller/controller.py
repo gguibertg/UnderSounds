@@ -10,6 +10,7 @@ from pathlib import Path
 import firebase_admin
 from firebase_admin import auth, credentials
 from model.dto.usuarioDTO import UsuarioDTO
+from model.dto.albumDTO import AlbumDTO
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
@@ -258,12 +259,13 @@ async def deregister(request: Request, response: Response):
 
 # Ruta para cargar la vista de perfil
 @app.get("/profile")
-async def perfil(request: Request):
-    res = handleAndGetUserDictDBData(request)
+async def get_profile(request: Request):
+    res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
         return res # Si es un Response, devolvemos el error
     
     return view.get_perfil_view(request, res)  # Si es un dict, pasamos los datos del usuario
+
 
 # Ruta para actualizar el perfil del usuario
 @app.post("/update-profile")
@@ -307,6 +309,7 @@ async def update_profile(request: Request, response: Response):
         print(PCTRL_WARN, "User", user_name, "not updated in database!")
         return {"success": False, "error": "User not updated in database"}
 
+
 # --------------------------- FAQS --------------------------- #
 
 @app.get("/faqs", description="Muestra preguntas frecuentes desde MongoDB")
@@ -315,11 +318,12 @@ def get_faqs(request: Request):
     return view.get_faqs_view(request, faqs_json)
 
 
+
 # ----------------------------- ALBUM ------------------------------ #
 
 # Ruta para cargar la vista de álbum-edit
 @app.get("/album-edit")
-async def album(request: Request):
+async def get_album_edit(request: Request):
     #Leemos de la request el id del album y recogemos el album de la BD
     #album_id = request.query_params.get("id") DEVELOPER
 
@@ -329,7 +333,7 @@ async def album(request: Request):
         print(PCTRL_WARN, "Album ID not provided in request")
         return Response("No autorizado", status_code=400)
 
-    res = handleAndGetUserDictDBData(request)
+    res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
         return res # Si es un Response, devolvemos el error
     
@@ -368,8 +372,74 @@ async def album(request: Request):
     return view.get_album_edit_view(request, album_info)  # Si es un dict, pasamos los datos del usuario
 
 
+# Ruta para cargar la vista de upload-album
+@app.get("/upload-album")
+async def get_upload_album(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error  
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    
+    return view.get_upload_album_view(request)
 
 
+# Ruta para subir un álbum
+@app.post("/upload-album")
+async def upload_album(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error  
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    
+    # Creamos un nuevo objeto AlbumDTO, utilizando los datos recibidos en el request
+    data = await request.json()
+
+    album = AlbumDTO()
+    album.set_titulo(data["titulo"])
+    album.set_autor(data["autor"])
+    album.set_descripcion(data["descripcion"])
+    album.set_fecha(data["fecha"])
+    album.set_generos(data["generos"])
+    album.set_canciones([]) ### NO subimos las canciones - las canciones 
+    album.set_nVisualizaciones(0)
+    album.set_portada(data["portada"])
+    album.set_precio(data["precio"])
+
+    # Subir el album a la base de datos
+    album_id = model.add_album(album)
+    if album_id is not None:
+        print(PCTRL, "Album", album_id, "uploaded to database")
+    else:
+        print(PCTRL_WARN, "Album", album_id, "not uploaded to database!")
+        return {"success": False, "error": "Album not uploaded to database"}
+
+    try: 
+        # Obtenemos los datos de usuario de la base de datos y creamos un nuevo objeto UsuarioDTO
+        # Ya tenemos estos datos (res), solo necesitamos castearlos.
+        user : UsuarioDTO = res
+
+        # Añadimos al usuario la nueva referencia al album
+        user.add_studio_album(album_id)
+
+        # Actualizamos el usuario en la base de datos
+        if model.update_usuario(user):
+            print(PCTRL, "User", user.get_email(), "updated in database")
+            return {"success": True, "message": "Album uploaded successfully"}
+        else:
+            raise Exception("User not updated in database")
+        
+    except Exception as e:
+        print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
+
+        # Destruir el album subido
+        model.delete_album(album_id)
+        return {"success": False, "error": "User not updated in database"}
 
 
 
@@ -390,10 +460,15 @@ def getSessionData(session_id: str) -> str:
     return None
 
 # Este método automatiza la obtención de datos del usuario a partir de la sesión activa.
+#
+#   1º Comprueba que exista una sesión activa
+#   2º Descarga los datos del usuario enlazados a esa sesión
+#   3º Devuelve dos cosas:
+#       Si todo es correcto -> Devuelve user_info (dict)
+#       Si no -> Devuelve un Response con el error y escribe a consola
+#
 # Conveniente para rutas sencillas que solo requieran la info del usuario.
-# Si todo es correcto -> Devuelve user_info (dict)
-# Si no -> Devuelve un Response y escribe a consola
-def handleAndGetUserDictDBData(request : Request):
+def verifySessionAndGetUserInfo(request : Request):
     # Comprobamos si el usuario tiene una sesión activa
     session_id = request.cookies.get("session_id")
     if not isUserSessionValid(session_id):

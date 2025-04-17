@@ -133,6 +133,42 @@
         </div>
     </main>
 
+    <script>
+        async function postAlbum() {
+            const formData = new FormData();
+            formData.append('titulo', document.getElementById('title').value);
+            formData.append('autor', document.getElementById('author').value);
+            formData.append('descripcion', document.getElementById('description').value);
+            formData.append('fecha', new Date().toISOString().split('T')[0]);
+            formData.append('colaboradores', document.getElementById('collaborators').value);
+            formData.append('precio', document.getElementById('price').value);
+
+            const genres = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+            .map(checkbox => checkbox.id);
+            formData.append('generos', JSON.stringify(genres));
+
+            const coverSrc = document.getElementById('cover-preview').src;
+            formData.append('cover', coverSrc);
+
+            try {
+            const response = await fetch('/upload-album', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Album uploaded successfully:', result);
+            } else {
+                console.error('Failed to upload album:', response.statusText);
+            }
+            } catch (error) {
+            console.error('Error uploading album:', error);
+            }
+        }
+
+    </script>
+
     <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
