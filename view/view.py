@@ -40,5 +40,5 @@ class View():
         return templates.TemplateResponse("music/album-edit.html", {"request": request, "album": album_info })
 
     # Renderizar la template upload-album.html
-    def get_upload_album_view(self, request: Request):
-        return templates.TemplateResponse("music/upload-album.html", {"request": request })
+    def get_upload_album_view(self, request: Request, songs: list[dict]):
+        return templates.TemplateResponse("music/upload-album.html", {"request": request , "songs": songs})

@@ -125,25 +125,34 @@
                     
                     <div class="div-pannel-sub upload-song" style="width: 100%;">
                         <label for="song-upload">Agregar canciones</label>
-                        <select id="song-list" name="song-list">
-                            <option value="" disabled selected>Selecciona una canción</option>
-                            <option value="song1">Canción 1</option>
-                            <option value="song2">Canción 2</option>
-                            <option value="song3">Canción 3</option>
-                            <option value="song4">Canción 4</option>
-                            <option value="song5">Canción 5</option>
-                        </select>
-                        <a href="/upload-song">
-                            <button style="margin-top: 25px;">Añadir canción</button>
-                        </a>
+                        <div class="div-pannel-sub grid-container" style="grid-template-columns: 1fr auto; gap: 20px;">
+                            <select id="song-list" name="song-list" style="height: 40px; width: 100%;">
+                                <option value="" disabled selected>Selecciona una canción</option>
+                                {% for song in songs %}   
+                                <option value="{{ song.id }}">{{ song.titulo }} · {{ song.autor }}</option>
+                                {% endfor %}
+                            </select>
+                            <a href="/upload-song">
+                                <button onclick="addSong()">Añadir canción</button>
+                            </a>
+                        </div>
                         <div class="grid-biblioteca">
-                               No hay canciones añadidas.   
+                            <p id="no_songs">No hay canciones añadidas.</p>
+                            {% for song in songs %}                       
+                            <div id="{{ song.id }}" class="div-pannel-sub songs-cell" style="display: none;"></div>
+                                <img src="{{ song.portada }}" class="songs-image" alt="Song Image">
+                                <h3>{{ song.titulo }}</h3>
+                                <p>{{ song.autor }}</p>
+                                <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver canción</button></a> <!-- TODO: Hacer que el botón funcione. Esperar implementación de song -->
+                                <button onclick="removeSong("{{ song.id }}")" style="width: 100%; background-color: #ff4646;">Eliminar</button>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </form>
 
                 <a href="/studio">
-                    <button type="submit">Subir</button>
+                    <button type="submit">Subir álbum</button>
                 </a>
             </div>
             <br>
@@ -151,6 +160,52 @@
     </main>
 
     <script>
+
+        function addSong() {
+            const songList = document.getElementById('song-list');
+            const selectedOption = songList.options[songList.selectedIndex];
+
+            if (selectedOption && selectedOption.value) {
+                const songId = selectedOption.value;
+
+                // Make the selected option invisible and unselectable
+                selectedOption.style.display = 'none';
+                selectedOption.disabled = true;
+
+                // Show the corresponding song div
+                const songDiv = document.getElementById(songId);
+                if (songDiv) {
+                    songDiv.style.display = 'block';
+                }
+
+                // Make the "no songs" message invisible
+                const noSongsMessage = document.getElementById('no_songs');
+                noSongsMessage.style.display = 'none';
+            }
+        }
+
+        function removeSong(songId) {
+            const songDiv = document.getElementById(songId);
+            if (songDiv) {
+                songDiv.style.display = 'none';
+            }
+
+            // Make the corresponding option in the select visible and selectable again
+            const songOption = document.querySelector(`option[value="${songId}"]`);
+            if (songOption) {
+                songOption.style.display = 'block';
+                songOption.disabled = false;
+            }
+
+            // Check if there are any visible songs left
+            const remainingSongs = Array.from(document.querySelectorAll('.songs-cell')).filter(songDiv => songDiv.style.display === 'block');
+            if (remainingSongs.length === 0) {
+                const noSongsMessage = document.getElementById('no_songs');
+                noSongsMessage.style.display = 'block';
+            }
+        }
+        }
+
         async function postAlbum() {
             const formData = new FormData();
             formData.append('titulo', document.getElementById('title').value);
@@ -160,9 +215,12 @@
             formData.append('colaboradores', document.getElementById('collaborators').value);
             formData.append('precio', document.getElementById('price').value);
 
-            const genres = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
-            .map(checkbox => checkbox.id);
+            const genres = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.id);
             formData.append('generos', JSON.stringify(genres));
+
+            const visibleSongs = Array.from(document.querySelectorAll('.grid-biblioteca .songs-cell[style*="display: block"]'));
+            const songIds = visibleSongs.map(songDiv => songDiv.id);
+            formData.append('canciones', JSON.stringify(songIds));
 
             const coverSrc = document.getElementById('cover-preview').src;
             formData.append('cover', coverSrc);

@@ -383,7 +383,45 @@ async def get_upload_album(request: Request):
         print(PCTRL_WARN, "User is not an artist")
         return Response("No autorizado", status_code=403)
     
-    return view.get_upload_album_view(request)
+    # Preparamos para escoger las songs validas para un album nuevo
+    # Para ello, debemos coger todas las canciones creadas por el usuario (campo studio_canciones) y que no pertenezcan a ningun album.
+    # Para comprobar que no pertenezcan a ningun album, debemos descargar todos los albumes y comprobar en el campo canciones de cada uno de ellos que esa cancion no esté.
+    # Debemos recordar que tanto studio_canciones como studio_albumes como el campo canciones de un album son listas de IDs de strings de canciones, albumes y canciones respectivamente.
+    # Por lo tanto, para cada string encontrado hay que hacer su llamada a model correspondiente para obtener el objeto real y pasarlo a la vista.
+    # Excepto en el caso de las canciones de un album, ya que solo necesitamos el ID y nada más.
+    
+    # Por cada canción en studio_canciones, obtenemos el objeto real, enviando un mensaje de error si no existe.
+    user_songs_objects = []
+    for song_id in res["studio_canciones"]:
+        song = model.get_cancion(song_id)
+        if not song:
+            print(PCTRL_WARN, "Song", song_id, "not found in database")
+            return Response("Error del sistema", status_code=403)
+        user_songs_objects.append(song)
+
+    # Por cada album en studio_albumes, obtenemos el objeto real, enviando un mensaje de error si no existe.
+    user_albums_objects = []
+    for album_id in res["studio_albumes"]:
+        album = model.get_album(album_id)
+        if not album:
+            print(PCTRL_WARN, "Album", album_id, "not found in database")
+            return Response("Error del sistema", status_code=403)
+        user_albums_objects.append(album)
+
+    # Comprobar que por cada canción en studio_canciones, no esté en el campo canciones de ningun album
+    # Cada canción que cumpla esta condición se añadira a la lista de canciones admitidas para el nuevo album
+    valid_songs = []        
+    for song in user_songs_objects:
+        # Comprobar si la canción está en el campo canciones de algún álbum
+        found = False
+        for album in user_albums_objects:
+            if song["id"] in album["canciones"]:
+                found = True
+                break
+        if not found:
+            valid_songs.append(song)
+
+    return view.get_upload_album_view(request, valid_songs)
 
 
 # Ruta para subir un álbum
