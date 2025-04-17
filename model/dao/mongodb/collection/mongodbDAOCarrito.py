@@ -2,8 +2,6 @@ import pymongo
 import pymongo.results
 from ...interfaceCarritoDAO import InterfaceCarritoDAO
 from ....dto.articuloCestaDTO import ArticulosCestaDTO, ArticuloCestaDTO
-from ....dto.articuloDTO import ArticuloDTO
-from ....dto.artistaDTO import ArtistaDTO
 from bson import ObjectId
 
 PDAO = "\033[95mDAO\033[0m:\t "
@@ -26,15 +24,13 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
             for doc in query:
                 articulo_cesta_dto = ArticuloCestaDTO()
                 articulo_cesta_dto.set_id(str(doc.get("_id")))
-
-                articulo_dto = ArticuloDTO(**doc.get("articulo"))
-                artista_dto = ArtistaDTO(**doc.get("artista"))
-
-                articulo_cesta_dto.set_articulo(articulo_dto)
-                articulo_cesta_dto.set_artista(artista_dto)
-                articulo_cesta_dto.set_cantidad(doc.get("cantidad"))
-                articulo_cesta_dto.set_usuario(doc.get("usuario"))
-
+                articulo_cesta_dto.set_precio(str(doc.get("precio")))
+                articulo_cesta_dto.set_nombre(str(doc.get("nombre")))
+                articulo_cesta_dto.set_descripcion(str(doc.get("descripcion")))
+                articulo_cesta_dto.set_artista(str(doc.get("artista")))
+                articulo_cesta_dto.set_cantidad(str(doc.get("cantidad")))
+                articulo_cesta_dto.set_usuario(str(doc.get("usuario")))
+                articulo_cesta_dto.set_imagen(str(doc.get("imagen")))
                 articulos.insertArticuloCesta(articulo_cesta_dto)
                 
         except Exception as e:
@@ -55,7 +51,7 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
         
     def deleteArticulo(self, id) -> bool:
         try:
-            result : pymongo.results.DeleteResult = self.collection.delete_one({"id": id})
+            result : pymongo.results.DeleteResult = self.collection.delete_one({"_id": id})
             return result.deleted_count == 1
         
         except Exception as e:

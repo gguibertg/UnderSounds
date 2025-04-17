@@ -10,6 +10,7 @@ from pathlib import Path
 import firebase_admin
 from firebase_admin import auth, credentials
 from model.dto.usuarioDTO import UsuarioDTO
+from model.dto.articuloCestaDTO import ArticuloCestaDTO
 from bson import ObjectId
 
 # Variable para el color + modulo de la consola
@@ -349,7 +350,7 @@ def get_faqs(request: Request):
 async def get_carrito(request: Request):
     if request.method == "POST":
         form_data = await request.form()
-        action = form_data.get("action", "add")  # Por defecto: añadir
+        action = form_data.get("action")  # Por defecto: añadir
 
         if action == "delete":
             item_id = form_data.get("item_id")
@@ -360,15 +361,18 @@ async def get_carrito(request: Request):
             model.carrito.deleteArticulo(item_id)
         
         elif action == "add":
-            item_id = form_data.get('item_id')
-            item_name = form_data.get('item_name')
-            artist_name = form_data.get('artist_name')
-            
-            if not item_id or not item_name or not artist_name:
-                return "Faltan datos para añadir el artículo al carrito", 400
+            articulo = ArticuloCestaDTO()
+            articulo.set_id(form_data.get("item_id"))
+            articulo.set_nombre(form_data.get("item_name"))
+            articulo.set_precio(form_data.get("item_precio"))
+            articulo.set_descripcion(form_data.get("item_desc"))
+            articulo.set_artista(form_data.get("artist_name"))
+            articulo.set_cantidad("1")
+            articulo.set_usuario(form_data.get("item_usuario"))
+            articulo.set_imagen(form_data.get("item_image"))
 
             # Añadir el artículo al carrito
-            model.carrito.insertArticulo(item_id, item_name, artist_name)
+            model.carrito.insertArticulo(articulo)
 
     # Si la petición es GET, mostrar el carrito
     carrito_json = model.get_carrito()

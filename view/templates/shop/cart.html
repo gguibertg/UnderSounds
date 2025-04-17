@@ -39,16 +39,16 @@
                             {% for item in carrito %}
                             <div class="div-pannel-sub div-row">
                                 <div class="cart-item">
-                                    <img src="{{ item.articulo.imagen }}" alt="{{ item.articulo.nombre }}" class="item-image">
+                                    <img src="{{ item.imagen }}" alt="{{ item.nombre }}" class="item-image">
                                     <div class="item-info">
-                                        <h3 class="item-title">{{ item.articulo.nombre }}</h3>
-                                        <p class="item-description">{{ item.articulo.descripcion }}</p>
-                                        <p class="item-author">Autor: {{ item.artista.nombre }}</p>
+                                        <h3 class="item-title">{{ item.nombre }}</h3>
+                                        <p class="item-description">{{ item.descripcion }}</p>
+                                        <p class="item-author">Autor: {{ item.artista }}</p>
                                         <p class="item-cantidad">Cantidad: {{item.cantidad}}</p>
                                     </div>
                                 </div>
                                 <div class="item-actions">
-                                    <p class="item-price">${{ "%.2f"|format(item.articulo.precio | float) }}</p>
+                                    <p class="item-price">${{ "%.2f"|format(item.precio | float) }}</p>
                                     <form action="/cart" method="post" style="display:inline;">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="item_id" value="{{ item.id }}">
@@ -59,7 +59,7 @@
                             {% endfor %}
 
                             {% if not carrito %}
-                                <p>Tú carrito no tiene ningún item</p>
+                                <p>Tu carrito no tiene ningún item</p>
                             {% endif %}
 
     
@@ -80,18 +80,22 @@
                                 <hr>
                                 <div class="grid-lista">
                                     {% for item in carrito %}
-                                        <p>{{ item.articulo.nombre }}</p>
+                                        <p>{{ item.nombre }}</p>
                                         <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
-                                        <p>${{ "%.2f"|format(item.articulo.precio | float)}}</p>
+                                        <p>${{ "%.2f"|format(item.precio | float)}}</p>
                                     {% endfor %}
                                 </div>
                                 <hr>
+                                {% set subtotal = 0 %}
+                                {% for item in carrito %}
+                                    {% set subtotal = subtotal + (item.precio | float) * (item.cantidad | int) %}
+                                {% endfor %}
                                 <div class="grid-lista">
                                     <b><p>SubTotal</p></b>
                                     <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
                                     <b>
                                         <p>
-                                            
+                                            <p>${{ '%.2f' | format(subtotal) }}</p>
                                         </p>
                                     </b>
                                 </div>
