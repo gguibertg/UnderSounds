@@ -35,7 +35,7 @@
         <div class="nav-bottom">
             <ul>
                 <li>
-                    <a href="/index">
+                    <a href="/">
                         <img class="theme-icon" data-icon="home-icon" src="/static/icons/site/home-icon-light.svg"
                             alt="FAQs">
                         <span>Inicio</span>
@@ -53,7 +53,12 @@
                             alt="FAQs">
                         <span>About</span>
                     </a></li>
-                <li><a href="/contact">✉ Contáctanos</a></li>
+                <li> <a href="/contact">
+                        <img class="theme-icon" data-icon="contact-icon" src="/static/icons/site/contact-icon-light.svg"
+                            alt="FAQs">
+                        <span>Contacto</span>
+                    </a>
+                </li>
                 <li>
                     <a href="/faqs">
                         <img class="theme-icon" data-icon="faqs-icon" src="/static/icons/site/faqs-icon-light.svg"
@@ -62,18 +67,27 @@
                     </a>
                 </li>
                 {% if user %}
-                <li><a href="/profile">🎵 Biblioteca</a></li>
-                <li>
-                    <a href="/merch">
-                        <img class="theme-icon" data-icon="cart-icon" src="/static/icons/site/cart-icon-light.svg"
-                            alt="Carrito">
-                        <span>Inicio</span>
-                    </a>
-                </li>
+                <li> <a href="/profile">
+                        <img class="theme-icon" data-icon="library-icon" src="/static/icons/site/library-icon-light.svg"
+                            alt="Biblioteca">
+                        <span>Biblioteca</span>
+                    </a></li>
                 {% if user.esArtista %}
-                <li><a href="/studio">🎙 Studio</a></li>
-                <li><a href="/upload-song">🔼 Subir canción</a></li>
-                <li><a href="/upload-album">🔼 Subir álbum</a></li>
+                <li> <a href="/studio">
+                        <img class="theme-icon" data-icon="studio-icon" src="/static/icons/site/studio-icon-light.svg"
+                            alt="Studio">
+                        <span>Studio</span>
+                    </a></li>
+                <li><a href="/upload-song">
+                        <img class="theme-icon" data-icon="upload-icon" src="/static/icons/site/upload-icon-light.svg"
+                            alt="Subir canción">
+                        <span>Subir canción</span>
+                    </a></li>
+                <li><a href="/upload--album">
+                        <img class="theme-icon" data-icon="upload-icon" src="/static/icons/site/upload-icon-light.svg"
+                            alt="Subir album">
+                        <span>Subir album</span>
+                    </a></li>
                 {% endif %}
                 {% endif %}
             </ul>

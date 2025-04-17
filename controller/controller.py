@@ -177,7 +177,7 @@ async def register_post(data: dict, response: Response, provider: str):
         else:
             user.set_imagen(decoded_token["picture"])
         user.set_url("")
-        user.set_esArtista(False) #TODO, como deberíamos determinar si es artista o no?
+        user.set_esArtista(bool(data.get("esArtista", False)))
 
         # Añadir el usuario a la base de datos
         if model.add_usuario(user):
