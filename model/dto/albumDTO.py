@@ -3,8 +3,9 @@ class AlbumDTO:
         self.id: str = None
         self.titulo: str = None
         self.autor: str = None
+        self.colaboradores: str = None # Si, se que es un string y no una lista, pero a quien le importa realmente? Nunca lo vamos a usar como una lista de todas formas
         self.descripcion: str = None
-        self.fecha: str = None
+        self.fecha: str = None # TODO: Esto debería ser un Date(), pero mongo no me quiere, así que string será por ahora.
         self.generos: list[str] = []
         self.canciones: list[str] = []
         self.nVisualizaciones: int = None
@@ -28,6 +29,12 @@ class AlbumDTO:
 
     def set_autor(self, autor: str):
         self.autor = autor
+
+    def get_colaboradores(self) -> str:
+        return self.colaboradores
+    
+    def set_colaboradores(self, colaboradores: str):
+        self.colaboradores = colaboradores
 
     def get_descripcion(self) -> str:
         return self.descripcion

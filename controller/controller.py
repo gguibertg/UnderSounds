@@ -403,10 +403,11 @@ async def upload_album(request: Request):
     album = AlbumDTO()
     album.set_titulo(data["titulo"])
     album.set_autor(data["autor"])
+    album.set_colaboradores(data["colaboradores"])
     album.set_descripcion(data["descripcion"])
     album.set_fecha(data["fecha"])
     album.set_generos(data["generos"])
-    album.set_canciones([]) ### NO subimos las canciones - las canciones 
+    album.set_canciones(data["canciones"])
     album.set_nVisualizaciones(0)
     album.set_portada(data["portada"])
     album.set_precio(data["precio"])
@@ -490,3 +491,24 @@ def verifySessionAndGetUserInfo(request : Request):
             print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")
         
     return Response("No autorizado", status_code=401)
+
+
+# --------------------------- HACKS DE MIERDA - ELIMINAR CUANDO HAYA UNA MEJOR IMPLEMENTACIÓN --------------------------- #
+# Guardar sesiones en un archivo JSON al cerrar el servidor y recuperarlas al iniciar.
+# Así evitamos perder las sesiones al reiniciar el servidor.
+@app.on_event("shutdown")
+def shutdown_event():
+    import json
+    with open("sessions.json", "w") as f:
+        json.dump(sessions, f)
+    print(PCTRL, "Sessions saved to sessions.json")
+@app.on_event("startup")
+def startup_event():
+    import json
+    if Path("sessions.json").is_file():
+        with open("sessions.json", "r") as f:
+            global sessions
+            sessions = json.load(f)
+        print(PCTRL, "Sessions loaded from sessions.json")
+    else:
+        print(PCTRL_WARN, "No sessions.json file found, starting with empty sessions")

@@ -42,6 +42,10 @@
                         <label for="album">Autor</label>
                         <input type="text" id="author" name="author" placeholder="Autor del álbum" value="{{ album.autor }}">
 
+                        <label for="collaborators">Colaboradores</label>
+                        <input type="text" id="collaborators" name="collaborators" placeholder="Separados por coma"
+                            value="{{ album.colaboradores }}">
+
                         <label for="album">Descripción</label>
                         <textarea id="desc" name="desc" rows="6" cols="40" style="resize: none;" placeholder="Descripción del álbum">{{ album.descripcion }}</textarea>
                     </div>

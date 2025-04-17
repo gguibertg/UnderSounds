@@ -26,6 +26,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
                 album.set_id(query.get("_id"))
                 album.set_titulo(query.get("titulo"))
                 album.set_autor(query.get("autor"))
+                album.set_colaboradores(query.get("colaboradores"))
                 album.set_descripcion(query.get("descripcion"))
                 album.set_fecha(query.get("fecha"))
                 album.set_generos(query.get("generos", []))
