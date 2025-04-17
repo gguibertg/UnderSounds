@@ -45,6 +45,12 @@
                 <label for="passwordVerify">Reescribir contraseña</label>
                 <input type="password" id="passwordVerify" name="passwordVerify" placeholder="Contraseña">
                 <br>
+                <br>
+                <label for="esArtista">
+                    <input type="checkbox" id="esArtista" name="esArtista">
+                    Registrarse como artista
+                </label>
+                <br>
                 <button type="submit">Continuar</button>
             </form>
             <br>
@@ -64,14 +70,14 @@
             messagingSenderId: "{{ API_CREDENTIALS.MESSAGING_SENDER_ID }}",
             appId: "{{ API_CREDENTIALS.APP_ID }}",
         };
-        
+
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
         function displayError(message) {
             const existingErrorDiv = document.querySelector(".div-error");
             if (existingErrorDiv) {
-            existingErrorDiv.remove();
+                existingErrorDiv.remove();
             }
 
             const errorDiv = document.createElement("div");
@@ -85,66 +91,67 @@
             mainElement.insertBefore(errorDiv, backButton);
         }
 
-        document.getElementById("register-form").addEventListener("submit", function(event) {
+        document.getElementById("register-form").addEventListener("submit", function (event) {
             event.preventDefault();
             const username = document.getElementById("username").value;
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
+            const esArtista = document.getElementById("esArtista").checked;
             console.log("Usuario " + email + " registrándose...");
 
             firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(userCredential => {
-            const user = userCredential.user;
-            return user.getIdToken();
-            })
-            .then(token => {
-            console.log("Token obtenido: " + token);
-            return fetch("http://localhost:8000/register-credentials", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token, username })
-            });
-            })
-            .then(response => response.json())
-            .then(data => {
-            if (data.success) {
-                window.location.href = "/profile";
-            } else {
-                throw new Error(data.error || "Ocurrió un error desconocido");
-            }
-            })
-            .catch(error => {
-            console.error("Error durante el registro de credenciales:", error.code, error.message);
-            displayError("Error durante el registro: " + error.message);
-            });
+                .then(userCredential => {
+                    const user = userCredential.user;
+                    return user.getIdToken();
+                })
+                .then(token => {
+                    console.log("Token obtenido: " + token);
+                    return fetch("http://localhost:8000/register-credentials", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ token, username, esArtista })
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = "/profile";
+                    } else {
+                        throw new Error(data.error || "Ocurrió un error desconocido");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error durante el registro de credenciales:", error.code, error.message);
+                    displayError("Error durante el registro: " + error.message);
+                });
         });
-        
-        document.getElementById("google-register").addEventListener("click", function() {
+
+        document.getElementById("google-register").addEventListener("click", function () {
             const provider = new firebase.auth.GoogleAuthProvider();
             console.log("Usuario registrándose con Google...");
             auth.signInWithPopup(provider)
-            .then(result => result.user.getIdToken())
-            .then(token => {
-                console.log("Token del usuario: ", token);
-                console.log("Solicitando acceso a la API...");
-                return fetch("http://localhost:8000/register-google", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token })
+                .then(result => result.user.getIdToken())
+                .then(token => {
+                    console.log("Token del usuario: ", token);
+                    console.log("Solicitando acceso a la API...");
+                    return fetch("http://localhost:8000/register-google", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ token })
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = "/profile";
+                    } else {
+                        throw new Error(data.error || "Ocurrió un error desconocido");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error durante el registro con Google:", error);
+                    displayError("Error durante el registro con Google: " + error.message);
                 });
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                window.location.href = "/profile";
-                } else {
-                throw new Error(data.error || "Ocurrió un error desconocido");
-                }
-            })
-            .catch(error => {
-                console.error("Error durante el registro con Google:", error);
-                displayError("Error durante el registro con Google: " + error.message);
-            });
         });
     </script>
 
