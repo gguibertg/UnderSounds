@@ -35,17 +35,17 @@
 
                     <div class="div-pannel-sub upload-group" style="width: auto;">
                         <label for="title">Título</label>
-                        <input type="text" id="title" name="title" required placeholder="Título de la canción">
+                        <input type="text" id="title" name="title" required placeholder="Título de la canción" value="{{song.title}}">
 
                         <label for="author">Autor</label>
-                        <input type="text" id="author" name="author" required placeholder="Autor de la cacnión">
+                        <input type="text" id="author" name="author" required placeholder="Autor de la cacnión" value="{{song.artist}}">
 
                         <label for="collaborators">Colaboradores</label>
-                        <input type="text" id="collaborators" name="collaborators" placeholder="Separados por coma"
+                        <input type="text" id="collaborators" name="collaborators" placeholder="Separados por coma" value="{{song.collaborators}}"
                             required>
 
                         <label for="price">Precio</label>
-                        <input type="text" id="price" name="price" placeholder="Precio de la canción" required>
+                        <input type="text" id="price" name="price" placeholder="Precio de la canción" value="{{song.price}}" required>
                     </div>
 
                     <div class="div-pannel-sub upload-group" style="width: auto;">
@@ -59,7 +59,7 @@
 
                         <label for="description">Descripción</label>
                         <textarea id="description" name="description" rows="4"
-                            placeholder="Escribe una breve descripción..." required></textarea>
+                            placeholder="Escribe una breve descripción..." value="{{song.description}}" required> {{song.description}} </textarea>
                     </div>
 
                     <div class="div-pannel-sub upload-checkbox-container" style="width:auto;">
@@ -70,27 +70,27 @@
                             <div>
                                 <h3>Géneros</h3>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="rock">
+                                    <input type="checkbox" id="rock" {% if "Rock" in album.generos %} checked {% endif %}>
                                     <label for="rock">Rock</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="pop">
+                                    <input type="checkbox" id="pop" {% if "Pop" in album.generos %} checked {% endif %}>
                                     <label for="pop">Pop</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="metal">
+                                    <input type="checkbox" id="metal" {% if "Metal" in album.generos %} checked {% endif %}>
                                     <label for="metal">Metal</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="jazz">
+                                    <input type="checkbox" id="jazz" {% if "Jazz" in album.generos %} checked {% endif %}>
                                     <label for="jazz">Jazz</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="blues">
+                                    <input type="checkbox" id="blues" {% if "Blues" in album.generos %} checked {% endif %>
                                     <label for="blues">Blues</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="flamenco">
+                                    <input type="checkbox" id="flamenco" {% if "Flamenco" in album.generos %} checked {% endif %}>
                                     <label for="flamenco">Flamenco</label>
                                 </div>
                             </div>
@@ -99,27 +99,27 @@
                             <div>
                                 <h3>Subgéneros</h3>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="punk-rock">
+                                    <input type="checkbox" id="punk-rock" {% if "Punk Rock" in album.generos %} checked {% endif %}>
                                     <label for="punk-rock">Punk Rock</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="heavy-metal">
+                                    <input type="checkbox" id="heavy-metal" {% if "Heavy Metal" in album.generos %} checked {% endif %}>
                                     <label for="heavy-metal">Heavy Metal</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="indie-pop">
+                                    <input type="checkbox" id="indie-pop" {% if "Indie Pop" in album.generos %} checked {% endif %}>
                                     <label for="indie-pop">Indie Pop</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="trap">
+                                    <input type="checkbox" id="trap" {% if "Trap" in album.generos %} checked {% endif %}>
                                     <label for="trap">Trap</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="techno">
+                                    <input type="checkbox" id="techno" {% if "Techno" in album.generos %} checked {% endif %}>
                                     <label for="techno">Techno</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="ska">
+                                    <input type="checkbox" id="ska" {% if "Ska" in album.generos %} checked {% endif %}>
                                     <label for="ska">Ska</label>
                                 </div>
                             </div>
@@ -128,7 +128,7 @@
 
                     <div class="div-pannel-sub upload-cover" style="width: auto;">
                         <label>Portada</label>
-                        <img id="cover-preview" src="/static/img/utils/under-sounds-cover.webp" alt="Portada del álbum">
+                        <img id="cover-preview" src="{{ song.portada }}" alt="Portada del álbum">
                         <input type="file" id="cover-upload" accept="image/*" hidden>
                         <button type="button" class="upload-cover-button"
                             onclick="document.getElementById('cover-upload').click();">Seleccionar portada</button>
