@@ -12,7 +12,7 @@ class Model ():
         self.songsDAO = self.factory.getSongsDAO()
         pass
 
-    def get_song(self, id):
+    def get_song(self, id: str):
         return self.songsDAO.get_song(id)
     
     def add_song(self, usuario : SongDTO):

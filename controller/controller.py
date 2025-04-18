@@ -65,9 +65,9 @@ def index(request: Request):
 # ----------------------------- Ver Cancion ------------------------------ #
 
 # Ruta para cargar vista login
-@app.get("/upload_song")
-def song_post(request: Request):
-    return view.get_upload_song_view(request)
+#@app.get("/upload_song")
+#def song_post(request: Request):
+#    return view.get_upload_song_view(request)
 
 # Ruta para procesar la petición de login
 #@app.post("/song/upload_song")
@@ -103,24 +103,22 @@ def get_songs(request: Request):
     songs_json = model.get_songs()
     return view.get_songs_view(request, songs_json)
 
-#@app.get("/song")
-#async def get_song(request: Request):
-     # Comprobamos si el usuario tiene una sesión activa
-#    data = await request.json()
-#    song_id = data["id"]
+@app.get("/song")
+async def get_song(request: Request, id: str):
 
-#    if not song_id:
-#        return Response("No autorizado", status_code=401)
+    print(PCTRL, id)
+    if not id:
+        return Response("No autorizado", status_code=401)
     
     # Accedemos a los datos del usuario en la base de datos
-#    song_info = model.get_song(song_id)
+    song_info = model.get_song(id)
 
-#    if not song_info:
-#        print(PCTRL_WARN, "Song does not exist")
-#        return Response("No autorizado", status_code=403)
+    if not song_info:
+        print(PCTRL_WARN, "Song does not exist")
+        return Response("No autorizado", status_code=403)
 
-#    print(song_info)
-#    return view.get_song_view(request, song_info)
+    print(song_info)
+    return view.get_song_view(request, song_info)
 
     
 #@app.get("/song/edit_edit")

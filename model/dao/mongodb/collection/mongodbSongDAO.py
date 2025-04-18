@@ -42,7 +42,7 @@ class MongodbSongDAO(InterfaceSongDAO):
         return [song.songdto_to_dict() for song in songs.songlist]
 
 
-    def get_song(self, id):
+    def get_song(self, id: str):
         song = None
 
         try:
