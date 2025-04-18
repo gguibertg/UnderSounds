@@ -17,7 +17,6 @@ class SongDTO():
 
     def __init__(self):
         self.id: str = None
-        self.album: str = None
         self.artist: str = None
         self.collaborators: list[str] = []
         self.date: str = None
@@ -32,7 +31,7 @@ class SongDTO():
         self.views: int = None
 
     def is_Empty(self):
-        return (self.id is None and self.album is None and self.artist is None and 
+        return (self.id is None and self.artist is None and 
                 self.collaborators is None and self.date is None and self.description is None and 
                 self.duration is None and self.genres is None and self.likes is None and self.portada is None and 
                 self.price is None and self.review_list is None and self.title is None is None and  self.views)
@@ -42,12 +41,6 @@ class SongDTO():
 
     def set_id(self, id: str):
         self.id = id
-    
-    def get_album(self) -> str:
-        return self.album
-
-    def set_album(self, album: str):
-        self.album = album
 
     def get_artist(self) -> str:
         return self.artist
@@ -132,7 +125,6 @@ class SongDTO():
     def songdto_to_dict(self) -> dict:
         return {
             "id": self.id,
-            "album": self.album,
             "artist": self.artist,
             "collaborators": self.collaborators,
             "date": self.date,
@@ -146,4 +138,3 @@ class SongDTO():
             "title": self.title,
             "views": self.views
         }
-    

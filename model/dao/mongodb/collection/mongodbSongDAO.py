@@ -22,7 +22,6 @@ class MongodbSongDAO(InterfaceSongDAO):
             for doc in query:
                 song_dto = SongDTO()
                 song_dto.set_id(str(doc.get("_id")))
-                song_dto.set_album(doc.get("album"))
                 song_dto.set_artist(doc.get("artist"))
                 song_dto.set_collaborators(doc.get("collaborators"))
                 song_dto.set_date(doc.get("date"))
@@ -51,7 +50,6 @@ class MongodbSongDAO(InterfaceSongDAO):
             if query:
                 song = SongDTO()
                 song.set_id(str(query.get("_id")))
-                song.set_album(query.get("album"))
                 song.set_artist(query.get("artist"))
                 song.set_collaborators(query.get("collaborators"))
                 song.set_date(query.get("date"))
