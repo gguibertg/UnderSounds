@@ -2,6 +2,8 @@ from .dao.mongodb.mongodbDAOFactory import mongodbDAOFactory
 from .dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 from .dto.albumDTO import AlbumDTO
 from .dto.generoDTO import GeneroDTO
+from .dto.songDTO import SongDTO
+
 
 # La clase Model tiene los métodos que hacen puente entre controller y la base de datos.
 class Model ():
