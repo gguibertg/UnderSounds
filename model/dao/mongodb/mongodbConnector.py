@@ -28,4 +28,4 @@ class MongoConnector:
         print("GET SONGS COLLECTION")
         if self.db is None:
             print("Database connection is not initialized.")
-        return self.db.Cancion
+        return self.db["Cancion"]

@@ -60,7 +60,8 @@ listSongs = {}
 # La función index se va a usar para renderizar la template index.html.
 @app.get("/")
 def index(request: Request): 
-    return view.get_index_view(request)
+    index_json = model.get_songs()
+    return view.get_index_view(index_json)
 
 # ----------------------------- Ver Cancion ------------------------------ #
 
