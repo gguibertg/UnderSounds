@@ -1,0 +1,121 @@
+
+.album-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 2.5rem 1.25rem;
+    max-width: 85%;
+    margin: auto;
+}
+
+.album-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.album-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    max-width: 500px;
+}
+
+.album-title {
+    font-size: 1.75rem;
+}
+
+.dark-mode .album-title {
+    color: white;
+}
+
+.album-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.album-buttons button {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+}
+
+.album-image {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #00000022;
+    padding: 1rem;
+}
+
+.album-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.album-song-grid {
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 500px;
+}
+
+.album-song-grid h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.song-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1rem;
+    padding-left: 0;
+    list-style: none;
+    counter-reset: song;
+}
+
+.song-grid li {
+    counter-increment: song;
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.song-grid li::before {
+    content: counter(song) ".";
+    font-weight: bold;
+}
+
+.song-grid li a {
+    text-decoration: none;
+    flex-grow: 1;
+}
+
+/* Hover para tema claro */
+.song-grid li:hover {
+    background-color: #dceaff;
+    transform: scale(1.02);
+}
+
+/* Hover para modo oscuro */
+.dark-mode .song-grid li:hover {
+    background-color: #3d3d3d;
+    transform: scale(1.02);
+}

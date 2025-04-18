@@ -19,10 +19,6 @@
     gap: 2.5rem;
 }
 
-.song-info {
-    flex: 1;
-}
-
 .song-title,
 .song-author,
 .song-album {
@@ -114,6 +110,7 @@
 }
 
 .song-info {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
