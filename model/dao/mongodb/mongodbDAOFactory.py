@@ -4,6 +4,7 @@ from .collection.mongodbFaqDAO import MongodbFaqDAO
 from .collection.mongodbDAOUsuario import mongodbUsuarioDAO
 from .collection.mongodbDAOAlbum import mongodbAlbumDAO
 from .collection.mongodbDAOGenero import mongodbGeneroDAO
+from .collection.mongodbSongDAO import MongodbSongDAO
 
 # Esta es la clase que implementa el patrón DAO Factory, que genera los DAOs de MongoDB.
 
@@ -23,4 +24,6 @@ class mongodbDAOFactory(InterfaceDAOFactory):
 
     def getGeneroDAO(self):
         return mongodbGeneroDAO(self.connector.get_genero_collection())
-
+    
+    def getSongsDAO(self):
+        return MongodbSongDAO(self.connector.post_song_collection())

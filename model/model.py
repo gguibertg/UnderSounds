@@ -14,6 +14,7 @@ class Model ():
         self.faqsDAO = self.factory.getFaqsDAO()
         self.daoAlbum = self.factory.getAlbumDAO()
         self.daoGenero = self.factory.getGeneroDAO()
+        self.songsDAO = self.factory.getSongsDAO()
         pass
     
     # Usuario
