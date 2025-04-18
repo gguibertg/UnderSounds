@@ -1,22 +1,23 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="L1-G4" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="L1-G4" name="author" />
     <title>Álbum</title>
-    <link rel="stylesheet" href="/static/css/base/style.css">
-    <link rel="stylesheet" href="/static/css/base/darkmode.css">
-    <link rel="stylesheet" href="/static/css/base/header.css">
-    <link rel="stylesheet" href="/static/css/base/footer.css">
-    <link rel="stylesheet" href="/static/css/music/album.css">
-    <link rel="icon" type="image/png" href="/static/icons/favicons/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/static/icons/favicons/favicon.svg" />
-    <link rel="shortcut icon" href="/static/icons/favicons/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicons/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
-    <link rel="manifest" href="/static/icons/favicons/site.webmanifest" />
+    <link href="/static/css/base/style.css" rel="stylesheet" />
+    <link href="/static/css/base/darkmode.css" rel="stylesheet" />
+    <link href="/static/css/base/header.css" rel="stylesheet" />
+    <link href="/static/css/base/footer.css" rel="stylesheet" />
+    <link href="/static/css/music/album.css" rel="stylesheet" />
+    <link href="/static/icons/favicons/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png" />
+    <link href="/static/icons/favicons/favicon.svg" rel="icon" type="image/svg+xml" />
+    <link href="/static/icons/favicons/favicon.ico" rel="shortcut icon" />
+    <link href="/static/icons/favicons/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
+    <meta content="UnderSounds" name="apple-mobile-web-app-title" />
+    <link href="/static/icons/favicons/site.webmanifest" rel="manifest" />
 </head>
 
 <body>
@@ -40,31 +41,152 @@
                             <button class="btn">Añadir a biblioteca</button>
                         </div>
                     </div>
-
                     <div class="div-pannel album-image">
-                        <img src="/static/img/albums/album-07.webp" alt="Portada del álbum Kamikaze" />
-                    </div>
-
-                    <div class="div-pannel album-song-grid">
-                        <h3>Canciones del álbum</h3>
-                        <ol class="song-grid">
-                            <li><a href="song.html">The Ringer</a></li>
-                            <li><a href="song.html">Greatest</a></li>
-                            <li><a href="song.html">Lucky You (feat. Joyner Lucas)</a></li>
-                            <li><a href="song.html">Paul (Skit)</a></li>
-                            <li><a href="song.html">Normal</a></li>
-                            <li><a href="song.html">Em Calls Paul (Skit)</a></li>
-                            <li><a href="song.html">Stepping Stone</a></li>
-                            <li><a href="song.html">Not Alike (feat. Royce da 5'9")</a></li>
-                            <li><a href="song.html">Kamikaze</a></li>
-                            <li><a href="song.html">Fall</a></li>
-                            <li><a href="song.html">Nice Guy (feat. Jessie Reyez)</a></li>
-                            <li><a href="song.html">Good Guy (feat. Jessie Reyez)</a></li>
-                            <li><a href="song.html">Venom (Music from the Motion Picture)</a></li>
-                        </ol>
+                        <img alt="Portada del álbum Kamikaze" src="/static/img/albums/album-07.webp" />
                     </div>
                 </section>
+                <section class="div-pannel song-list-section">
+                    <h2>Canciones del álbum</h2>
+                    <div class="song-grid-cards">
 
+                        <div class="song-card">
+                            <details open>
+                                <summary><img class="chevron" src="/static/icons/site/dropdown-icon.svg" width="16"
+                                        height="16" /> <strong>The Ringer</strong> — Eminem</summary>
+                                <div class="song-content">
+                                    <img src="/static/img/albums/album-07.webp" alt="Portada" class="song-cover" />
+                                    <div class="song-info">
+                                        <p><strong>Precio:</strong> 1,29 €</p>
+                                        <div class="song-stats">
+                                            <span><img src="/static/icons/site/favourite-icon-light.svg" alt="likes" />
+                                                1245</span>
+                                            <span><img src="/static/icons/site/comment-icon-light.svg"
+                                                    alt="comentarios" /> 34</span>
+                                            <span><img src="/static/icons/site/views-icon-light.svg"
+                                                    alt="reproducciones" /> 54K</span>
+                                        </div>
+                                        <div class="song-actions">
+                                            <button class="btn"><img src="/static/icons/site/edit-icon.svg"
+                                                    alt="Editar" /> Editar canción</button>
+                                            <button class="btn delete"><img src="/static/icons/site/delete-icon.svg"
+                                                    alt="Borrar" /> Borrar canción</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+
+                        <div class="song-card">
+                            <details>
+                                <summary><img class="chevron" src="/static/icons/site/dropdown-icon.svg" width="16"
+                                        height="16" /> <strong>Greatest</strong> — Eminem</summary>
+                                <div class="song-content">
+                                    <img src="/static/img/albums/album-07.webp" alt="Portada" class="song-cover" />
+                                    <div class="song-info">
+                                        <p><strong>Precio:</strong> 1,29 €</p>
+                                        <div class="song-stats">
+                                            <span><img src="/static/icons/site/favourite-icon-light.svg" alt="likes" />
+                                                980</span>
+                                            <span><img src="/static/icons/site/comment-icon-light.svg"
+                                                    alt="comentarios" /> 12</span>
+                                            <span><img src="/static/icons/site/views-icon-light.svg"
+                                                    alt="reproducciones" /> 38K</span>
+                                        </div>
+                                        <div class="song-actions">
+                                            <button class="btn"><img src="/static/icons/site/edit-icon.svg"
+                                                    alt="Editar" /> Editar canción</button>
+                                            <button class="btn delete"><img src="/static/icons/site/delete-icon.svg"
+                                                    alt="Borrar" /> Borrar canción</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+
+                        <div class="song-card">
+                            <details>
+                                <summary><img class="chevron" src="/static/icons/site/dropdown-icon.svg" width="16"
+                                        height="16" /> <strong>Lucky You (feat. Joyner Lucas)</strong> — Eminem
+                                </summary>
+                                <div class="song-content">
+                                    <img src="/static/img/albums/album-07.webp" alt="Portada" class="song-cover" />
+                                    <div class="song-info">
+                                        <p><strong>Precio:</strong> 1,29 €</p>
+                                        <div class="song-stats">
+                                            <span><img src="/static/icons/site/favourite-icon-light.svg" alt="likes" />
+                                                1890</span>
+                                            <span><img src="/static/icons/site/comment-icon-light.svg"
+                                                    alt="comentarios" /> 67</span>
+                                            <span><img src="/static/icons/site/views-icon-light.svg"
+                                                    alt="reproducciones" /> 72K</span>
+                                        </div>
+                                        <div class="song-actions">
+                                            <button class="btn"><img src="/static/icons/site/edit-icon.svg"
+                                                    alt="Editar" /> Editar canción</button>
+                                            <button class="btn delete"><img src="/static/icons/site/delete-icon.svg"
+                                                    alt="Borrar" /> Borrar canción</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+
+                        <div class="song-card">
+                            <details>
+                                <summary><img class="chevron" src="/static/icons/site/dropdown-icon.svg" width="16"
+                                        height="16" /> <strong>Paul (Skit)</strong> — Eminem</summary>
+                                <div class="song-content">
+                                    <img src="/static/img/albums/album-07.webp" alt="Portada" class="song-cover" />
+                                    <div class="song-info">
+                                        <p><strong>Precio:</strong> 0,99 €</p>
+                                        <div class="song-stats">
+                                            <span><img src="/static/icons/site/favourite-icon-light.svg" alt="likes" />
+                                                400</span>
+                                            <span><img src="/static/icons/site/comment-icon-light.svg"
+                                                    alt="comentarios" /> 5</span>
+                                            <span><img src="/static/icons/site/views-icon-light.svg"
+                                                    alt="reproducciones" /> 12K</span>
+                                        </div>
+                                        <div class="song-actions">
+                                            <button class="btn"><img src="/static/icons/site/edit-icon.svg"
+                                                    alt="Editar" /> Editar canción</button>
+                                            <button class="btn delete"><img src="/static/icons/site/delete-icon.svg"
+                                                    alt="Borrar" /> Borrar canción</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+
+                        <div class="song-card">
+                            <details>
+                                <summary><img class="chevron" src="/static/icons/site/dropdown-icon.svg" width="16"
+                                        height="16" /> <strong>Normal</strong> — Eminem</summary>
+                                <div class="song-content">
+                                    <img src="/static/img/albums/album-07.webp" alt="Portada" class="song-cover" />
+                                    <div class="song-info">
+                                        <p><strong>Precio:</strong> 1,29 €</p>
+                                        <div class="song-stats">
+                                            <span><img src="/static/icons/site/favourite-icon-light.svg" alt="likes" />
+                                                1102</span>
+                                            <span><img src="/static/icons/site/comment-icon-light.svg"
+                                                    alt="comentarios" /> 24</span>
+                                            <span><img src="/static/icons/site/views-icon-light.svg"
+                                                    alt="reproducciones" /> 44K</span>
+                                        </div>
+                                        <div class="song-actions">
+                                            <button class="btn"><img src="/static/icons/site/edit-icon.svg"
+                                                    alt="Editar" /> Editar canción</button>
+                                            <button class="btn delete"><img src="/static/icons/site/delete-icon.svg"
+                                                    alt="Borrar" /> Borrar canción</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+
+                    </div>
+                </section>
             </div>
         </div>
     </main>
