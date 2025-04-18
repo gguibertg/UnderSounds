@@ -61,7 +61,7 @@ listSongs = {}
 @app.get("/")
 def index(request: Request): 
     index_json = model.get_songs()
-    return view.get_index_view(index_json)
+    return view.get_songs_view(request, index_json)
 
 # ----------------------------- Ver Cancion ------------------------------ #
 

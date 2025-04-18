@@ -26,11 +26,11 @@ class MongodbSongDAO(InterfaceSongDAO):
                 song_dto.set_artist(doc.get("artist"))
                 song_dto.set_collaborators(doc.get("collaborators"))
                 song_dto.set_date(doc.get("date"))
-                song_dto.set_description(query.get("description"))
+                song_dto.set_description(doc.get("description"))
                 song_dto.set_duration(doc.get("duration"))
                 song_dto.set_genres(doc.get("genres"))
                 song_dto.set_likes(str(doc.get("likes")))
-                song_dto.set_portada(query.get("portada"))
+                song_dto.set_portada(doc.get("portada"))
                 song_dto.set_price(doc.get("price"))
                 song_dto.set_review_list(doc.get("review_list"))
 

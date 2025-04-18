@@ -47,7 +47,7 @@
             <h1><i>Nuevos lanzamientos</i></h1>
             <br>
             <div class="div-carrusel div-pannel">
-                {% for item in lanzamientos %}
+                {% for item in songs %}
                 <div style="margin: 0 1rem;">
                     <a href="/song/{{ item.id }}"><img src="{{ item.portada }}" class="foto-artista"></a>
                     <p class="texto-producto">{{ item.titulo }}</p>
@@ -59,7 +59,6 @@
                         <input type="hidden" name="artist_name" value="{{ item.artista }}">
                         <input type="hidden" name="item_desc" value="{{ item.descripcion }}">
                         <input type="hidden" name="item_precio" value="{{ item.precio }}">
-                        <input type="hidden" name="item_usuario" value="{{ usuario_id }}">
                         <button type="submit" class="button-comprar-item">Añadir</button>
                     </form>
                 </div>
