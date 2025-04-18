@@ -44,3 +44,19 @@ class Model ():
     # Genero
     def get_genero(self, id):
         return self.daoGenero.get_genero(id)
+    
+    # Songs
+    def get_song(self, id: str):
+        return self.songsDAO.get_song(id)
+    
+    def add_song(self, usuario : SongDTO):
+        return self.songsDAO.add_song(usuario)
+
+    def update_song(self, usuario : SongDTO):
+        return self.songsDAO.update_song(usuario)
+
+    def delete_song(self, id):
+        return self.songsDAO.delete_song(id)
+
+    def get_songs(self):
+        return self.songsDAO.get_all_songs()

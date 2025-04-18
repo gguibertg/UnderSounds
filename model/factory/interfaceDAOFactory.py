@@ -20,4 +20,8 @@ class InterfaceDAOFactory(ABC):
     def getGeneroDAO(self):
         pass
 
+    @abstractmethod
+    def getSongsDAO(self):
+        pass
+
 
