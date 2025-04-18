@@ -325,10 +325,12 @@ def get_faqs(request: Request):
 @app.get("/album-edit")
 async def get_album_edit(request: Request):
     #Leemos de la request el id del album y recogemos el album de la BD
-    #album_id = request.query_params.get("id") DEVELOPER
-
-    data = await request.json()
-    album_id = data["id"]
+    if request.query_params.get("id") is not None:
+        album_id = request.query_params.get("id") # Developer
+    else:
+        data = await request.json() # API
+        album_id = data["id"]
+    
     if not album_id:
         print(PCTRL_WARN, "Album ID not provided in request")
         return Response("No autorizado", status_code=400)
@@ -368,7 +370,6 @@ async def get_album_edit(request: Request):
         pass
     album_info["canciones"] = canciones_out
 
-    print(album_info)
     return view.get_album_edit_view(request, album_info)  # Si es un dict, pasamos los datos del usuario
 
 
@@ -481,7 +482,17 @@ async def upload_album(request: Request):
         return {"success": False, "error": "User not updated in database"}
 
 
+# Ruta para cargar la vista de album
+@app.get("/album")
+async def get_album(request: Request):
+    #Leemos de la request el id del album y recogemos el album de la BD
+    if request.query_params.get("id") is not None:
+        album_id = request.query_params.get("id") # Developer
+    else:
+        data = await request.json() # API
+        album_id = data["id"]
 
+    
 
 
 
