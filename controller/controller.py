@@ -365,9 +365,12 @@ async def get_album_edit(request: Request):
     album_info["generos"] = generos_out
 
     canciones_out : list[dict] = []
-    for genero_id in album_info["canciones"]:
-        # TODO canciones_out.append(model.get_cancion(genero_id))    
-        pass
+    for cancion_id in album_info["canciones"]:
+        cancion = model.get_song(cancion_id)
+        if not cancion:
+            print(PCTRL_WARN, "Cancion", cancion_id, "not found in database")
+            return Response("Error del sistema", status_code=403)   
+        canciones_out.append(cancion)
     album_info["canciones"] = canciones_out
 
     return view.get_album_edit_view(request, album_info)  # Si es un dict, pasamos los datos del usuario

@@ -58,4 +58,4 @@ class MongoConnector:
         print(PCONN, "Descargando canciones...")
         if self.db is None:
             print(PCONN_ERR, "Database connection is not initialized.")
-        return self.db.Canciones
+        return self.db.Cancion

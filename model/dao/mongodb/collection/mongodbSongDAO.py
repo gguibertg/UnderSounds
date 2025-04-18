@@ -1,3 +1,4 @@
+from bson import ObjectId
 import pymongo
 import pymongo.results
 from ...interfaceSongDAO import InterfaceSongDAO
@@ -25,11 +26,11 @@ class MongodbSongDAO(InterfaceSongDAO):
                 song_dto.set_artist(doc.get("artist"))
                 song_dto.set_collaborators(doc.get("collaborators"))
                 song_dto.set_date(doc.get("date"))
-                song_dto.set_description(query.get("description"))
+                song_dto.set_description(doc.get("description"))
                 song_dto.set_duration(doc.get("duration"))
                 song_dto.set_genres(doc.get("genres"))
                 song_dto.set_likes(str(doc.get("likes")))
-                song_dto.set_portada(query.get("portada"))
+                song_dto.set_portada(doc.get("portada"))
                 song_dto.set_price(doc.get("price"))
                 song_dto.set_review_list(doc.get("review_list"))
 
@@ -45,7 +46,7 @@ class MongodbSongDAO(InterfaceSongDAO):
         song = None
 
         try:
-            query = self.collection.find_one({"_id": id})
+            query = self.collection.find_one({"_id": ObjectId(id)})
 
             if query:
                 song = SongDTO()
@@ -72,7 +73,7 @@ class MongodbSongDAO(InterfaceSongDAO):
             song_dict : dict = song.songdto_to_dict()
             song_dict.pop("id", None)
             result : pymongo.results.InsertOneResult = self.collection.insert_one(song_dict)
-            return result.inserted_id == song_dict["_id"]
+            return str(result.inserted_id)
         
         except Exception as e:
             print(f"{PDAO_ERROR}Error al agregar el usuario: {e}")
@@ -82,7 +83,7 @@ class MongodbSongDAO(InterfaceSongDAO):
     def update_song(self, song: SongDTO) -> bool:
         try:
             song_dict : dict = song.songdto_to_dict()
-            song_dict["_id"] = song_dict.pop("id", None)
+            song_dict["_id"] = ObjectId(song_dict.pop("id", None))
             result : pymongo.results.UpdateResult = self.collection.update_one({"_id": song_dict["_id"]}, {"$set": song_dict})
             return result.modified_count == 1
         
@@ -93,7 +94,7 @@ class MongodbSongDAO(InterfaceSongDAO):
 
     def delete_song(self, id: str) -> bool:
         try:
-            result : pymongo.results.DeleteResult = self.collection.delete_one({"_id": id})
+            result : pymongo.results.DeleteResult = self.collection.delete_one({"_id": ObjectId(id)})
             return result.deleted_count == 1
         
         except Exception as e:
