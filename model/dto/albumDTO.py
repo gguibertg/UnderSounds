@@ -91,6 +91,7 @@ class AlbumDTO:
             "id": self.id,
             "titulo": self.titulo,
             "autor": self.autor,
+            "colaboradores": self.colaboradores,
             "descripcion": self.descripcion,
             "fecha": self.fecha,
             "generos": self.generos,
