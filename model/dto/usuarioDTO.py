@@ -88,6 +88,17 @@ class UsuarioDTO():
         if cancion_id in self.studio_canciones:
             self.studio_canciones.remove(cancion_id)
 
+    def load_from_dict(self, data: dict):
+        self.id = data.get("id")
+        self.nombre = data.get("nombre")
+        self.email = data.get("email")
+        self.bio = data.get("bio")
+        self.imagen = data.get("imagen")
+        self.url = data.get("url")
+        self.esArtista = data.get("esArtista", False)
+        self.studio_albumes = data.get("studio_albumes", [])
+        self.studio_canciones = data.get("studio_canciones", [])
+
     def usuario_to_dict(self) -> dict:
         return {
             "id": self.id,

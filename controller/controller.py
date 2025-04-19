@@ -465,7 +465,8 @@ async def upload_album(request: Request):
     try: 
         # Obtenemos los datos de usuario de la base de datos y creamos un nuevo objeto UsuarioDTO
         # Ya tenemos estos datos (res), solo necesitamos castearlos.
-        user : UsuarioDTO = res
+        user = UsuarioDTO()
+        user.load_from_dict(res)
 
         # Añadimos al usuario la nueva referencia al album
         user.add_studio_album(album_id)
@@ -482,6 +483,7 @@ async def upload_album(request: Request):
 
         # Destruir el album subido
         model.delete_album(album_id)
+        print(PCTRL_WARN, "Album", album_id, "deleted from database")
         return {"success": False, "error": "User not updated in database"}
 
 
