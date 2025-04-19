@@ -145,6 +145,6 @@ class SongDTO():
             "visitas": self.visitas,
             "portada": self.portada,
             "precio": self.precio,
-            "lista_reseñas": self.lista_resenas,
+            "lista_resenas": self.lista_resenas,
             "visible": self.visible
         }
