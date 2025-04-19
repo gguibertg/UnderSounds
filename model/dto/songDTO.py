@@ -17,24 +17,28 @@ class SongDTO():
 
     def __init__(self):
         self.id: str = None
-        self.artist: str = None
-        self.collaborators: list[str] = []
-        self.date: str = None
-        self.description: str = None
-        self.duration: str = None 
-        self.genres: list[str] = []
+        self.titulo: str = None
+        self.artista: str = None
+        self.colaboradores: list[str] = []
+        self.fecha: str = None
+        self.descripcion: str = None
+        self.duracion: str = None
+        self.generos: list[str] = []
         self.likes: int = None
+        self.visitas: int = None
         self.portada: str = None
-        self.price: float = None
-        self.review_list: list[str] = []
-        self.title: str = None
-        self.views: int = None
+        self.precio: float = None
+        self.lista_resenas: list[str] = []
+        self.visible: bool = None
 
-    def is_Empty(self):
-        return (self.id is None and self.artist is None and 
-                self.collaborators is None and self.date is None and self.description is None and 
-                self.duration is None and self.genres is None and self.likes is None and self.portada is None and 
-                self.price is None and self.review_list is None and self.title is None is None and  self.views)
+    def is_empty(self):
+        return (self.id is None and self.titulo is None and 
+                self.artista is None and self.colaboradores is None and 
+                self.fecha is None and self.descripcion is None and 
+                self.duracion is None and self.generos is None and 
+                self.likes is None and self.visitas is None and 
+                self.portada is None and self.precio is None and 
+                self.lista_resenas is None and self.visible is None)
 
     def get_id(self) -> str:
         return self.id
@@ -42,48 +46,54 @@ class SongDTO():
     def set_id(self, id: str):
         self.id = id
 
-    def get_artist(self) -> str:
-        return self.artist
+    def get_titulo(self) -> str:
+        return self.titulo
 
-    def set_artist(self, artist: str):
-        self.artist = artist
+    def set_titulo(self, titulo: str):
+        self.titulo = titulo
 
-    def get_collaborators(self) -> list[str]:
-        return self.collaborators
+    def get_artista(self) -> str:
+        return self.artista
 
-    def set_collaborators(self, collaborators: list[str]):
-        self.collaborators = collaborators
+    def set_artista(self, artista: str):
+        self.artista = artista
 
-    def get_date(self) -> str:
-        return self.date
+    def get_colaboradores(self) -> list[str]:
+        return self.colaboradores
 
-    def set_date(self, date: str):
-        self.date = date
+    def set_colaboradores(self, colaboradores: list[str]):
+        self.colaboradores = colaboradores
 
-    def get_description(self) -> str:
-        return self.description
+    def get_fecha(self) -> str:
+        return self.fecha
 
-    def set_description(self, description: str):
-        self.description = description
+    def set_fecha(self, fecha: str):
+        self.fecha = fecha
 
-    def get_duration(self) -> str:
-        return self.duration
+    def get_descripcion(self) -> str:
+        return self.descripcion
 
-    def set_duration(self, duration: str):
-        self.duration = duration
+    def set_descripcion(self, descripcion: str):
+        self.descripcion = descripcion
 
-    def get_genres(self) -> list[str]:
-        return self.genres
+    def get_duracion(self) -> str:
+        return self.duracion
+
+    def set_duracion(self, duracion: str):
+        self.duracion = duracion
+
+    def get_generos(self) -> list[str]:
+        return self.generos
 
     def add_genero(self, genero_id: str):
-        self.genres.append(genero_id)
+        self.generos.append(genero_id)
 
     def remove_genero(self, genero_id: str):
-        if genero_id in self.genres:
-            self.genres.remove(genero_id)
+        if genero_id in self.generos:
+            self.generos.remove(genero_id)
 
-    def set_genres(self, genres: list[str]):
-        self.genres = genres
+    def set_generos(self, generos: list[str]):
+        self.generos = generos
 
     def get_likes(self) -> int:
         return self.likes
@@ -91,50 +101,50 @@ class SongDTO():
     def set_likes(self, likes: int):
         self.likes = likes
 
+    def get_visitas(self) -> int:
+        return self.visitas
+
+    def set_visitas(self, visitas: int):
+        self.visitas = visitas
+
     def get_portada(self) -> str:
         return self.portada
 
     def set_portada(self, portada: str):
         self.portada = portada
 
-    def get_price(self) -> float:
-        return self.price
+    def get_precio(self) -> float:
+        return self.precio
 
-    def set_price(self, price: float):
-        self.price = price
+    def set_precio(self, precio: float):
+        self.precio = precio
 
-    def get_review_list(self) -> list[str]:
-        return self.review_list
+    def get_lista_resenas(self) -> list[str]:
+        return self.lista_resenas
 
-    def set_review_list(self, review_list: list[str]):
-        self.review_list = review_list
+    def set_lista_resenas(self, lista_resenas: list[str]):
+        self.lista_resenas = lista_resenas
 
-    def get_title(self) -> str:
-        return self.title
+    def get_visible(self) -> bool:
+        return self.visible
 
-    def set_title(self, title: str):
-        self.title = title
+    def set_visible(self, visible: bool):
+        self.visible = visible
 
-    def get_views(self) -> int:
-        return self.views
-
-    def set_views(self, views: int):
-        self.views = views
-
-    # Por último, definimos una función que se va a usar para convertir la canción a un diccionario.
     def songdto_to_dict(self) -> dict:
         return {
             "id": self.id,
-            "artist": self.artist,
-            "collaborators": self.collaborators,
-            "date": self.date,
-            "description": self.description,
-            "duration": self.duration,
-            "genres": self.genres,
+            "titulo": self.titulo,
+            "artista": self.artista,
+            "colaboradores": self.colaboradores,
+            "fecha": self.fecha,
+            "descripcion": self.descripcion,
+            "duracion": self.duracion,
+            "generos": self.generos,
             "likes": self.likes,
+            "visitas": self.visitas,
             "portada": self.portada,
-            "price": self.price,
-            "review_list": self.review_list,
-            "title": self.title,
-            "views": self.views
+            "precio": self.precio,
+            "lista_reseñas": self.lista_resenas,
+            "visible": self.visible
         }
