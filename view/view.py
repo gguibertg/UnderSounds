@@ -36,8 +36,8 @@ class View():
         return templates.TemplateResponse("main/faqs.html", {"request": request, "faqs": faqs })
     
     # Renderizar la template album-edit.html
-    def get_album_edit_view(self, request: Request, album_info):
-        return templates.TemplateResponse("music/album-edit.html", {"request": request, "album": album_info })
+    def get_album_edit_view(self, request: Request, album_info : dict, songs: list[dict]):
+        return templates.TemplateResponse("music/album-edit.html", {"request": request, "album": album_info, "songs": songs })
 
     # Renderizar la template upload-album.html
     def get_upload_album_view(self, request: Request, songs: list[dict]):

@@ -321,63 +321,6 @@ def get_faqs(request: Request):
 
 # ----------------------------- ALBUM ------------------------------ #
 
-# Ruta para cargar la vista de álbum-edit
-@app.get("/album-edit")
-async def get_album_edit(request: Request):
-    #Leemos de la request el id del album y recogemos el album de la BD
-    if request.query_params.get("id") is not None:
-        album_id = request.query_params.get("id") # Developer
-    else:
-        data = await request.json() # API
-        album_id = data["id"]
-    
-    if not album_id:
-        print(PCTRL_WARN, "Album ID not provided in request")
-        return Response("No autorizado", status_code=400)
-
-    res = verifySessionAndGetUserInfo(request)
-    if isinstance(res, Response):
-        return res # Si es un Response, devolvemos el error
-    
-    # Tenemos un usuario logeado. Bien. Ahora queremos saber si es artista y si es, en concreto, arista de ese album.
-    # Verificamos si el usuario es artista y si el álbum pertenece al arista.
-    if not res["esArtista"]:
-        print(PCTRL_WARN, "User is not an artist")
-        return Response("No autorizado", status_code=403)
-    album_info = model.get_album(album_id)
-    #print(album_info)
-    if not album_info:
-        print(PCTRL_WARN, "Album does not exist")
-        return Response("No autorizado", status_code=403)
-    #print(res["studio_albumes"])
-    if album_id not in res["studio_albumes"]:
-        print(PCTRL_WARN, "Album not found in user albums")
-        return Response("No autorizado", status_code=403)
-
-    # Ahora popularemos el album reemplazando las IDs (referencias) por los objetos reales
-    #generos_out : list[dict] = []
-    #for genero_id in album_info["generos"]:
-    #    genero = model.get_genero(genero_id)
-    #    if not genero:
-    #        print(PCTRL_WARN, "Genero", genero_id ,"not found in database")
-    #        return Response("Error del sistema", status_code=403)
-    #    generos_out.append(genero["nombre"])
-    #album_info["generos"] = generos_out
-    #
-    # TODO: Al descargar un album ya vienen con IDs de generos que coinciden en nombre, por lo que no es necesario hacer la llamada a la BD para obtener el objeto real.
-
-    canciones_out : list[dict] = []
-    for cancion_id in album_info["canciones"]:
-        cancion = model.get_song(cancion_id)
-        if not cancion:
-            print(PCTRL_WARN, "Cancion", cancion_id, "not found in database")
-            return Response("Error del sistema", status_code=403)   
-        canciones_out.append(cancion)
-    album_info["canciones"] = canciones_out
-
-    return view.get_album_edit_view(request, album_info)  # Si es un dict, pasamos los datos del usuario
-
-
 # Ruta para cargar la vista de upload-album
 @app.get("/upload-album")
 async def get_upload_album(request: Request):
@@ -500,7 +443,92 @@ async def get_album(request: Request):
         album_id = data["id"]
 
     
+# Ruta para cargar la vista de álbum-edit
+@app.get("/album-edit")
+async def get_album_edit(request: Request):
+    #Leemos de la request el id del album y recogemos el album de la BD
+    if request.query_params.get("id") is not None:
+        album_id = request.query_params.get("id") # Developer
+    else:
+        data = await request.json() # API
+        album_id = data["id"]
+    if not album_id:
+        print(PCTRL_WARN, "Album ID not provided in request")
+        return Response("No autorizado", status_code=400)
 
+    # Verificar si el usuario tiene una sesión activa, si es artista y si el album existe, y si le pertenece.
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    album_info = model.get_album(album_id)
+    if not album_info:
+        print(PCTRL_WARN, "Album does not exist")
+        return Response("No autorizado", status_code=403)
+    if album_id not in res["studio_albumes"]:
+        print(PCTRL_WARN, "Album not found in user albums")
+        return Response("No autorizado", status_code=403)
+
+    # Ahora popularemos el album reemplazando las IDs (referencias) por los objetos reales
+    
+    #generos_out : list[dict] = []
+    #for genero_id in album_info["generos"]:
+    #    genero = model.get_genero(genero_id)
+    #    if not genero:
+    #        print(PCTRL_WARN, "Genero", genero_id ,"not found in database")
+    #        return Response("Error del sistema", status_code=403)
+    #    generos_out.append(genero["nombre"])
+    #album_info["generos"] = generos_out
+    #
+    # TODO: Al descargar un album ya vienen con IDs de generos que coinciden en nombre, por lo que no es necesario hacer la llamada a la BD para obtener el objeto real.
+
+    canciones_out : list[dict] = []
+    for cancion_id in album_info["canciones"]:
+        cancion = model.get_song(cancion_id)
+        if not cancion:
+            print(PCTRL_WARN, "Cancion", cancion_id, "not found in database")
+            return Response("Error del sistema", status_code=403)   
+        canciones_out.append(cancion)
+    album_info["canciones"] = canciones_out
+
+    # Ya tenemos el album preparado. Pero ahora, tenemos que emular basicamente la misma funcionalidad que en upload-album, para que el artista pueda editar el album con nuevas canciones.
+    # Así pues, copiamos y pegamos el código de upload-album para obtener las canciones válidas para un album nuevo.
+
+    # Por cada canción en studio_canciones, obtenemos el objeto real, enviando un mensaje de error si no existe.
+    user_songs_objects = []
+    for song_id in res["studio_canciones"]:
+        song = model.get_song(song_id)
+        if not song:
+            print(PCTRL_WARN, "Song", song_id, "not found in database")
+            return Response("Error del sistema", status_code=403)
+        user_songs_objects.append(song)
+
+    # Por cada album en studio_albumes, obtenemos el objeto real, enviando un mensaje de error si no existe.
+    user_albums_objects = []
+    for album_id in res["studio_albumes"]:
+        album = model.get_album(album_id)
+        if not album:
+            print(PCTRL_WARN, "Album", album_id, "not found in database")
+            return Response("Error del sistema", status_code=403)
+        user_albums_objects.append(album)
+
+    # Comprobar que por cada canción en studio_canciones, no esté en el campo canciones de ningun album
+    # Cada canción que cumpla esta condición se añadira a la lista de canciones admitidas para el nuevo album
+    valid_songs = []        
+    for song in user_songs_objects:
+        # Comprobar si la canción está en el campo canciones de algún álbum
+        found = False
+        for album in user_albums_objects:
+            if song["id"] in album["canciones"]:
+                found = True
+                break
+        if not found:
+            valid_songs.append(song)
+
+    # Devolvemos todo
+    return view.get_album_edit_view(request, album_info, valid_songs)
 
 
 

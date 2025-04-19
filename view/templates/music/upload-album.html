@@ -41,11 +41,11 @@
                         <input type="text" id="author" name="author" required placeholder="Autor del álbum">
 
                         <label for="collaborators">Colaboradores</label>
-                        <input type="text" id="collaborators" name="collaborators" placeholder="Separados por coma"
-                            required>
+                        <input type="text" id="collaborators" name="collaborators" placeholder="Separados por coma" required>
 
                         <label for="price">Precio</label>
                         <input type="text" id="price" name="price" placeholder="Precio del álbum" required>
+
                         <label for="description">Descripción</label>
                         <textarea id="description" name="description" rows="4"
                             placeholder="Escribe una breve descripción..." required></textarea>
@@ -239,6 +239,10 @@
             } catch (error) {
                 console.error('Error uploading album:', error);
             }
+
+            // TODO falta por mostrar mensaje de éxito o error al usuario con los divs
+            // TODO falta por redirigir al usuario a studio
+
         }
 
     </script>
