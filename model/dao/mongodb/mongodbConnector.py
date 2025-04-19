@@ -47,4 +47,4 @@ class MongoConnector:
         if self.db is None:
             print("Database connection is not initialized.")
             return []
-        return self.db["ArticulosCesta"]
+        return self.db["Carrito"]

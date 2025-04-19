@@ -1,40 +1,30 @@
 import json
-
-class ArticulosCestaDTO:
-    def __init__(self):
-        self.articulosCestaList = []
-
-    def insertArticuloCesta(self, articuloCesta):
-        self.articulosCestaList.append(articuloCesta)
-
-    def articulosCestaList_to_json(self):
-        return json.dumps(self.articulosCestaList)
+from typing import List
+from bson import ObjectId
 
 class ArticuloCestaDTO:
 
     id: str
-    precio: str
+    precio: float
     nombre: str
     descripcion: str
     artista: str
     cantidad: int
-    usuario: str
     imagen: str
 
     def __init__(self):
         self.id = None
-        self.precio = None
+        self.precio = 0.0
         self.nombre = None
         self.descripcion = None
         self.artista = None
         self.cantidad = None
-        self.usuario = None
         self.imagen = None
 
     def is_empty(self):
         return (self.id is None and self.precio is None and self.nombre is None and
                 self.descripcion is None and self.artista is None and self.cantidad is None
-                and self.usuario is None and self.imagen is None)
+                and self.imagen is None)
 
     def get_id(self):
         return self.id
@@ -72,12 +62,6 @@ class ArticuloCestaDTO:
     def set_cantidad(self, cantidad):
         self.cantidad = cantidad
         
-    def get_usuario(self):
-        return self.usuario
-    
-    def set_usuario(self, usuario):
-        self.usuario = usuario
-        
     def get_imagen(self):
         return self.imagen
     
@@ -92,6 +76,29 @@ class ArticuloCestaDTO:
             "descripcion": self.descripcion,
             "artista": self.artista,
             "cantidad": self.cantidad,
-            "usuario": self.usuario,
             "imagen": self.imagen
         }
+        
+class CarritoDTO:
+    
+    usuario: ObjectId
+    articulos: List[ArticuloCestaDTO]
+    subtotal: float
+    
+    def __init__(self):
+        self.articulos = []
+        self.subtotal = 0.0
+        self.usuario = None
+
+    def insertArticuloCesta(self, articuloCesta):
+        self.articulos.append(articuloCesta)
+        
+    def to_dict(self):
+        return {
+            "usuario": self.usuario,
+            "articulos": [a.articulocestadto_to_dict() for a in self.articulos],
+            "subtotal": self.subtotal
+        }
+        
+    def articulosCestaList_to_json(self):
+        return json.dumps(self.to_dict())

@@ -1,7 +1,7 @@
 import pymongo
 import pymongo.results
 from ...interfaceCarritoDAO import InterfaceCarritoDAO
-from ....dto.articuloCestaDTO import ArticulosCestaDTO, ArticuloCestaDTO
+from ....dto.carritoDTO import CarritoDTO, ArticuloCestaDTO
 from bson import ObjectId
 
 PDAO = "\033[95mDAO\033[0m:\t "
@@ -15,74 +15,150 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
     def __init__(self, collection):
         self.collection = collection
     
-    def get_all_articulos(self):
-        articulos = ArticulosCestaDTO()
+    def get_all_articulos(self, usuario):
+        articulos = CarritoDTO()
+        subtotal = 0.0
         try:
-            # Filtramos los artículos que pertenecen a un usuario específico
-            query = self.collection.find()
+            # Buscamos el documento del carrito del usuario
+            carrito = self.collection.find_one({"usuario": usuario})
 
-            for doc in query:
-                articulo_cesta_dto = ArticuloCestaDTO()
-                articulo_cesta_dto.set_id(str(doc.get("_id")))
-                articulo_cesta_dto.set_precio(str(doc.get("precio")))
-                articulo_cesta_dto.set_nombre(str(doc.get("nombre")))
-                articulo_cesta_dto.set_descripcion(str(doc.get("descripcion")))
-                articulo_cesta_dto.set_artista(str(doc.get("artista")))
-                articulo_cesta_dto.set_cantidad(str(doc.get("cantidad")))
-                articulo_cesta_dto.set_usuario(str(doc.get("usuario")))
-                articulo_cesta_dto.set_imagen(str(doc.get("imagen")))
-                articulos.insertArticuloCesta(articulo_cesta_dto)
-                
+            if carrito and "articulos" in carrito:
+                for doc in carrito["articulos"]:
+                    articulo_cesta_dto = ArticuloCestaDTO()
+                    articulo_cesta_dto.set_id(doc.get("id"))
+                    articulo_cesta_dto.set_precio(str(doc.get("precio")))
+                    articulo_cesta_dto.set_nombre(str(doc.get("nombre")))
+                    articulo_cesta_dto.set_descripcion(str(doc.get("descripcion")))
+                    articulo_cesta_dto.set_artista(str(doc.get("artista")))
+                    articulo_cesta_dto.set_cantidad(str(doc.get("cantidad")))
+                    articulo_cesta_dto.set_imagen(str(doc.get("imagen")))
+                    subtotal += float(doc.get("precio")) * int(doc.get("cantidad"))
+                    articulos.subtotal = subtotal
+                    articulos.insertArticuloCesta(articulo_cesta_dto)
+
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al recuperar los articulos: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar los artículos: {e}")
 
-        return [articulo.articulocestadto_to_dict() for articulo in articulos.articulosCestaList]
+        return articulos
 
-    def insertArticulo(self, articulo) -> bool:
+
+    def upsert_articulo_en_carrito(self, usuario, articulo) -> bool:
         try:
-            articulo_dict : dict = articulo.articulocestadto_to_dict()
-            articulo_dict["_id"] = articulo_dict.pop("id", None)
-            result : pymongo.results.InsertOneResult = self.collection.insert_one(articulo_dict)
-            return result.inserted_id == articulo_dict["_id"]
-        
+            articulo_dict = articulo.articulocestadto_to_dict()
+            filtro_usuario = {"usuario": usuario}
+
+            existing_carrito = self.collection.find_one(filtro_usuario)
+
+            if existing_carrito:
+                if self.articulo_existe_en_carrito(existing_carrito, articulo_dict["id"]):
+                    return self.incrementar_articulo_existente(usuario, articulo_dict["id"])
+                else:
+                    return self.agregar_articulo_a_carrito(usuario, articulo_dict)
+            else:
+                return self.crear_carrito(usuario, articulo_dict)
+
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al agregar el usuario: {e}")
+            print(f"{PDAO_ERROR}Error al insertar/actualizar artículo en carrito: {e}")
             return False
         
-    def deleteArticulo(self, id) -> bool:
-        try:
-            result : pymongo.results.DeleteResult = self.collection.delete_one({"_id": id})
-            return result.deleted_count == 1
-        
-        except Exception as e:
-            print(f"{PDAO_ERROR}Error al eliminar el articulo: {e}")
-            return False        
+    def articulo_existe_en_carrito(self, carrito, articulo_id) -> bool:
+        return any(art["id"] == articulo_id for art in carrito.get("articulos", []))
 
-    def incrementArticulo(self, id) -> bool:
+    def incrementar_articulo_existente(self, usuario: str, articulo_id: str) -> bool:
+        articulo = self.collection.find_one(
+            {"usuario": usuario, "articulos.id": articulo_id},
+            {"articulos.$": 1}
+        )
+        if not articulo or not articulo.get("articulos"):
+            return False
+
+        precio_unitario = float(articulo["articulos"][0].get("precio_unitario", 0))
+
+        result = self.collection.update_one(
+            {"usuario": usuario, "articulos.id": articulo_id},
+            {
+                "$inc": {
+                    "articulos.$.cantidad": 1,
+                    "subtotal": precio_unitario
+                }
+            }
+        )
+        return result.modified_count == 1
+
+
+    def decrementar_articulo_existente(self, usuario: str, articulo_id: str) -> bool:
+        articulo = self.collection.find_one(
+            {"usuario": usuario, "articulos.id": articulo_id},
+            {"articulos.$": 1}
+        )
+        if not articulo or not articulo.get("articulos"):
+            return False
+
+        precio_unitario = float(articulo["articulos"][0].get("precio", 0))
+
+        result = self.collection.update_one(
+            {"usuario": usuario, "articulos": {"$elemMatch": {"id": articulo_id, "cantidad": {"$gt": 1}}}},
+            {
+                "$inc": {
+                    "articulos.$.cantidad": -1,
+                    "subtotal": -precio_unitario
+                }
+            }
+        )
+
+        if result.modified_count == 1:
+            return True
+
+        # Si la cantidad era 1, eliminamos el artículo
+        return self.deleteArticuloDelCarrito(usuario, articulo_id)
+
+
+    def agregar_articulo_a_carrito(self, usuario, articulo_dict) -> bool:
+        result = self.collection.update_one(
+            {"usuario": usuario},
+            {
+                "$push": {"articulos": articulo_dict},
+                "$inc": {"subtotal": float(articulo_dict.get("precio", 0))}
+            }
+        )
+        return result.modified_count == 1
+
+
+    def crear_carrito(self, usuario, articulo_dict) -> bool:
+        carrito_dict = {
+            "usuario": usuario,
+            "articulos": [articulo_dict],
+            "subtotal": float(articulo_dict.get("precio", 0))
+        }
+        result = self.collection.insert_one(carrito_dict)
+        return result.acknowledged
+
+
+    def deleteArticuloDelCarrito(self, usuario, id_articulo) -> bool:
         try:
-            # Realiza una actualización incremental del campo 'cantidad' en +1
-            result: pymongo.results.UpdateResult = self.collection.update_one(
-                {"_id": ObjectId(id)},
-                {"$inc": {"cantidad": 1}}
+            articulo = self.collection.find_one(
+                {"usuario": usuario, "articulos.id": id_articulo},
+                {"articulos.$": 1}
+            )
+            if not articulo or not articulo.get("articulos"):
+                return False
+
+            art = articulo["articulos"][0]
+            precio_total = float(art.get("precio", 0)) * float(art.get("cantidad", 1))
+
+            result = self.collection.update_one(
+                {"usuario": usuario},
+                {
+                    "$pull": {"articulos": {"id": id_articulo}},
+                    "$inc": {"subtotal": -precio_total}
+                }
             )
             return result.modified_count == 1
-
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al actualizar el artículo: {e}")
+            print(f"{PDAO_ERROR}Error al eliminar artículo del carrito: {e}")
             return False
 
-    def decrementArticulo(self, id) -> bool:
-        try:
-            # Solo decrementa si la cantidad actual es mayor a 0
-            result: pymongo.results.UpdateResult = self.collection.update_one(
-                {"_id": ObjectId(id), "cantidad": {"$gt": 0}},
-                {"$inc": {"cantidad": -1}}
-            )
-            return result.modified_count == 1
 
-        except Exception as e:
-            print(f"{PDAO_ERROR}Error al actualizar el artículo: {e}")
-            return False
 
         
         

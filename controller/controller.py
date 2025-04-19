@@ -10,7 +10,7 @@ from pathlib import Path
 import firebase_admin
 from firebase_admin import auth, credentials
 from model.dto.usuarioDTO import UsuarioDTO
-from model.dto.articuloCestaDTO import ArticuloCestaDTO
+from model.dto.carritoDTO import CarritoDTO, ArticuloCestaDTO
 from bson import ObjectId
 
 # Variable para el color + modulo de la consola
@@ -348,34 +348,40 @@ def get_faqs(request: Request):
 
 @app.api_route("/cart", methods=["GET", "POST"], description="Muestra los artículos de tu cesta")
 async def get_carrito(request: Request):
+    
+    # Así se obtendría el usuario, por motivos de prueba, se probará un usuario fijo
+    # session_id = request.cookies.get("session_id")
+    # session_data = getSessionData(session_id)
+    # user_id = session_data["user_id"]
+    user_id = ObjectId('68037e69d5a55cd63debd99b')
+    form_data = await request.form()
+    action = form_data.get("action")  # Por defecto: añadir
+    item_id = form_data.get("item_id")
+    
     if request.method == "POST":
-        form_data = await request.form()
-        action = form_data.get("action")  # Por defecto: añadir
 
-        if action == "delete":
-            item_id = form_data.get("item_id")
+        if action == "decrement":
             if not item_id:
-                return "Falta el ID del artículo para eliminarlo", 400
-            
+                return "Falta el ID del artículo para decrementarlo/eliminarlo", 400 
             # Eliminar el artículo del carrito
-            model.carrito.deleteArticulo(item_id)
+            model.carrito.decrementar_articulo_existente(user_id, item_id)
         
         elif action == "add":
+            
             articulo = ArticuloCestaDTO()
             articulo.set_id(form_data.get("item_id"))
             articulo.set_nombre(form_data.get("item_name"))
             articulo.set_precio(form_data.get("item_precio"))
             articulo.set_descripcion(form_data.get("item_desc"))
             articulo.set_artista(form_data.get("artist_name"))
-            articulo.set_cantidad("1")
-            articulo.set_usuario(form_data.get("item_usuario"))
+            articulo.set_cantidad(1)
             articulo.set_imagen(form_data.get("item_image"))
 
             # Añadir el artículo al carrito
-            model.carrito.insertArticulo(articulo)
+            model.carrito.upsert_articulo_en_carrito(user_id, articulo)
 
     # Si la petición es GET, mostrar el carrito
-    carrito_json = model.get_carrito()
+    carrito_json = model.get_carrito(user_id) 
     return view.get_carrito_view(request, carrito_json)
 
 
