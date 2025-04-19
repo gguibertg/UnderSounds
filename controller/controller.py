@@ -355,14 +355,16 @@ async def get_album_edit(request: Request):
         return Response("No autorizado", status_code=403)
 
     # Ahora popularemos el album reemplazando las IDs (referencias) por los objetos reales
-    generos_out : list[dict] = []
-    for genero_id in album_info["generos"]:
-        genero = model.get_genero(genero_id)
-        if not genero:
-            print(PCTRL_WARN, "Genero", genero_id ,"not found in database")
-            return Response("Error del sistema", status_code=403)
-        generos_out.append(genero["nombre"])
-    album_info["generos"] = generos_out
+    #generos_out : list[dict] = []
+    #for genero_id in album_info["generos"]:
+    #    genero = model.get_genero(genero_id)
+    #    if not genero:
+    #        print(PCTRL_WARN, "Genero", genero_id ,"not found in database")
+    #        return Response("Error del sistema", status_code=403)
+    #    generos_out.append(genero["nombre"])
+    #album_info["generos"] = generos_out
+    #
+    # TODO: Al descargar un album ya vienen con IDs de generos que coinciden en nombre, por lo que no es necesario hacer la llamada a la BD para obtener el objeto real.
 
     canciones_out : list[dict] = []
     for cancion_id in album_info["canciones"]:
