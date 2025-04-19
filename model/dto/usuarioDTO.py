@@ -24,6 +24,7 @@ class UsuarioDTO():
         self.nombre: str = None
         self.esArtista: bool = None
         self.studio_albumes: list[str] = []
+        self.studio_canciones: list[str] = []
         
     def get_id(self) -> str:
         return self.id
@@ -77,6 +78,16 @@ class UsuarioDTO():
         if album_id in self.studio_albumes:
             self.studio_albumes.remove(album_id)
 
+    def set_studio_canciones(self, studio_canciones: list[str]):
+        self.studio_canciones = studio_canciones
+
+    def add_studio_cancion(self, cancion_id: str):
+        self.studio_canciones.append(cancion_id)
+
+    def remove_studio_cancion(self, cancion_id: str):
+        if cancion_id in self.studio_canciones:
+            self.studio_canciones.remove(cancion_id)
+
     def usuario_to_dict(self) -> dict:
         return {
             "id": self.id,
@@ -86,5 +97,6 @@ class UsuarioDTO():
             "imagen": self.imagen,
             "url": self.url,
             "esArtista": self.esArtista,
-            "studio_albumes": self.studio_albumes
+            "studio_albumes": self.studio_albumes,
+            "studio_canciones": self.studio_canciones
         }
