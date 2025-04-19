@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/static/css/base/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
     <link rel="stylesheet" href="/static/css/base/header.css"> <!-- Hoja de estilo del header -->
     <link rel="stylesheet" href="/static/css/base/footer.css"> <!-- Hoja de estilo del footer -->
-    <link rel="stylesheet" href="/static/css/music/upload.css"> <!-- Hoja de estilo de la página de subida de música -->
+    <link rel="stylesheet" href="/static/css/music/album-edit.css"> <!-- Hoja de estilo de la página de subida de música -->
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/static/icons/favicons/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/static/icons/favicons/favicon.svg" />
@@ -129,31 +129,27 @@
                             <select id="song-list" name="song-list" style="height: 40px; width: 100%;">
                                 <option value="" disabled selected>Selecciona una canción</option>
                                 {% for song in songs %}   
-                                <option value="{{ song.id }}">{{ song.titulo }} · {{ song.autor }}</option>
+                                <option value="{{ song.id }}">{{ song.titulo }} · {{ song.artista }}</option>
                                 {% endfor %}
                             </select>
-                            <a href="/upload-song">
-                                <button onclick="addSong()">Añadir canción</button>
-                            </a>
+                            <button type="button" onclick="addSong()">Añadir canción</button>
                         </div>
                         <div class="grid-biblioteca">
                             <p id="no_songs">No hay canciones añadidas.</p>
                             {% for song in songs %}                       
-                            <div id="{{ song.id }}" class="div-pannel-sub songs-cell" style="display: none;"></div>
+                            <div id="{{ song.id }}" class="div-pannel-sub songs-cell" style="display: none;">
                                 <img src="{{ song.portada }}" class="songs-image" alt="Song Image">
                                 <h3>{{ song.titulo }}</h3>
-                                <p>{{ song.autor }}</p>
-                                <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver canción</button></a> <!-- TODO: Hacer que el botón funcione. Esperar implementación de song -->
-                                <button onclick="removeSong("{{ song.id }}")" style="width: 100%; background-color: #ff4646;">Eliminar</button>
+                                <p>{{ song.artista }}</p>
+                                <button type="button" style="width: 10rem;">Ver canción</button> <!-- TODO: Hacer que el botón funcione. Esperar implementación de song -->
+                                <button type="button" style="width: 10rem; background-color: #ff4646;" onclick="removeSong('{{ song.id }}')">Eliminar</button>
                             </div>
                             {% endfor %}
                         </div>
                     </div>
                 </form>
 
-                <a href="/studio">
-                    <button type="submit">Subir álbum</button>
-                </a>
+                <button type="submit" onclick="postAlbum()">Subir álbum</button>
             </div>
             <br>
         </div>
@@ -162,6 +158,7 @@
     <script>
 
         function addSong() {
+            event.preventDefault();
             const songList = document.getElementById('song-list');
             const selectedOption = songList.options[songList.selectedIndex];
 
@@ -175,16 +172,20 @@
                 // Show the corresponding song div
                 const songDiv = document.getElementById(songId);
                 if (songDiv) {
-                    songDiv.style.display = 'block';
+                    songDiv.style.display = 'flex';
                 }
 
                 // Make the "no songs" message invisible
                 const noSongsMessage = document.getElementById('no_songs');
                 noSongsMessage.style.display = 'none';
+
+                // Clear the selection
+                songList.selectedIndex = 0; // Reset to the first option (disabled)
             }
         }
 
         function removeSong(songId) {
+            event.preventDefault();
             const songDiv = document.getElementById(songId);
             if (songDiv) {
                 songDiv.style.display = 'none';
@@ -193,52 +194,50 @@
             // Make the corresponding option in the select visible and selectable again
             const songOption = document.querySelector(`option[value="${songId}"]`);
             if (songOption) {
-                songOption.style.display = 'block';
+                songOption.style.display = 'flex';
                 songOption.disabled = false;
             }
 
             // Check if there are any visible songs left
-            const remainingSongs = Array.from(document.querySelectorAll('.songs-cell')).filter(songDiv => songDiv.style.display === 'block');
+            const remainingSongs = Array.from(document.querySelectorAll('.songs-cell')).filter(songDiv => songDiv.style.display === 'flex');
             if (remainingSongs.length === 0) {
                 const noSongsMessage = document.getElementById('no_songs');
-                noSongsMessage.style.display = 'block';
+                noSongsMessage.style.display = 'flex';
             }
         }
-        }
+        
 
         async function postAlbum() {
-            const formData = new FormData();
-            formData.append('titulo', document.getElementById('title').value);
-            formData.append('autor', document.getElementById('author').value);
-            formData.append('descripcion', document.getElementById('description').value);
-            formData.append('fecha', new Date().toISOString().split('T')[0]);
-            formData.append('colaboradores', document.getElementById('collaborators').value);
-            formData.append('precio', document.getElementById('price').value);
-
-            const genres = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.id);
-            formData.append('generos', JSON.stringify(genres));
-
-            const visibleSongs = Array.from(document.querySelectorAll('.grid-biblioteca .songs-cell[style*="display: block"]'));
-            const songIds = visibleSongs.map(songDiv => songDiv.id);
-            formData.append('canciones', JSON.stringify(songIds));
-
-            const coverSrc = document.getElementById('cover-preview').src;
-            formData.append('cover', coverSrc);
+            event.preventDefault();
+            const albumData = {
+                titulo: document.getElementById('title').value,
+                autor: document.getElementById('author').value,
+                descripcion: document.getElementById('description').value,
+                fecha: new Date().toISOString().split('T')[0],
+                colaboradores: document.getElementById('collaborators').value,
+                precio: document.getElementById('price').value,
+                generos: Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
+                canciones: Array.from(document.querySelectorAll('.grid-biblioteca .songs-cell[style*="display: flex"]')).map(songDiv => songDiv.id),
+                portada: document.getElementById('cover-preview').src
+            };
 
             try {
-            const response = await fetch('/upload-album', {
-                method: 'POST',
-                body: formData
-            });
+                const response = await fetch('/upload-album', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(albumData)
+                });
 
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Album uploaded successfully:', result);
-            } else {
-                console.error('Failed to upload album:', response.statusText);
-            }
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Album uploaded successfully:', result);
+                } else {
+                    console.error('Failed to upload album:', response.statusText);
+                }
             } catch (error) {
-            console.error('Error uploading album:', error);
+                console.error('Error uploading album:', error);
             }
         }
 

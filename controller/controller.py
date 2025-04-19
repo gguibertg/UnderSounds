@@ -397,7 +397,7 @@ async def get_upload_album(request: Request):
     # Por cada canción en studio_canciones, obtenemos el objeto real, enviando un mensaje de error si no existe.
     user_songs_objects = []
     for song_id in res["studio_canciones"]:
-        song = model.get_cancion(song_id)
+        song = model.get_song(song_id)
         if not song:
             print(PCTRL_WARN, "Song", song_id, "not found in database")
             return Response("Error del sistema", status_code=403)
