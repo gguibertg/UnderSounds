@@ -8,7 +8,7 @@ class AlbumDTO:
         self.fecha: str = None # TODO: Esto debería ser un Date(), pero mongo no me quiere, así que string será por ahora.
         self.generos: list[str] = []
         self.canciones: list[str] = []
-        self.nVisualizaciones: int = None
+        self.visitas: int = None
         self.portada: str = None
         self.precio: float = None
 
@@ -68,11 +68,11 @@ class AlbumDTO:
         if cancion_id in self.canciones:
             self.canciones.remove(cancion_id)
 
-    def get_nVisualizaciones(self) -> int:
-        return self.nVisualizaciones
+    def get_visitas(self) -> int:
+        return self.visitas
 
-    def set_nVisualizaciones(self, nVisualizaciones: int):
-        self.nVisualizaciones = nVisualizaciones
+    def set_visitas(self, visitas: int):
+        self.visitas = visitas
 
     def get_portada(self) -> str:
         return self.portada
@@ -95,7 +95,7 @@ class AlbumDTO:
             "fecha": self.fecha,
             "generos": self.generos,
             "canciones": self.canciones,
-            "nVisualizaciones": self.nVisualizaciones,
+            "visitas": self.visitas,
             "portada": self.portada,
             "precio": self.precio
         }

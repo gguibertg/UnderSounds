@@ -450,7 +450,7 @@ async def upload_album(request: Request):
     album.set_fecha(data["fecha"])
     album.set_generos(data["generos"])
     album.set_canciones(data["canciones"])
-    album.set_nVisualizaciones(0)
+    album.set_visitas(0)
     album.set_portada(data["portada"])
     album.set_precio(data["precio"])
 
