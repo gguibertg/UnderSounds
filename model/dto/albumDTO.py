@@ -89,6 +89,19 @@ class AlbumDTO:
     def set_precio(self, precio: float):
         self.precio = precio
 
+    def load_from_dict(self, data: dict):
+        self.id = data.get("id")
+        self.titulo = data.get("titulo")
+        self.autor = data.get("autor")
+        self.colaboradores = data.get("colaboradores")
+        self.descripcion = data.get("descripcion")
+        self.fecha = data.get("fecha")
+        self.generos = data.get("generos", [])
+        self.canciones = data.get("canciones", [])
+        self.visitas = data.get("visitas")
+        self.portada = data.get("portada")
+        self.precio = data.get("precio")
+
     def album_to_dict(self) -> dict:
         return {
             "id": self.id,

@@ -344,7 +344,7 @@ async def get_upload_album(request: Request):
     for song_id in res["studio_canciones"]:
         song = model.get_song(song_id)
         if not song:
-            print(PCTRL_WARN, "Song", song_id, "not found in database")
+            print(PCTRL_WARN, "User created Song", song_id, "not found in database")
             return Response("Error del sistema", status_code=403)
         user_songs_objects.append(song)
 
@@ -353,7 +353,7 @@ async def get_upload_album(request: Request):
     for album_id in res["studio_albumes"]:
         album = model.get_album(album_id)
         if not album:
-            print(PCTRL_WARN, "Album", album_id, "not found in database")
+            print(PCTRL_WARN, "User created Album", album_id, "not found in database")
             return Response("Error del sistema", status_code=403)
         user_albums_objects.append(album)
 
@@ -529,6 +529,53 @@ async def get_album_edit(request: Request):
 
     # Devolvemos todo
     return view.get_album_edit_view(request, album_info, valid_songs)
+
+
+# Ruta para subir un álbum
+@app.post("/album-edit")
+async def upload_album(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error  
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    
+    try:
+        # Recibimos los datos del nuevo album editado, junto con su ID.
+        data = await request.json()
+        album_id = data["id"] # ID del album a editar
+
+        # Descargamos el album antiguo de la base de datos via su ID.
+        album_dict = model.get_album(album_id)
+        album = AlbumDTO()
+        album.load_from_dict(album_dict)
+
+        # Editamos el album con los nuevos datos recibidos en la request
+        album.set_titulo(data["titulo"])
+        album.set_autor(data["autor"])
+        album.set_colaboradores(data["colaboradores"])
+        album.set_descripcion(data["descripcion"])
+        #album.set_fecha(datetime.strptime(data["fecha"], "%Y-%m-%d")) # La fecha no se puede editar.
+        album.set_generos(data["generos"])
+        album.set_canciones(data["canciones"])
+        #album.set_visitas(0) # La cantidad de visitas no se puede editar.
+        album.set_portada(data["portada"])
+        album.set_precio(data["precio"])
+
+        # Actualizamos el album en la base de datos
+        if model.update_album(album):
+            print(PCTRL, "Album", album_id, "updated in database")
+            return {"success": True, "message": "Album updated successfully"}
+        else:
+            print(PCTRL_WARN, "Album", album_id, "not updated in database!")
+            return {"success": False, "error": "Album not updated in database"}
+    
+    except Exception as e:
+        print(PCTRL_WARN, "Error while processing Album", album_id, ", updating to database failed!")
+        return {"success": False, "error": "Album not updated in database"}
+
 
 
 
