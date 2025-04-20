@@ -1,3 +1,6 @@
+from datetime import datetime
+
+
 class AlbumDTO:
     def __init__(self):
         self.id: str = None
@@ -5,7 +8,7 @@ class AlbumDTO:
         self.autor: str = None
         self.colaboradores: str = None # Si, se que es un string y no una lista, pero a quien le importa realmente? Nunca lo vamos a usar como una lista de todas formas
         self.descripcion: str = None
-        self.fecha: str = None # TODO: Esto debería ser un Date(), pero mongo no me quiere, así que string será por ahora.
+        self.fecha: datetime = None
         self.generos: list[str] = []
         self.canciones: list[str] = []
         self.visitas: int = None
@@ -42,10 +45,10 @@ class AlbumDTO:
     def set_descripcion(self, descripcion: str):
         self.descripcion = descripcion
 
-    def get_fecha(self) -> str:
+    def get_fecha(self) -> datetime:
         return self.fecha
 
-    def set_fecha(self, fecha: str):
+    def set_fecha(self, fecha: datetime):
         self.fecha = fecha
 
     def set_generos(self, generos: list[str]):

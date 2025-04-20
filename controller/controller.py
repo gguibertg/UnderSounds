@@ -1,5 +1,5 @@
+from datetime import datetime
 import uuid
-
 from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 
@@ -392,7 +392,7 @@ async def upload_album(request: Request):
     album.set_autor(data["autor"])
     album.set_colaboradores(data["colaboradores"])
     album.set_descripcion(data["descripcion"])
-    album.set_fecha(data["fecha"])
+    album.set_fecha(datetime.strptime(data["fecha"], "%Y-%m-%d")) # Convertimos el string tipo YYYY-MM-DD a un objeto datetime antes de guardar.
     album.set_generos(data["generos"])
     album.set_canciones(data["canciones"])
     album.set_visitas(0)
