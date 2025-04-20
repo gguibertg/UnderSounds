@@ -218,46 +218,52 @@ async def register_google(data: dict, response: Response):
 # Ruta para procesar la petición de logout
 @app.post("/unregister")
 async def deregister(request: Request, response: Response):
-    # Verificar si el usuario tiene una sesión activa
-    session_id = request.cookies.get("session_id")
-    if not isUserSessionValid(session_id):
-        return Response("No autorizado", status_code=401)
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error  
 
-    # Obtener los datos de la sesión del usuario
-    session_data = getSessionData(session_id)
-    if session_data:
-        user_id = session_data["user_id"]
-        user_name = session_data["name"]
-        print(PCTRL, "User", user_name, "requested account deletion")
+    print(PCTRL, "User", res["email"], "requested account deletion") 
 
-        # Verificar si el usuario existe en la base de datos
-        if model.get_usuario(user_id):
-            try:
-                # Eliminar al usuario de Firebase Auth
-                auth.delete_user(user_id)
-                print(PCTRL, "User", user_name, "deleted from Firebase Auth")
+    try:
+        # Eliminar al usuario de Firebase Auth
+        auth.delete_user(res["id"])
+        print(PCTRL, "User", res["email"], "deleted from Firebase Auth")
 
-                # Eliminar al usuario de la base de datos
-                if model.delete_usuario(user_id):
-                    print(PCTRL, "User", user_name, "deleted from database")
-                else:
-                    print(PCTRL_WARN, "User", user_name, "not deleted from database!")
-                    return {"success": False, "error": "User not deleted from database"}
+        # Eliminar cada una de las canciones en studio_canciones de la base de datos
+        for song_id in res["studio_canciones"]:
+            if model.delete_song(song_id):
+                print(PCTRL, "Song", song_id, "deleted from database")
+            else:
+                print(PCTRL_WARN, "Song", song_id, "not deleted from database!")
+                return {"success": False, "error": "Song not deleted from database"}
+        
+        # Eliminar cada uno de los albumes en studio_albumes de la base de datos
+        for album_id in res["studio_albumes"]:
+            if model.delete_album(album_id):
+                print(PCTRL, "Album", album_id, "deleted from database")
+            else:
+                print(PCTRL_WARN, "Album", album_id, "not deleted from database!")
+                return {"success": False, "error": "Album not deleted from database"}
 
-                # Eliminar la sesión del usuario
-                del sessions[session_id]
-                response.delete_cookie("session_id")
-                print(PCTRL, "User session", session_id, "destroyed")
-
-                return {"success": True, "message": "User account deleted successfully"}
-            except Exception as e:
-                print(PCTRL, "Error deleting user:", str(e))
-                return {"success": False, "error": str(e)}
+        # Eliminar al usuario de la base de datos
+        if model.delete_usuario(res["id"]):
+            print(PCTRL, "User", res["email"], "deleted from database")
         else:
-            print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")
-            return {"success": False, "error": "User not found in database"}
+            print(PCTRL_WARN, "User", res["email"], "not deleted from database!")
+            return {"success": False, "error": "User not deleted from database"}
+
+        # Eliminar la sesión del usuario
+        session_id = request.cookies.get("session_id")
+        del sessions[session_id]
+        response.delete_cookie("session_id")
+        print(PCTRL, "User session", session_id, "destroyed")
+
+        return {"success": True, "message": "User account deleted successfully"}
     
-    return Response("No autorizado", status_code=401)
+    except Exception as e:
+        print(PCTRL, "Error deleting user:", str(e))
+        return {"success": False, "error": str(e)}
 
 
 # ----------------------------- PERFIL ------------------------------ #
