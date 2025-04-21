@@ -64,7 +64,7 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
     def articulo_existe_en_carrito(self, carrito, articulo_id) -> bool:
         return any(art["id"] == articulo_id for art in carrito.get("articulos", []))
 
-    def incrementar_articulo_existente(self, usuario: str, articulo_id: str) -> bool:
+    def incrementar_articulo_existente(self, usuario, articulo_id) -> bool:
         articulo = self.collection.find_one(
             {"usuario": usuario, "articulos.id": articulo_id},
             {"articulos.$": 1}
@@ -86,7 +86,7 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
         return result.modified_count == 1
 
 
-    def decrementar_articulo_existente(self, usuario: str, articulo_id: str) -> bool:
+    def decrementar_articulo_existente(self, usuario, articulo_id) -> bool:
         articulo = self.collection.find_one(
             {"usuario": usuario, "articulos.id": articulo_id},
             {"articulos.$": 1}

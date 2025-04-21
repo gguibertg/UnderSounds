@@ -394,10 +394,9 @@ def get_faqs(request: Request):
 async def get_carrito(request: Request):
     
     # Así se obtendría el usuario, por motivos de prueba, se probará un usuario fijo
-    # session_id = request.cookies.get("session_id")
-    # session_data = getSessionData(session_id)
-    # user_id = ObjectId(session_data["user_id"])
-    user_id = ObjectId('68037e69d5a55cd63debd99b')
+    session_id = request.cookies.get("session_id")
+    session_data = getSessionData(session_id)
+    user_id = (session_data["user_id"])
     form_data = await request.form()
     action = form_data.get("action")  # Por defecto: añadir
     item_id = form_data.get("item_id")

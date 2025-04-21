@@ -81,7 +81,7 @@ class ArticuloCestaDTO:
         
 class CarritoDTO:
     
-    usuario: ObjectId
+    usuario: str
     articulos: List[ArticuloCestaDTO]
     subtotal: float
     
