@@ -1,0 +1,220 @@
+.album-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 2.5rem 1.25rem;
+    max-width: 85%;
+    margin: auto;
+}
+
+.album-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.album-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    max-width: 500px;
+}
+
+.album-title {
+    font-size: 1.75rem;
+}
+
+.dark-mode .album-title {
+    color: white;
+}
+
+.album-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.album-buttons button {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+}
+
+.album-image {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #00000022;
+    padding: 1rem;
+}
+
+.album-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.song-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1rem;
+    padding-left: 0;
+    list-style: none;
+    counter-reset: song;
+}
+
+.song-grid li {
+    counter-increment: song;
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.song-grid li::before {
+    content: counter(song) ".";
+    font-weight: bold;
+}
+
+.song-grid li a {
+    text-decoration: none;
+    flex-grow: 1;
+}
+
+/* Hover para tema claro */
+.song-grid li:hover {
+    background-color: #dceaff;
+    transform: scale(1.02);
+}
+
+/* Hover para modo oscuro */
+.dark-mode .song-grid li:hover {
+    background-color: #3d3d3d;
+    transform: scale(1.02);
+}
+
+.song-list-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.song-grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.song-card {
+    background-color: #f4f4f4;
+    border-radius: 12px;
+    box-shadow: 0 0 10px #00000011;
+    padding: 1rem;
+    margin: 5px 0;
+}
+
+.dark-mode .song-card {
+    background-color: #2a2a2a;
+}
+
+.song-card summary {
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+}
+
+.song-card details[open] summary {
+    margin-bottom: 1rem;
+}
+
+.song-content {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.song-cover {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.song-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.song-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    align-items: center;
+}
+
+.song-stats img {
+    vertical-align: middle;
+    margin-right: 0.3rem;
+    width: 18px;
+    height: 18px;
+}
+
+.song-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.song-actions .btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.song-actions .btn img {
+    width: 14px;
+    height: 14px;
+}
+
+.song-actions .btn:hover {
+    background-color: #0056b3;
+}
+
+.song-actions .btn.delete {
+    background-color: #dc3545;
+}
+
+.song-actions .btn.delete:hover {
+    background-color: #a71d2a;
+}

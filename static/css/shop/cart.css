@@ -84,10 +84,20 @@ hr {
 .remove-btn {
     margin-top: 8px;
     width: 100%;
+    padding: 10px
 }
 
 .remove-btn:hover {
-    background: #c82333;
+    background: #861622;
+}
+
+.add-btn {
+    margin-top: 8px;
+    width: 100%;
+}
+
+.add-btn:hover {
+    background: #23c841;
 }
 
 .shopmore-btn {

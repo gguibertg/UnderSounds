@@ -298,7 +298,6 @@ main {
     border-radius: 50%;
     text-align: center;
     cursor: pointer;
-    position: fixed;
     top: 20px;
     left: 20px;
 }

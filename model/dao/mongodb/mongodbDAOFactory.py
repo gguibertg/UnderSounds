@@ -1,33 +1,33 @@
-from ...factory.interface_dao_factory import InterfaceDAOFactory
-from .collection.mongodbDAOSong import mongodbSongDAO
-#from firebase_admin import credentials, firestore, initialize_app, auth
+from ...factory.interfaceDAOFactory import InterfaceDAOFactory
+from .mongodbConnector import MongoConnector
+from .collection.mongodbFaqDAO import MongodbFaqDAO
+from .collection.mongodbDAOUsuario import mongodbUsuarioDAO
+from .collection.mongodbDAOAlbum import mongodbAlbumDAO
+from .collection.mongodbDAOGenero import mongodbGeneroDAO
+from .collection.mongodbSongDAO import MongodbSongDAO
+from .collection.mongodbDAOCarrito import mongodbCarritoDAO
 
-# -----------------------------------------------------------
-# No se muy bien para que sirve esta clase.
-# Quien lo sepa mejor, que lo explique aquí:
-# -----------------------------------------------------------
+# Esta es la clase que implementa el patrón DAO Factory, que genera los DAOs de MongoDB.
 
 class mongodbDAOFactory(InterfaceDAOFactory):
 
     def __init__(self):
-#         ## Conexion bd 
-        self.db = {"songs" : [
-         {'album': 'A Night at the Opera', 'author': 'Queen', 'id': 'EGDjQKq3kMroVWapLhoG', 'duration': '5:55', 'musicgenre': 'Rock', 'price': 1.99, 'rating': 5, 'release': '1975-10-30 23:00:00.215000+00:00', 'title': 'Bohemian Rhapsody'}, 
-          {'album': 'Thriller', 'author': 'Michael Jackson', 'id': 'MuT75L6x43aWumwAEwYc', 'duration': 0, 'musicgenre': 'Pop', 'price': 1.99, 'rating': '5', 'release': '1983-01-01 23:00:00.408000+00:00', 'title': 'Billie Jean'}
-         ]
-         } # (Local)
-#         """
-#         Código para la conexión con firebase
-#         try:
-#             self.credentials = credentials.Certificate("model//dao//firebase//credentials.json")
-#             initialize_app(self.credentials)
-#             self.db = firestore.client()
-#             print("Connection to Firebase Firestore initialized successfully.")
-#         except Exception as e:
-#             print("Error in connecting with db")
-#             print(e)
-#         """
-    def getSongDao(self):
-#         # collection = self.db.collection("songs") (Firebase)
-        collection = self.db["songs"] # (Local)
-        return mongodbSongDAO(collection)
+        self.connector = MongoConnector()
+
+    def getUsuariosDAO(self):
+        return mongodbUsuarioDAO(self.connector.get_usuario_collection())
+
+    def getFaqsDAO(self):
+        return MongodbFaqDAO(self.connector.post_faq_collection())
+    
+    def getCarritoDAO(self):
+       return mongodbCarritoDAO(self.connector.get_articulos_carrito())
+    
+    def getAlbumDAO(self):
+        return mongodbAlbumDAO(self.connector.get_album_collection())
+
+    def getGeneroDAO(self):
+        return mongodbGeneroDAO(self.connector.get_genero_collection())
+    
+    def getSongsDAO(self):
+        return MongodbSongDAO(self.connector.post_song_collection())

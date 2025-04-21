@@ -31,8 +31,9 @@ header {
 
 .profile-container {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
 }
 
 .nav-top .logo {
@@ -84,6 +85,19 @@ header {
     list-style: none;
     display: flex;
     gap: 25px;
+}
+
+.nav-bottom li a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.nav-bottom li a .theme-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
 }
 
 /* =======================

@@ -1,90 +1,80 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Detecta si estamos en una página de autenticación (sin header/footer dinámicos)
-    const authPage = document.body.classList.contains("auth-page");
+    const isAuthPage = document.body.classList.contains("auth-page");
 
-    // Referencias a elementos que se actualizarán según el tema
     let logo = null;
-    let fLogo = null;
-    let shop = null;
+    let footerLogo = null;
 
-    // Íconos de acciones sobre la canción que deben cambiar según el tema
-    const elementos = [
-        { className: "song-love", icon: "favourite-icon" },
-        { className: "song-comment", icon: "comment-icon" },
-        { className: "song-view", icon: "views-icon" },
-        { className: "song-visible", icon: "visibility-icon" }
-    ];    
+    const updateTheme = (theme) => {
+        const isDark = theme === "dark";
+        document.body.classList.toggle("dark-mode", isDark);
 
-    // Aplica el modo claro u oscuro, y actualiza los iconos y logos correspondientes
-    const actualizarModo = (modo) => {
-        const esOscuro = modo === "dark";
-        document.body.classList.toggle("dark-mode", esOscuro);
-
-        const logoSrc = `/static/img/utils/logo-${esOscuro ? "dark" : "light"}.png`;
-        const cartSrc = `/static/icons/site/cart-icon-${esOscuro ? "dark" : "light"}.svg`;
+        const logoSrc = `/static/img/utils/logo-${isDark ? "dark" : "light"}.png`;
 
         if (logo) logo.src = logoSrc;
-        if (fLogo) fLogo.src = logoSrc;
-        if (shop) shop.src = cartSrc;
+        if (footerLogo) footerLogo.src = logoSrc;
 
-        elementos.forEach(({ className, icon }) => {
-            const iconSrc = `/static/icons/site/${icon}-${esOscuro ? "dark" : "light"}.svg`;
-            document.querySelectorAll(`.${className}`).forEach(el => {
-                el.src = iconSrc;
-            });
+        // Actualiza automáticamente todos los íconos temáticos
+        document.querySelectorAll(".theme-icon").forEach(el => {
+            const iconBase = el.dataset.icon;
+            if (iconBase) {
+                el.src = `/static/icons/site/${iconBase}-${isDark ? "dark" : "light"}.svg`;
+            }
         });
 
-        localStorage.setItem("theme", modo);
+        localStorage.setItem("theme", theme);
     };
 
-    // Aplica el modo previamente guardado en el navegador
-    const aplicarModoPreferido = () => {
-        const userTheme = localStorage.getItem("theme");
-        if (userTheme) {
-            actualizarModo(userTheme);
+    const applySavedTheme = () => {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+            updateTheme(savedTheme);
         }
     };
 
-    // Asocia el botón de contraste para alternar el tema manualmente
-    const vincularBoton = () => {
-        const contrastButton = document.querySelector(".contrast-btn");
-        if (contrastButton && !contrastButton.dataset.listenerAttached) {
-            contrastButton.addEventListener("click", () => {
-                const esModoOscuro = document.body.classList.contains("dark-mode");
-                actualizarModo(esModoOscuro ? "light" : "dark");
+    const bindContrastButton = () => {
+        const contrastBtn = document.querySelector(".contrast-btn");
+        if (contrastBtn && !contrastBtn.dataset.listenerAttached) {
+            contrastBtn.addEventListener("click", () => {
+                const isDark = document.body.classList.contains("dark-mode");
+                updateTheme(isDark ? "light" : "dark");
             });
-            contrastButton.dataset.listenerAttached = "true";
+            contrastBtn.dataset.listenerAttached = "true";
         }
     };
 
-    // Captura referencias a los elementos clave para modificar sus recursos
-    const capturarElementos = () => {
+    const captureElements = () => {
         logo = document.querySelector(".logo");
-        fLogo = document.querySelector(".footer-logo");
-        shop = document.querySelector(".shop");
+        footerLogo = document.querySelector(".footer-logo");
     };
 
-    aplicarModoPreferido();
+    const esperarElemento = (selector) => {
+        return new Promise(resolve => {
+            if (document.querySelector(selector)) return resolve();
+            const observer = new MutationObserver(() => {
+                if (document.querySelector(selector)) {
+                    observer.disconnect();
+                    resolve();
+                }
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+        });
+    };
 
-    if (authPage) {
-        // Si es una página de login/registro, los elementos ya están en el DOM
-        capturarElementos();
-        vincularBoton();
+    const iniciarTemaYEventos = () => {
+        captureElements();
+        applySavedTheme();
+        bindContrastButton();
+    };
+
+    applySavedTheme();
+
+    if (isAuthPage) {
+        iniciarTemaYEventos();
     } else {
-        // En páginas con carga dinámica del header/footer:
-        document.addEventListener("headerLoaded", () => {
-            capturarElementos();
-            aplicarModoPreferido();
-        });
-
-        document.addEventListener("footerLoaded", () => {
-            vincularBoton();
-        });
-
-        // Por si header/footer ya estaban cargados antes de estos eventos
-        setTimeout(() => {
-            capturarElementos();
-            vincularBoton();
-        }, 500);
+        Promise.all([
+            esperarElemento(".logo"),
+            esperarElemento(".footer-logo"),
+            esperarElemento(".contrast-btn")
+        ]).then(iniciarTemaYEventos);
     }
 });
