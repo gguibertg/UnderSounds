@@ -106,7 +106,7 @@ async def login_post(data: dict, response: Response, provider: str):
     try:
 
         # Verificamos el token de Firebase dado por el usuario
-        decoded_token = auth.verify_id_token(token)
+        decoded_token = auth.verify_id_token(token, None, False, 3)
         # Identificador único del usuario otorgado por Firebase que podemos usar como identificador del usuario en nuestra base de datos
         user_id = decoded_token["uid"]
         user_email = decoded_token["email"]
