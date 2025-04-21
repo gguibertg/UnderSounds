@@ -27,6 +27,7 @@ from view.view import View
 PCTRL = "\033[96mCTRL\033[0m:\t "
 PCTRL_WARN = "\033[96mCTRL\033[0m|\033[93mWARN\033[0m:\t "
 
+
 # ===============================================================================
 # ========================= INICIALIZACIÓN DE LA APP ============================
 # ===============================================================================
@@ -64,6 +65,8 @@ model = Model()
 # Almacenamiento en memoria para sesiones
 sessions = {}
 
+
+
 # ===============================================================================
 # =========================== DEFINICIÓN DE RUTAS ===============================
 # ===============================================================================
@@ -79,6 +82,13 @@ def getsongs(request: Request):
     songs = model.get_songs() # JSON
     # Luego se lo pasamos al View para que lo renderice y lo devuelva al cliente.
     return view.get_songs_view(request,songs)
+
+
+
+
+
+
+
 
 # ------------------------------------------------------------------ #
 # ----------------------------- LOGIN ------------------------------ #
@@ -143,6 +153,12 @@ async def logout(request: Request, response: Response):
     print(PCTRL, "User session", session_id, "destroyed")
     response.delete_cookie("session_id")
     return {"success": True}
+
+
+
+
+
+
 
 # --------------------------------------------------------------------- #
 # ----------------------------- REGISTER ------------------------------ #
@@ -276,6 +292,12 @@ async def deregister(request: Request, response: Response):
         print(PCTRL, "Error deleting user:", str(e))
         return {"success": False, "error": str(e)}
 
+
+
+
+
+
+
 # ------------------------------------------------------------------- #
 # ----------------------------- PERFIL ------------------------------ #
 # ------------------------------------------------------------------- #
@@ -332,8 +354,14 @@ async def update_profile(request: Request, response: Response):
         print(PCTRL_WARN, "User", user_name, "not updated in database!")
         return {"success": False, "error": "User not updated in database"}
 
+
+
+
+
+
+
 # ------------------------------------------------------------------- #
-# ----------------------------- Album ------------------------------- #
+# ----------------------------- ALBUM ------------------------------- #
 # ------------------------------------------------------------------- #
 
 # Ruta para cargar la vista de upload-album
@@ -588,6 +616,13 @@ async def upload_album(request: Request):
         print(PCTRL_WARN, "Error while processing Album", album_id, ", updating to database failed!")
         return {"success": False, "error": "Album not updated in database"}
 
+
+
+
+
+
+
+
 # ------------------------------------------------------------------ #
 # ----------------------------- INCLUDES --------------------------- #
 # ------------------------------------------------------------------ #
@@ -607,6 +642,12 @@ def footer(request: Request):
         return view.get_footer_view(request, None)
     
     return view.get_footer_view(request, res)  # Si es un dict, pasamos los datos del usuario
+
+
+
+
+
+
 
 # -------------------------------------------------------------------------- #
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
@@ -653,13 +694,27 @@ def verifySessionAndGetUserInfo(request : Request):
         
     return Response("No autorizado", status_code=401)
 
+
+
+
+
+
+
+
 # ------------------------------------------------------------- #
-# --------------------------- About --------------------------- #
+# --------------------------- ABOUT --------------------------- #
 # ------------------------------------------------------------- #
 
 @app.get("/about" , description="Muestra información sobre Undersounds")
 def about(request: Request):
     return view.get_about_view(request)
+
+
+
+
+
+
+
 
 # ------------------------------------------------------------ #
 # --------------------------- FAQS --------------------------- #
@@ -670,8 +725,14 @@ def get_faqs(request: Request):
     faqs_json = model.get_faqs()
     return view.get_faqs_view(request, faqs_json)
 
+
+
+
+
+
+
 # ------------------------------------------------------------------ #
-# ----------------------------- Carrito ---------------------------- #
+# ----------------------------- CARRITO ---------------------------- #
 # ------------------------------------------------------------------ #
 
 @app.api_route("/cart", methods=["GET", "POST"], description="Muestra los artículos de tu cesta")
@@ -711,8 +772,15 @@ async def get_carrito(request: Request):
     carrito_json = model.get_carrito(user_id) 
     return view.get_carrito_view(request, carrito_json)
 
+
+
+
+
+
+
+
 # ------------------------------------------------------------ #
-# --------------------------- Contact ------------------------ #
+# --------------------------- CONTACT ------------------------ #
 # ------------------------------------------------------------ #
 
 @app.get("/contact", description="Muestra el formulario de contacto")
