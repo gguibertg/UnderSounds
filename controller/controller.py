@@ -1,15 +1,21 @@
+# Imports estándar de Python
 import uuid
 from pathlib import Path
 
+# Imports de terceros
 import firebase_admin
-from firebase_admin import auth, credentials
+from bson import ObjectId
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from firebase_admin import auth, credentials
 
+# Imports locales del proyecto
+from model.dto.carritoDTO import ArticuloCestaDTO, CarritoDTO
 from model.dto.usuarioDTO import UsuarioDTO
 from model.model import Model
 from view.view import View
+
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
@@ -38,6 +44,7 @@ app.mount(
     StaticFiles(directory=Path(__file__).parent.parent.absolute() / "static"),
     name="static",
 )
+
 app.mount(
     "/includes",
     StaticFiles(directory=Path(__file__).parent.parent.absolute() / "view/templates/includes"),
@@ -310,7 +317,10 @@ async def update_profile(request: Request, response: Response):
         print(PCTRL_WARN, "User", user_name, "not updated in database!")
         return {"success": False, "error": "User not updated in database"}
 
-# -------------------------------- INCLUDES -------------------------------- #
+# ------------------------------------------------------------------ #
+# ----------------------------- INCLUDES --------------------------- #
+# ------------------------------------------------------------------ #
+
 @app.get("/header")
 def header(request: Request):
     res = handleAndGetUserDictDBData(request)
@@ -319,8 +329,7 @@ def header(request: Request):
     
     return view.get_header_view(request, res)  # Si es un dict, pasamos los datos del usuario
 
-
-
+# -------------------------------------------------------------------------- #
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
 # -------------------------------------------------------------------------- #
 
@@ -376,6 +385,48 @@ def about(request: Request):
 def get_faqs(request: Request):
     faqs_json = model.get_faqs()
     return view.get_faqs_view(request, faqs_json)
+
+# ------------------------------------------------------------------ #
+# ----------------------------- Carrito ---------------------------- #
+# ------------------------------------------------------------------ #
+
+@app.api_route("/cart", methods=["GET", "POST"], description="Muestra los artículos de tu cesta")
+async def get_carrito(request: Request):
+    
+    # Así se obtendría el usuario, por motivos de prueba, se probará un usuario fijo
+    # session_id = request.cookies.get("session_id")
+    # session_data = getSessionData(session_id)
+    # user_id = ObjectId(session_data["user_id"])
+    user_id = ObjectId('68037e69d5a55cd63debd99b')
+    form_data = await request.form()
+    action = form_data.get("action")  # Por defecto: añadir
+    item_id = form_data.get("item_id")
+    
+    if request.method == "POST":
+
+        if action == "decrement":
+            if not item_id:
+                return "Falta el ID del artículo para decrementarlo/eliminarlo", 400 
+            # Eliminar el artículo del carrito
+            model.carrito.decrementar_articulo_existente(user_id, item_id)
+        
+        elif action == "add":
+            
+            articulo = ArticuloCestaDTO()
+            articulo.set_id(form_data.get("item_id"))
+            articulo.set_nombre(form_data.get("item_name"))
+            articulo.set_precio(form_data.get("item_precio"))
+            articulo.set_descripcion(form_data.get("item_desc"))
+            articulo.set_artista(form_data.get("artist_name"))
+            articulo.set_cantidad(1)
+            articulo.set_imagen(form_data.get("item_image"))
+
+            # Añadir el artículo al carrito
+            model.carrito.upsert_articulo_en_carrito(user_id, articulo)
+
+    # Si la petición es GET, mostrar el carrito
+    carrito_json = model.get_carrito(user_id) 
+    return view.get_carrito_view(request, carrito_json)
 
 # ------------------------------------------------------------ #
 # --------------------------- Contact ------------------------ #

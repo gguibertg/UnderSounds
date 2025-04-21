@@ -48,3 +48,10 @@ class View():
     # Renderizar la template contact.html
     def get_contact_view(self, request : Request, success: int = 0): 
         return templates.TemplateResponse("main/contact.html", {"request" : request, "success" : success})
+        
+    # Renderizar la template carrito.html
+    def get_carrito_view(self, request: Request, carrito):
+        return templates.TemplateResponse("shop/cart.html", {
+            "request": request,
+            "carrito": carrito,
+        })

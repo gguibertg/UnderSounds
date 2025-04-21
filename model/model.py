@@ -8,6 +8,7 @@ class Model ():
         self.factory = mongodbDAOFactory()
         self.daoUsuario = self.factory.getUsuariosDAO()
         self.faqsDAO = self.factory.getFaqsDAO()
+        self.carrito = self.factory.getCarritoDAO()
         pass
     
     def get_usuario(self, id):
@@ -33,3 +34,6 @@ class Model ():
     # La función devuelve True si se ha guardado correctamente y False si ha habido un error.
     def save_contact_msg(self, name: str, email: str, telf: str, msg: str):
         return True
+    
+    def get_carrito(self, usuario):
+       return self.carrito.get_all_articulos(usuario)
