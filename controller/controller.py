@@ -189,7 +189,7 @@ async def register_post(data: dict, response: Response, provider: str):
         user.set_email(user_email)
         user.set_bio("")
         if provider == "credentials":
-            user.set_imagen("/static/img/default_profile.png")  # Imagen por defecto para usuarios registrados con credenciales clásicas
+            user.set_imagen("/static/img/utils/default_user.jpeg")  # Imagen por defecto para usuarios registrados con credenciales clásicas
         else:
             # Descargar la imagen de Google, la convierte a base64 y la guarda en el campo imagen del usuario
             user.set_imagen("data:image/jpeg;base64," + base64.b64encode(requests.get(decoded_token["picture"]).content).decode("utf-8"))
@@ -594,11 +594,19 @@ async def upload_album(request: Request):
 
 @app.get("/header")
 def header(request: Request):
-    res = handleAndGetUserDictDBData(request)
+    res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
         return view.get_header_view(request, None) # Si es un Response, devolvemos la vista de guest
     
     return view.get_header_view(request, res)  # Si es un dict, pasamos los datos del usuario
+
+@app.get("/footer")
+def footer(request: Request):
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return view.get_footer_view(request, None)
+    
+    return view.get_footer_view(request, res)  # Si es un dict, pasamos los datos del usuario
 
 # -------------------------------------------------------------------------- #
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
@@ -614,10 +622,15 @@ def getSessionData(session_id: str) -> str:
     return None
 
 # Este método automatiza la obtención de datos del usuario a partir de la sesión activa.
+#
+#   1º Comprueba que exista una sesión activa
+#   2º Descarga los datos del usuario enlazados a esa sesión
+#   3º Devuelve dos cosas:
+#       Si todo es correcto -> Devuelve user_info (dict)
+#       Si no -> Devuelve un Response con el error y escribe a consola
+#
 # Conveniente para rutas sencillas que solo requieran la info del usuario.
-# Si todo es correcto -> Devuelve user_info (dict)
-# Si no -> Devuelve un Response y escribe a consola
-def handleAndGetUserDictDBData(request : Request):
+def verifySessionAndGetUserInfo(request : Request):
     # Comprobamos si el usuario tiene una sesión activa
     session_id = request.cookies.get("session_id")
     if not isUserSessionValid(session_id):

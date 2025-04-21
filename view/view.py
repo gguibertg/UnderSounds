@@ -40,10 +40,15 @@ class View():
 
     # Renderizar la template upload-album.html
     def get_upload_album_view(self, request: Request, songs: list[dict]):
-        return templates.TemplateResponse("music/upload-album.html", {"request": request , "songs": songs})    
+        return templates.TemplateResponse("music/upload-album.html", {"request": request , "songs": songs}) 
+    
     # Renderizar la template header.html
     def get_header_view(self, request: Request, user_info : dict):
         return templates.TemplateResponse("includes/header.html", {"request": request, "user": user_info})
+    
+    # Renderizar la template footer.html
+    def get_footer_view(self, request: Request, user_info : dict):
+        return templates.TemplateResponse("includes/footer.html", {"request": request, "user": user_info})
 
     # Renderizar la template about.html
     def get_about_view(self, request: Request):
