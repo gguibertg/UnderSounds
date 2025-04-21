@@ -17,6 +17,7 @@ from firebase_admin import auth, credentials
 # Imports locales del proyecto
 from model.dto.albumDTO import AlbumDTO
 from model.dto.carritoDTO import ArticuloCestaDTO, CarritoDTO
+from model.dto.contactoDTO import ContactoDTO
 from model.dto.usuarioDTO import UsuarioDTO
 from model.model import Model
 from view.view import View
@@ -783,44 +784,41 @@ async def get_carrito(request: Request):
 # --------------------------- CONTACT ------------------------ #
 # ------------------------------------------------------------ #
 
-@app.get("/contact", description="Muestra el formulario de contacto")
-def index(request: Request, success: int = 0): 
-    # success = -1 --> Error al enviar el mensaje
-    # success = 0 --> No hay que renderizar nada
-    # success = 1 --> Mensaje enviado correctamente
-    return view.get_contact_view(request, success)
+@app.get("/contact")
+def index(request: Request): 
+    return view.get_contact_view(request)
 
-# Responde al endpoint API /api/contact/send
-@app.post("/api/contact/send")
+# Responde al endpoint API /contact
+@app.post("/contact")
 async def index(request: Request):
-    form_data = await request.form()
+    # Obtenemos los datos de la query en formato JSON
+    data = await request.json()
     
     # Validar que los campos requeridos no estén vacíos
-    if not form_data.get("name") or not form_data.get("email") or not form_data.get("telf") or not form_data.get("msg") or not form_data.get("terms"):
+    if not data.get("name") or not data.get("email") or not data.get("telf") or not data.get("msg"):
         return JSONResponse(
             content={"status": "error", "message": "Formulario inválido"},
-            status_code=500,
+            status_code=400,
             headers={"Content-Type": "application/json"}
         )
     
-    # Llamar a la función del modelo para guardar el reporte en la base de datos
-    success = model.save_contact_msg(
-        name=form_data.get("name"),
-        email=form_data.get("email"),
-        telf=form_data.get("telf"),
-        msg=form_data.get("msg")
-    )
+    # Crear objeto ContactoDTO y asignar los valores del formulario
+    contacto = ContactoDTO()
+    contacto.set_nombre(data.get("name"))
+    contacto.set_email(data.get("email"))
+    contacto.set_telefono(data.get("telf"))
+    contacto.set_mensaje(data.get("msg"))
     
-    # Devolver la respuesta al cliente
-    if success:
+    # Llamar a la función del modelo para guardar el reporte en la base de datos y devolver respuesta
+    if model.add_contacto(contacto):
         return JSONResponse(
-            content={"status": "ok", "message": "Mensaje enviado correctamente"},
+            content={"status": "success", "message": "Formulario enviado correctamente"},
             status_code=200,
             headers={"Content-Type": "application/json"}
         )
     else:
         return JSONResponse(
-            content={"status": "error", "message": "Error al enviar el mensaje"},
+            content={"status": "error", "message": "Error al enviar el formulario"},
             status_code=500,
             headers={"Content-Type": "application/json"}
         )
