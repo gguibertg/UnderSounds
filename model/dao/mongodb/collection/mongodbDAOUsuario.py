@@ -28,6 +28,8 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
                 user_dto.set_bio(doc.get("bio"))
                 user_dto.set_esArtista(doc.get("esArtista"))
                 user_dto.set_imagen(doc.get("imagen"))
+                user_dto.set_studio_albumes(query.get("studio_albumes", []))
+                user_dto.set_studio_canciones(query.get("studio_canciones", []))
 
                 users.insertUser(user_dto)
 
@@ -52,6 +54,8 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
                 user.set_bio(query.get("bio"))
                 user.set_esArtista(query.get("esArtista"))
                 user.set_imagen(query.get("imagen"))
+                user.set_studio_albumes(query.get("studio_albumes", []))
+                user.set_studio_canciones(query.get("studio_canciones", []))
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar el usuario: {e}")
@@ -59,7 +63,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
         return user.usuario_to_dict() if user else None
     
 
-    def add_usuario(self, usuario) -> bool:
+    def add_usuario(self, usuario : UsuarioDTO) -> bool:
         try:
             user_dict : dict = usuario.usuario_to_dict()
             user_dict["_id"] = user_dict.pop("id", None)

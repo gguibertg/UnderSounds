@@ -16,3 +16,16 @@ class InterfaceDAOFactory(ABC):
     def getCarritoDAO (self):
        pass
 
+    @abstractmethod
+    def getAlbumDAO(self):
+        pass
+
+    @abstractmethod
+    def getGeneroDAO(self):
+        pass
+
+    @abstractmethod
+    def getSongsDAO(self):
+        pass
+
+

@@ -1,6 +1,9 @@
+from datetime import datetime
 # Imports estándar de Python
 import uuid
-from pathlib import Path
+import json
+import requests
+import base64from pathlib import Path
 
 # Imports de terceros
 import firebase_admin
@@ -13,6 +16,7 @@ from firebase_admin import auth, credentials
 # Imports locales del proyecto
 from model.dto.carritoDTO import ArticuloCestaDTO, CarritoDTO
 from model.dto.usuarioDTO import UsuarioDTO
+from model.dto.albumDTO import AlbumDTO
 from model.model import Model
 from view.view import View
 
@@ -183,9 +187,11 @@ async def register_post(data: dict, response: Response, provider: str):
         user.set_email(user_email)
         user.set_bio("")
         if provider == "credentials":
-            user.set_imagen("data:image/jpeg;base64,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")
+            user.set_imagen("/static/img/default_profile.png")  # Imagen por defecto para usuarios registrados con credenciales clásicas
         else:
-            user.set_imagen(decoded_token["picture"])
+            # Descargar la imagen de Google, la convierte a base64 y la guarda en el campo imagen del usuario
+            user.set_imagen("data:image/jpeg;base64," + base64.b64encode(requests.get(decoded_token["picture"]).content).decode("utf-8"))
+
         user.set_url("")
         user.set_esArtista(bool(data.get("esArtista", False)))
 
@@ -221,46 +227,52 @@ async def register_google(data: dict, response: Response):
 # Ruta para procesar la petición de logout
 @app.post("/unregister")
 async def deregister(request: Request, response: Response):
-    # Verificar si el usuario tiene una sesión activa
-    session_id = request.cookies.get("session_id")
-    if not isUserSessionValid(session_id):
-        return Response("No autorizado", status_code=401)
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error  
 
-    # Obtener los datos de la sesión del usuario
-    session_data = getSessionData(session_id)
-    if session_data:
-        user_id = session_data["user_id"]
-        user_name = session_data["name"]
-        print(PCTRL, "User", user_name, "requested account deletion")
+    print(PCTRL, "User", res["email"], "requested account deletion") 
 
-        # Verificar si el usuario existe en la base de datos
-        if model.get_usuario(user_id):
-            try:
-                # Eliminar al usuario de Firebase Auth
-                auth.delete_user(user_id)
-                print(PCTRL, "User", user_name, "deleted from Firebase Auth")
+    try:
+        # Eliminar al usuario de Firebase Auth
+        auth.delete_user(res["id"])
+        print(PCTRL, "User", res["email"], "deleted from Firebase Auth")
 
-                # Eliminar al usuario de la base de datos
-                if model.delete_usuario(user_id):
-                    print(PCTRL, "User", user_name, "deleted from database")
-                else:
-                    print(PCTRL_WARN, "User", user_name, "not deleted from database!")
-                    return {"success": False, "error": "User not deleted from database"}
+        # Eliminar cada una de las canciones en studio_canciones de la base de datos
+        for song_id in res["studio_canciones"]:
+            if model.delete_song(song_id):
+                print(PCTRL, "Song", song_id, "deleted from database")
+            else:
+                print(PCTRL_WARN, "Song", song_id, "not deleted from database!")
+                return {"success": False, "error": "Song not deleted from database"}
+        
+        # Eliminar cada uno de los albumes en studio_albumes de la base de datos
+        for album_id in res["studio_albumes"]:
+            if model.delete_album(album_id):
+                print(PCTRL, "Album", album_id, "deleted from database")
+            else:
+                print(PCTRL_WARN, "Album", album_id, "not deleted from database!")
+                return {"success": False, "error": "Album not deleted from database"}
 
-                # Eliminar la sesión del usuario
-                del sessions[session_id]
-                response.delete_cookie("session_id")
-                print(PCTRL, "User session", session_id, "destroyed")
-
-                return {"success": True, "message": "User account deleted successfully"}
-            except Exception as e:
-                print(PCTRL, "Error deleting user:", str(e))
-                return {"success": False, "error": str(e)}
+        # Eliminar al usuario de la base de datos
+        if model.delete_usuario(res["id"]):
+            print(PCTRL, "User", res["email"], "deleted from database")
         else:
-            print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")
-            return {"success": False, "error": "User not found in database"}
+            print(PCTRL_WARN, "User", res["email"], "not deleted from database!")
+            return {"success": False, "error": "User not deleted from database"}
+
+        # Eliminar la sesión del usuario
+        session_id = request.cookies.get("session_id")
+        del sessions[session_id]
+        response.delete_cookie("session_id")
+        print(PCTRL, "User session", session_id, "destroyed")
+
+        return {"success": True, "message": "User account deleted successfully"}
     
-    return Response("No autorizado", status_code=401)
+    except Exception as e:
+        print(PCTRL, "Error deleting user:", str(e))
+        return {"success": False, "error": str(e)}
 
 # ------------------------------------------------------------------- #
 # ----------------------------- PERFIL ------------------------------ #
@@ -268,12 +280,13 @@ async def deregister(request: Request, response: Response):
 
 # Ruta para cargar la vista de perfil
 @app.get("/profile")
-async def perfil(request: Request):
-    res = handleAndGetUserDictDBData(request)
+async def get_profile(request: Request):
+    res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
         return res # Si es un Response, devolvemos el error
     
     return view.get_perfil_view(request, res)  # Si es un dict, pasamos los datos del usuario
+
 
 # Ruta para actualizar el perfil del usuario
 @app.post("/update-profile")
@@ -316,6 +329,277 @@ async def update_profile(request: Request, response: Response):
     else:
         print(PCTRL_WARN, "User", user_name, "not updated in database!")
         return {"success": False, "error": "User not updated in database"}
+
+
+# --------------------------- FAQS --------------------------- #
+
+@app.get("/faqs", description="Muestra preguntas frecuentes desde MongoDB")
+def get_faqs(request: Request):
+    faqs_json = model.get_faqs()
+    return view.get_faqs_view(request, faqs_json)
+
+
+
+# ----------------------------- ALBUM ------------------------------ #
+
+# Ruta para cargar la vista de upload-album
+@app.get("/upload-album")
+async def get_upload_album(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error  
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    
+    # Preparamos para escoger las songs validas para un album nuevo
+    # Para ello, debemos coger todas las canciones creadas por el usuario (campo studio_canciones) y que no pertenezcan a ningun album.
+    # Para comprobar que no pertenezcan a ningun album, debemos descargar todos los albumes y comprobar en el campo canciones de cada uno de ellos que esa cancion no esté.
+    # Debemos recordar que tanto studio_canciones como studio_albumes como el campo canciones de un album son listas de IDs de strings de canciones, albumes y canciones respectivamente.
+    # Por lo tanto, para cada string encontrado hay que hacer su llamada a model correspondiente para obtener el objeto real y pasarlo a la vista.
+    # Excepto en el caso de las canciones de un album, ya que solo necesitamos el ID y nada más.
+    
+    # Por cada canción en studio_canciones, obtenemos el objeto real, enviando un mensaje de error si no existe.
+    user_songs_objects = []
+    for song_id in res["studio_canciones"]:
+        song = model.get_song(song_id)
+        if not song:
+            print(PCTRL_WARN, "User created Song", song_id, "not found in database")
+            return Response("Error del sistema", status_code=403)
+        user_songs_objects.append(song)
+
+    # Por cada album en studio_albumes, obtenemos el objeto real, enviando un mensaje de error si no existe.
+    user_albums_objects = []
+    for album_id in res["studio_albumes"]:
+        album = model.get_album(album_id)
+        if not album:
+            print(PCTRL_WARN, "User created Album", album_id, "not found in database")
+            return Response("Error del sistema", status_code=403)
+        user_albums_objects.append(album)
+
+    # Comprobar que por cada canción en studio_canciones, no esté en el campo canciones de ningun album
+    # Cada canción que cumpla esta condición se añadira a la lista de canciones admitidas para el nuevo album
+    valid_songs = []        
+    for song in user_songs_objects:
+        # Comprobar si la canción está en el campo canciones de algún álbum
+        found = False
+        for album in user_albums_objects:
+            if song["id"] in album["canciones"]:
+                found = True
+                break
+        if not found:
+            valid_songs.append(song)
+
+    return view.get_upload_album_view(request, valid_songs)
+
+
+# Ruta para subir un álbum
+@app.post("/upload-album")
+async def upload_album(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error  
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    
+    # Creamos un nuevo objeto AlbumDTO, utilizando los datos recibidos en el request
+    data = await request.json()
+
+    album = AlbumDTO()
+    album.set_titulo(data["titulo"])
+    album.set_autor(data["autor"])
+    album.set_colaboradores(data["colaboradores"])
+    album.set_descripcion(data["descripcion"])
+    album.set_fecha(datetime.strptime(data["fecha"], "%Y-%m-%d")) # Convertimos el string tipo YYYY-MM-DD a un objeto datetime antes de guardar.
+    album.set_generos(data["generos"])
+    album.set_canciones(data["canciones"])
+    album.set_visitas(0)
+    album.set_portada(data["portada"])
+    album.set_precio(data["precio"])
+
+    # Subir el album a la base de datos
+    album_id = model.add_album(album)
+    if album_id is not None:
+        print(PCTRL, "Album", album_id, "uploaded to database")
+    else:
+        print(PCTRL_WARN, "Album", album_id, "not uploaded to database!")
+        return {"success": False, "error": "Album not uploaded to database"}
+
+    try: 
+        # Obtenemos los datos de usuario de la base de datos y creamos un nuevo objeto UsuarioDTO
+        # Ya tenemos estos datos (res), solo necesitamos castearlos.
+        user = UsuarioDTO()
+        user.load_from_dict(res)
+
+        # Añadimos al usuario la nueva referencia al album
+        user.add_studio_album(album_id)
+
+        # Actualizamos el usuario en la base de datos
+        if model.update_usuario(user):
+            print(PCTRL, "User", user.get_email(), "updated in database")
+            return {"success": True, "message": "Album uploaded successfully"}
+        else:
+            raise Exception("User not updated in database")
+        
+    except Exception as e:
+        print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
+
+        # Destruir el album subido
+        model.delete_album(album_id)
+        print(PCTRL_WARN, "Album", album_id, "deleted from database")
+        return {"success": False, "error": "User not updated in database"}
+
+
+# Ruta para cargar la vista de album
+@app.get("/album")
+async def get_album(request: Request):
+    #Leemos de la request el id del album y recogemos el album de la BD
+    if request.query_params.get("id") is not None:
+        album_id = request.query_params.get("id") # Developer
+    else:
+        data = await request.json() # API
+        album_id = data["id"]
+
+    
+# Ruta para cargar la vista de álbum-edit
+@app.get("/album-edit")
+async def get_album_edit(request: Request):
+    #Leemos de la request el id del album y recogemos el album de la BD
+    if request.query_params.get("id") is not None:
+        album_id = request.query_params.get("id") # Developer
+    else:
+        data = await request.json() # API
+        album_id = data["id"]
+    if not album_id:
+        print(PCTRL_WARN, "Album ID not provided in request")
+        return Response("No autorizado", status_code=400)
+
+    # Verificar si el usuario tiene una sesión activa, si es artista y si el album existe, y si le pertenece.
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    album_info = model.get_album(album_id)
+    if not album_info:
+        print(PCTRL_WARN, "Album does not exist")
+        return Response("No autorizado", status_code=403)
+    if album_id not in res["studio_albumes"]:
+        print(PCTRL_WARN, "Album not found in user albums")
+        return Response("No autorizado", status_code=403)
+
+    # Ahora popularemos el album reemplazando las IDs (referencias) por los objetos reales
+    
+    #generos_out : list[dict] = []
+    #for genero_id in album_info["generos"]:
+    #    genero = model.get_genero(genero_id)
+    #    if not genero:
+    #        print(PCTRL_WARN, "Genero", genero_id ,"not found in database")
+    #        return Response("Error del sistema", status_code=403)
+    #    generos_out.append(genero["nombre"])
+    #album_info["generos"] = generos_out
+    #
+    # TODO: Al descargar un album ya vienen con IDs de generos que coinciden en nombre, por lo que no es necesario hacer la llamada a la BD para obtener el objeto real.
+
+    canciones_out : list[dict] = []
+    for cancion_id in album_info["canciones"]:
+        cancion = model.get_song(cancion_id)
+        if not cancion:
+            print(PCTRL_WARN, "Cancion", cancion_id, "not found in database")
+            return Response("Error del sistema", status_code=403)   
+        canciones_out.append(cancion)
+    album_info["canciones"] = canciones_out
+
+    # Ya tenemos el album preparado. Pero ahora, tenemos que emular basicamente la misma funcionalidad que en upload-album, para que el artista pueda editar el album con nuevas canciones.
+    # Así pues, copiamos y pegamos el código de upload-album para obtener las canciones válidas para un album nuevo.
+
+    # Por cada canción en studio_canciones, obtenemos el objeto real, enviando un mensaje de error si no existe.
+    user_songs_objects = []
+    for song_id in res["studio_canciones"]:
+        song = model.get_song(song_id)
+        if not song:
+            print(PCTRL_WARN, "Song", song_id, "not found in database")
+            return Response("Error del sistema", status_code=403)
+        user_songs_objects.append(song)
+
+    # Por cada album en studio_albumes, obtenemos el objeto real, enviando un mensaje de error si no existe.
+    user_albums_objects = []
+    for album_id in res["studio_albumes"]:
+        album = model.get_album(album_id)
+        if not album:
+            print(PCTRL_WARN, "Album", album_id, "not found in database")
+            return Response("Error del sistema", status_code=403)
+        user_albums_objects.append(album)
+
+    # Comprobar que por cada canción en studio_canciones, no esté en el campo canciones de ningun album
+    # Cada canción que cumpla esta condición se añadira a la lista de canciones admitidas para el nuevo album
+    valid_songs = []        
+    for song in user_songs_objects:
+        # Comprobar si la canción está en el campo canciones de algún álbum
+        found = False
+        for album in user_albums_objects:
+            if song["id"] in album["canciones"]:
+                found = True
+                break
+        if not found:
+            valid_songs.append(song)
+
+    # Devolvemos todo
+    return view.get_album_edit_view(request, album_info, valid_songs)
+
+
+# Ruta para subir un álbum
+@app.post("/album-edit")
+async def upload_album(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error  
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    
+    try:
+        # Recibimos los datos del nuevo album editado, junto con su ID.
+        data = await request.json()
+        album_id = data["id"] # ID del album a editar
+
+        # Descargamos el album antiguo de la base de datos via su ID.
+        album_dict = model.get_album(album_id)
+        album = AlbumDTO()
+        album.load_from_dict(album_dict)
+
+        # Editamos el album con los nuevos datos recibidos en la request
+        album.set_titulo(data["titulo"])
+        album.set_autor(data["autor"])
+        album.set_colaboradores(data["colaboradores"])
+        album.set_descripcion(data["descripcion"])
+        #album.set_fecha(datetime.strptime(data["fecha"], "%Y-%m-%d")) # La fecha no se puede editar.
+        album.set_generos(data["generos"])
+        album.set_canciones(data["canciones"])
+        #album.set_visitas(0) # La cantidad de visitas no se puede editar.
+        album.set_portada(data["portada"])
+        album.set_precio(data["precio"])
+
+        # Actualizamos el album en la base de datos
+        if model.update_album(album):
+            print(PCTRL, "Album", album_id, "updated in database")
+            return {"success": True, "message": "Album updated successfully"}
+        else:
+            print(PCTRL_WARN, "Album", album_id, "not updated in database!")
+            return {"success": False, "error": "Album not updated in database"}
+    
+    except Exception as e:
+        print(PCTRL_WARN, "Error while processing Album", album_id, ", updating to database failed!")
+        return {"success": False, "error": "Album not updated in database"}
+
+
+
+
 
 # ------------------------------------------------------------------ #
 # ----------------------------- INCLUDES --------------------------- #

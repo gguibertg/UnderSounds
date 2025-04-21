@@ -19,7 +19,7 @@ class View():
     
     # Renderizar la template login.html
     def get_login_view(self, request: Request):
-        return templates.TemplateResponse("auth/login.html", {"request": request, "API_CREDENTIALS" : apicreds})
+        return templates.TemplateResponse("auth/login.html", {"request": request, "API_CREDENTIALS" : apicreds })
 
     # Renderizar la template profile.html
     # Necesita un user_info completo, no se contempla otro caso.
@@ -28,15 +28,19 @@ class View():
     
     # Renderizar la template register.html
     def get_register_view(self, request: Request):
-        return templates.TemplateResponse("auth/register.html", {"request": request, "API_CREDENTIALS" : apicreds})
+        return templates.TemplateResponse("auth/register.html", {"request": request, "API_CREDENTIALS" : apicreds })
     
     # Renderizar la template faqs.html
     def get_faqs_view(self, request: Request, faqs):
-        return templates.TemplateResponse("main/faqs.html", {
-            "request": request,
-            "faqs": faqs
-        })
+        return templates.TemplateResponse("main/faqs.html", {"request": request, "faqs": faqs })
     
+    # Renderizar la template album-edit.html
+    def get_album_edit_view(self, request: Request, album_info : dict, songs: list[dict]):
+        return templates.TemplateResponse("music/album-edit.html", {"request": request, "album": album_info, "songs": songs })
+
+    # Renderizar la template upload-album.html
+    def get_upload_album_view(self, request: Request, songs: list[dict]):
+        return templates.TemplateResponse("music/upload-album.html", {"request": request , "songs": songs})    
     # Renderizar la template header.html
     def get_header_view(self, request: Request, user_info : dict):
         return templates.TemplateResponse("includes/header.html", {"request": request, "user": user_info})
