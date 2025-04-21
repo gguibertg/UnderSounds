@@ -65,38 +65,38 @@ def index(request: Request):
 # ----------------------------- Ver Cancion ------------------------------ #
 
 # Ruta para cargar vista login
-#@app.get("/upload_song")
-#def song_post(request: Request):
-#    return view.get_upload_song_view(request)
+@app.get("/upload-song")
+def song_post(request: Request):
+    return view.get_upload_song_view(request)
 
 # Ruta para procesar la petición de login
-#@app.post("/song/upload_song")
-#async def song_post(request: Request):
+@app.post("/upload-song")
+async def song_post(request: Request):
 
-    # Registrar la cancion en la base de datos
-#   data = await request.json()
+# Registrar la cancion en la base de datos
+    data = await request.json()
 
-#    song = SongDTO()
-#    song.set_title(data["title"])
-#    song.set_artist(data["artist"])
-#    song.set_collaborators(data["collaborators"])
-#    song.set_price(data["price"])
-#    song.set_album(data["album"])
-#    song.set_description(data["description"])
-#    song.set_genres(data["genres"])
-#    song.set_portada(data["portada"])
-#    song.set_date(datetime.now())
-#    song.set_likes(0)
-#    song.set_review_list([])
-#    song.set_views(0)
+    song = SongDTO()
+    song.set_titulo(data["titulo"])
+    song.set_artista(data["artista"])
+    song.set_colaboradores(data["colaboradores"])
+    song.set_fecha(datetime.strptime(data["fecha"], "%Y-%m-%d"))
+    song.set_descripcion(data["descripcion"])
+    song.set_generos(data["generos"])
+    song.set_likes(0)
+    song.set_visitas(0)
+    song.set_portada(data["portada"])
+    song.set_precio(data["precio"])
+    song.set_lista_resenas([])
+    song.set_visible(True)
 
-#    song_id = model.add_song(song)
+    song_id = model.add_song(song)
    
-#    if song_id is not None:
-#        print(PCTRL, "Song registered in database")
-#    else:
-#        print(PCTRL_WARN, "Song registration failed in database!")
-#        return {"success": False, "error": "Song registration failed"}
+    if song_id is not None:
+        print(PCTRL, "Song registered in database")
+    else:
+        print(PCTRL_WARN, "Song registration failed in database!")
+        return {"success": False, "error": "Song registration failed"}
     
 @app.get("/songs")
 def get_songs(request: Request):
@@ -104,66 +104,74 @@ def get_songs(request: Request):
     return view.get_songs_view(request, songs_json)
 
 @app.get("/song")
-async def get_song(request: Request, id: str):
+async def get_song(request: Request):
+    if request.query_params.get("id") is not None:
+        song_id = request.query_params.get("id") # Developer
+    else:
+        data = await request.json() # API
+        song_id = data["id"]
 
-    print(PCTRL, id)
-    if not id:
-        return Response("No autorizado", status_code=401)
+    if not song_id:
+        return Response("Falta el parámetro 'id'", status_code=400)
+
+    song_info = model.get_song(song_id)
+
+    if not song_info:
+        print(PCTRL_WARN, "La cancion no existe")
+        return Response("No autorizado", status_code=403)
     
-    # Accedemos a los datos del usuario en la base de datos
-    song_info = model.get_song(id)
+    return view.get_song_view(request, song_info)
+
+    
+    
+@app.get("/edit-song")
+async def edit_song_post(request: Request):
+    
+    if request.query_params.get("id") is not None:
+        song_id = request.query_params.get("id") # Developer
+    else:
+        data = await request.json() # API
+        song_id = data["id"]
+
+    if not song_id:
+        return Response("Falta el parámetro 'id'", status_code=400)
+
+    song_info = model.get_song(song_id)
 
     if not song_info:
         print(PCTRL_WARN, "Song does not exist")
         return Response("No autorizado", status_code=403)
 
-    print(song_info)
-    return view.get_song_view(request, song_info)
+    return view.get_edit_song_view(request, song_info)
 
+@app.post("/edit-song")
+async def edit_song_post(request: Request):
+    try:
+        # Recibimos los datos del nuevo album editado, junto con su ID.
+        data = await request.json()
+        song_id = data["id"] # ID del album a editar
+
+        # Descargamos el album antiguo de la base de datos via su ID.
+        song_dict = model.get_song(song_id)
+        song = SongDTO()
+        song.load_from_dict(song_dict)
+
+        song.set_titulo(data["titulo"])
+        song.set_artista(data["artista"])
+        song.set_colaboradores(data["colaboradores"])
+        song.set_descripcion(data["descripcion"])
+        song.set_generos(data["generos"])
+        song.set_portada(data["portada"])
+        song.set_precio(data["precio"])
+
+        # Actualizamos el album en la base de datos
+        if model.update_song(song):
+            print(PCTRL, "Song", song_id, "updated in database")
+            return {"success": True, "message": "Album updated successfully"}
+        else:
+            print(PCTRL_WARN, "Song", song_id, "not updated in database!")
+            return {"success": False, "error": "Album not updated in database"}
     
-#@app.get("/song/edit_edit")
-#async def edit_song_post(request: Request):
-    
-    # Obtenemos los datos de usuario de la base de datos y creamos un nuevo objeto UsuarioDTO, utilizando los datos recibidos en el request
-#    data = await request.json()
-#    song_id = data["id"]
-
-#    if not song_id:
-#        print(PCTRL_WARN, "Song ID not provided in request")
-#        return Response("No autorizado", status_code=400)
-
-#    song_info = model.get_song(song_id)
-
-#    if not song_info:
-#        print(PCTRL_WARN, "Song does not exist")
-#        return Response("No autorizado", status_code=403)
-
-#    print(song_info)
-#    return view.get_edit_song_view(request, song_info)
-
-#@app.post("/song/edit_edit")
-#async def edit_song_post(request: Request):
-    # Registrar la cancion en la base de datos
-#    data = await request.json()
-
-#    song = SongDTO()
-#    song.set_title(data["title"])
-#    song.set_artist(data["artist"])
-#    song.set_collaborators(data["collaborators"])
-#    song.set_price(data["price"])
-#    song.set_album(data["album"])
-#    song.set_description(data["description"])
-#    song.set_genres(data["genres"])
-#    song.set_portada(data["portada"])
-#    song.set_date(data["date"])
-#    song.set_duration(data["duration"])
-#    song.set_likes(data["likes"])
-#    song.set_review_list(data["review_list"])
-#    song.set_views(data["views"])
-
-#    song_id = model.update_song(song)
-#    if song_id is not None:
-#        print(PCTRL, "Song registered in database")
-#    else:
-#        print(PCTRL_WARN, "Song registration failed in database!")
-#        return {"success": False, "error": "Song registration failed"}
+    except Exception as e:
+        print(PCTRL_WARN, "Error while processing Song", song_id, ", updating to database failed!")
+        return {"success": False, "error": "Song not updated in database"}
