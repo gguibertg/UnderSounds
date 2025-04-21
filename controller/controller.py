@@ -1,12 +1,13 @@
-from datetime import datetime
 # Imports estándar de Python
-import uuid
+import base64
 import json
-import requests
-import base64from pathlib import Path
+import uuid
+from datetime import datetime
+from pathlib import Path
 
 # Imports de terceros
 import firebase_admin
+import requests
 from bson import ObjectId
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse, RedirectResponse
@@ -14,11 +15,12 @@ from fastapi.staticfiles import StaticFiles
 from firebase_admin import auth, credentials
 
 # Imports locales del proyecto
+from model.dto.albumDTO import AlbumDTO
 from model.dto.carritoDTO import ArticuloCestaDTO, CarritoDTO
 from model.dto.usuarioDTO import UsuarioDTO
-from model.dto.albumDTO import AlbumDTO
 from model.model import Model
 from view.view import View
+
 
 
 # Variable para el color + modulo de la consola
@@ -330,17 +332,9 @@ async def update_profile(request: Request, response: Response):
         print(PCTRL_WARN, "User", user_name, "not updated in database!")
         return {"success": False, "error": "User not updated in database"}
 
-
-# --------------------------- FAQS --------------------------- #
-
-@app.get("/faqs", description="Muestra preguntas frecuentes desde MongoDB")
-def get_faqs(request: Request):
-    faqs_json = model.get_faqs()
-    return view.get_faqs_view(request, faqs_json)
-
-
-
-# ----------------------------- ALBUM ------------------------------ #
+# ------------------------------------------------------------------- #
+# ----------------------------- Album ------------------------------- #
+# ------------------------------------------------------------------- #
 
 # Ruta para cargar la vista de upload-album
 @app.get("/upload-album")
@@ -392,7 +386,6 @@ async def get_upload_album(request: Request):
             valid_songs.append(song)
 
     return view.get_upload_album_view(request, valid_songs)
-
 
 # Ruta para subir un álbum
 @app.post("/upload-album")
@@ -452,7 +445,6 @@ async def upload_album(request: Request):
         print(PCTRL_WARN, "Album", album_id, "deleted from database")
         return {"success": False, "error": "User not updated in database"}
 
-
 # Ruta para cargar la vista de album
 @app.get("/album")
 async def get_album(request: Request):
@@ -463,7 +455,6 @@ async def get_album(request: Request):
         data = await request.json() # API
         album_id = data["id"]
 
-    
 # Ruta para cargar la vista de álbum-edit
 @app.get("/album-edit")
 async def get_album_edit(request: Request):
@@ -596,10 +587,6 @@ async def upload_album(request: Request):
     except Exception as e:
         print(PCTRL_WARN, "Error while processing Album", album_id, ", updating to database failed!")
         return {"success": False, "error": "Album not updated in database"}
-
-
-
-
 
 # ------------------------------------------------------------------ #
 # ----------------------------- INCLUDES --------------------------- #
