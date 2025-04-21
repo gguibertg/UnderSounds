@@ -1,38 +1,42 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
-    <meta name="author" content="L1-G4">
+    <meta charset="utf-8" /> <!-- Codificación de caracteres -->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" /> <!-- Escalabilidad de la página -->
+    <meta content="L1-G4" name="author" />
     <title>Perfil</title> <!-- Título que aparece en la pestaña del navegador -->
     <!-- Estilos -->
-    <link rel="stylesheet" href="/static/css/base/style.css"> <!-- Hoja de estilos principal -->
-    <link rel="stylesheet" href="/static/css/base/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
-    <link rel="stylesheet" href="/static/css/base/header.css"> <!-- Hoja de estilo del header -->
-    <link rel="stylesheet" href="/static/css/base/footer.css"> <!-- Hoja de estilo del footer -->
-    <link rel="stylesheet" href="/static/css/user/profile.css"> <!-- Hoja de estilo del perfil -->
+    <link href="/static/css/base/style.css" rel="stylesheet" /> <!-- Hoja de estilos principal -->
+    <link href="/static/css/base/darkmode.css" rel="stylesheet" /> <!-- Hoja de estilo de modo oscuro -->
+    <link href="/static/css/base/header.css" rel="stylesheet" /> <!-- Hoja de estilo del header -->
+    <link href="/static/css/base/footer.css" rel="stylesheet" /> <!-- Hoja de estilo del footer -->
+    <link href="/static/css/user/profile.css" rel="stylesheet" /> <!-- Hoja de estilo del perfil -->
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/static/icons/favicons/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/static/icons/favicons/favicon.svg" />
-    <link rel="shortcut icon" href="/static/icons/favicons/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicons/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
-    <link rel="manifest" href="/static/icons/favicons/site.webmanifest" />
+    <link href="/static/icons/favicons/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png">
+    <link href="/static/icons/favicons/favicon.svg" rel="icon" type="image/svg+xml">
+    <link href="/static/icons/favicons/favicon.ico" rel="shortcut icon">
+    <link href="/static/icons/favicons/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+    <meta content="UnderSounds" name="apple-mobile-web-app-title">
+    <link href="/static/icons/favicons/site.webmanifest" rel="manifest">
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    </link>
+    </meta>
+    </link>
+    </link>
+    </link>
+    </link>
 </head>
 
 <body>
-
     <!-- Barra de navegación -->
     <div id="header-placeholder"></div>
-
     <!-- Contenido principal -->
     <main>
         <div class="div-bg">
             <div class="grid-container">
-
                 <div style="grid-area: 1 / 1 / 2 / 2;">
                     <div class="div-pannel" style="height: 100%;">
                         <div class="grid-content">
@@ -40,259 +44,261 @@
                         </div>
                     </div>
                 </div>
-
                 <div style="grid-area: 1 / 2 / 2 / 3;">
-
                     <div class="grid-content-narrow-row" style="justify-content: flex-start;">
-                        <img src="{{ user.imagen }}" alt="Imagen de perfil"
-                            style="width: 96px; height: 96px; border-radius: 50%;">
+                        <img alt="Imagen de perfil" src="{{ user.imagen }}"
+                            style="width: 96px; height: 96px; border-radius: 50%;" />
                         <h1 style="font-size: 3rem;">Bienvenido de vuelta, {{ user.nombre }}</h1>
-                        <button onclick="logout()" style="margin: 20px 20px 20px 20px; width: 15%; background-color: #ff4646;">Cerrar
+                        <button onclick="logout()"
+                            style="margin: 20px 20px 20px 20px; width: 15%; background-color: #ff4646;">Cerrar
                             sesión</button>
                     </div>
-                    <br>
-
+                    <br />
                     <div class="div-pannel">
                         <div class="grid-content">
                             <h1>Información personal</h1>
                             <form class="grid-form">
                                 <div class="grid-content-narrow" style="grid-area: 1 / 1 / 2 / 2;">
                                     <label for="nombre">Nombre completo</label>
-                                    <input style="width: 100%;" type="text" id="nombre" name="nombre"
-                                        placeholder="Nombre y apellidos" value="{{ user.nombre }}">
+                                    <input id="nombre" name="nombre" placeholder="Nombre y apellidos"
+                                        style="width: 100%;" type="text" value="{{ user.nombre }}" />
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 1 / 2 / 2 / 3;">
                                     <label for="email">Correo electrónico</label>
-                                    <input type="email" id="email" name="email" placeholder="Correo electrónico" value="{{ user.email }}">
+                                    <input id="email" name="email" placeholder="Correo electrónico" type="email"
+                                        value="{{ user.email }}" />
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 1 / 3 / 2 / 4;">
                                     <label for="url">Enlaces sociales</label>
-                                    <input type="text" id="url" name="url" placeholder="Enlace de red social" value="{{ user.url }}">
+                                    <input id="url" name="url" placeholder="Enlace de red social" type="text"
+                                        value="{{ user.url }}" />
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 1 / 4 / 2 / 5; align-items: center;">
-                                    <img id="user_image_upload" src="{{ user.imagen }}" alt="Imagen de perfil" style="width: 96px;">
-                                    <button onclick="loadImg()" style="align-self: center; margin-top: 5px;" type="submit">Subir imagen</button>
+                                    <img alt="Imagen de perfil" id="user_image_upload" src="{{ user.imagen }}"
+                                        style="width: 96px;" />
+                                    <button onclick="loadImg()" style="align-self: center; margin-top: 5px;"
+                                        type="submit">Subir imagen</button>
                                 </div>
                                 <div class="grid-content-narrow" style="grid-area: 2 / 1 / 3 / 5;">
                                     <label for="bio">Acerca de mi</label>
-                                    <textarea id="bio" class="textarea" rows="6" cols="40" style="resize: none;"placeholder="Cuéntanos sobre ti">{{ user.bio }}</textarea>
-                                    <br>
-                                    <button onclick="update()" style="align-self: center; width: 30%;" type="submit">Guardar cambios</button>
+                                    <textarea class="textarea" cols="40" id="bio" placeholder="Cuéntanos sobre ti"
+                                        rows="6" style="resize: none;">{{ user.bio }}</textarea>
+                                    <br />
+                                    <button onclick="update()" style="align-self: center; width: 30%;"
+                                        type="submit">Guardar cambios</button>
                                 </div>
                             </form>
                         </div>
                     </div>
-
-                    <br>
-
+                    <br />
                     <div class="div-pannel">
                         <div class="grid-content">
                             <h1>Mi biblioteca</h1>
                             <div class="grid-biblioteca">
                                 <div class="div-pannel-sub songs-cell">
-                                    <img src="/static/img/artists/stromae-song-01.webp" class="songs-image"
-                                        alt="Song Image">
+                                    <img alt="Song Image" class="songs-image"
+                                        src="/static/img/artists/stromae-song-01.webp" />
                                     <h3>Título canción</h3>
                                     <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button
-                                            style="width: 100%;">Ver canción</button></a>
+                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
+                                            canción</button></a>
                                 </div>
                                 <div class="div-pannel-sub songs-cell">
-                                    <img src="/static/img/artists/stromae-song-01.webp" class="songs-image"
-                                        alt="Song Image">
+                                    <img alt="Song Image" class="songs-image"
+                                        src="/static/img/artists/stromae-song-01.webp" />
                                     <h3>Título canción</h3>
                                     <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button
-                                            style="width: 100%;">Ver canción</button></a>
+                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
+                                            canción</button></a>
                                 </div>
                                 <div class="div-pannel-sub songs-cell">
-                                    <img src="/static/img/artists/stromae-song-01.webp" class="songs-image"
-                                        alt="Song Image">
+                                    <img alt="Song Image" class="songs-image"
+                                        src="/static/img/artists/stromae-song-01.webp" />
                                     <h3>Título canción</h3>
                                     <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button
-                                            style="width: 100%;">Ver canción</button></a>
+                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
+                                            canción</button></a>
                                 </div>
                                 <div class="div-pannel-sub songs-cell">
-                                    <img src="/static/img/artists/stromae-song-01.webp" class="songs-image"
-                                        alt="Song Image">
+                                    <img alt="Song Image" class="songs-image"
+                                        src="/static/img/artists/stromae-song-01.webp" />
                                     <h3>Título canción</h3>
                                     <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button
-                                            style="width: 100%;">Ver canción</button></a>
+                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
+                                            canción</button></a>
                                 </div>
                                 <div class="div-pannel-sub songs-cell">
-                                    <img src="/static/img/artists/stromae-song-01.webp" class="songs-image"
-                                        alt="Song Image">
+                                    <img alt="Song Image" class="songs-image"
+                                        src="/static/img/artists/stromae-song-01.webp" />
                                     <h3>Título canción</h3>
                                     <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button
-                                            style="width: 100%;">Ver canción</button></a>
+                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
+                                            canción</button></a>
                                 </div>
                                 <div class="div-pannel-sub songs-cell">
-                                    <img src="/static/img/artists/stromae-song-01.webp" class="songs-image"
-                                        alt="Song Image">
+                                    <img alt="Song Image" class="songs-image"
+                                        src="/static/img/artists/stromae-song-01.webp" />
                                     <h3>Título canción</h3>
                                     <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button
-                                            style="width: 100%;">Ver canción</button></a>
+                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
+                                            canción</button></a>
                                 </div>
                                 <div class="div-pannel-sub songs-cell">
-                                    <img src="/static/img/artists/stromae-song-01.webp" class="songs-image"
-                                        alt="Song Image">
+                                    <img alt="Song Image" class="songs-image"
+                                        src="/static/img/artists/stromae-song-01.webp" />
                                     <h3>Título canción</h3>
                                     <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button
-                                            style="width: 100%;">Ver canción</button></a>
+                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
+                                            canción</button></a>
                                 </div>
                             </div>
-                            <br>
+                            <br />
                         </div>
                     </div>
-                    <br>
-
+                    <br />
                     <div class="div-pannel">
                         <div class="grid-content">
                             <h1>Listas de reproducción</h1>
-                            <br>
+                            <br />
                             <h2>MiLista</h2>
                             <div class="div-carrusel div-pannel-sub">
                                 <div class="grid-content-narrow-row">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
                                 </div>
                             </div>
-                            <br>
+                            <br />
                             <h2>MiLista2</h2>
                             <div class="div-carrusel div-pannel-sub">
                                 <div class="grid-content-narrow-row">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
                                 </div>
                             </div>
-                            <br>
+                            <br />
                             <h2>MiLista3</h2>
                             <div class="div-carrusel div-pannel-sub">
                                 <div class="grid-content-narrow-row">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
-                                    <img src="/static/img/utils/under-sounds-cover.webp" alt="placeholder"
-                                        style="width: 96px;">
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
+                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
+                                        style="width: 96px;" />
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <br>
-
+                    <br />
                     <div class="div-pannel">
                         <div class="grid-content">
                             <h1>Ajustes de seguridad</h1>
-                            <br>
+                            <br />
                             <div class="grid-warn-zone">
                                 <div style="grid-area: 1 / 1 / 2 / 2;">
-                                    <button style="width: 100%;">Cambiar contraseña</button>
+                                    <button onclick="sendPasswordReset()" style="width: 100%;">Cambiar
+                                        contraseña</button>
                                 </div>
                                 <div style="grid-area: 1 / 2 / 2 / 3;">
                                     <label>Solicita un cambio de contraseña a tu correo electrónico.</label>
                                 </div>
                                 <div style="grid-area: 2 / 1 / 3 / 2;">
-                                    <button style="width: 100%;">Cambiar correo electrónico</button>
+                                    <button onclick="changeEmail()" style="width: 100%;">Cambiar correo
+                                        electrónico</button>
                                 </div>
                                 <div style="grid-area: 2 / 2 / 3 / 3;">
                                     <label>Solicita un cambio de correo electrónico. Necesitarás acceso a tu correo
                                         electrónico anterior.</label>
                                 </div>
                                 <div style="grid-area: 3 / 1 / 4 / 2;">
-                                    <button onclick="unregister()" style="width: 100%; background-color: #ff4646;">Cerrar cuenta</button>
+                                    <button onclick="unregister()"
+                                        style="width: 100%; background-color: #ff4646;">Cerrar cuenta</button>
                                 </div>
                                 <div style="grid-area: 3 / 2 / 4 / 3;">
                                     <label>Cierra la cuenta permanentemente y elimina todos tus datos. Tendrás 14 días
@@ -300,23 +306,18 @@
                                         opinión.</label>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </main>
-
     <!-- Pie de página -->
     <div id="footer-placeholder"></div>
-
     <!-- Scripts -->
     <script src="/static/js/header.js"></script>
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
-
     <script>
         const firebaseConfig = {
             apiKey: "{{ API_CREDENTIALS.API_KEY }}",
@@ -326,45 +327,136 @@
             messagingSenderId: "{{ API_CREDENTIALS.MESSAGING_SENDER_ID }}",
             appId: "{{ API_CREDENTIALS.APP_ID }}",
         };
-        
+
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
         function logout() {
             if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-            fetch("/logout", { method: "POST" })
-                .then(response => response.json())
-                .then(data => {
-                if (data.success) {
-                    auth.signOut().then(() => {});
-                    window.location.href = "/";
-                }
-                }).catch(error => {
-                console.error("Error al cerrar sesión en Firebase:", error);
-                });
+                fetch("/logout", { method: "POST" })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            auth.signOut().then(() => { });
+                            window.location.href = "/";
+                        }
+                    }).catch(error => {
+                        console.error("Error al cerrar sesión en Firebase:", error);
+                    });
             }
         }
 
-        function unregister() {
-            if (confirm('¿Estás seguro de que deseas cerrar tu cuenta? Esta acción es irreversible.')) {
-            fetch("/unregister", { 
-                method: "POST", 
+        function update() {
+            event.preventDefault();
+            const nombre = document.getElementById("nombre").value;
+            const email = document.getElementById("email").value;
+            const url = document.getElementById("url").value;
+            const bio = document.getElementById("bio").value;
+            const imagen = document.getElementById('user_image_upload').src;
+
+            fetch("/update-profile", {
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ confirm: true })
+                body: JSON.stringify({ nombre, email, url, bio, imagen })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                alert('Tu cuenta ha sido cerrada exitosamente.');
-                window.location.href = "/";
-                } else {
-                alert('Hubo un problema al cerrar tu cuenta. Inténtalo de nuevo más tarde.');
-                }
-            })
-            .catch(error => {
-                console.error("Error al cerrar la cuenta:", error);
-                alert('Ocurrió un error inesperado. Inténtalo de nuevo más tarde.');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Tu perfil ha sido actualizado exitosamente.');
+                        window.location.href = "/profile";
+                    } else {
+                        alert('Hubo un problema al actualizar tu perfil.');
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al actualizar el perfil:", error);
+                    alert('Ocurrió un error inesperado.');
+                });
+        }
+
+        function sendPasswordReset() {
+            const email = document.getElementById("email").value;
+            if (!email) {
+                alert("Por favor, introduce tu correo electrónico.");
+                return;
+            }
+
+            auth.sendPasswordResetEmail(email)
+                .then(() => alert("Se ha enviado un correo para restablecer tu contraseña."))
+                .catch((error) => {
+                    console.error("Error al enviar el correo:", error);
+                    alert("No se pudo enviar el correo.");
+                });
+        }
+
+        function changeEmail() {
+            const newEmail = prompt("Introduce tu nuevo correo electrónico:");
+            if (!newEmail) {
+                alert("No se proporcionó un correo nuevo.");
+                return;
+            }
+
+            const user = auth.currentUser;
+            if (!user) {
+                alert("No hay sesión iniciada.");
+                return;
+            }
+
+            user.verifyBeforeUpdateEmail(newEmail)
+                .then(() => {
+                    alert(`Se ha enviado un correo de verificación a ${newEmail}. Debes verificarlo para completar el cambio.`);
+                })
+                .catch((error) => {
+                    console.error("Error al cambiar el correo:", error);
+                    switch (error.code) {
+                        case "auth/requires-recent-login":
+                            alert("Debes volver a iniciar sesión para cambiar el correo.");
+                            break;
+                        case "auth/email-already-in-use":
+                            alert("Ese correo ya está en uso. Intenta con otro.");
+                            break;
+                        case "auth/invalid-email":
+                            alert("El correo introducido no es válido.");
+                            break;
+                        default:
+                            alert("No se pudo enviar la verificación para el cambio de correo.");
+                            break;
+                    }
+                });
+        }
+
+        function unregister() {
+            if (confirm('¿Seguro que quieres cerrar tu cuenta? Esta acción es irreversible.')) {
+                fetch("/unregister", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ confirm: true })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const user = auth.currentUser;
+                            user.delete()
+                                .then(() => {
+                                    alert('Tu cuenta ha sido eliminada.');
+                                    window.location.href = "/";
+                                })
+                                .catch((error) => {
+                                    console.error("Error al eliminar la cuenta de Firebase:", error);
+                                    if (error.code === "auth/requires-recent-login") {
+                                        alert("Debes volver a iniciar sesión para eliminar tu cuenta.");
+                                    } else {
+                                        alert("No se pudo eliminar la cuenta.");
+                                    }
+                                });
+                        } else {
+                            alert('Error al eliminar tu cuenta en el sistema.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error al eliminar la cuenta en el sistema:", error);
+                        alert('Ocurrió un error inesperado.');
+                    });
             }
         }
 
@@ -374,54 +466,20 @@
             input.type = 'file';
             input.onchange = () => {
                 const file = input.files[0];
-                if (file) {
-                    if (file.size > 2 * 1024 * 1024) { // 2MB in bytes
-                        alert('El archivo no debe pesar más de 2MB.');
-                        return;
-                    }
+                if (file && file.size <= 2 * 1024 * 1024) {
                     const reader = new FileReader();
                     reader.onload = () => {
                         const base64String = reader.result.split(',')[1];
-                        const userImage = document.getElementById('user_image_upload');
-                        userImage.src = `data:image/png;base64,${base64String}`;
+                        document.getElementById('user_image_upload').src = `data:image/png;base64,${base64String}`;
                     };
                     reader.readAsDataURL(file);
+                } else {
+                    alert('El archivo no debe pesar más de 2MB.');
                 }
             };
             input.click();
-
         }
-
-        function update() {
-            event.preventDefault();
-            const nombre = document.getElementById("nombre").value;
-            const email = document.getElementById("email").value;
-            const url = document.getElementById("url").value;
-            const bio = document.getElementById("bio").value;
-            const imagen = document.getElementById('user_image_upload').src
-
-            fetch("/update-profile", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ nombre, email, url, bio, imagen })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Tu perfil ha sido actualizado exitosamente.');
-                    window.location.href = "/profile";
-                } else {
-                    alert('Hubo un problema al actualizar tu perfil. Inténtalo de nuevo más tarde.');
-                }
-            })
-            .catch(error => {
-                console.error("Error al actualizar el perfil:", error);
-                alert('Ocurrió un error inesperado. Inténtalo de nuevo más tarde.');
-            });
-        }
-
     </script>
-
 </body>
 
 </html>
