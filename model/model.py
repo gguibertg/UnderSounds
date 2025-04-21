@@ -3,6 +3,7 @@ from .dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 from .dto.albumDTO import AlbumDTO
 from .dto.generoDTO import GeneroDTO
 from .dto.songDTO import SongDTO
+from .dto.listaDTO import ListaDTO
 
 
 # La clase Model tiene los métodos que hacen puente entre controller y la base de datos.
@@ -16,6 +17,7 @@ class Model ():
         self.daoGenero = self.factory.getGeneroDAO()
         self.songsDAO = self.factory.getSongsDAO()
         self.carrito = self.factory.getCarritoDAO()
+        self.daoLista = self.factory.getListaDAO()
         pass
     
     # Usuario
@@ -41,6 +43,7 @@ class Model ():
     def save_contact_msg(self, name: str, email: str, telf: str, msg: str):
         return True
     
+    # Carrito
     def get_carrito(self, usuario):
         return self.carrito.get_all_articulos(usuario)
     
@@ -73,3 +76,17 @@ class Model ():
 
     def get_songs(self):
         return self.songsDAO.get_all_songs()
+    
+    # Lista
+    def get_lista(self, id : str):
+        return self.daoLista.get_lista(id)
+    
+    def add_lista(self, lista : ListaDTO):
+        return self.daoLista.add_lista(lista)
+    
+    def update_lista(self, lista : ListaDTO):
+        return self.daoLista.update_lista(lista)
+    
+    def delete_lista(self, id : str):
+        return self.daoLista.delete_lista(id)
+    

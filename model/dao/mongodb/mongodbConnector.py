@@ -58,10 +58,17 @@ class MongoConnector:
         print(PCONN, "Descargando canciones...")
         if self.db is None:
             print(PCONN_ERR, "Database connection is not initialized.")
-        return self.db.Cancion    
+        return self.db.Cancion  
+      
     def get_articulos_carrito(self):
         print(PCONN, "Descargando artículos del carrito...")
         if self.db is None:
             print("Database connection is not initialized.")
             return []
         return self.db["Carrito"]
+    
+    def get_lista_collection(self):
+        print(PCONN, "Descargando listas...")
+        if self.db is None:
+            print(PCONN_ERR, "Database connection is not initialized.")
+        return self.db.ListasReproduccion
