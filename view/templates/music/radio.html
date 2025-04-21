@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
+    <meta name="author" content="L1-G4">
+    <title>Carrito</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/static/css/base/style.css"> <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="/static/css/base/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/static/css/base/header.css"> <!-- Hoja de estilo del header -->
+    <link rel="stylesheet" href="/static/css/base/footer.css"> <!-- Hoja de estilo del footer -->
+    <link rel="stylesheet" href="/static/css/shop/radio.css"> <!-- Hoja de estilos para la página de carrito -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/icons/favicons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/static/icons/favicons/favicon.svg" />
+    <link rel="shortcut icon" href="/static/icons/favicons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
+    <link rel="manifest" href="/static/icons/favicons/site.webmanifest" />
+</head>
+
+<body>
+    <!-- Barra de navegación -->
+    <div id="header-placeholder"></div>
+
+    <!-- Contenido principal -->
+    <main>
+
+        <!-- Mini reproductor estilo Spotify -->
+        <div class="mini-player">
+            <img src="/static/img/albums/album-01.webp" alt="Portada" class="mini-album">
+            
+            <div class="mini-content">
+                <div class="mini-song-info">
+                    <span class="mini-title">Nombre de la canción</span>
+                    <span class="mini-artist">Nombre del artista</span>
+                </div>
+
+                <div class="mini-controls-bar">
+                    <div class="mini-controls">
+                        <button class="mini-btn">⏮️</button>
+                        <button class="mini-btn">⏯️</button>
+                        <button class="mini-btn">⏭️</button>
+                    </div>
+                    <input type="range" class="mini-progress" min="0" max="100" value="20">
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Pie de página -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/static/js/header.js"></script>
+    <script src="/static/js/footer.js"></script>
+    <script src="/static/js/dark-mode.js"></script>
+
+</body>
+
+</html>

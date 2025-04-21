@@ -1,0 +1,80 @@
+.mini-player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #1e1e1e;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    gap: 16px;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+}
+
+.mini-album {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.mini-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.mini-song-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6px;
+}
+
+.mini-title {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mini-artist {
+    font-size: 12px;
+    color: #ccc;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mini-controls-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mini-controls {
+    display: flex;
+    gap: 12px;
+}
+
+.mini-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+}
+
+.mini-progress {
+    width: 100%;
+    accent-color: #1db954;
+    height: 4px;
+}
