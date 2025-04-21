@@ -1,10 +1,16 @@
 class ContactoDTO:
     def __init__(self):
-        
+        self.id: str = None
         self.nombre: str = None
         self.email: str = None
         self.telefono: str = None
         self.mensaje: str = None
+
+    def get_id(self) -> str:
+        return self.id
+
+    def set_id(self, id: str):
+        self.id = id
 
     def get_nombre(self) -> str:
         return self.nombre
@@ -31,6 +37,7 @@ class ContactoDTO:
         self.mensaje = mensaje
 
     def load_from_dict(self, data: dict):
+        self.id = data.get("id")
         self.nombre = data.get("nombre")
         self.email = data.get("email")
         self.telefono = data.get("telefono")
@@ -38,6 +45,7 @@ class ContactoDTO:
 
     def contacto_to_dict(self) -> dict:
         return {
+            "id": self.id,
             "nombre": self.nombre,
             "email": self.email,
             "telefono": self.telefono,
