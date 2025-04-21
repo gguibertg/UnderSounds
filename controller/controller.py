@@ -21,11 +21,12 @@ from model.dto.usuarioDTO import UsuarioDTO
 from model.model import Model
 from view.view import View
 
-
-
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
 PCTRL_WARN = "\033[96mCTRL\033[0m|\033[93mWARN\033[0m:\t "
+
+
+
 
 
 # ===============================================================================
@@ -71,20 +72,14 @@ sessions = {}
 # =========================== DEFINICIÓN DE RUTAS ===============================
 # ===============================================================================
 
+# ------------------------------------------------------------------ #
+# ----------------------------- INDEX ------------------------------ #
+# ------------------------------------------------------------------ #
+
+# Ruta para cargar la vista index
 @app.get("/")
 def index(request: Request):
     return view.get_index_view(request)
-
-# En este caso servimos la template songs.html al cliente cuando se hace una petición GET a la ruta "/getsongs".
-@app.get("/getsongs", description="Hola esto es una descripcion")
-def getsongs(request: Request):
-    # Vamos a llamar al Model para que nos devuelva la lista de canciones en formato JSON.
-    songs = model.get_songs() # JSON
-    # Luego se lo pasamos al View para que lo renderice y lo devuelva al cliente.
-    return view.get_songs_view(request,songs)
-
-
-
 
 
 

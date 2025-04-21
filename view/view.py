@@ -60,7 +60,4 @@ class View():
         
     # Renderizar la template carrito.html
     def get_carrito_view(self, request: Request, carrito):
-        return templates.TemplateResponse("shop/cart.html", {
-            "request": request,
-            "carrito": carrito,
-        })
+        return templates.TemplateResponse("shop/cart.html", {"request": request, "carrito": carrito})
