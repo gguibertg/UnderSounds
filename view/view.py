@@ -3,7 +3,6 @@ from fastapi import Request
 from API_KEYS import API_CREDENTIALS
 
 templates = Jinja2Templates(directory="view/templates") # Esta ruta es la que se va a usar para renderizar las plantillas
-
 apicreds = API_CREDENTIALS() # Cargamos las credenciales de la API de Firebase
 
 class View():

@@ -1,10 +1,7 @@
-import os
-import uuid
-import firebase_admin
-from datetime import datetime
 # Imports estándar de Python
 import base64
 import json
+import os
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -13,7 +10,7 @@ from pathlib import Path
 import firebase_admin
 import requests
 from bson import ObjectId
-from fastapi import FastAPI, Request, Response, Form, UploadFile, File, Response
+from fastapi import FastAPI, Request, Response, Form, UploadFile, File
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from firebase_admin import auth, credentials
@@ -21,17 +18,15 @@ from firebase_admin import auth, credentials
 # Imports locales del proyecto
 from model.dto.albumDTO import AlbumDTO
 from model.dto.carritoDTO import ArticuloCestaDTO, CarritoDTO
+from model.dto.songDTO import SongDTO
 from model.dto.usuarioDTO import UsuarioDTO
 from model.model import Model
 from view.view import View
 
+
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
 PCTRL_WARN = "\033[96mCTRL\033[0m|\033[93mWARN\033[0m:\t "
-
-
-
-
 
 # ===============================================================================
 # ========================= INICIALIZACIÓN DE LA APP ============================
@@ -66,16 +61,10 @@ app.mount(
 view = View()
 model = Model()
 
-# Almacenamiento en memoria para sesiones
 listSongs = {}
-
-# ===============================================================================
-# =========================== DEFINICIÓN DE RUTAS ===============================
-# ===============================================================================
 
 # Almacenamiento en memoria para sesiones
 sessions = {}
-
 
 
 # ===============================================================================
@@ -90,10 +79,6 @@ sessions = {}
 @app.get("/")
 def index(request: Request):
     return view.get_index_view(request)
-
-
-
-
 
 # ------------------------------------------------------------------ #
 # ----------------------------- LOGIN ------------------------------ #
@@ -158,12 +143,6 @@ async def logout(request: Request, response: Response):
     print(PCTRL, "User session", session_id, "destroyed")
     response.delete_cookie("session_id")
     return {"success": True}
-
-
-
-
-
-
 
 # --------------------------------------------------------------------- #
 # ----------------------------- REGISTER ------------------------------ #
@@ -297,12 +276,6 @@ async def deregister(request: Request, response: Response):
         print(PCTRL, "Error deleting user:", str(e))
         return {"success": False, "error": str(e)}
 
-
-
-
-
-
-
 # ------------------------------------------------------------------- #
 # ----------------------------- PERFIL ------------------------------ #
 # ------------------------------------------------------------------- #
@@ -315,7 +288,6 @@ async def get_profile(request: Request):
         return res # Si es un Response, devolvemos el error
     
     return view.get_perfil_view(request, res)  # Si es un dict, pasamos los datos del usuario
-
 
 # Ruta para actualizar el perfil del usuario
 @app.post("/update-profile")
@@ -358,12 +330,6 @@ async def update_profile(request: Request, response: Response):
     else:
         print(PCTRL_WARN, "User", user_name, "not updated in database!")
         return {"success": False, "error": "User not updated in database"}
-
-
-
-
-
-
 
 # ------------------------------------------------------------------- #
 # ----------------------------- ALBUM ------------------------------- #
@@ -575,7 +541,6 @@ async def get_album_edit(request: Request):
     # Devolvemos todo
     return view.get_album_edit_view(request, album_info, valid_songs)
 
-
 # Ruta para subir un álbum
 @app.post("/album-edit")
 async def upload_album(request: Request):
@@ -621,13 +586,6 @@ async def upload_album(request: Request):
         print(PCTRL_WARN, "Error while processing Album", album_id, ", updating to database failed!")
         return {"success": False, "error": "Album not updated in database"}
 
-
-
-
-
-
-
-
 # ------------------------------------------------------------------ #
 # ----------------------------- INCLUDES --------------------------- #
 # ------------------------------------------------------------------ #
@@ -647,11 +605,6 @@ def footer(request: Request):
         return view.get_footer_view(request, None)
     
     return view.get_footer_view(request, res)  # Si es un dict, pasamos los datos del usuario
-
-
-
-
-
 
 
 # -------------------------------------------------------------------------- #
@@ -699,13 +652,6 @@ def verifySessionAndGetUserInfo(request : Request):
         
     return Response("No autorizado", status_code=401)
 
-
-
-
-
-
-
-
 # ------------------------------------------------------------- #
 # --------------------------- ABOUT --------------------------- #
 # ------------------------------------------------------------- #
@@ -713,13 +659,6 @@ def verifySessionAndGetUserInfo(request : Request):
 @app.get("/about" , description="Muestra información sobre Undersounds")
 def about(request: Request):
     return view.get_about_view(request)
-
-
-
-
-
-
-
 
 # ------------------------------------------------------------ #
 # --------------------------- FAQS --------------------------- #
@@ -729,12 +668,6 @@ def about(request: Request):
 def get_faqs(request: Request):
     faqs_json = model.get_faqs()
     return view.get_faqs_view(request, faqs_json)
-
-
-
-
-
-
 
 # ------------------------------------------------------------------ #
 # ----------------------------- CARRITO ---------------------------- #
@@ -776,13 +709,6 @@ async def get_carrito(request: Request):
     # Si la petición es GET, mostrar el carrito
     carrito_json = model.get_carrito(user_id) 
     return view.get_carrito_view(request, carrito_json)
-
-
-
-
-
-
-
 
 # ------------------------------------------------------------ #
 # --------------------------- CONTACT ------------------------ #
@@ -829,14 +755,16 @@ async def index(request: Request):
             status_code=500,
             headers={"Content-Type": "application/json"}
         )
-# ----------------------------- Ver Cancion ------------------------------ #
+# ------------------------------------------------------------ #
+# ---------------------------- SONG -------------------------- #
+# ------------------------------------------------------------ #
 
-# Ruta para cargar vista login
+# Ruta para cargar vista upload-song
 @app.get("/upload-song")
 def song_post(request: Request):
     return view.get_upload_song_view(request)
 
-# Ruta para procesar la petición de login
+# Ruta para procesar la petición de upload-song
 @app.post("/upload-song")
 async def song_post(request: Request):
 
@@ -858,7 +786,7 @@ async def song_post(request: Request):
     song.set_visible(True)
 
     song_id = model.add_song(song)
-   
+
     if song_id is not None:
         print(PCTRL, "Song registered in database")
     else:
