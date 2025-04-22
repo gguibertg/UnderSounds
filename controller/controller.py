@@ -486,9 +486,38 @@ async def get_album(request: Request):
         cancion = model.get_song(cancion_id)
         if not cancion:
             print(PCTRL_WARN, "Cancion", cancion_id, "not found in database")
-            return Response("Error del sistema", status_code=403)   
+            return Response("Error del sistema", status_code=403)
+        
+        # Convertimos los generos de cada canción a un string sencillo
+        # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en cancion["generosStr"]
+        # Esto se hace por cada canción del album.
+        generosStr = ""
+        for genero_id in cancion["generos"]:
+            genero = model.get_genero(genero_id)
+            if not genero:
+                print(PCTRL_WARN, "Genero", genero_id ,"not found in database")
+                return Response("Error del sistema", status_code=403)
+            generosStr += genero["nombre"] + ", "
+        generosStr = generosStr[:-2] # Quitamos la última coma y espacio
+        cancion["generosStr"] = generosStr # Añadimos el string a la canción
+
         canciones_out.append(cancion)
+
     album_info["canciones"] = canciones_out
+
+
+    # Convertimos los generos del album a un string sencillo
+    # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en album_info["generosStr"]
+    generosStr = ""
+    for genero_id in album_info["generos"]:
+        genero = model.get_genero(genero_id)
+        if not genero:
+            print(PCTRL_WARN, "Genero", genero_id ,"not found in database")
+            return Response("Error del sistema", status_code=403)
+        generosStr += genero["nombre"] + ", "
+    generosStr = generosStr[:-2] # Quitamos la última coma y espacio
+    album_info["generosStr"] = generosStr # Añadimos el string a la canción
+
 
     # Recuperamos al usuario actualmente logeado y comprobamos si es el autor del album
     res = verifySessionAndGetUserInfo(request)
@@ -855,13 +884,48 @@ async def get_song(request: Request):
     if not song_id:
         return Response("Falta el parámetro 'id'", status_code=400)
 
-    
     song_info = model.get_song(song_id)
     if not song_info:
         print(PCTRL_WARN, "La cancion no existe")
         return Response("No autorizado", status_code=403)
     
-    return view.get_song_view(request, song_info)
+    # Antes de hacer nada, comprobamos si la canción es visible o no. Si no es visible, solo el artista creador puede verla.
+    res = verifySessionAndGetUserInfo(request)
+    if not song_info["visible"]:
+        if isinstance(res, Response) or song_id not in res["studio_canciones"]:
+            return Response("No autorizado", status_code=403)
+
+    # Convertimos los generos de la canción a un string sencillo
+    # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en song_info["generosStr"]
+    generosStr = ""
+    for genero_id in song_info["generos"]:
+        genero = model.get_genero(genero_id)
+        if not genero:
+            print(PCTRL_WARN, "Genero", genero_id ,"not found in database")
+            return Response("Error del sistema", status_code=403)
+        generosStr += genero["nombre"] + ", "
+    generosStr = generosStr[:-2] # Quitamos la última coma y espacio
+    song_info["generosStr"] = generosStr
+    
+    # Recuperamos al usuario actualmente logeado y comprobamos si es el autor de la canción
+    if isinstance(res, Response):
+        tipoUsuario = 0 # Guest
+    else:
+        if song_id in res["studio_canciones"]:
+            tipoUsuario = 3 # Artista (creador)
+
+        elif song_id in res["songs_compradas"]:
+            tipoUsuario = 2 # Propietario (User o Artista)
+
+        else:
+            tipoUsuario = 1
+
+    # Donde tipo Usuario:
+    # 0 = Guest
+    # 1 = User
+    # 2 = Propietario (User o Artista)
+    # 3 = Artista (creador)
+    return view.get_song_view(request, song_info, tipoUsuario) # Devolvemos la vista del song
 
     
 # Ruta para cargar vista edit-song

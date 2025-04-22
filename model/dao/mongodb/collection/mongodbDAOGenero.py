@@ -1,4 +1,3 @@
-from bson import ObjectId
 from ...intefaceGeneroDAO import InterfaceGeneroDAO
 from ....dto.generoDTO import GeneroDTO
 
@@ -17,11 +16,11 @@ class mongodbGeneroDAO(InterfaceGeneroDAO):
         genero = None
 
         try:
-            query = self.collection.find_one({"_id": ObjectId(id)})
+            query = self.collection.find_one({"_id": id})
 
             if query:
                 genero = GeneroDTO()
-                genero.set_id(str(query.get("_id")))
+                genero.set_id(query.get("_id"))
                 genero.set_nombre(query.get("nombre"))
                 genero.set_esSubGen(query.get("esSubGenero"))
                 

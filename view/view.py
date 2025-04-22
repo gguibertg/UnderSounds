@@ -17,8 +17,8 @@ class View():
     def get_upload_song_view(self, request: Request):
         return templates.TemplateResponse("music/upload-song.html", {"request": request})
     
-    def get_song_view(self, request: Request, song_info):
-        return templates.TemplateResponse("music/song.html", {"request": request, "song": song_info})
+    def get_song_view(self, request: Request, song_info : dict, tipoUsuario: int):
+        return templates.TemplateResponse("music/song.html", {"request": request, "song": song_info, "tipoUsuario": tipoUsuario})
 
     def get_edit_song_view(self, request: Request, song_info):
         return templates.TemplateResponse("music/song-edit.html", {"request": request, "song": song_info})

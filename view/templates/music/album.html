@@ -30,11 +30,14 @@
                         <h2 class="album-title">{{album.titulo}}</h2>
                         <p><strong>Autor:</strong> {{album.autor}}</p>
                         <p><strong>Colaboradores:</strong> {{album.colaboradores}}</p>
-                        <p><strong>Fecha:</strong> {{album.fecha}}</p>
-                        <p><strong>Géneros:</strong> TODO</p>
                         <p><strong>Descripción:</strong> {{album.descripcion}}</p>
-                        <p><strong>N.º de visualizaciones:</strong> {{album.visitas}}</p>
-                        <p><strong>Precio:</strong> {{album.precio}} </p>
+                        <p><strong>Fecha:</strong> {{album.fecha}}</p>
+                        <p><strong>Géneros:</strong> {{album.generosStr}}</p> <!-- Este genero es especial -> Es un campo populado por los nombres de los generos, NO los IDs -->
+                        <p><strong>Número de canciones en total:</strong> {{album.canciones|length}}</p>
+                        <p><strong>Duración total:</strong> TODO</p> <!-- TODO: Hacer be-stream primero! y que los archivos tengan duración, no null! -->
+                        <!-- TODO: No se le puede dar un like a un album! (Es esto a proposito?) -->
+                        <p><strong>Visualizaciones:</strong> {{album.visitas}}</p>
+                        <p><strong>Precio:</strong> {{album.precio}}€</p>
                         <div class="album-buttons">
                             {% if tipoUsuario >= 2 %}
                             <button class="btn">Descargar álbum</button> <!-- TODO en be-stream! -->
@@ -68,7 +71,8 @@
                                 <div class="song-content">
                                     <img src="{{ cancion.portada }}" alt="Portada" class="song-cover" />
                                     <div class="song-info">
-                                        <p><strong>Precio:</strong> {{ cancion.precio }}</p>
+                                        <p><strong>Géneros:</strong> {{ cancion.generosStr }}</p>
+                                        <p><strong>Precio:</strong> {{ cancion.precio }}</p>                                 
                                         <div class="song-stats">
                                             <span><img src="/static/icons/site/favourite-icon-light.svg" alt="likes" /> {{ cancion.likes }}</span>
                                             <span><img src="/static/icons/site/comment-icon-light.svg" alt="comentarios" /> TODO: LISTA RESEÑAS!</span>

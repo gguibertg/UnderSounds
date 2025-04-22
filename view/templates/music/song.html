@@ -36,24 +36,35 @@
                     <div class="div-pannel song-info">
                         <h2 class="song-title"> {{song.titulo}}</h2>
                         <p><strong>Autor:</strong> {{song.artista}}</p>
+                        <p><strong>Colaboradores:</strong> {{song.colaboradores}}</p>
                         <p><strong>Descripción:</strong> {{song.descripcion}} </p>
-                        <div class="song-stats">
-                            <p><strong>Likes:</strong> {{song.likes}} </p>
-                            <p><strong>Visualizaciones:</strong> {{song.visitas}} </p>
-                        </div>
-                        <div class="song-stats">
-                            <p><strong>Precio:</strong> {{song.precio}} </p>
-                        </div>
+                        <p><strong>Fecha de lanzamiento:</strong> {{song.fecha}}</p>
+                        <p><strong>Duración:</strong> TODO</p> <!-- TODO: Hacer be-stream primero! y que los archivos tengan duración, no null! -->
+                        <p><strong>Álbum:</strong> TODO</p> <!-- TODO: AÑADIR CAMPO ALBUM! -->
+                        <p><strong>Géneros:</strong> {{song.generosStr}} </p> <!-- Este genero es especial -> Es un campo populado por los nombres de los generos, NO los IDs -->
+                        <p><strong>Likes:</strong> {{song.likes}} </p>
+                        <p><strong>Visualizaciones:</strong> {{song.visitas}} </p>
+                        <p><strong>Precio:</strong> {{song.precio}}€</p>
+                        {% if tipoUsuario >= 2 %}
                         <div class="play">
-                            <button id="play-btn">▶️ Reproducir</button>
+                            <button id="play-btn">▶️ Reproducir</button> <!-- TODO hacer en be-stream !-->
                         </div>
                         <div class="song-buttons">
-                            <button class="btn download-btn">Descargar</button>
+                            <button class="btn download-btn">Descargar canción</button> <!-- TODO hacer en be-stream !-->
+                            <button class="btn">Añadir a lista de reproducción</button> <!-- TODO Necesitamos listas para esto!-->
                             <button class="btn fav-btn" title="Añadir a favoritos">
                                 <img alt="Favorito" class="fav-icon"
                                     src="/static/icons/site/favourite-icon-light.svg" />
                             </button>
+                            {% if tipoUsuario == 3 %}
+                            <button class="btn" onclick="window.location.href='/edit-song?id={{song.id}}';">Editar canción</button>
+                            {% endif %}
                         </div>
+                        {% elif tipoUsuario == 1 %}
+                        <button class="btn">Comprar canción</button> <!-- TODO ¡Que alguien lo enlace con carrito! -->
+                        {% else %}
+                        <button class="btn" onclick="window.location.href='/login';">Inicia sesión para comprar y escuchar esta canción </button>
+                        {% endif %}
                     </div>
                     <div class="div-pannel song-image" style="width: auto;">
                         <img alt="Portada del álbum" src="{{song.portada}}" />
