@@ -1,6 +1,5 @@
 from datetime import datetime
 
-
 class AlbumDTO:
     def __init__(self):
         self.id: str = None
@@ -14,6 +13,7 @@ class AlbumDTO:
         self.visitas: int = None
         self.portada: str = None
         self.precio: float = None
+        self.versiones: list[AlbumDTO]
 
     def get_id(self) -> str:
         return self.id
@@ -56,6 +56,15 @@ class AlbumDTO:
 
     def add_genero(self, genero_id: str):
         self.generos.append(genero_id)
+        
+    def get_versiones(self):
+        return self.versiones
+    
+    def add_version(self, version):
+        self.versiones.append(version)
+        
+    def get_last_version(self):
+        return self.versiones.pop()
 
     def remove_genero(self, genero_id: str):
         if genero_id in self.generos:
@@ -101,6 +110,7 @@ class AlbumDTO:
         self.visitas = data.get("visitas")
         self.portada = data.get("portada")
         self.precio = data.get("precio")
+        self.versiones = data.get("versiones")
 
     def album_to_dict(self) -> dict:
         return {
@@ -114,5 +124,6 @@ class AlbumDTO:
             "canciones": self.canciones,
             "visitas": self.visitas,
             "portada": self.portada,
-            "precio": self.precio
+            "precio": self.precio,
+            "versiones": self.versiones
         }

@@ -574,6 +574,7 @@ async def upload_album(request: Request):
         #album.set_visitas(0) # La cantidad de visitas no se puede editar.
         album.set_portada(data["portada"])
         album.set_precio(data["precio"])
+        album.add_version(album)
 
         # Actualizamos el album en la base de datos
         if model.update_album(album):
