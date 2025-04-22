@@ -577,6 +577,13 @@ async def upload_album(request: Request):
 
         # Descargamos el album antiguo de la base de datos via su ID.
         album_dict = model.get_album(album_id)
+        if not album_dict:
+            print(PCTRL_WARN, "Album does not exist")
+            return Response("No autorizado", status_code=403)
+        if album_id not in res["studio_albumes"]:
+            print(PCTRL_WARN, "Album not found in user albums")
+            return Response("No autorizado", status_code=403)
+        
         album = AlbumDTO()
         album.load_from_dict(album_dict)
 
@@ -867,7 +874,7 @@ async def edit_song_post(request: Request):
         if not song_dict:
             print(PCTRL_WARN, "Song does not exist")
             return Response("No autorizado", status_code=403)
-        if song_dict["id"] not in res["studio_canciones"]:
+        if song_id not in res["studio_canciones"]:
             print(PCTRL_WARN, "Song not found in user songs")
             return Response("No autorizado", status_code=403)
     
