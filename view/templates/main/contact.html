@@ -28,15 +28,6 @@
 
     <!-- Contenido principal -->
     <main>
-        {% if success == 1 %}
-        <div class="div-success">
-            <p>Mensaje enviado correctamente. Contactaremos con usted lo antes posible.</p>
-        </div>
-        {% elif success == -1 %}
-        <div class="div-error">
-            <p>Ha ocurrido un error al enviar el mensaje. Pruebe de nuevo más tarde.</p>
-        </div>
-        {% endif %}
 
         <div class="div-bg">
             <h1 style="align-self: self-start; margin-left: 10px; margin-top: 10px;">Contactar con el soporte al cliente
@@ -95,7 +86,6 @@
                                         <label for="terms" style="font-size: smaller;">Estoy de acuerdo con que
                                             UnderSounds procese mis datos personales para llevar a cabo esta
                                             comunicación (obligatorio)
-
                                         </label>
                                     </checkbox>
                                 </div>
@@ -114,22 +104,63 @@
 
     <script>
         function submitForm() {
-            const form = document.querySelector('.grid-form');
-            fetch('/api/contact/send', {
-                method: 'POST',
-                body: new FormData(form)
+            event.preventDefault();
+
+            const data = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            telf: document.getElementById('telf').value,
+            msg: document.getElementById('msg').value
+            };
+
+            // Validar que los campos no estén vacíos
+            if (!data.name.trim()) {
+                return displayMessage("error", "El campo 'Nombre completo' no puede estar vacío.");
+            }
+            if (!data.email.trim()) {
+                return displayMessage("error", "El campo 'Correo electrónico' no puede estar vacío.");
+            }
+            if (!data.telf.trim()) {
+                return displayMessage("error", "El campo 'Teléfono' no puede estar vacío.");
+            }
+            if (!data.msg.trim()) {
+                return displayMessage("error", "El campo 'Mensaje' no puede estar vacío.");
+            }
+
+            // Validar formato del correo electrónico
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(data.email)) {
+                return displayMessage("error", "El formato del correo electrónico no es válido.");
+            }
+
+            // Validar formato del teléfono
+            const phoneRegex = /^\+?[0-9\s\-]+$/;
+            if (!phoneRegex.test(data.telf)) {
+                return displayMessage("error", "El formato del teléfono no es válido.");
+            }
+
+            if (!document.getElementById('terms').checked) {
+            return displayMessage("error", "Debe aceptar el tratamiento de datos personales para enviar el formulario.");
+            }
+
+            fetch('/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
             })
             .then(response => {
-                if (response.ok) {
-                    window.location.href = '/contact?success=1';
-                } else {
-                    window.location.href = '/contact?success=-1';
-                }
+            if (response.ok) {
+                displayMessage("success", "Mensaje enviado correctamente. Contactaremos con usted lo antes posible.");
+                document.getElementById('name').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('telf').value = '';
+                document.getElementById('msg').value = '';
+                document.getElementById('terms').checked = false;
+            } else {
+                displayMessage("error", "No se pudo enviar el mensaje. Inténtelo de nuevo más tarde.");
+            }
             })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error al enviar el mensaje. Inténtelo de nuevo más tarde.');
-            });
+            .catch(() => displayMessage("error", "No se pudo enviar el mensaje. Inténtelo de nuevo más tarde."));
         }
     </script>
 
@@ -141,6 +172,7 @@
     <script src="/static/js/header.js"></script>
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
+    <script src="/static/js/displayMessage.js"></script>
 
 </body>
 
