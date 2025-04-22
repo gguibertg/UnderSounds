@@ -624,52 +624,6 @@ def footer(request: Request):
     
     return view.get_footer_view(request, res)  # Si es un dict, pasamos los datos del usuario
 
-
-# -------------------------------------------------------------------------- #
-# --------------------------- MÉTODOS AUXILIARES --------------------------- #
-# -------------------------------------------------------------------------- #
-
-def isUserSessionValid(session_id : str) -> bool:
-    return session_id and session_id in sessions and model.get_usuario(sessions[session_id]["user_id"])
-
-# Un session contiene un name, user_id y el tipo de login (google o credentials)
-def getSessionData(session_id: str) -> str:
-    if session_id in sessions:
-        return sessions[session_id]
-    return None
-
-# Este método automatiza la obtención de datos del usuario a partir de la sesión activa.
-#
-#   1º Comprueba que exista una sesión activa
-#   2º Descarga los datos del usuario enlazados a esa sesión
-#   3º Devuelve dos cosas:
-#       Si todo es correcto -> Devuelve user_info (dict)
-#       Si no -> Devuelve un Response con el error y escribe a consola
-#
-# Conveniente para rutas sencillas que solo requieran la info del usuario.
-def verifySessionAndGetUserInfo(request : Request):
-    # Comprobamos si el usuario tiene una sesión activa
-    session_id = request.cookies.get("session_id")
-    if not isUserSessionValid(session_id):
-        return Response("No autorizado", status_code=401)
-    
-    # Accedemos a los datos de la sesión del usuario
-    session_data = getSessionData(session_id)
-    if session_data:
-        user_id = session_data["user_id"]
-        user_name = session_data["name"]
-        print(PCTRL, "User", user_name, "requested access to user data")
-
-        # Accedemos a los datos del usuario en la base de datos
-        user_info = model.get_usuario(user_id)
-
-        if user_info:
-            return user_info
-        else:
-            print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")
-        
-    return Response("No autorizado", status_code=401)
-
 # ------------------------------------------------------------- #
 # --------------------------- ABOUT --------------------------- #
 # ------------------------------------------------------------- #
@@ -778,13 +732,28 @@ async def index(request: Request):
 # Ruta para cargar vista upload-song
 @app.get("/upload-song")
 def song_post(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error  
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    
     return view.get_upload_song_view(request)
 
 # Ruta para procesar la petición de upload-song
 @app.post("/upload-song")
 async def song_post(request: Request):
-
-# Registrar la cancion en la base de datos
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error  
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    
+    # Registrar la cancion en la base de datos
     data = await request.json()
 
     song = SongDTO()
@@ -801,19 +770,33 @@ async def song_post(request: Request):
     song.set_lista_resenas([])
     song.set_visible(True)
 
-    song_id = model.add_song(song)
+    try:
+        song_id = model.add_song(song)
 
-    if song_id is not None:
-        print(PCTRL, "Song registered in database")
-    else:
-        print(PCTRL_WARN, "Song registration failed in database!")
-        return {"success": False, "error": "Song registration failed"}
-    
-@app.get("/songs")
-def get_songs(request: Request):
-    songs_json = model.get_songs()
-    return view.get_songs_view(request, songs_json)
+        if song_id is not None:
+            print(PCTRL, "Song registered in database")
+        else:
+            print(PCTRL_WARN, "Song registration failed in database!")
+            return {"success": False, "error": "Song registration failed"}
 
+        # Convertirmos res en un objeto UsuarioDTO, le añadimos la nueva canción a studio_canciones y lo actualizamos en la base de datos
+        user = UsuarioDTO()
+        user.load_from_dict(res)
+        user.add_studio_cancion(song_id)
+        if model.update_usuario(user):
+            print(PCTRL, "User", user.get_email(), "updated in database")
+            return {"success": True, "message": "Song added successfully"}
+        else:
+            print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
+            raise Exception("User not updated in database")
+
+    except Exception as e:
+        print(PCTRL_WARN, "Error while processing Song", song_id, ", adding to database failed!")
+        # Eliminar la canción subida (intentar tanto si se ha subido como si no)
+        model.delete_song(song_id)
+        return {"success": False, "error": "Song not added to database"}
+
+# Ruta para cargar vista song
 @app.get("/song")
 async def get_song(request: Request):
     if request.query_params.get("id") is not None:
@@ -821,12 +804,11 @@ async def get_song(request: Request):
     else:
         data = await request.json() # API
         song_id = data["id"]
-
     if not song_id:
         return Response("Falta el parámetro 'id'", status_code=400)
 
+    
     song_info = model.get_song(song_id)
-
     if not song_info:
         print(PCTRL_WARN, "La cancion no existe")
         return Response("No autorizado", status_code=403)
@@ -834,9 +816,16 @@ async def get_song(request: Request):
     return view.get_song_view(request, song_info)
 
     
-    
+# Ruta para cargar vista edit-song
 @app.get("/edit-song")
 async def edit_song_post(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error  
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
     
     if request.query_params.get("id") is not None:
         song_id = request.query_params.get("id") # Developer
@@ -848,15 +837,26 @@ async def edit_song_post(request: Request):
         return Response("Falta el parámetro 'id'", status_code=400)
 
     song_info = model.get_song(song_id)
-
     if not song_info:
         print(PCTRL_WARN, "Song does not exist")
+        return Response("No autorizado", status_code=403)
+    if song_info not in res["studio_canciones"]:
+        print(PCTRL_WARN, "Song not found in user songs")
         return Response("No autorizado", status_code=403)
 
     return view.get_edit_song_view(request, song_info)
 
+# Ruta para procesar la petición de edit-song
 @app.post("/edit-song")
 async def edit_song_post(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res # Si es un Response, devolvemos el error  
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    
     try:
         # Recibimos los datos del nuevo album editado, junto con su ID.
         data = await request.json()
@@ -864,6 +864,13 @@ async def edit_song_post(request: Request):
 
         # Descargamos el album antiguo de la base de datos via su ID.
         song_dict = model.get_song(song_id)
+        if not song_dict:
+            print(PCTRL_WARN, "Song does not exist")
+            return Response("No autorizado", status_code=403)
+        if song_dict["id"] not in res["studio_canciones"]:
+            print(PCTRL_WARN, "Song not found in user songs")
+            return Response("No autorizado", status_code=403)
+    
         song = SongDTO()
         song.load_from_dict(song_dict)
 
@@ -886,3 +893,48 @@ async def edit_song_post(request: Request):
     except Exception as e:
         print(PCTRL_WARN, "Error while processing Song", song_id, ", updating to database failed!")
         return {"success": False, "error": "Song not updated in database"}
+    
+# -------------------------------------------------------------------------- #
+# --------------------------- MÉTODOS AUXILIARES --------------------------- #
+# -------------------------------------------------------------------------- #
+
+def isUserSessionValid(session_id : str) -> bool:
+    return session_id and session_id in sessions and model.get_usuario(sessions[session_id]["user_id"])
+
+# Un session contiene un name, user_id y el tipo de login (google o credentials)
+def getSessionData(session_id: str) -> str:
+    if session_id in sessions:
+        return sessions[session_id]
+    return None
+
+# Este método automatiza la obtención de datos del usuario a partir de la sesión activa.
+#
+#   1º Comprueba que exista una sesión activa
+#   2º Descarga los datos del usuario enlazados a esa sesión
+#   3º Devuelve dos cosas:
+#       Si todo es correcto -> Devuelve user_info (dict)
+#       Si no -> Devuelve un Response con el error y escribe a consola
+#
+# Conveniente para rutas sencillas que solo requieran la info del usuario.
+def verifySessionAndGetUserInfo(request : Request):
+    # Comprobamos si el usuario tiene una sesión activa
+    session_id = request.cookies.get("session_id")
+    if not isUserSessionValid(session_id):
+        return Response("No autorizado", status_code=401)
+    
+    # Accedemos a los datos de la sesión del usuario
+    session_data = getSessionData(session_id)
+    if session_data:
+        user_id = session_data["user_id"]
+        user_name = session_data["name"]
+        print(PCTRL, "User", user_name, "requested access to user data")
+
+        # Accedemos a los datos del usuario en la base de datos
+        user_info = model.get_usuario(user_id)
+
+        if user_info:
+            return user_info
+        else:
+            print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")
+        
+    return Response("No autorizado", status_code=401)
