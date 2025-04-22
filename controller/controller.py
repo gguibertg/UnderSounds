@@ -83,13 +83,6 @@ def getsongs(request: Request):
     # Luego se lo pasamos al View para que lo renderice y lo devuelva al cliente.
     return view.get_songs_view(request,songs)
 
-
-
-
-
-
-
-
 # ------------------------------------------------------------------ #
 # ----------------------------- LOGIN ------------------------------ #
 # ------------------------------------------------------------------ #
@@ -115,12 +108,24 @@ async def login_post(data: dict, response: Response, provider: str):
         print(PCTRL, "\tUser user_id: ", user_id)
         print(PCTRL, "\tUser provider: ", provider)
 
-        # Comprobar que el usuario existe en la base de datos
-        if not model.get_usuario(user_id):
+        #Comprobar que el usuario existe en la base de datos
+        usuario_db = model.get_usuario(user_id)
+
+        if not usuario_db:
             # Eliminar al usuario de Firebase Auth
             auth.delete_user(user_id)
             print(PCTRL_WARN, "User is logged into Firebase, but not registered in database! Logon failed")
             return {"success": False, "error": "User is not registered in database"}
+
+        # Verificar si el email ha cambiado en Firebase
+        if usuario_db["email"] != user_email:
+            print(PCTRL, "Firebase email and MongoDB email differ. Updating MongoDB...")
+            usuario_dto = UsuarioDTO()
+            usuario_dto.load_from_dict(usuario_db)
+            usuario_dto.set_email(user_email)
+            success = model.update_usuario(usuario_dto)
+            print(PCTRL, "Email updated in MongoDB" if success else f"{PCTRL_WARN} Failed to update email in MongoDB")
+
 
         # Creamos una sesión para el usuario
         session_id = str(uuid.uuid4())
