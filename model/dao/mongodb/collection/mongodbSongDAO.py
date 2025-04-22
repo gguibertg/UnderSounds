@@ -1,6 +1,6 @@
-from bson import ObjectId
 import pymongo
 import pymongo.results
+from bson import ObjectId
 from ...interfaceSongDAO import InterfaceSongDAO
 from ....dto.songDTO import SongDTO, SongsDTO
 
@@ -88,9 +88,14 @@ class MongodbSongDAO(InterfaceSongDAO):
 
     def update_song(self, song: SongDTO) -> bool:
         try:
-            song_dict : dict = song.songdto_to_dict()
-            song_dict["_id"] = ObjectId(song_dict.pop("id", None))
-            result : pymongo.results.UpdateResult = self.collection.update_one({"_id": song_dict["_id"]}, {"$set": song_dict})
+            song_dict = song.songdto_to_dict()
+            song_id = song_dict.pop("id")
+            song_dict["_id"] = ObjectId(song_id)  # importante
+
+            result : pymongo.results.UpdateResult = self.collection.update_one(
+                {"_id": ObjectId(song_id)},  # usa ObjectId aquí también
+                {"$set": song_dict}
+            )
             return result.modified_count == 1
         
         except Exception as e:
@@ -100,7 +105,7 @@ class MongodbSongDAO(InterfaceSongDAO):
 
     def delete_song(self, id: str) -> bool:
         try:
-            result : pymongo.results.DeleteResult = self.collection.delete_one({"_id": ObjectId(id)})
+            result : pymongo.results.DeleteResult = self.collection.delete_one({"_id": id})
             return result.deleted_count == 1
         
         except Exception as e:

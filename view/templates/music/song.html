@@ -31,17 +31,15 @@
             <div class="song-page">
                 <section class="song-top">
                     <div class="div-pannel song-info">
-                        <h2 class="song-title">Never Gonna Give you Up</h2>
-                        <p><strong>Autor:</strong> Rick Astley</p>
-                        <p><strong>Álbum:</strong> Whenever You Need Somebody</p>
-                        <p><strong>Descripción:</strong> Una de las canciones más icónicas de los 80, conocida
-                            mundialmente por el famoso "Rickroll".</p>
+                        <h2 class="song-title"> {{song.titulo}}</h2>
+                        <p><strong>Autor:</strong> {{song.artista}}</p>
+                        <p><strong>Descripción:</strong> {{song.descripcion}} </p>
                         <div class="song-stats">
-                            <p><strong>Likes:</strong> 12.345</p>
-                            <p><strong>Visualizaciones:</strong> 567.890</p>
+                            <p><strong>Likes:</strong> {{song.likes}} </p>
+                            <p><strong>Visualizaciones:</strong> {{song.visitas}} </p>
                         </div>
                         <div class="song-stats">
-                            <p><strong>Precio:</strong> 12$</p>
+                            <p><strong>Precio:</strong> {{song.precio}} </p>
                         </div>
                         <div class="song-buttons">
                             <button class="btn download-btn">Descargar</button>
@@ -49,11 +47,10 @@
                                 <img alt="Favorito" class="fav-icon"
                                     src="/static/icons/site/favourite-icon-light.svg" />
                             </button>
-                            <p style="align-self: center;"><strong>Precio:</strong> 12$</p>
                         </div>
                     </div>
                     <div class="div-pannel song-image" style="width: auto;">
-                        <img alt="Portada del álbum" src="/static/img/utils/rickroll-poster.webp" />
+                        <img alt="Portada del álbum" src="{{song.portada}}" />
                     </div>
                     <div class="div-pannel review-form">
                         <h3>Reseña nueva</h3>

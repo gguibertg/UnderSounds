@@ -4,11 +4,10 @@ from pymongo.errors import ConnectionFailure
 PCONN = "\033[95mCONN\033[0m:\t "
 PCONN_ERR = "\033[96mCTRL\033[0m|\033[91mERROR\033[0m:\t "
 
-# Aquí se conecta a la base de datos de MongoDB Atlas y se obtienen las colecciones necesarias.
-
 class MongoConnector:
     mongo_initialized = False
 
+    # Singleton pattern to ensure only one instance of MongoClient
     def __init__(self):
         try:
             if not MongoConnector.mongo_initialized:
@@ -30,35 +29,42 @@ class MongoConnector:
             print(PCONN_ERR, "Database connection is not initialized.")
         return self.db
     
+    # User
     def get_usuario_collection(self):
         print(PCONN, "Descargando usuarios...")
         if self.db is None:
             print(PCONN_ERR, "Database connection is not initialized.")
         return self.db.Usuarios
 
+    #Faqs
     def post_faq_collection(self):
         print(PCONN, "Descargando faqs...")
         if self.db is None:
             print(PCONN_ERR,"Database connection is not initialized.")
         return self.db.Preguntas
     
+    # Album
     def get_album_collection(self):
         print(PCONN, "Descargando albumes...")
         if self.db is None:
             print(PCONN_ERR, "Database connection is not initialized.")
         return self.db.Albums
     
+    # Genero
     def get_genero_collection(self):
         print(PCONN, "Descargando generos...")
         if self.db is None:
             print(PCONN_ERR, "Database connection is not initialized.")
         return self.db.Géneros
     
+    # Cancion
     def post_song_collection(self):
         print(PCONN, "Descargando canciones...")
         if self.db is None:
             print(PCONN_ERR, "Database connection is not initialized.")
         return self.db.Cancion    
+    
+    # Carrito
     def get_articulos_carrito(self):
         print(PCONN, "Descargando artículos del carrito...")
         if self.db is None:

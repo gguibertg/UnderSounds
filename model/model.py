@@ -1,3 +1,9 @@
+from .dao.mongodb.mongodbDAOFactory import MongodbDAOFactory #TODO: Cambiar a MongoDB
+from .dto.songDTO import SongDTO, SongsDTO
+
+# La clase Model es la encargada de gestionar los datos y la lógica de negocio de la aplicación.
+# Esta clase nos permite interactuar con la base de datos y obtener los datos que necesitamos para la aplicación,
+# sin la necesidad de que otras clases tengan que preocuparse por la implementación de la base de datos.
 from .dao.mongodb.mongodbDAOFactory import mongodbDAOFactory
 from .dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 from .dto.albumDTO import AlbumDTO
@@ -9,6 +15,8 @@ from .dto.songDTO import SongDTO
 class Model ():
 
     def __init__(self):
+        self.factory = MongodbDAOFactory()
+        self.songsDAO = self.factory.getSongsDAO()
         self.factory = mongodbDAOFactory()
         self.daoUsuario = self.factory.getUsuariosDAO()
         self.faqsDAO = self.factory.getFaqsDAO()
@@ -17,6 +25,19 @@ class Model ():
         self.songsDAO = self.factory.getSongsDAO()
         self.carrito = self.factory.getCarritoDAO()
         pass
+
+    def get_song(self, id: str):
+        return self.songsDAO.get_song(id)
+    
+    def add_song(self, usuario : SongDTO):
+        return self.songsDAO.add_song(usuario)
+
+    def update_song(self, usuario : SongDTO):
+        return self.songsDAO.update_song(usuario)
+
+    def delete_song(self, id):
+        return self.songsDAO.delete_song(id)
+
     
     # Usuario
     def get_usuario(self, id):

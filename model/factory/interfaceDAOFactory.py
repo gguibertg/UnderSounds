@@ -1,8 +1,11 @@
 from abc import abstractmethod, ABC
 
 class InterfaceDAOFactory(ABC):
-
 # Un método por cada colección existente en la base de datos.
+
+    @abstractmethod
+    def getSongsDAO(self):
+        pass
 
     @abstractmethod
     def getUsuariosDAO(self):
@@ -14,7 +17,7 @@ class InterfaceDAOFactory(ABC):
     
     @abstractmethod
     def getCarritoDAO (self):
-       pass
+        pass
 
     @abstractmethod
     def getAlbumDAO(self):
@@ -23,9 +26,4 @@ class InterfaceDAOFactory(ABC):
     @abstractmethod
     def getGeneroDAO(self):
         pass
-
-    @abstractmethod
-    def getSongsDAO(self):
-        pass
-
 

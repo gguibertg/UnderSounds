@@ -7,11 +7,11 @@
     <meta name="author" content="L1-G4">
     <title>Nueva Canción</title>
     <!-- Estilos -->
-    <link rel="stylesheet" href="/styles/style.css">
-    <link rel="stylesheet" href="/styles/darkmode.css">
-    <link rel="stylesheet" href="/styles/header.css">
-    <link rel="stylesheet" href="/styles/footer.css">
-    <link rel="stylesheet" href="/styles/upload.css">
+    <link rel="stylesheet" href="/static/css/base/style.css">
+    <link rel="stylesheet" href="/static/css/base/darkmode.css">
+    <link rel="stylesheet" href="/static/css/base/header.css">
+    <link rel="stylesheet" href="/static/css/base/footer.css">
+    <link rel="stylesheet" href="/static/css/music/upload.css">
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
@@ -35,31 +35,23 @@
 
                     <div class="div-pannel-sub upload-group" style="width: auto;">
                         <label for="title">Título</label>
-                        <input type="text" id="title" name="title" required placeholder="Título de la canción">
+                        <input type="text" id="titulo" name="titulo" required placeholder="Título de la canción">
 
-                        <label for="author">Autor</label>
-                        <input type="text" id="author" name="author" required placeholder="Autor de la canción">
+                        <label for="artist">Autor</label>
+                        <input type="text" id="artista" name="artista" required placeholder="Autor de la canción">
 
                         <label for="collaborators">Colaboradores</label>
-                        <input type="text" id="collaborators" name="collaborators" placeholder="Separados por coma"
+                        <input type="text" id="colaboradores" name="colaboradores" placeholder="Separados por coma"
                             required>
 
                         <label for="price">Precio</label>
-                        <input type="text" id="price" name="price" placeholder="Precio de la canción" required>
+                        <input type="text" id="precio" name="precio" placeholder="Precio de la canción" required>
                     </div>
 
                     <div class="div-pannel-sub upload-group" style="width: auto;">
-                        <label for="album-select">Álbum</label>
-                        <select id="album-select" name="album">
-                            <option value="">Selecciona un álbum</option>
-                            <option value="album1">Álbum 1</option>
-                            <option value="album2">Álbum 2</option>
-                            <option value="album3">Álbum 3</option>
-                        </select>
-
                         <label for="description">Descripción</label>
-                        <textarea id="description" name="description" rows="4"
-                            placeholder="Escribe una breve descripción..." required></textarea>
+                        <textarea id="descripcion" name="descripcion" rows="4"
+                            placeholder="Escribe una breve descripción..." required> </textarea>
                     </div>
 
                     <div class="div-pannel-sub upload-checkbox-container" style="width:auto;">
@@ -128,7 +120,7 @@
 
                     <div class="div-pannel-sub upload-cover" style="width: auto;">
                         <label>Portada</label>
-                        <img id="cover-preview" src="/static/img/utils/under-sounds-cover.webp" alt="Portada del álbum">
+                        <img id="cover-preview" src="/static/img/utils/under-sounds-cover.webp" alt="Portada de la cancion">
                         <input type="file" id="cover-upload" accept="image/*" hidden>
                         <button type="button" class="upload-cover-button"
                             onclick="document.getElementById('cover-upload').click();">Seleccionar portada</button>
@@ -140,13 +132,47 @@
                     <label for="song-upload">Seleccionar canción</label>
                     <input type="file" id="song-upload" accept="audio/*">
                 </div>
-                <a href="/studio">
-                    <button type="submit">Subir</button>
-                </a>
+                <button type="submit" onclick="postSong()">Subir canción</button>
             </div>
             <br>
         </div>
     </main>
+
+    <script>
+        async function postSong() {
+            event.preventDefault();
+            const songData = {
+                titulo: document.getElementById('titulo').value,
+                artista: document.getElementById('artista').value,
+                descripcion: document.getElementById('descripcion').value,
+                fecha: new Date().toISOString().split('T')[0],
+                colaboradores: document.getElementById('colaboradores').value,
+                precio: document.getElementById('precio').value,
+                generos: Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
+                portada: document.getElementById('cover-preview').src
+            };
+
+            try {
+                const response = await fetch('/upload-song', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(songData)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Song uploaded successfully:', result);
+                } else {
+                    console.error('Failed to upload song:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error uploading song:', error);
+            }
+
+        }
+    </script>
 
     <div id="footer-placeholder"></div>
 

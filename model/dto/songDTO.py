@@ -148,3 +148,19 @@ class SongDTO():
             "lista_resenas": self.lista_resenas,
             "visible": self.visible
         }
+    
+    def load_from_dict(self, data: dict):
+        self.id = data.get("id")
+        self.titulo = data.get("titulo")
+        self.artista = data.get("artista")
+        self.colaboradores = data.get("colaboradores")
+        self.fecha = data.get("fecha")
+        self.descripcion = data.get("descripcion")
+        self.duracion = data.get("duracion")
+        self.generos = data.get("generos", [])
+        self.likes = data.get("likes")
+        self.visitas = data.get("visitas")
+        self.portada = data.get("portada")
+        self.precio = data.get("precio")
+        self.lista_resenas = data.get("lista_resenas", [])
+        self.visible = data.get("visible")
