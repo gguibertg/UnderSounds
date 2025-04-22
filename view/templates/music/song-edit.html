@@ -139,38 +139,39 @@
         async function postSong() {
             event.preventDefault();
             const songData = {
-                id: "{{song.id}}",
-                titulo: document.getElementById('titulo').value,
-                artista: document.getElementById('artista').value,
-                descripcion: document.getElementById('descripcion').value,
-                colaboradores: document.getElementById('colaboradores').value,
-                precio: document.getElementById('precio').value,
-                generos: Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
-                portada: document.getElementById('cover-preview').src
-                // TODO: Al hacer be-stream, se debe pasar también la ruta del archuvo de audio en el backend (puede ser por ejemplo el nombre del archivo y ya)
-                // TODO: La duración de la canción se puede calcular en el backend.
+            id: "{{song.id}}",
+            titulo: document.getElementById('titulo').value,
+            artista: document.getElementById('artista').value,
+            descripcion: document.getElementById('descripcion').value,
+            colaboradores: document.getElementById('colaboradores').value,
+            precio: document.getElementById('precio').value,
+            generos: Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
+            portada: document.getElementById('cover-preview').src
+            // TODO: Al hacer be-stream, se debe pasar también la ruta del archuvo de audio en el backend (puede ser por ejemplo el nombre del archivo y ya)
+            // TODO: La duración de la canción se puede calcular en el backend.
             };
 
             try {
-                const response = await fetch('/edit-song', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(songData)
-                });
+            const response = await fetch('/edit-song', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(songData)
+            });
 
-                if (response.ok) {
-                    const result = await response.json();
-                    displayMessage('success', 'Canción editada exitosamente.');
-                    console.log('Song edited successfully:', result);
-                } else {
-                    displayMessage('error', `Error al editar la canción: ${response.statusText}`);
-                    console.error('Failed to edit song:', response.statusText);
-                }
+            if (response.ok) {
+                const result = await response.json();
+                displayMessage('success', 'Canción editada exitosamente.');
+                console.log('Song edited successfully:', result);
+                window.location.href = '/studio';
+            } else {
+                displayMessage('error', `Error al editar la canción: ${response.statusText}`);
+                console.error('Failed to edit song:', response.statusText);
+            }
             } catch (error) {
-                displayMessage('error', 'Ocurrió un error al editar la canción.');
-                console.error('Error editing song:', error);
+            displayMessage('error', 'Ocurrió un error al editar la canción.');
+            console.error('Error editing song:', error);
             }
         }
     </script>

@@ -163,12 +163,13 @@
 
                 if (response.ok) {
                     const result = await response.json();
-                    console.log('Song uploaded successfully:', result);
+                    displayMessage('success', 'Canción subida exitosamente');
+                    window.location.href = '/studio';
                 } else {
-                    console.error('Failed to upload song:', response.statusText);
+                    displayMessage('error', 'Error al subir la canción: ' + response.statusText);
                 }
             } catch (error) {
-                console.error('Error uploading song:', error);
+                displayMessage('error', 'Error al subir la canción: ' + error.message);
             }
 
         }
@@ -181,7 +182,7 @@
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
     <script src="/static/js/upload-song-image.js"></script>
-
+    <script src="/static/js/displayMessage.js"></script>
 </body>
 
 </html>

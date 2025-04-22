@@ -235,16 +235,17 @@
 
                 if (response.ok) {
                     const result = await response.json();
+                    displayMessage("success", "Álbum subido correctamente.");
                     console.log('Album uploaded successfully:', result);
+                    window.location.href = '/studio';
                 } else {
+                    displayMessage("error", "Error al subir el álbum. Por favor, inténtalo de nuevo.");
                     console.error('Failed to upload album:', response.statusText);
                 }
             } catch (error) {
+                displayMessage("error", "Error al subir el álbum. Por favor, inténtalo de nuevo.");
                 console.error('Error uploading album:', error);
             }
-
-            // TODO falta por mostrar mensaje de éxito o error al usuario con los divs
-            // TODO falta por redirigir al usuario a studio
 
         }
 
@@ -257,7 +258,7 @@
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
     <script src="/static/js/upload-song-image.js"></script>
-
+    <script src="/static/js/displayMessage.js"></script>
 </body>
 
 </html>
