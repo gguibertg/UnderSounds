@@ -472,6 +472,47 @@ async def get_album(request: Request):
         data = await request.json() # API
         album_id = data["id"]
 
+    # TODO: Album no tiene un parametro visible?? Esto podría dar problemas en el futuro cuando songs contemple la posibilidad de ser visible o no.
+
+    # Descargamos el album de la base de datos via su ID.
+    album_info = model.get_album(album_id)
+    if not album_info:
+        print(PCTRL_WARN, "Album does not exist")
+        return Response("No autorizado", status_code=403)
+    
+    # Descargamos las canciones del album de la base de datos via su ID en el campo canciones y las insertamos en este album_info
+    canciones_out : list[dict] = []
+    for cancion_id in album_info["canciones"]:
+        cancion = model.get_song(cancion_id)
+        if not cancion:
+            print(PCTRL_WARN, "Cancion", cancion_id, "not found in database")
+            return Response("Error del sistema", status_code=403)   
+        canciones_out.append(cancion)
+    album_info["canciones"] = canciones_out
+
+    # Recuperamos al usuario actualmente logeado y comprobamos si es el autor del album
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        tipoUsuario = 0 # Guest
+    else:
+        if album_id in res["studio_albumes"]:
+            tipoUsuario = 3 # Artista (creador)
+
+        elif all(song["id"] in res["songs_compradas"] for song in album_info["canciones"]):
+            tipoUsuario = 2 # Propietario (User o Artista)
+
+        else:
+            tipoUsuario = 1
+
+    # Donde tipo Usuario:
+    # 0 = Guest
+    # 1 = User
+    # 2 = Propietario (User o Artista)
+    # 3 = Artista (creador)
+    return view.get_album_view(request, album_info, tipoUsuario) # Devolvemos la vista del album
+
+
+
 # Ruta para cargar la vista de álbum-edit
 @app.get("/album-edit")
 async def get_album_edit(request: Request):
@@ -847,7 +888,7 @@ async def edit_song_post(request: Request):
     if not song_info:
         print(PCTRL_WARN, "Song does not exist")
         return Response("No autorizado", status_code=403)
-    if song_info not in res["studio_canciones"]:
+    if song_id not in res["studio_canciones"]:
         print(PCTRL_WARN, "Song not found in user songs")
         return Response("No autorizado", status_code=403)
 

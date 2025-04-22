@@ -49,6 +49,10 @@ class View():
     def get_upload_album_view(self, request: Request, songs: list[dict]):
         return templates.TemplateResponse("music/upload-album.html", {"request": request , "songs": songs}) 
     
+    # Renderizar la template album.html
+    def get_album_view(self, request: Request, album_info : dict, tipoUsuario : int):
+        return templates.TemplateResponse("music/album.html", {"request": request, "album": album_info, "tipoUsuario": tipoUsuario})
+    
     # Renderizar la template header.html
     def get_header_view(self, request: Request, user_info : dict):
         return templates.TemplateResponse("includes/header.html", {"request": request, "user": user_info})
