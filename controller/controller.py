@@ -1,7 +1,5 @@
 # Imports estándar de Python
 import base64
-import json
-import os
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -9,7 +7,6 @@ from pathlib import Path
 # Imports de terceros
 import firebase_admin
 import requests
-from bson import ObjectId
 from fastapi import FastAPI, Request, Response, Form, UploadFile, File
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -773,6 +770,7 @@ async def index(request: Request):
             status_code=500,
             headers={"Content-Type": "application/json"}
         )
+    
 # ------------------------------------------------------------ #
 # ---------------------------- SONG -------------------------- #
 # ------------------------------------------------------------ #

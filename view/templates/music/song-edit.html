@@ -62,27 +62,27 @@
                             <div>
                                 <h3>Géneros</h3>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="rock" {% if "Rock" in song.generos %} checked {% endif %}>
+                                    <input type="checkbox" id="rock" {% if "rock" in song.generos %} checked {% endif %}>
                                     <label for="rock">Rock</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="pop" {% if "Pop" in song.generos %} checked {% endif %}>
+                                    <input type="checkbox" id="pop" {% if "pop" in song.generos %} checked {% endif %}>
                                     <label for="pop">Pop</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="metal" {% if "Metal" in song.generos %} checked {% endif %}>
+                                    <input type="checkbox" id="metal" {% if "metal" in song.generos %} checked {% endif %}>
                                     <label for="metal">Metal</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="jazz" {% if "Jazz" in song.generos %} checked {% endif %}>
+                                    <input type="checkbox" id="jazz" {% if "jazz" in song.generos %} checked {% endif %}>
                                     <label for="jazz">Jazz</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="blues" {% if "Blues" in song.generos %} checked {% endif %}>
+                                    <input type="checkbox" id="blues" {% if "blues" in song.generos %} checked {% endif %}>
                                     <label for="blues">Blues</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="flamenco" {% if "Flamenco" in song.generos %} checked {% endif %}>
+                                    <input type="checkbox" id="flamenco" {% if "flamenco" in song.generos %} checked {% endif %}>
                                     <label for="flamenco">Flamenco</label>
                                 </div>
                             </div>
@@ -91,27 +91,27 @@
                             <div>
                                 <h3>Subgéneros</h3>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="punk-rock" {% if "Punk Rock" in song.generos %} checked {% endif %}>
+                                    <input type="checkbox" id="punk-rock" {% if "punk-rock" in song.generos %} checked {% endif %}>
                                     <label for="punk-rock">Punk Rock</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="heavy-metal" {% if "Heavy Metal" in song.generos %} checked {% endif %}>
+                                    <input type="checkbox" id="heavy-metal" {% if "heavy-metal" in song.generos %} checked {% endif %}>
                                     <label for="heavy-metal">Heavy Metal</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="indie-pop" {% if "Indie Pop" in song.generos %} checked {% endif %}>
+                                    <input type="checkbox" id="indie-pop" {% if "indie-pop" in song.generos %} checked {% endif %}>
                                     <label for="indie-pop">Indie Pop</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="trap" {% if "Trap" in song.generos %} checked {% endif %}>
+                                    <input type="checkbox" id="trap" {% if "trap" in song.generos %} checked {% endif %}>
                                     <label for="trap">Trap</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="techno" {% if "Techno" in song.generos %} checked {% endif %}>
+                                    <input type="checkbox" id="techno" {% if "techno" in song.generos %} checked {% endif %}>
                                     <label for="techno">Techno</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" id="ska" {% if "Ska" in song.generos %} checked {% endif %}>
+                                    <input type="checkbox" id="ska" {% if "ska" in song.generos %} checked {% endif %}>
                                     <label for="ska">Ska</label>
                                 </div>
                             </div>
@@ -147,6 +147,8 @@
                 precio: document.getElementById('precio').value,
                 generos: Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
                 portada: document.getElementById('cover-preview').src
+                // TODO: Al hacer be-stream, se debe pasar también la ruta del archuvo de audio en el backend (puede ser por ejemplo el nombre del archivo y ya)
+                // TODO: La duración de la canción se puede calcular en el backend.
             };
 
             try {
@@ -160,14 +162,16 @@
 
                 if (response.ok) {
                     const result = await response.json();
+                    displayMessage('success', 'Canción editada exitosamente.');
                     console.log('Song edited successfully:', result);
                 } else {
+                    displayMessage('error', `Error al editar la canción: ${response.statusText}`);
                     console.error('Failed to edit song:', response.statusText);
                 }
             } catch (error) {
+                displayMessage('error', 'Ocurrió un error al editar la canción.');
                 console.error('Error editing song:', error);
             }
-
         }
     </script>
 
@@ -177,7 +181,7 @@
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
     <script src="/static/js/upload-song-image.js"></script>
-
+    <script src="/static/js/displayMessage.js"></script>
 </body>
 
 </html>
