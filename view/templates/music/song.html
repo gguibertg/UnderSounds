@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="/static/css/base/header.css"> <!-- Hoja de estilo del header -->
     <link rel="stylesheet" href="/static/css/base/footer.css"> <!-- Hoja de estilo del footer -->
     <link rel="stylesheet" href="/static/css/music/song.css"> <!-- Hoja de estilo de la página de canción -->
+    <link rel="stylesheet" href="/static/css/music/radio.css">
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/static/icons/favicons/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/static/icons/favicons/favicon.svg" />
@@ -27,6 +29,7 @@
     <div id="header-placeholder"></div>
     <!-- Contenido principal -->
     <main>
+
         <div class="div-bg">
             <div class="song-page">
                 <section class="song-top">
@@ -42,6 +45,9 @@
                         </div>
                         <div class="song-stats">
                             <p><strong>Precio:</strong> 12$</p>
+                        </div>
+                        <div class="play">
+                            <button id="play-btn">▶️ Reproducir</button>
                         </div>
                         <div class="song-buttons">
                             <button class="btn download-btn">Descargar</button>
@@ -126,6 +132,7 @@
                 </section>
             </div>
         </div>
+
     </main>
     <!-- Pie de página -->
     <div id="footer-placeholder"></div>
@@ -134,6 +141,7 @@
     <script src="/static/js/header.js"></script>
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
+    <script src="/static/js/radio.js"></script>
 </body>
 
 </html>
