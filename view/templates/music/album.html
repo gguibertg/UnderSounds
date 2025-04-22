@@ -79,8 +79,9 @@
                                             <span><img src="/static/icons/site/views-icon-light.svg" alt="reproducciones" /> {{ cancion.visitas }}</span>
                                         </div>
                                         <div class="song-actions">
+                                            <button onclick="window.location.href='/song?id={{cancion.id}}';"> Ver canción</button>
                                             {% if tipoUsuario == 3 %}
-                                            <button class="btn" onclick="window.location.href='/edit-song?id={{cancion.id}}';"><img src="/static/icons/site/edit-icon.svg" alt="Editar" /> Editar canción</button>
+                                            <button class="btn" onclick="window.location.href='/edit-song?id={{cancion.id}}';"><img src="/static/icons/site/edit-icon.svg" alt="Editar" /> Editar canción</button> 
                                             {% endif %}
                                         </div>
                                     </div>

@@ -893,6 +893,7 @@ async def get_song(request: Request):
     res = verifySessionAndGetUserInfo(request)
     if not song_info["visible"]:
         if isinstance(res, Response) or song_id not in res["studio_canciones"]:
+            print(PCTRL_WARN, "Song is not visible and user is not the creator")
             return Response("No autorizado", status_code=403)
 
     # Convertimos los generos de la canción a un string sencillo
