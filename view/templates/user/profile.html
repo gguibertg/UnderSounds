@@ -426,35 +426,19 @@
         }
 
         function unregister() {
-            if (confirm('¿Seguro que quieres cerrar tu cuenta? Esta acción es irreversible.')) {
-                fetch("/unregister", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ confirm: true })
-                })
+            if (confirm('¿Estás seguro de que deseas cerrar tu cuenta? Esta acción es irreversible.')) {
+                fetch("/unregister", { method: "POST" })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            const user = auth.currentUser;
-                            user.delete()
-                                .then(() => {
-                                    alert('Tu cuenta ha sido eliminada.');
-                                    window.location.href = "/";
-                                })
-                                .catch((error) => {
-                                    console.error("Error al eliminar la cuenta de Firebase:", error);
-                                    if (error.code === "auth/requires-recent-login") {
-                                        alert("Debes volver a iniciar sesión para eliminar tu cuenta.");
-                                    } else {
-                                        alert("No se pudo eliminar la cuenta.");
-                                    }
-                                });
+                            alert('Tu cuenta ha sido cerrada exitosamente.');
+                            window.location.href = "/";
                         } else {
-                            alert('Error al eliminar tu cuenta en el sistema.');
+                            alert('Hubo un problema al cerrar tu cuenta.');
                         }
                     })
                     .catch(error => {
-                        console.error("Error al eliminar la cuenta en el sistema:", error);
+                        console.error("Error al cerrar la cuenta:", error);
                         alert('Ocurrió un error inesperado.');
                     });
             }

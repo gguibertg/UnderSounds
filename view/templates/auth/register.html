@@ -128,31 +128,33 @@
 
         document.getElementById("google-register").addEventListener("click", function () {
             const provider = new firebase.auth.GoogleAuthProvider();
+            const esArtista = document.getElementById("esArtista").checked;
             console.log("Usuario registrándose con Google...");
             auth.signInWithPopup(provider)
-                .then(result => result.user.getIdToken())
-                .then(token => {
-                    console.log("Token del usuario: ", token);
-                    console.log("Solicitando acceso a la API...");
-                    return fetch("http://localhost:8000/register-google", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ token })
-                    });
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.href = "/profile";
-                    } else {
-                        throw new Error(data.error || "Ocurrió un error desconocido");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error durante el registro con Google:", error);
-                    displayError("Error durante el registro con Google: " + error.message);
+            .then(result => result.user.getIdToken())
+            .then(token => {
+                console.log("Token del usuario: ", token);
+                console.log("Solicitando acceso a la API...");
+                return fetch("http://localhost:8000/register-google", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token, esArtista })
                 });
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                window.location.href = "/profile";
+                } else {
+                throw new Error(data.error || "Ocurrió un error desconocido");
+                }
+            })
+            .catch(error => {
+                console.error("Error durante el registro con Google:", error);
+                displayError("Error durante el registro con Google: " + error.message);
+            });
         });
+        
     </script>
 
     <!-- Scripts -->

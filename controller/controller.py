@@ -179,7 +179,7 @@ async def register_post(data: dict, response: Response, provider: str):
 
     try:
         # Verificamos el token de Firebase dado por el usuario
-        decoded_token = auth.verify_id_token(token)
+        decoded_token = auth.verify_id_token(token, None, False, 3)
         # Identificador único del usuario otorgado por Firebase que podemos usar como identificador del usuario en nuestra base de datos
         
         if provider == "credentials":
@@ -215,6 +215,9 @@ async def register_post(data: dict, response: Response, provider: str):
 
         user.set_url("")
         user.set_esArtista(bool(data.get("esArtista", False)))
+        user.set_studio_albumes([])  # Inicializamos el campo studio_albumes como una lista vacía
+        user.set_studio_canciones([])  # Inicializamos el campo studio_canciones como una lista vacía
+        #user.set_songs_compradas([])  # No existe todavía!!!
 
         # Añadir el usuario a la base de datos
         if model.add_usuario(user):
@@ -289,6 +292,7 @@ async def deregister(request: Request, response: Response):
         response.delete_cookie("session_id")
         print(PCTRL, "User session", session_id, "destroyed")
 
+        print(PCTRL, "User account deleted successfully")
         return {"success": True, "message": "User account deleted successfully"}
     
     except Exception as e:
