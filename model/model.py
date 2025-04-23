@@ -1,4 +1,4 @@
-from .dao.mongodb.mongodbDAOFactory import MongodbDAOFactory  # TODO: Cambiar a MongoDB
+from .dao.mongodb.mongodbDAOFactory import MongodbDAOFactory
 from .dto.albumDTO import AlbumDTO
 from .dto.generoDTO import GeneroDTO
 from .dto.songDTO import SongDTO, SongsDTO
