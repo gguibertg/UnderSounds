@@ -10,6 +10,7 @@ class View():
     def __init__(self): 
         pass
 
+    # Esta función se va a usar para renderizar la template index.html
     def get_index_view(self, request: Request): 
         return templates.TemplateResponse("main/index.html", {"request" : request})
     
@@ -23,7 +24,6 @@ class View():
     def get_edit_song_view(self, request: Request, song_info):
         return templates.TemplateResponse("music/song-edit.html", {"request": request, "song": song_info})
     
-    # Seguir añadiendo funciones para renderizar las templates que se necesiten...
     # Renderizar la template login.html
     def get_login_view(self, request: Request):
         return templates.TemplateResponse("auth/login.html", {"request": request, "API_CREDENTIALS" : apicreds })
@@ -72,3 +72,7 @@ class View():
     # Renderizar la template carrito.html
     def get_carrito_view(self, request: Request, carrito):
         return templates.TemplateResponse("shop/cart.html", {"request": request, "carrito": carrito})
+    
+    # Renderizar la template studio.html
+    def get_studio_view(self, request: Request):
+        return templates.TemplateResponse("user/studio.html", {"request": request})

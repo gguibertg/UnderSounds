@@ -6,15 +6,12 @@
     justify-content: flex-start; /* Alinea los elementos a la izquierda sin espacio extra */
 }
 
-
-
 .songs-cell {
     display: flex;
-    flex: 1;
-    flex-direction: column; /* Organiza los elementos en una sola columna */
+    flex-direction: column;
     align-items: center;
-    max-width: 20rem;
-    min-width: auto;
+    max-width: 16rem;
+    gap: 10px;
 }
 
 .songs-image {

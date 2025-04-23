@@ -1,5 +1,6 @@
 # Imports estándar de Python
 import base64
+import json
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -1007,6 +1008,26 @@ async def edit_song_post(request: Request):
         print(PCTRL_WARN, "Error while processing Song", song_id, ", updating to database failed!")
         return {"success": False, "error": "Song not updated in database"}
     
+# -------------------------------------------------------------- #
+# ---------------------------- STUDIO -------------------------- #
+# -------------------------------------------------------------- #
+
+# Ruta para cargar la vista de studio
+@app.get("/studio")
+async def get_studio(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return Response("No autorizado", status_code=403)
+    
+    return view.get_studio_view(request)
+
+
+
+
 # -------------------------------------------------------------------------- #
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
 # -------------------------------------------------------------------------- #
@@ -1051,3 +1072,25 @@ def verifySessionAndGetUserInfo(request : Request):
             print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")
         
     return Response("No autorizado", status_code=401)
+
+
+
+
+# --------------------------- HACKS DE MIERDA - ELIMINAR CUANDO HAYA UNA MEJOR IMPLEMENTACIÓN --------------------------- #
+# Guardar sesiones en un archivo JSON al cerrar el servidor y recuperarlas al iniciar.
+# Así evitamos perder las sesiones al reiniciar el servidor.
+@app.on_event("shutdown")
+def shutdown_event():
+    with open("sessions.json", "w") as f:
+        json.dump(sessions, f)
+    print(PCTRL, "Sessions saved to sessions.json")
+@app.on_event("startup")
+def startup_event():
+    if Path("sessions.json").is_file():
+        with open("sessions.json", "r") as f:
+            global sessions
+            sessions = json.load(f)
+        print(PCTRL, "Sessions loaded from sessions.json")
+    else:
+        print(PCTRL_WARN, "No sessions.json file found, starting with empty sessions")
+

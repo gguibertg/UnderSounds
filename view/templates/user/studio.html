@@ -29,11 +29,12 @@
     <!-- Contenido principal -->
     <main>
         <div class="div-bg">
-            <div class="div-pannel" style="width: 100%; align-items: center;">
+            <br>
+            <div class="div-pannel" style="width: 80%; align-items: center;">
                 <p class="songs-title">Tus Canciones</p>
                 <div class="parent">
+                    
                     <div class="div-pannel-sub songs-cell">
-                        <button class="delete-btn">🗑️</button>
                         <img src="/static/img/albums/album-03.webp" class="songs-image" alt="Song Image">
                         <b style="font-size: 1.3rem;">Título canción</b>
                         <p>Álbum · Artista</p>
@@ -58,20 +59,24 @@
                             </div>
                         </div>
 
-                        <a href="/song-edit" style="width: 100%;">
-                            <button style="width: 100%;">Editar canción</button>
-                        </a>
+                        <div class="button-array">
+                            <button type="button" style="background-color: white;" onclick="window.location.href='/song?id='">🔗</button>
+                            <button type="button" style="background-color: #ff4646;" onclick="removeSong('')">🗑️</button>
+                            <button type="button" style="background-color: #0077ff;" onclick="window.location.href='/edit-song?id='">✏️</button>
+                        </div>
                     </div>
 
                     <a href="/upload-song">
                         <button class="add-btn">➕ Añadir canción</button>
                     </a>
+                
                 </div>
-
                 <br>
             </div>
+            
             <br>
-            <div class="div-pannel" style="width: 100%; align-items: center;">
+            
+            <div class="div-pannel" style="width: 80%; align-items: center;">
                 <p class="songs-title">Tus Álbumes</p>
                 <div class="parent">
 
