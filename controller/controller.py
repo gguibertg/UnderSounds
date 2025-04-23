@@ -751,6 +751,63 @@ async def album_edit_post(request: Request):
         print(PCTRL_WARN, "Error while processing Album", album_id, ", updating to database failed!")
         return {"success": False, "error": "Error del sistema"}
 
+# Ruta para eliminar un álbum
+@app.post("/delete-album")
+async def delete_album_post(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return {"success": False, "error": "No autorizado"}
+    if not res["esArtista"]:
+        return {"success": False, "error": "No autorizado"}
+    
+    # Obtenemos el ID del álbum a eliminar desde la request
+    data = await request.json()
+    album_id = data.get("id")
+    if not album_id:
+        print(PCTRL_WARN, "Album ID not provided in request")
+        return {"success": False, "error": "Album ID not provided"}
+    
+    # Verificamos que el álbum existe y pertenece al usuario
+    album = model.get_album(album_id)
+    if not album:
+        print(PCTRL_WARN, "Album does not exist")
+        return {"success": False, "error": "Album does not exist"}
+    if album_id not in res["studio_albumes"]:
+        print(PCTRL_WARN, "Album not found in user albums")
+        return {"success": False, "error": "Album not found in user albums"}
+    
+    # Procedemos a la eliminación del álbum
+    # Primero, borramos el campo album de cada una de las canciones que lo componen. Si algo falla, nos da igual.
+    for song_id in album["canciones"]:
+        song = model.get_song(song_id)
+        if not song:
+            print(PCTRL_WARN, "Song", song_id, "not found in database - skipping")
+            continue
+        
+        # Actualizamos el campo album de la canción con el id del nuevo album
+        song["album"] = None
+        if not model.update_song(song):
+            print(PCTRL_WARN, "Song", song_id, "not updated in database! - skipping")
+            continue
+
+    # Luego, borramos el álbum del studio_albumes del usuario
+    user = UsuarioDTO()
+    user.load_from_dict(res)
+    user.remove_studio_album(album_id)
+    if not model.update_usuario(user):
+        print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
+        return {"success": False, "error": "User not updated in database"}
+    
+    # Por ultimo, borramos el álbum de la base de datos
+    if model.delete_album(album_id):
+        print(PCTRL, "Album", album_id, "deleted from database")
+        return {"success": True, "message": "Album deleted successfully"}
+    else:
+        print(PCTRL_WARN, "Album", album_id, "not deleted from database!")
+        return {"success": False, "error": "Album not deleted from database"}
+        
+
 # ------------------------------------------------------------------ #
 # ----------------------------- INCLUDES --------------------------- #
 # ------------------------------------------------------------------ #
@@ -1077,7 +1134,68 @@ async def edit_song_post(request: Request):
     except Exception as e:
         print(PCTRL_WARN, "Error while processing Song", song_id, ", updating to database failed!")
         return {"success": False, "error": "Song not updated in database"}
+
+# Ruta para eliminar una canción
+@app.post("/delete-song")
+async def delete_song_post(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return {"success": False, "error": "No autorizado"}
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return {"success": False, "error": "No autorizado"}
     
+    # Obtenemos el ID de la canción a eliminar desde la request
+    data = await request.json()
+    song_id = data.get("id")
+    if not song_id:
+        print(PCTRL_WARN, "Song ID not provided in request")
+        return {"success": False, "error": "Song ID not provided"}
+    
+    # Verificamos que la canción existe y pertenece al usuario
+    song = model.get_song(song_id)
+    if not song:
+        print(PCTRL_WARN, "Song does not exist")
+        return {"success": False, "error": "Song does not exist"}
+    if song_id not in res["studio_canciones"]:
+        print(PCTRL_WARN, "Song not found in user songs")
+        return {"success": False, "error": "Song not found in user songs"}
+    
+    # Procedemos a la eliminación de la canción
+    # Primero, descargaremos el album al que pertenece la canción, y eliminaremos la canción de su campo canciones.
+    # Si no pertenece a ningun album, no haremos nada.
+    if song["album"] is not None:
+        album = model.get_album(song["album"])
+        if not album:
+            print(PCTRL_WARN, "Album does not exist")
+            return {"success": False, "error": "Album does not exist"}
+        album_object = AlbumDTO()
+        album_object.load_from_dict(album)
+        album_object.remove_cancion(song_id)
+        if not model.update_album(album_object):
+            print(PCTRL_WARN, "Album", album["id"], "not updated in database!")
+            return {"success": False, "error": "Album not updated in database"}
+    
+    # Luego, borramos la canción del studio_canciones del usuario
+    user = UsuarioDTO()
+    user.load_from_dict(res)
+    user.remove_studio_cancion(song_id)
+    if not model.update_usuario(user):
+        print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
+        return {"success": False, "error": "User not updated in database"}
+
+    # Por último, borramos la canción de la base de datos
+    if model.delete_song(song_id):
+        print(PCTRL, "Song", song_id, "deleted from database")
+        return {"success": True, "message": "Song deleted successfully"}
+    else:
+        print(PCTRL_WARN, "Song", song_id, "not deleted from database!")
+        return {"success": False, "error": "Song not deleted from database"}
+
+
+
+
 # -------------------------------------------------------------- #
 # ---------------------------- STUDIO -------------------------- #
 # -------------------------------------------------------------- #

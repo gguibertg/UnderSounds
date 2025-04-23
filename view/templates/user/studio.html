@@ -121,7 +121,7 @@
     <script>
         function removeAlbum(id) {
             if (confirm("¿Estás seguro de que deseas eliminar este álbum?\nTodas las canciones asociadas a este álbum pasarán a ser Singles.\n\nEsta acción no se puede deshacer.")) {
-                fetch('/remove-album', {
+                fetch('/delete-album', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -145,7 +145,7 @@
 
         function removeSong(id) {
             if (confirm("¿Estás seguro de que deseas eliminar esta canción?\nAl eliminar la canción se borrará del album asociado.\n\nEsta acción no se puede deshacer.")) {
-                fetch('/remove-song', {
+                fetch('/delete-song', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
