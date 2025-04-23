@@ -18,6 +18,7 @@ from model.dto.carritoDTO import ArticuloCestaDTO, CarritoDTO
 from model.dto.songDTO import SongDTO
 from model.dto.contactoDTO import ContactoDTO
 from model.dto.usuarioDTO import UsuarioDTO
+from model.dto.reseñasDTO import ReseñaDTO
 from model.model import Model
 from view.view import View
 
@@ -886,3 +887,92 @@ async def edit_song_post(request: Request):
     except Exception as e:
         print(PCTRL_WARN, "Error while processing Song", song_id, ", updating to database failed!")
         return {"success": False, "error": "Song not updated in database"}
+    
+
+# ------------------------------------------------------------ #
+# --------------------------- Reseña ------------------------- #
+# ------------------------------------------------------------ #
+
+@app.post("/add-review")
+async def add_review(request: Request):
+    
+    try:
+        # Verificar si el usuario tiene una sesión activa y es artista 
+        user_db = verifySessionAndGetUserInfo(request)
+        if isinstance(user_db, Response):
+            return user_db # Si es un Response, devolvemos el error  
+
+        print(PCTRL, "Añadiendo")
+        data_info = await request.json()
+        song_id = data_info["song_id"]
+        titulo = data_info["titulo"]
+        texto = data_info["reseña"]
+
+        usuario = UsuarioDTO()
+        usuario.load_from_dict(user_db)
+
+        # Crear ReseñaDTO
+        reseña = ReseñaDTO()
+        reseña.set_titulo(titulo)
+        reseña.set_reseña(texto)
+        reseña.set_usuario(usuario)
+
+        # Guardar en base de datos
+        success = model.add_reseña(reseña)  # Lo implementamos abajo
+
+        song_dict = model.get_song(song_id)
+        song = SongDTO()
+        song.load_from_dict(song_dict)
+        song.add_resenas(reseña)
+        result = model.update_song(song)
+
+        if success and result:
+            return JSONResponse(status_code=200, content={"message": "Reseña añadida correctamente."})
+        else:
+            return JSONResponse(status_code=500, content={"error": "No se pudo guardar la reseña."})
+
+    except Exception as e:
+        print("ERROR add_review:", e)
+        return JSONResponse(status_code=500, content={"error": str(e)})
+    
+
+@app.post("/delete-review")
+async def delete_review(request: Request):
+        try:
+            res = verifySessionAndGetUserInfo(request)
+            if isinstance(res, Response):
+                return res # Si es un Response, devolvemos el error  
+            print(PCTRL, "Borrando")
+            data = await request.json()
+            reseña_id = data["id"]
+            token = data["token"]
+            song_id = data["song_id"]
+
+            # Validar usuario
+            decoded_token = auth.verify_id_token(token)
+            uid = decoded_token["uid"]
+
+            # Obtener la reseña
+            reseña_data = model.get_reseña(reseña_id)
+
+            if not reseña_data or reseña_data["usuario"]["id"] != uid:
+                return JSONResponse(status_code=403, content={"error": "No autorizado para borrar esta reseña."})
+
+            result = model.delete_reseña(reseña_id)
+
+            reseña = ReseñaDTO()
+            reseña.load_from_dict(reseña_data)
+
+            song_dict = model.get_song(song_id)
+            song = SongDTO()
+            song.load_from_dict(song_dict)
+            song.remove_resena(reseña)
+            result = model.update_song(song)
+
+            if result:
+                return JSONResponse(status_code=200, content={"message": "Reseña eliminada."})
+            else:
+                return JSONResponse(status_code=500, content={"error": "No se pudo eliminar la reseña."})
+
+        except Exception as e:
+            return JSONResponse(status_code=500, content={"error": str(e)})

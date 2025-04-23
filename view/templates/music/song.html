@@ -60,77 +60,94 @@
                     </div>
                     <div class="div-pannel review-form">
                         <h3>Reseña nueva</h3>
-                        <textarea placeholder="Escribe tu reseña aquí..."></textarea>
-                        <button class="btn publish-btn">Publicar</button>
+                        <textarea id="titulo" placeholder="Escribe el titulo aquí..."></textarea>
+                        <textarea id="reseña" placeholder="Escribe tu reseña aquí..."></textarea>
+                        <button class="btn publish-btn" onclick="addReseña()" >Publicar</button>
                     </div>
                 </section>
                 <section class="div-pannel reviews" style="align-items: center;">
                     <h2>Reseñas</h2>
                     <div class="reviews-grid">
-                        <details class="review" open>
+                        {% if song.lista_resenas|length == 0 %}
+                        <p id="no_reseñas" style="display: flex;">No hay reseñas.</p>
+                        {% else %}
+                        {% for resena in song.lista_resenas %}
+                        <details class="review" id="resena-¨{{ resena.id }}">
                             <summary><img alt="Desplegar" class="chevron" height="16"
-                                    src="/static/icons/site/dropdown-icon.svg" width="16" /><strong>Juan Pérez</strong>
+                                    src="{{ resena.usuario.imagen }}" width="16" /><strong>{{resena.usuario.nombre}}</strong>
                                 —
-                                ¡Un clásico atemporal!</summary>
-                            <p>Rick Astley nos regaló un himno inolvidable. Esta canción siempre trae una sonrisa a mi
-                                rostro.</p>
+                                {{ resena.titulo }}</summary>
+                            <p>{{ resena.reseña }}</p>
                             <div class="review-actions">
-                                <button class="btn" title="Editar"><img alt="Editar" height="20"
+                                <button class="btn" title="Editar" onclick=""><img alt="Editar" height="20"
                                         src="/static/icons/site/edit-icon.svg" width="20" /></button>
-                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
+                                    
+                                <button class="btn" title="Borrar" onclick="borrarReseña('{{ resena.id }}')"><img alt="Borrar" height="20"
                                         src="/static/icons/site/delete-icon.svg" width="20" /></button>
                             </div>
                         </details>
-                        <details class="review">
-                            <summary><img alt="Desplegar" class="chevron" height="16"
-                                    src="/static/icons/site/dropdown-icon.svg" width="16" /><strong>María López</strong>
-                                —
-                                No pasa de moda</summary>
-                            <p>Es increíble cómo esta canción sigue siendo tan popular después de tantos años.
-                                Definitivamente
-                                un éxito eterno.</p>
-                            <div class="review-actions">
-                                <button class="btn" title="Editar"><img alt="Editar" height="20"
-                                        src="/static/icons/site/edit-icon.svg" width="20" /></button>
-                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
-                                        src="/static/icons/site/delete-icon.svg" width="20" /></button>
-                            </div>
-                        </details>
-                        <details class="review">
-                            <summary><img alt="Desplegar" class="chevron" height="16"
-                                    src="/static/icons/site/dropdown-icon.svg" width="16" /><strong>Carlos
-                                    Mendoza</strong> — Perfecta para cualquier momento</summary>
-                            <p>La melodía, la letra y la energía de Rick Astley la convierten en una de mis favoritas.
-                                ¡No puedo
-                                dejar de escucharla!</p>
-                            <div class="review-actions">
-                                <button class="btn" title="Editar"><img alt="Editar" height="20"
-                                        src="/static/icons/site/edit-icon.svg" width="20" /></button>
-                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
-                                        src="/static/icons/site/delete-icon.svg" width="20" /></button>
-                            </div>
-                        </details>
-                        <details class="review">
-                            <summary><img alt="Desplegar" class="chevron" height="16"
-                                    src="/static/icons/site/dropdown-icon.svg" width="16" /><strong>Laura Gómez</strong>
-                                —
-                                Siempre en mi playlist</summary>
-                            <p>Desde que la escuché por primera vez, se convirtió en una de mis canciones
-                                imprescindibles.
-                                ¡Nunca decepciona!</p>
-                            <div class="review-actions">
-                                <button class="btn" title="Editar"><img alt="Editar" height="20"
-                                        src="/static/icons/site/edit-icon.svg" width="20" /></button>
-                                <button class="btn" title="Borrar"><img alt="Borrar" height="20"
-                                        src="/static/icons/site/delete-icon.svg" width="20" /></button>
-                            </div>
-                        </details>
+                        {% endfor %}
+                        {% endif %}
                     </div>
                 </section>
             </div>
         </div>
 
     </main>
+    <script>
+        
+        async function addReseña() {
+            const titulo = document.getElementById('titulo').value;
+            const reseña = document.getElementById('reseña').value;
+
+            const response = await fetch('/add-review', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    song_id: "{{ song.id }}",
+                    titulo: titulo,
+                    reseña: reseña
+                })
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert("Reseña publicada!");
+                location.reload();
+            } else {
+                alert("Error: " + result.error);
+            }
+        }
+
+        async function borrarReseña(reseñaId) {
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                alert("Debes iniciar sesión para borrar una reseña.");
+                return;
+            }
+
+            const token = await user.getIdToken();
+            console.log("Borrando Reseña");
+
+            const response = await fetch('/delete-review', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    song_id: "{{ song.id }}",
+                    id: reseñaId,
+                    token: token
+                })
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert("Reseña eliminada.");
+                location.reload();
+            } else {
+                alert("Error: " + result.error);
+            }
+        }
+    </script>
     <!-- Pie de página -->
     <div id="footer-placeholder"></div>
 
