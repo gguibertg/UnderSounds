@@ -120,22 +120,13 @@
         }
 
         async function borrarReseña(reseñaId) {
-            const user = firebase.auth().currentUser;
-            if (!user) {
-                alert("Debes iniciar sesión para borrar una reseña.");
-                return;
-            }
-
-            const token = await user.getIdToken();
-            console.log("Borrando Reseña");
-
+            
             const response = await fetch('/delete-review', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     song_id: "{{ song.id }}",
-                    id: reseñaId,
-                    token: token
+                    reseña_id: reseñaId
                 })
             });
 

@@ -24,6 +24,7 @@ class mongodbReseñaDAO(InterfaceReseñaDAO):
             for doc in query:
                 reseña_dto = ReseñaDTO()
                 reseña_dto.set_id(str(doc.get_id("id")))
+                reseña_dto.set_titulo(doc.get_titulo("titulo"))
                 reseña_dto.set_reseña(doc.get_reseña("reseña"))
                 reseña_dto.set_usuario(doc.get_usuario("usuario"))
                
@@ -36,20 +37,21 @@ class mongodbReseñaDAO(InterfaceReseñaDAO):
 
     def get_reseña(self, id):
         reseña = None
-
+        
         try:
             query = self.collection.find_one({"_id": ObjectId(id)})
-
+            
             if query:
                 reseña = ReseñaDTO()
                 reseña.set_id(str(query.get("_id")))
+                reseña.set_titulo(query.get("titulo"))
                 reseña.set_reseña(query.get("reseña"))
                 reseña.set_usuario(query.get("usuario"))
                 
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al recuperar el género: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar la reseña: {e}")
 
-        return reseña.reseñadto_to_dict if reseña else None
+        return reseña.reseñadto_to_dict() if reseña else None
     
     def get_reseña_song(self, id, song: SongDTO):
         reseña_dict = self.get_reseña(id) 
@@ -69,7 +71,7 @@ class mongodbReseñaDAO(InterfaceReseñaDAO):
             return str(result.inserted_id)
         
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al agregar el usuario: {e}")
+            print(f"{PDAO_ERROR}Error al agregar la reseña: {e}")
             return None
             
 
@@ -86,7 +88,7 @@ class mongodbReseñaDAO(InterfaceReseñaDAO):
             return result.modified_count == 1
         
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al actualizar el usuario: {e}")
+            print(f"{PDAO_ERROR}Error al actualizar la reseña: {e}")
             return False
     
 
@@ -96,5 +98,5 @@ class mongodbReseñaDAO(InterfaceReseñaDAO):
             return result.deleted_count == 1
         
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al eliminar el usuario: {e}")
+            print(f"{PDAO_ERROR}Error al eliminar la reseña: {e}")
             return False

@@ -29,7 +29,7 @@ class SongDTO():
         self.visitas: int = None
         self.portada: str = None
         self.precio: float = None
-        self.lista_resenas: list[ReseñaDTO] = []
+        self.lista_resenas: list[dict] = []
         self.visible: bool = None
 
     def is_empty(self):
@@ -120,17 +120,17 @@ class SongDTO():
     def set_precio(self, precio: float):
         self.precio = precio
 
-    def get_lista_resenas(self) -> list[ReseñaDTO]:
+    def get_lista_resenas(self) -> list[dict]:
         return self.lista_resenas
     
-    def add_resenas(self, resenas: ReseñaDTO):
-        self.generos.append(resenas)
+    def add_resenas(self, resenas: dict):
+        self.lista_resenas.append(resenas)
 
-    def remove_resena(self, resenas: ReseñaDTO):
+    def remove_resena(self, resenas: dict):
         if resenas in self.lista_resenas:
-            self.generos.remove(resenas)
+            self.lista_resenas.remove(resenas)
 
-    def set_lista_resenas(self, lista_resenas: list[ReseñaDTO]):
+    def set_lista_resenas(self, lista_resenas: list[dict]):
         self.lista_resenas = lista_resenas
 
     def get_visible(self) -> bool:

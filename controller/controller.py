@@ -898,35 +898,42 @@ async def add_review(request: Request):
     
     try:
         # Verificar si el usuario tiene una sesión activa y es artista 
-        user_db = verifySessionAndGetUserInfo(request)
-        if isinstance(user_db, Response):
-            return user_db # Si es un Response, devolvemos el error  
-
-        print(PCTRL, "Añadiendo")
+        #user_db = verifySessionAndGetUserInfo(request)
+        #if isinstance(user_db, Response):
+        #    return user_db # Si es un Response, devolvemos el error  
+        
         data_info = await request.json()
         song_id = data_info["song_id"]
         titulo = data_info["titulo"]
         texto = data_info["reseña"]
 
         usuario = UsuarioDTO()
-        usuario.load_from_dict(user_db)
+        usuario.set_nombre("Adrian")
+        usuario.set_imagen("")
+        #usuario.load_from_dict(user_db)
 
         # Crear ReseñaDTO
         reseña = ReseñaDTO()
         reseña.set_titulo(titulo)
         reseña.set_reseña(texto)
-        reseña.set_usuario(usuario)
+        reseña.set_usuario(usuario.usuario_to_dict())
 
         # Guardar en base de datos
-        success = model.add_reseña(reseña)  # Lo implementamos abajo
+        reseña_id = model.add_reseña(reseña)
+        if reseña_id:
+            print(PCTRL, "Reseña registered in database")
+        else:
+            print(PCTRL_WARN, "No se pudo guardar la reseña.")
 
+        reseña.set_id(reseña_id)
+        
         song_dict = model.get_song(song_id)
+
         song = SongDTO()
         song.load_from_dict(song_dict)
-        song.add_resenas(reseña)
-        result = model.update_song(song)
+        song.add_resenas(reseña.reseñadto_to_dict())
 
-        if success and result:
+        if model.update_song(song):
             return JSONResponse(status_code=200, content={"message": "Reseña añadida correctamente."})
         else:
             return JSONResponse(status_code=500, content={"error": "No se pudo guardar la reseña."})
@@ -939,26 +946,17 @@ async def add_review(request: Request):
 @app.post("/delete-review")
 async def delete_review(request: Request):
         try:
-            res = verifySessionAndGetUserInfo(request)
-            if isinstance(res, Response):
-                return res # Si es un Response, devolvemos el error  
-            print(PCTRL, "Borrando")
-            data = await request.json()
-            reseña_id = data["id"]
-            token = data["token"]
-            song_id = data["song_id"]
-
-            # Validar usuario
-            decoded_token = auth.verify_id_token(token)
-            uid = decoded_token["uid"]
+            # Verificar si el usuario tiene una sesión activa y es artista 
+            #user_db = verifySessionAndGetUserInfo(request)
+            #if isinstance(user_db, Response):
+            #    return user_db # Si es un Response, devolvemos el error  
+            
+            data_info = await request.json()
+            song_id = data_info["song_id"]
+            reseña_id = data_info["reseña_id"]
 
             # Obtener la reseña
             reseña_data = model.get_reseña(reseña_id)
-
-            if not reseña_data or reseña_data["usuario"]["id"] != uid:
-                return JSONResponse(status_code=403, content={"error": "No autorizado para borrar esta reseña."})
-
-            result = model.delete_reseña(reseña_id)
 
             reseña = ReseñaDTO()
             reseña.load_from_dict(reseña_data)
@@ -966,10 +964,14 @@ async def delete_review(request: Request):
             song_dict = model.get_song(song_id)
             song = SongDTO()
             song.load_from_dict(song_dict)
-            song.remove_resena(reseña)
-            result = model.update_song(song)
+            song.remove_resena(reseña_data)
 
-            if result:
+            if model.update_song(song):
+                print(PCTRL, "Reseña deleted of song", song_id )
+            else:
+                return JSONResponse(status_code=500, content={"error": "No se pudo eliminar la reseña."})
+
+            if model.delete_reseña(reseña_id):
                 return JSONResponse(status_code=200, content={"message": "Reseña eliminada."})
             else:
                 return JSONResponse(status_code=500, content={"error": "No se pudo eliminar la reseña."})

@@ -20,7 +20,7 @@ class ReseñaDTO():
         self.id: str = None
         self.titulo: str = None
         self.reseña: str = None
-        self.usuario: UsuarioDTO = None
+        self.usuario: dict = None
 
     def is_empty(self):
         return (self.id is None and self.titulo is None and self.reseña is None and self.usuario is None)
@@ -43,20 +43,22 @@ class ReseñaDTO():
     def set_reseña(self, reseña: str):
         self.reseña = reseña
 
-    def get_usuario(self) -> UsuarioDTO:
+    def get_usuario(self) -> dict:
         return self.usuario
 
-    def set_usuario(self, usuario: UsuarioDTO):
+    def set_usuario(self, usuario: dict):
         self.usuario = usuario
 
     def reseñadto_to_dict(self) -> dict:
         return {
             "id": self.id,
+            "titulo": self.titulo,
             "reseña": self.reseña,
             "usuario": self.usuario
         }
     
     def load_from_dict(self, data: dict):
         self.id = data.get("id")
+        self.titulo = data.get("titulo")
         self.reseña = data.get("reseña")
         self.usuario = data.get("usuario")
