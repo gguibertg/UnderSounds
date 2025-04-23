@@ -63,6 +63,9 @@ class AlbumDTO:
         if genero_id in self.generos:
             self.generos.remove(genero_id)
 
+    def get_generos(self) -> list[str]:
+        return self.generos
+
     def set_canciones(self, canciones: list[str]):
         self.canciones = canciones
 
@@ -72,6 +75,9 @@ class AlbumDTO:
     def remove_cancion(self, cancion_id: str):
         if cancion_id in self.canciones:
             self.canciones.remove(cancion_id)
+
+    def get_canciones(self) -> list[str]:
+        return self.canciones
 
     def get_visitas(self) -> int:
         return self.visitas

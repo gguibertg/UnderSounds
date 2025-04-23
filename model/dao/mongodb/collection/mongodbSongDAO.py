@@ -36,6 +36,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                 song_dto.set_precio(doc.get("precio"))
                 song_dto.set_lista_resenas(doc.get("lista_resenas"))
                 song_dto.set_visible(doc.get("visible"))
+                song_dto.set_album(doc.get("album"))
 
                 songs.insertSong(song_dto)
 
@@ -67,6 +68,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                 song.set_precio(query.get("precio"))
                 song.set_lista_resenas(query.get("lista_resenas"))
                 song.set_visible(query.get("visible"))
+                song.set_album(query.get("album"))
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar el usuario: {e}")

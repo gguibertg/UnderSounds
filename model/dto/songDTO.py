@@ -30,6 +30,7 @@ class SongDTO():
         self.precio: float = None
         self.lista_resenas: list[str] = []
         self.visible: bool = None
+        self.album: str = None
 
     def is_empty(self):
         return (self.id is None and self.titulo is None and 
@@ -38,7 +39,8 @@ class SongDTO():
                 self.duracion is None and self.generos is None and 
                 self.likes is None and self.visitas is None and 
                 self.portada is None and self.precio is None and 
-                self.lista_resenas is None and self.visible is None)
+                self.lista_resenas is None and self.visible is None and 
+                self.album is None)
 
     def get_id(self) -> str:
         return self.id
@@ -131,6 +133,12 @@ class SongDTO():
     def set_visible(self, visible: bool):
         self.visible = visible
 
+    def get_album(self) -> str:
+        return self.album
+
+    def set_album(self, album: str):
+        self.album = album
+
     def songdto_to_dict(self) -> dict:
         return {
             "id": self.id,
@@ -146,7 +154,8 @@ class SongDTO():
             "portada": self.portada,
             "precio": self.precio,
             "lista_resenas": self.lista_resenas,
-            "visible": self.visible
+            "visible": self.visible,
+            "album": self.album
         }
     
     def load_from_dict(self, data: dict):
@@ -164,3 +173,4 @@ class SongDTO():
         self.precio = data.get("precio")
         self.lista_resenas = data.get("lista_resenas", [])
         self.visible = data.get("visible")
+        self.album = data.get("album")

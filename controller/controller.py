@@ -407,14 +407,14 @@ async def get_upload_album(request: Request):
 
 # Ruta para subir un álbum
 @app.post("/upload-album")
-async def upload_album(request: Request):
+async def upload_album_post(request: Request):
     # Verificar si el usuario tiene una sesión activa y es artista 
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return res # Si es un Response, devolvemos el error  
+        return {"success": False, "error": "No autorizado"}  # Si es un Response, devolvemos el error  
     if not res["esArtista"]:
         print(PCTRL_WARN, "User is not an artist")
-        return Response("No autorizado", status_code=403)
+        return {"success": False, "error": "No autorizado"}
     
     # Creamos un nuevo objeto AlbumDTO, utilizando los datos recibidos en el request
     data = await request.json()
@@ -439,9 +439,22 @@ async def upload_album(request: Request):
         print(PCTRL, "Album", album_id, "uploaded to database")
     else:
         print(PCTRL_WARN, "Album", album_id, "not uploaded to database!")
-        return {"success": False, "error": "Album not uploaded to database"}
+        return {"success": False, "error": "Error del sistema"}
 
-    try: 
+    try:
+        # Por cada una de las canciones en el album, actualizamos su campo album con el id del nuevo album
+        for song_id in album.get_canciones():
+            song = model.get_song(song_id)
+            if not song:
+                print(PCTRL_WARN, "Song", song_id, "not found in database")
+                raise Exception(f"Song {song_id} not found in database")
+            
+            # Actualizamos el campo album de la canción con el id del nuevo album
+            song["album"] = album_id
+            if not model.update_song(song):
+                print(PCTRL_WARN, "Song", song_id, "not updated in database!")
+                raise Exception(f"Song {song_id} not updated in database!")
+
         # Obtenemos los datos de usuario de la base de datos y creamos un nuevo objeto UsuarioDTO
         # Ya tenemos estos datos (res), solo necesitamos castearlos.
         user = UsuarioDTO()
@@ -458,12 +471,35 @@ async def upload_album(request: Request):
             raise Exception("User not updated in database")
         
     except Exception as e:
-        print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
+        print(PCTRL_WARN, "Error:", str(e))
 
-        # Destruir el album subido
+        # Intentar destruir el album subido
         model.delete_album(album_id)
         print(PCTRL_WARN, "Album", album_id, "deleted from database")
-        return {"success": False, "error": "User not updated in database"}
+
+        # Intentar revertir los cambios en las canciones
+        for song_id in album.get_canciones():
+            song = model.get_song(song_id)
+            if not song:
+                print(PCTRL_WARN, "Song", song_id, "not found in database")
+            
+            # Actualizamos el campo album de la canción con el id del nuevo album
+            song["album"] = None
+            if not model.update_song(song):
+                print(PCTRL_WARN, "Song", song_id, "not updated in database!")
+
+        # Intentar revertir los cambios en el usuario
+        user = UsuarioDTO()
+        user.load_from_dict(res)
+        # Eliminar la referencia al album
+        user.remove_studio_album(album_id)
+        # Actualizar el usuario en la base de datos
+        if model.update_usuario(user):
+            print(PCTRL, "User", user.get_email(), "updated in database")
+        else:
+            print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
+            
+        return {"success": False, "error": "Error del sistema"}
 
 # Ruta para cargar la vista de album
 @app.get("/album")
@@ -543,8 +579,6 @@ async def get_album(request: Request):
     # 3 = Artista (creador)
     return view.get_album_view(request, album_info, tipoUsuario) # Devolvemos la vista del album
 
-
-
 # Ruta para cargar la vista de álbum-edit
 @app.get("/album-edit")
 async def get_album_edit(request: Request):
@@ -574,18 +608,6 @@ async def get_album_edit(request: Request):
         return Response("No autorizado", status_code=403)
 
     # Ahora popularemos el album reemplazando las IDs (referencias) por los objetos reales
-    
-    #generos_out : list[dict] = []
-    #for genero_id in album_info["generos"]:
-    #    genero = model.get_genero(genero_id)
-    #    if not genero:
-    #        print(PCTRL_WARN, "Genero", genero_id ,"not found in database")
-    #        return Response("Error del sistema", status_code=403)
-    #    generos_out.append(genero["nombre"])
-    #album_info["generos"] = generos_out
-    #
-    # TODO: Al descargar un album ya vienen con IDs de generos que coinciden en nombre, por lo que no es necesario hacer la llamada a la BD para obtener el objeto real.
-
     canciones_out : list[dict] = []
     for cancion_id in album_info["canciones"]:
         cancion = model.get_song(cancion_id)
@@ -634,28 +656,28 @@ async def get_album_edit(request: Request):
 
 # Ruta para subir un álbum
 @app.post("/album-edit")
-async def upload_album(request: Request):
+async def album_edit_post(request: Request):
     # Verificar si el usuario tiene una sesión activa y es artista 
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return res # Si es un Response, devolvemos el error  
+        return {"success": False, "error": "No autorizado"}  # Si es un Response, devolvemos el error  
     if not res["esArtista"]:
         print(PCTRL_WARN, "User is not an artist")
-        return Response("No autorizado", status_code=403)
+        return {"success": False, "error": "No autorizado"}
     
+    # Descargamos el album antiguo de la base de datos via su ID.
+    album_dict = model.get_album(album_id)
+    if not album_dict:
+        print(PCTRL_WARN, "Album does not exist")
+        return {"success": False, "error": "Album does not exist"}
+    if album_id not in res["studio_albumes"]:
+        print(PCTRL_WARN, "Album not found in user albums")
+        return {"success": False, "error": "Album not found in user albums"}
+
     try:
         # Recibimos los datos del nuevo album editado, junto con su ID.
         data = await request.json()
-        album_id = data["id"] # ID del album a editar
-
-        # Descargamos el album antiguo de la base de datos via su ID.
-        album_dict = model.get_album(album_id)
-        if not album_dict:
-            print(PCTRL_WARN, "Album does not exist")
-            return Response("No autorizado", status_code=403)
-        if album_id not in res["studio_albumes"]:
-            print(PCTRL_WARN, "Album not found in user albums")
-            return Response("No autorizado", status_code=403)
+        album_id = data["id"]  # ID del album a editar
         
         album = AlbumDTO()
         album.load_from_dict(album_dict)
@@ -665,26 +687,69 @@ async def upload_album(request: Request):
         album.set_autor(data["autor"])
         album.set_colaboradores(data["colaboradores"])
         album.set_descripcion(data["descripcion"])
-        #album.set_fecha(datetime.strptime(data["fecha"], "%Y-%m-%d")) # La fecha no se puede editar.
+        # album.set_fecha(datetime.strptime(data["fecha"], "%Y-%m-%d")) # La fecha no se puede editar.
         album.set_generos(data["generos"])
         album.set_canciones(data["canciones"])
-        #album.set_visitas() # La cantidad de visitas no se puede editar.
+        # album.set_visitas() # La cantidad de visitas no se puede editar.
         album.set_portada(data["portada"])
         album.set_precio(data["precio"])
-        #album.set_likes() # La cantidad de likes no se puede editar.
+        # album.set_likes() # La cantidad de likes no se puede editar.
         album.set_visible(data["visible"])
+        
+        # Por cada una de las canciones en el album, actualizamos su campo album con el id del nuevo album
+        for song_id in album.get_canciones():
+            song = model.get_song(song_id)
+            if not song:
+                print(PCTRL_WARN, "Song", song_id, "not found in database")
+                raise Exception(f"Song {song_id} not found in database")
+            
+            # Actualizamos el campo album de la canción con el id del nuevo album
+            song["album"] = album_id
+            if not model.update_song(song):
+                print(PCTRL_WARN, "Song", song_id, "not updated in database!")
+                raise Exception(f"Song {song_id} not updated in database!")
 
         # Actualizamos el album en la base de datos
         if model.update_album(album):
             print(PCTRL, "Album", album_id, "updated in database")
             return {"success": True, "message": "Album updated successfully"}
         else:
-            print(PCTRL_WARN, "Album", album_id, "not updated in database!")
-            return {"success": False, "error": "Album not updated in database"}
+            raise Exception(f"Album {album_id} not updated in database!")
     
     except Exception as e:
+
+        # Intentamos revertir los cambios en el album
+        album_object = AlbumDTO()
+        album_object.load_from_dict(album_dict)
+        if model.update_album(album_object):
+            print(PCTRL, "Album", album_id, "reverted in database")
+        else:
+            print(PCTRL_WARN, "Album", album_id, "not reverted in database!")
+
+        # Intentar revertir los cambios en las canciones
+        for song_id in album.get_canciones():
+            song = model.get_song(song_id)
+            if not song:
+                print(PCTRL_WARN, "Song", song_id, "not found in database")
+            
+            # Actualizamos el campo album de la canción con el id del nuevo album
+            song["album"] = None
+            if not model.update_song(song):
+                print(PCTRL_WARN, "Song", song_id, "not updated in database!")
+
+        # Intentamos asociar las canciones del album antiguo a su album original
+        for song_id in album_dict["canciones"]:
+            song = model.get_song(song_id)
+            if not song:
+                print(PCTRL_WARN, "Song", song_id, "not found in database")
+            
+            # Actualizamos el campo album de la canción con el id del nuevo album
+            song["album"] = album_id
+            if not model.update_song(song):
+                print(PCTRL_WARN, "Song", song_id, "not updated in database!")
+
         print(PCTRL_WARN, "Error while processing Album", album_id, ", updating to database failed!")
-        return {"success": False, "error": "Album not updated in database"}
+        return {"success": False, "error": "Error del sistema"}
 
 # ------------------------------------------------------------------ #
 # ----------------------------- INCLUDES --------------------------- #
@@ -769,12 +834,12 @@ async def get_carrito(request: Request):
 # ------------------------------------------------------------ #
 
 @app.get("/contact")
-def index(request: Request): 
+def get_contact(request: Request): 
     return view.get_contact_view(request)
 
 # Responde al endpoint API /contact
 @app.post("/contact")
-async def index(request: Request):
+async def contact_post(request: Request):
     # Obtenemos los datos de la query en formato JSON
     data = await request.json()
     
@@ -813,7 +878,7 @@ async def index(request: Request):
 
 # Ruta para cargar vista upload-song
 @app.get("/upload-song")
-def song_post(request: Request):
+def get_upload_song(request: Request):
     # Verificar si el usuario tiene una sesión activa y es artista 
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
@@ -826,7 +891,7 @@ def song_post(request: Request):
 
 # Ruta para procesar la petición de upload-song
 @app.post("/upload-song")
-async def song_post(request: Request):
+async def upload_song_post(request: Request):
     # Verificar si el usuario tiene una sesión activa y es artista 
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
@@ -851,6 +916,7 @@ async def song_post(request: Request):
     song.set_precio(data["precio"])
     song.set_lista_resenas([])
     song.set_visible(data["visible"])
+    song.set_album(None) # El album se asigna posteriormente en el editor de albumes
 
     try:
         song_id = model.add_song(song)
@@ -933,10 +999,9 @@ async def get_song(request: Request):
     # 3 = Artista (creador)
     return view.get_song_view(request, song_info, tipoUsuario) # Devolvemos la vista del song
 
-    
 # Ruta para cargar vista edit-song
 @app.get("/edit-song")
-async def edit_song_post(request: Request):
+async def get_edit_song(request: Request):
     # Verificar si el usuario tiene una sesión activa y es artista 
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
