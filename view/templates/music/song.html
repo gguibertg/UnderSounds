@@ -76,10 +76,10 @@
                             <summary><img alt="Desplegar" class="chevron" height="16"
                                     src="{{ resena.usuario.imagen }}" width="16" /><strong>{{resena.usuario.nombre}}</strong>
                                 —
-                                {{ resena.titulo }}</summary>
-                            <p>{{ resena.reseña }}</p>
+                            <input id="editar_titulo" type="text" name="titulo" value="{{ resena.titulo }}" required></summary>
+                            <textarea id="editar_reseña" name="texto" required>{{ resena.reseña }}</textarea>
                             <div class="review-actions">
-                                <button class="btn" title="Editar" onclick=""><img alt="Editar" height="20"
+                                <button class="btn" title="Editar" onclick="editarReseña('{{ resena.id }}')"><img alt="Editar" height="20"
                                         src="/static/icons/site/edit-icon.svg" width="20" /></button>
                                     
                                 <button class="btn" title="Borrar" onclick="borrarReseña('{{ resena.id }}')"><img alt="Borrar" height="20"
@@ -120,7 +120,7 @@
         }
 
         async function borrarReseña(reseñaId) {
-            
+
             const response = await fetch('/delete-review', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -133,6 +133,30 @@
             const result = await response.json();
             if (response.ok) {
                 alert("Reseña eliminada.");
+                location.reload();
+            } else {
+                alert("Error: " + result.error);
+            }
+        }
+
+        async function editarReseña(reseñaId) {
+            const titulo = document.getElementById('editar_titulo').value;
+            const reseña = document.getElementById('editar_reseña').value;
+                        
+            const response = await fetch('/update-review', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    song_id: "{{ song.id }}",
+                    reseña_id: reseñaId,
+                    titulo: titulo,
+                    reseña: reseña
+                })
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert("Reseña actualizada.");
                 location.reload();
             } else {
                 alert("Error: " + result.error);

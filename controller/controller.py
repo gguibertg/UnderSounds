@@ -958,9 +958,6 @@ async def delete_review(request: Request):
             # Obtener la reseña
             reseña_data = model.get_reseña(reseña_id)
 
-            reseña = ReseñaDTO()
-            reseña.load_from_dict(reseña_data)
-
             song_dict = model.get_song(song_id)
             song = SongDTO()
             song.load_from_dict(song_dict)
@@ -975,6 +972,48 @@ async def delete_review(request: Request):
                 return JSONResponse(status_code=200, content={"message": "Reseña eliminada."})
             else:
                 return JSONResponse(status_code=500, content={"error": "No se pudo eliminar la reseña."})
+
+        except Exception as e:
+            return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+@app.post("/update-review")
+async def update_review(request: Request):
+        try:
+            # Verificar si el usuario tiene una sesión activa y es artista 
+            #user_db = verifySessionAndGetUserInfo(request)
+            #if isinstance(user_db, Response):
+            #    return user_db # Si es un Response, devolvemos el error  
+            
+            data_info = await request.json()
+            song_id = data_info["song_id"]
+            reseña_id = data_info["reseña_id"]
+            titulo = data_info["titulo"]
+            texto = data_info["reseña"]
+
+            # Obtener la reseña
+            reseña_data = model.get_reseña(reseña_id)
+
+            song_dict = model.get_song(song_id)
+            song = SongDTO()
+            song.load_from_dict(song_dict)
+            song.remove_resena(reseña_data)
+
+            reseña = ReseñaDTO()
+            reseña.load_from_dict(reseña_data)
+            reseña.set_titulo(str(titulo))
+            reseña.set_reseña(str(texto))
+            song.add_resenas(reseña.reseñadto_to_dict())
+
+            if model.update_song(song):
+                print(PCTRL, "Reseña update of song", song_id )
+            else:
+                return JSONResponse(status_code=500, content={"error": "No se pudo actualizar la reseña."})
+
+            if model.update_reseña(reseña):
+                return JSONResponse(status_code=200, content={"message": "Reseña actualizada."})
+            else:
+                return JSONResponse(status_code=500, content={"error": "No se pudo actualizar la reseña."})
 
         except Exception as e:
             return JSONResponse(status_code=500, content={"error": str(e)})
