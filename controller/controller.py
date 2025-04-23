@@ -450,8 +450,10 @@ async def upload_album_post(request: Request):
                 raise Exception(f"Song {song_id} not found in database")
             
             # Actualizamos el campo album de la canción con el id del nuevo album
-            song["album"] = album_id
-            if not model.update_song(song):
+            song_object = SongDTO()
+            song_object.load_from_dict(song)
+            song_object.set_album(album_id)
+            if not model.update_song(song_object):
                 print(PCTRL_WARN, "Song", song_id, "not updated in database!")
                 raise Exception(f"Song {song_id} not updated in database!")
 
@@ -484,8 +486,10 @@ async def upload_album_post(request: Request):
                 print(PCTRL_WARN, "Song", song_id, "not found in database")
             
             # Actualizamos el campo album de la canción con el id del nuevo album
-            song["album"] = None
-            if not model.update_song(song):
+            song_object = SongDTO()
+            song_object.load_from_dict(song)
+            song_object.set_album(album_id)
+            if not model.update_song(song_object):
                 print(PCTRL_WARN, "Song", song_id, "not updated in database!")
 
         # Intentar revertir los cambios en el usuario
@@ -665,6 +669,13 @@ async def album_edit_post(request: Request):
         print(PCTRL_WARN, "User is not an artist")
         return {"success": False, "error": "No autorizado"}
     
+    # Recibimos los datos del nuevo album editado, junto con su ID.
+    data = await request.json()
+    album_id = data["id"]  # ID del album a editar
+    if not album_id:
+        print(PCTRL_WARN, "Album ID not provided in request")
+        return {"success": False, "error": "Album ID not provided"}
+
     # Descargamos el album antiguo de la base de datos via su ID.
     album_dict = model.get_album(album_id)
     if not album_dict:
@@ -675,10 +686,6 @@ async def album_edit_post(request: Request):
         return {"success": False, "error": "Album not found in user albums"}
 
     try:
-        # Recibimos los datos del nuevo album editado, junto con su ID.
-        data = await request.json()
-        album_id = data["id"]  # ID del album a editar
-        
         album = AlbumDTO()
         album.load_from_dict(album_dict)
 
@@ -704,8 +711,10 @@ async def album_edit_post(request: Request):
                 raise Exception(f"Song {song_id} not found in database")
             
             # Actualizamos el campo album de la canción con el id del nuevo album
-            song["album"] = album_id
-            if not model.update_song(song):
+            song_object = SongDTO()
+            song_object.load_from_dict(song)
+            song_object.set_album(album_id)
+            if not model.update_song(song_object):
                 print(PCTRL_WARN, "Song", song_id, "not updated in database!")
                 raise Exception(f"Song {song_id} not updated in database!")
 
@@ -733,8 +742,10 @@ async def album_edit_post(request: Request):
                 print(PCTRL_WARN, "Song", song_id, "not found in database")
             
             # Actualizamos el campo album de la canción con el id del nuevo album
-            song["album"] = None
-            if not model.update_song(song):
+            song_object = SongDTO()
+            song_object.load_from_dict(song)
+            song_object.set_album(None)
+            if not model.update_song(song_object):
                 print(PCTRL_WARN, "Song", song_id, "not updated in database!")
 
         # Intentamos asociar las canciones del album antiguo a su album original
@@ -744,8 +755,10 @@ async def album_edit_post(request: Request):
                 print(PCTRL_WARN, "Song", song_id, "not found in database")
             
             # Actualizamos el campo album de la canción con el id del nuevo album
-            song["album"] = album_id
-            if not model.update_song(song):
+            song_object = SongDTO()
+            song_object.load_from_dict(song)
+            song_object.set_album(album_id)
+            if not model.update_song(song_object):
                 print(PCTRL_WARN, "Song", song_id, "not updated in database!")
 
         print(PCTRL_WARN, "Error while processing Album", album_id, ", updating to database failed!")
@@ -786,8 +799,10 @@ async def delete_album_post(request: Request):
             continue
         
         # Actualizamos el campo album de la canción con el id del nuevo album
-        song["album"] = None
-        if not model.update_song(song):
+        song_object = SongDTO()
+        song_object.load_from_dict(song)
+        song_object.set_album(None)
+        if not model.update_song(song_object):
             print(PCTRL_WARN, "Song", song_id, "not updated in database! - skipping")
             continue
 
@@ -1231,7 +1246,7 @@ async def get_studio(request: Request):
     
     # Buscamos por cada canción descagada si su id está en el campo canciones de algún album.
     # Si es así, reemplazamos el campo album de esa canción por el NOMBRE del album.
-    # Si no, lo introducimos en su lugar "Single"
+    # Si no, lo introducimos en su lugar None
     for song in user_songs_objects:
         found = False
         for album in user_albums_objects:
@@ -1239,18 +1254,9 @@ async def get_studio(request: Request):
                 song["album"] = album["titulo"]
                 found = True
                 print(PCTRL, "Song", song["titulo"], "found in album", album["titulo"])
-                print(PCTRL, song)
                 break
         if not found:
-            song["album"] = "Single"
-
-    # Printear cada uno de los albums y canciones del usuario (DEBUG)
-    #print(PCTRL, "User albums:")
-    #for album in user_albums_objects:
-    #    print(PCTRL, album)
-    #print(PCTRL, "User songs:")
-    #for song in user_songs_objects:
-    #    print(PCTRL, song)
+            song["album"] = None
 
     return view.get_studio_view(request, user_songs_objects, user_albums_objects)
 

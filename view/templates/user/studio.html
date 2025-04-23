@@ -39,7 +39,7 @@
                     <div class="div-pannel-sub songs-cell">
                         <img src="{{ album.portada }}" class="songs-image" alt="Album Image">
                         <b style="font-size: 1.3rem;">{{ album.titulo }}</b>
-                        <p>Autor: {{ album.autor }}</p>
+                        <p><b>{{ album.autor }}</b> · <i>{{ album.canciones|length }} canciones</i></p>
 
                         <div class="song-info">
                             <div style="text-align: center;">
@@ -80,7 +80,11 @@
                     <div class="div-pannel-sub songs-cell">
                         <img src="{{ song.portada }}" class="songs-image" alt="Song Image">
                         <b style="font-size: 1.3rem;">{{ song.titulo }}</b>
-                        <p>Álbum: {{ song.album }}</p>
+                        {% if song.album %}
+                        <p><b>{{ song.artista }}</b> · <i>Parte de {{ song.album }}</i></p>
+                        {% else %}
+                        <p><b>{{ song.artista }}</b> · <i>Single</i></p>
+                        {% endif %}
 
                         <div class="song-info">
                             <div style="text-align: center;">
@@ -121,51 +125,52 @@
     <script>
         function removeAlbum(id) {
             if (confirm("¿Estás seguro de que deseas eliminar este álbum?\nTodas las canciones asociadas a este álbum pasarán a ser Singles.\n\nEsta acción no se puede deshacer.")) {
-                fetch('/delete-album', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id: id })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        displayMessage("Álbum eliminado correctamente.", "success");
-                        window.location.href = '/studio';
-                    } else {
-                        displayMessage("Error al eliminar el álbum: " + data.error, "error");
-                    }
-                })
-                .catch(error => {
-                    displayMessage("Error al procesar la solicitud: " + error.message, "error");
-                });
+            fetch('/delete-album', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                displayMessage("success", "Álbum eliminado correctamente.");
+                window.location.href = '/studio';
+                } else {
+                displayMessage("error", "Error al eliminar el álbum: " + data.error);
+                }
+            })
+            .catch(error => {
+                displayMessage("error", "Error al procesar la solicitud: " + error.message);
+            });
             }
         }
 
         function removeSong(id) {
             if (confirm("¿Estás seguro de que deseas eliminar esta canción?\nAl eliminar la canción se borrará del album asociado.\n\nEsta acción no se puede deshacer.")) {
-                fetch('/delete-song', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id: id })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        displayMessage("Canción eliminada correctamente.", "success");
-                        window.location.href = '/studio';
-                    } else {
-                        displayMessage("Error al eliminar la canción: " + data.error, "error");
-                    }
-                })
-                .catch(error => {
-                    displayMessage("Error al procesar la solicitud: " + error.message, "error");
-                });
+            fetch('/delete-song', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                displayMessage("success", "Canción eliminada correctamente.");
+                window.location.href = '/studio';
+                } else {
+                displayMessage("error", "Error al eliminar la canción: " + data.error);
+                }
+            })
+            .catch(error => {
+                displayMessage("error", "Error al procesar la solicitud: " + error.message);
+            });
             }
         }
+        
     </script>
 
     <!-- Pie de página -->

@@ -80,7 +80,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
             user_dict : dict = usuario.usuario_to_dict()
             user_dict["_id"] = user_dict.pop("id", None)
             result : pymongo.results.UpdateResult = self.collection.update_one({"_id": user_dict["_id"]}, {"$set": user_dict})
-            return result.modified_count == 1
+            return result.matched_count == 1
         
         except Exception as e:
             print(f"{PDAO_ERROR}Error al actualizar el usuario: {e}")

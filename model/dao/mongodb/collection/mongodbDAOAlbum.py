@@ -62,7 +62,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
             result: pymongo.results.UpdateResult = self.collection.update_one(
                 {"_id": album_dict["_id"]}, {"$set": album_dict}
             )
-            return result.modified_count == 1
+            return result.matched_count == 1
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al actualizar el álbum: {e}")

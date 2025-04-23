@@ -1,5 +1,5 @@
 import pymongo
-import pymongo.results
+from pymongo.results import *
 from bson import ObjectId
 from ...interfaceSongDAO import InterfaceSongDAO
 from ....dto.songDTO import SongDTO, SongsDTO
@@ -8,7 +8,7 @@ PDAO = "\033[95mDAO\033[0m:\t "
 PDAO_ERROR = "\033[96mDAO\033[0m|\033[91mERROR\033[0m:\t "
 
 # Esta clase implementa los métodos que se usaran en las llamadas del Model.
-# En concreto, esta es la clase destinada para lo relacionado con la colección de Usuarios en MongoDB.
+# En concreto, esta es la clase destinada para lo relacionado con la colección de songs en MongoDB.
 class MongodbSongDAO(InterfaceSongDAO):
 
     # En el constructor de la clase, se recibe la colección de MongoDB que se va a usar para interactuar con la base de datos.
@@ -41,7 +41,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                 songs.insertSong(song_dto)
 
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al recuperar los usuarios: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar los songs: {e}")
 
         return [song.songdto_to_dict() for song in songs.songlist]
 
@@ -71,7 +71,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                 song.set_album(query.get("album"))
 
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al recuperar el usuario: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar el song: {e}")
 
         return song.songdto_to_dict() if song else None
     
@@ -80,11 +80,11 @@ class MongodbSongDAO(InterfaceSongDAO):
         try:
             song_dict : dict = song.songdto_to_dict()
             song_dict.pop("id", None)
-            result : pymongo.results.InsertOneResult = self.collection.insert_one(song_dict)
+            result : InsertOneResult = self.collection.insert_one(song_dict)
             return str(result.inserted_id)
         
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al agregar el usuario: {e}")
+            print(f"{PDAO_ERROR}Error al agregar el song: {e}")
             return None
         
 
@@ -94,22 +94,19 @@ class MongodbSongDAO(InterfaceSongDAO):
             song_id = song_dict.pop("id")
             song_dict["_id"] = ObjectId(song_id)  # importante
 
-            result : pymongo.results.UpdateResult = self.collection.update_one(
-                {"_id": ObjectId(song_id)},  # usa ObjectId aquí también
-                {"$set": song_dict}
-            )
-            return result.modified_count == 1
+            result : UpdateResult = self.collection.update_one({"_id": ObjectId(song_id)}, {"$set": song_dict})
+            return result.matched_count == 1
         
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al actualizar el usuario: {e}")
+            print(f"{PDAO_ERROR}Error al actualizar el song: {e}")
             return False
     
 
     def delete_song(self, id: str) -> bool:
         try:
-            result : pymongo.results.DeleteResult = self.collection.delete_one({"_id": id})
+            result : DeleteResult = self.collection.delete_one({"_id": ObjectId(id)})
             return result.deleted_count == 1
         
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al eliminar el usuario: {e}")
+            print(f"{PDAO_ERROR}Error al eliminar el song: {e}")
             return False
