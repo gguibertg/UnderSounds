@@ -850,7 +850,7 @@ async def song_post(request: Request):
     song.set_portada(data["portada"])
     song.set_precio(data["precio"])
     song.set_lista_resenas([])
-    song.set_visible(False)
+    song.set_visible(data["visible"])
 
     try:
         song_id = model.add_song(song)
@@ -999,6 +999,7 @@ async def edit_song_post(request: Request):
         song.set_generos(data["generos"])
         song.set_portada(data["portada"])
         song.set_precio(data["precio"])
+        song.set_visible(data["visible"])
 
         # Actualizamos el album en la base de datos
         if model.update_song(song):

@@ -46,6 +46,9 @@
 
                         <label for="price">Precio</label>
                         <input type="text" id="precio" name="precio" placeholder="Precio de la canción" value="{{song.precio}}" required>
+                    
+                        <label for="is-visible">Visible al público</label>
+                        <input type="checkbox" id="is-visible" name="is_visible" {% if song.visible %} checked {% endif %}>
                     </div>
 
                     <div class="div-pannel-sub upload-group" style="width: auto;">
@@ -145,8 +148,9 @@
             descripcion: document.getElementById('descripcion').value,
             colaboradores: document.getElementById('colaboradores').value,
             precio: document.getElementById('precio').value,
-            generos: Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
-            portada: document.getElementById('cover-preview').src
+            generos: Array.from(document.querySelectorAll('.upload-checkbox-container div:first-child input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
+            portada: document.getElementById('cover-preview').src,
+            visible: document.getElementById('is-visible').checked
             // TODO: Al hacer be-stream, se debe pasar también la ruta del archuvo de audio en el backend (puede ser por ejemplo el nombre del archivo y ya)
             // TODO: La duración de la canción se puede calcular en el backend.
             };
