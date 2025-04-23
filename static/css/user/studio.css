@@ -1,23 +1,33 @@
 .parent {
     display: flex;
     flex-wrap: wrap;
-    gap: 50px; /* Reduce el espacio entre elementos */
-    align-items: center;
+    gap: 30px; /* Reduce el espacio entre elementos */
     justify-content: flex-start; /* Alinea los elementos a la izquierda sin espacio extra */
+    align-items: stretch;
 }
 
 .songs-cell {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 16rem;
+    width: 16rem;
+    min-height: 16rem;
     gap: 10px;
+    word-break: break-all;
+}
+
+.songs-cell p, 
+.songs-cell b {
+    word-break: break-all;
+    width: auto;
 }
 
 .songs-image {
     width: 90%;
+    aspect-ratio: 1 / 1; /* Force the image to be square */
     border-radius: 15px;
     border: 2px solid #111;
+    object-fit: cover; /* Ensure the image fits within the square */
 }
 
 .dark-mode .songs-image {
@@ -30,6 +40,7 @@
     gap: 10px;
     align-items: center;
     justify-content: center;
+    word-break: break-all;
 }
 
 
@@ -38,6 +49,7 @@
     font-weight: bold;
     text-align: center;
     margin-bottom: 20px;
+    word-break: break-all;
 }
 
 .song-love {
@@ -106,15 +118,19 @@
 .add-btn {
     align-self: right;
     margin: -10px -10px 10px 0px;
-    background-color: #46ff7e;
+    background-color: #00ca3d;
     height: 100%;
     transition: transform 0.3s ease-in-out;
     text-align: left;
     padding-left: 9px; /* Shift text inside the button 9 pixels to the left */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
 }
 
 .add-btn:hover {
-    background-color: #34c660;
+    background-color: #00ca3d;
 }
 
 .dark-mode .delete-btn {
@@ -122,7 +138,7 @@
 }
 
 .dark-mode .add-btn {
-    background-color: #46ff7e;
+    background-color: #00ca3d;
 }
 
 

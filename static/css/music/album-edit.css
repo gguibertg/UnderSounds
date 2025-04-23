@@ -244,6 +244,8 @@
 
 .songs-image {
     min-width: 100%;
+    aspect-ratio: 1 / 1; /* Force the image to be square */
+    object-fit: cover; /* Ensure the image fits within the square */
     border-radius: 15px;
     border: 2px solid #111;
 }

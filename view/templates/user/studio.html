@@ -35,36 +35,37 @@
                 <p class="songs-title">Tus Álbumes</p>
                 <div class="parent">
 
+                    {% for album in albums %}
                     <div class="div-pannel-sub songs-cell">
-                        <img src="/static/img/albums/album-05.webp" class="songs-image" alt="Song Image">
-                        <b style="font-size: 1.3rem;">Título álbum</b>
-                        <p>Artista</p>
+                        <img src="{{ album.portada }}" class="songs-image" alt="Album Image">
+                        <b style="font-size: 1.3rem;">{{ album.titulo }}</b>
+                        <p>Autor: {{ album.autor }}</p>
 
                         <div class="song-info">
                             <div style="text-align: center;">
                                 <img src="/static/icons/site/favourite-icon-light.svg" class="song-love" alt="Fav">
-                                <div>120</div>
+                                <div>{{ album.likes }}</div>
                             </div>
                             <div style="text-align: center;">
                                 <img src="/static/icons/site/views-icon-light.svg" class="song-view" alt="Views">
-                                <div>1000</div>
+                                <div>{{ album.visitas }}</div>
                             </div>
                             <div style="text-align: center;">
-                                <img src="/static/icons/site/visibility-icon-light.svg" class="song-visible"
-                                    alt="Visible">
-                                <div>Visible</div>
+                                <img src="/static/icons/site/visibility-icon-light.svg" class="song-visible" alt="Visible">
+                                <div>{{ "Visible" if album.visible else "Oculto" }}</div>
                             </div>
                         </div>
 
                         <div class="button-array">
-                            <button type="button" style="background-color: white;" onclick="window.location.href='/song?id='">🔗</button>
-                            <button type="button" style="background-color: #ff4646;" onclick="removeSong('')">🗑️</button>
-                            <button type="button" style="background-color: #0077ff;" onclick="window.location.href='/edit-song?id='">✏️</button>
+                            <button type="button" style="background-color: white;" onclick="window.location.href='/album?id={{ album.id }}'">🔗</button>
+                            <button type="button" style="background-color: #ff4646;" onclick="removeAlbum('{{ album.id }}')">🗑️</button>
+                            <button type="button" style="background-color: #0077ff;" onclick="window.location.href='/album-edit?id={{ album.id }}'">✏️</button>
                         </div>
                     </div>
-                    <a href="/upload-album">
-                        <button class="add-btn">➕ Añadir álbum</button>
-                    </a>
+                    {% endfor %}
+                    <div class="div-pannel-sub songs-cell">
+                        <button class="add-btn" onclick="window.location.href='/upload-album'">➕ Añadir álbum</button>
+                    </div>
                 </div>
                 <br>
             </div>
@@ -75,49 +76,97 @@
             <div class="div-pannel" style="width: 80%; align-items: center;">
                 <p class="songs-title">Tus Canciones</p>
                 <div class="parent">
-                    
+                    {% for song in songs %}
                     <div class="div-pannel-sub songs-cell">
-                        <img src="/static/img/albums/album-03.webp" class="songs-image" alt="Song Image">
-                        <b style="font-size: 1.3rem;">Título canción</b>
-                        <p>Álbum · Artista</p>
+                        <img src="{{ song.portada }}" class="songs-image" alt="Song Image">
+                        <b style="font-size: 1.3rem;">{{ song.titulo }}</b>
+                        <p>Álbum: {{ song.album }}</p>
 
                         <div class="song-info">
                             <div style="text-align: center;">
                                 <img src="/static/icons/site/favourite-icon-light.svg" class="song-love" alt="Fav">
-                                <div>120</div>
+                                <div>{{ song.likes }}</div>
                             </div>
                             <div style="text-align: center;">
                                 <img src="/static/icons/site/comment-icon-light.svg" class="song-comment" alt="Comments">
-                                <div>45</div>
+                                <div>{{ song.lista_resenas | length }}</div>
                             </div>
                             <div style="text-align: center;">
                                 <img src="/static/icons/site/views-icon-light.svg" class="song-view" alt="Views">
-                                <div>1000</div>
+                                <div>{{ song.visitas }}</div>
                             </div>
                             <div style="text-align: center;">
-                                <img src="/static/icons/site/visibility-icon-light.svg" class="song-visible"
-                                    alt="Visible">
-                                <div>Visible</div>
+                                <img src="/static/icons/site/visibility-icon-light.svg" class="song-visible" alt="Visible">
+                                <div>{{ "Visible" if song.visible else "Oculto" }}</div>
                             </div>
                         </div>
 
                         <div class="button-array">
-                            <button type="button" style="background-color: white;" onclick="window.location.href='/song?id='">🔗</button>
-                            <button type="button" style="background-color: #ff4646;" onclick="removeSong('')">🗑️</button>
-                            <button type="button" style="background-color: #0077ff;" onclick="window.location.href='/edit-song?id='">✏️</button>
+                            <button type="button" style="background-color: white;" onclick="window.location.href='/song?id={{ song.id }}'">🔗</button>
+                            <button type="button" style="background-color: #ff4646;" onclick="removeSong('{{ song.id }}')">🗑️</button>
+                            <button type="button" style="background-color: #0077ff;" onclick="window.location.href='/edit-song?id={{ song.id }}'">✏️</button>
                         </div>
                     </div>
-
-                    <a href="/upload-song">
-                        <button class="add-btn">➕ Añadir canción</button>
-                    </a>
-                
+                    {% endfor %}
+                    <div class="div-pannel-sub songs-cell">
+                        <button class="add-btn" onclick="window.location.href='/upload-song'">➕ Añadir canción</button>
+                    </div>
                 </div>
                 <br>
             </div>
 
             <br>
     </main>
+
+    <script>
+        function removeAlbum(id) {
+            if (confirm("¿Estás seguro de que deseas eliminar este álbum?\nTodas las canciones asociadas a este álbum pasarán a ser Singles.\n\nEsta acción no se puede deshacer.")) {
+                fetch('/remove-album', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: id })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayMessage("Álbum eliminado correctamente.", "success");
+                        window.location.href = '/studio';
+                    } else {
+                        displayMessage("Error al eliminar el álbum: " + data.error, "error");
+                    }
+                })
+                .catch(error => {
+                    displayMessage("Error al procesar la solicitud: " + error.message, "error");
+                });
+            }
+        }
+
+        function removeSong(id) {
+            if (confirm("¿Estás seguro de que deseas eliminar esta canción?\nAl eliminar la canción se borrará del album asociado.\n\nEsta acción no se puede deshacer.")) {
+                fetch('/remove-song', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: id })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayMessage("Canción eliminada correctamente.", "success");
+                        window.location.href = '/studio';
+                    } else {
+                        displayMessage("Error al eliminar la canción: " + data.error, "error");
+                    }
+                })
+                .catch(error => {
+                    displayMessage("Error al procesar la solicitud: " + error.message, "error");
+                });
+            }
+        }
+    </script>
 
     <!-- Pie de página -->
     <div id="footer-placeholder"></div>
@@ -126,7 +175,7 @@
     <script src="/static/js/header.js"></script>
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
-
+    <script src="/static/js/displayMessage.js"></script>
 </body>
 
 </html>

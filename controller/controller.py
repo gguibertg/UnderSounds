@@ -1028,7 +1028,48 @@ async def get_studio(request: Request):
         print(PCTRL_WARN, "User is not an artist")
         return Response("No autorizado", status_code=403)
     
-    return view.get_studio_view(request)
+    # Descargamos los albumes y canciones del usuario
+    user_albums_objects = []
+    for album_id in res["studio_albumes"]:
+        album = model.get_album(album_id)
+        if not album:
+            print(PCTRL_WARN, "Album", album_id, "not found in database")
+            return Response("Error del sistema", status_code=403)
+        user_albums_objects.append(album)
+    
+    # Descargamos las canciones del usuario
+    user_songs_objects = []
+    for song_id in res["studio_canciones"]:
+        song = model.get_song(song_id)
+        if not song:
+            print(PCTRL_WARN, "Song", song_id, "not found in database")
+            return Response("Error del sistema", status_code=403)
+        user_songs_objects.append(song)
+    
+    # Buscamos por cada canción descagada si su id está en el campo canciones de algún album.
+    # Si es así, reemplazamos el campo album de esa canción por el NOMBRE del album.
+    # Si no, lo introducimos en su lugar "Single"
+    for song in user_songs_objects:
+        found = False
+        for album in user_albums_objects:
+            if song["id"] in album["canciones"]:
+                song["album"] = album["titulo"]
+                found = True
+                print(PCTRL, "Song", song["titulo"], "found in album", album["titulo"])
+                print(PCTRL, song)
+                break
+        if not found:
+            song["album"] = "Single"
+
+    # Printear cada uno de los albums y canciones del usuario (DEBUG)
+    #print(PCTRL, "User albums:")
+    #for album in user_albums_objects:
+    #    print(PCTRL, album)
+    #print(PCTRL, "User songs:")
+    #for song in user_songs_objects:
+    #    print(PCTRL, song)
+
+    return view.get_studio_view(request, user_songs_objects, user_albums_objects)
 
 
 
