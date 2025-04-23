@@ -2,7 +2,7 @@
     ---------------------- ESTILOS DE FAQs ----------------------
    ========================================================== */
 
-.faqs-container {
+   .faqs-container {
     max-width: 80%;
     margin: 2.5rem auto;
     padding: 1.25rem;
@@ -21,16 +21,6 @@
 .dark-mode .faqs-container h2 {
     color: white;
     /* En modo oscuro */
-}
-
-.faqs-container h1 {
-    font-size: min(5vw, 1.75rem);
-    gap: 10px;
-}
-
-.faqs-container h2 {
-    font-size: 1.375rem;
-    gap: 20px;
 }
 
 /* ========================
@@ -57,11 +47,9 @@
 
 /* Estilo de las preguntas */
 .faq-card h3 {
-    font-size: 1.125rem;
     font-weight: bold;
     color: #007bff;
     /* En modo claro */
-    gap: 8px;
     text-align: center;
 }
 
@@ -72,7 +60,6 @@
 
 /* Estilo de las respuestas */
 .faq-card p {
-    font-size: 1rem;
     color: #333;
     /* En modo claro */
     line-height: 1.5;
@@ -91,7 +78,6 @@ a {
     text-decoration: none;
     color: #007bff;
     /* En modo claro */
-    font-size: 0.875rem;
     font-weight: 500;
     transition: color 0.3s ease;
 }
