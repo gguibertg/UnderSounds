@@ -49,6 +49,9 @@
                         <label for="description">Descripción</label>
                         <textarea id="description" name="description" rows="4"
                             placeholder="Escribe una breve descripción..." required></textarea>
+
+                        <label for="is-visible">Visible al público</label>
+                        <input type="checkbox" id="is-visible" name="is_visible" {% if album.visible %} checked {% endif %}>
                     </div>
 
                     <div class="div-pannel-sub upload-checkbox-container" style="width:auto;">
@@ -221,7 +224,8 @@
                 precio: document.getElementById('price').value,
                 generos: Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
                 canciones: Array.from(document.querySelectorAll('.grid-biblioteca .songs-cell[style*="display: flex"]')).map(songDiv => songDiv.id),
-                portada: document.getElementById('cover-preview').src
+                portada: document.getElementById('cover-preview').src,
+                visible: document.getElementById('is-visible').checked ? 1 : 0
             };
 
             try {

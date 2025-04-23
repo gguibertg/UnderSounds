@@ -34,6 +34,8 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
                 album.set_visitas(query.get("visitas"))
                 album.set_portada(query.get("portada"))
                 album.set_precio(query.get("precio"))
+                album.set_likes(query.get("likes"))
+                album.set_visible(query.get("visible"))
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar el álbum: {e}")

@@ -10,10 +10,12 @@ class AlbumDTO:
         self.descripcion: str = None
         self.fecha: datetime = None
         self.generos: list[str] = []
-        self.canciones: list[str] = []
+        self.canciones: list[str] = []       
         self.visitas: int = None
         self.portada: str = None
         self.precio: float = None
+        self.likes: int = None
+        self.visible: bool = None
 
     def get_id(self) -> str:
         return self.id
@@ -89,6 +91,18 @@ class AlbumDTO:
     def set_precio(self, precio: float):
         self.precio = precio
 
+    def get_likes(self) -> int:
+        return self.likes
+
+    def set_likes(self, likes: int):
+        self.likes = likes
+
+    def get_visible(self) -> bool:
+        return self.visible
+
+    def set_visible(self, visible: bool):
+        self.visible = visible
+
     def load_from_dict(self, data: dict):
         self.id = data.get("id")
         self.titulo = data.get("titulo")
@@ -101,6 +115,8 @@ class AlbumDTO:
         self.visitas = data.get("visitas")
         self.portada = data.get("portada")
         self.precio = data.get("precio")
+        self.likes = data.get("likes")
+        self.visible = data.get("visible")
 
     def album_to_dict(self) -> dict:
         return {
@@ -114,5 +130,7 @@ class AlbumDTO:
             "canciones": self.canciones,
             "visitas": self.visitas,
             "portada": self.portada,
-            "precio": self.precio
+            "precio": self.precio,
+            "likes": self.likes,
+            "visible": self.visible
         }

@@ -430,6 +430,8 @@ async def upload_album(request: Request):
     album.set_visitas(0)
     album.set_portada(data["portada"])
     album.set_precio(data["precio"])
+    album.set_likes(0)
+    album.set_visible(data["visible"])
 
     # Subir el album a la base de datos
     album_id = model.add_album(album)
@@ -666,9 +668,11 @@ async def upload_album(request: Request):
         #album.set_fecha(datetime.strptime(data["fecha"], "%Y-%m-%d")) # La fecha no se puede editar.
         album.set_generos(data["generos"])
         album.set_canciones(data["canciones"])
-        #album.set_visitas(0) # La cantidad de visitas no se puede editar.
+        #album.set_visitas() # La cantidad de visitas no se puede editar.
         album.set_portada(data["portada"])
         album.set_precio(data["precio"])
+        #album.set_likes() # La cantidad de likes no se puede editar.
+        album.set_visible(data["visible"])
 
         # Actualizamos el album en la base de datos
         if model.update_album(album):
@@ -846,7 +850,7 @@ async def song_post(request: Request):
     song.set_portada(data["portada"])
     song.set_precio(data["precio"])
     song.set_lista_resenas([])
-    song.set_visible(True)
+    song.set_visible(False)
 
     try:
         song_id = model.add_song(song)
