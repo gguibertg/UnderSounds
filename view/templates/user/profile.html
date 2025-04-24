@@ -87,16 +87,16 @@
                     <br />
                     <div class="div-pannel">
                         <div class="grid-content">
-                            <h1>Mi biblioteca</h1>
+                            <h1 class="songs-title">Mi biblioteca</h1>
                             <div class="grid-biblioteca">
                                 {% for cancion in canciones_biblioteca %}
-                                <div class="div-pannel-sub songs-cell">
-                                    <img alt="Portada de {{ cancion.titulo }}" class="songs-image"
-                                        src="{{ cancion.portada }}" />
+                                <div class="songs-cell div-pannel-sub">
+                                    <img class="songs-image" src="{{ cancion.portada }}"
+                                        alt="Portada de {{ cancion.titulo }}" />
                                     <h3>{{ cancion.titulo }}</h3>
                                     <p>{{ cancion.artista }}</p>
-                                    <a href="/song/{{ cancion.id }}" style="width: 100%;">
-                                        <button style="width: 100%;">Ver canción</button>
+                                    <a href="/song/{{ cancion.id }}">
+                                        <button class="btn">Ver canción</button>
                                     </a>
                                 </div>
                                 {% else %}
@@ -104,62 +104,69 @@
                                     automáticamente.</p>
                                 {% endfor %}
                             </div>
-                            <br />
                         </div>
                     </div>
+
                     <br />
                     <div class="div-pannel">
                         <div class="grid-content">
-                            <h1>Listas de reproducción</h1>
+                            <h1 class="songs-title">Listas de reproducción</h1>
 
-                            <!-- Formulario para crear nueva lista -->
-                            <form method="post" action="/crear-lista" class="form-add-cancion"
-                                style="margin-bottom: 2rem;">
+                            <!-- Crear lista -->
+                            <form method="post" action="/crear-lista" class="grid-form">
                                 <input type="text" name="nombre_lista" placeholder="Nombre de la nueva lista"
                                     required />
-                                <button type="submit" class="btn-add">➕ Crear lista</button>
+                                <button type="submit" class="btn" title="Añadir">
+                                    <img alt="Añadir" src="/static/icons/site/add-icon.svg" width="20" height="20" />
+                                </button>
                             </form>
 
                             {% if listas_completas %}
                             {% for lista in listas_completas %}
-                            <div class="lista-reproduccion">
-                                <div class="lista-header">
-                                    <h2>{{ lista.nombre }}</h2>
-                                    <form method="post" action="/remove-lista">
+                            <div class="lista-header">
+                                <h2>{{ lista.nombre }}</h2>
+                                <form method="post" action="/remove-lista">
+                                    <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}">
+                                    <button type="submit" class="btn-delete-list">
+                                        <img alt="Borrar" src="/static/icons/site/delete-icon.svg" width="20"
+                                            height="20" /></button>
+                                </form>
+                            </div>
+
+                            <!-- Añadir canción -->
+                            <form method="post" action="/add-song-to-list" class="form-add-song">
+                                <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}">
+                                <label for="id_cancion_{{ loop.index }}">Añadir canción:</label>
+                                <select name="id_cancion" id="id_cancion_{{ loop.index }}" required>
+                                    {% for cancion in canciones_biblioteca %}
+                                    <option value="{{ cancion.id }}">{{ cancion.titulo }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit" class="btn" title="Añadir">
+                                    <img alt="Añadir" src="/static/icons/site/add-icon.svg" width="20" height="20" />
+                                </button>
+                            </form>
+
+                            <!-- Canciones de la lista -->
+                            <div class="grid-biblioteca">
+                                {% for cancion in lista.songs %}
+                                <div class="songs-cell div-pannel-sub">
+                                    <img class="songs-image" src="{{ cancion.portada }}" alt="{{ cancion.titulo }}" />
+                                    <h3>{{ cancion.titulo }}</h3>
+                                    <p>{{ cancion.artista }}</p>
+                                    <form method="post" action="/remove-song-from-list">
                                         <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}">
-                                        <button type="submit" class="btn-remove-lista">🗑</button>
+                                        <input type="hidden" name="id_cancion" value="{{ cancion.id }}">
+                                        <a href="/song/{{ cancion.id }}">
+                                            <button class="btn">Ver canción</button>
+                                        </a>
+                                        <button type="submit" class="btn" title="Borrar">
+                                            <img alt="Borrar" src="/static/icons/site/delete-icon.svg" width="20"
+                                                height="20" />
+                                        </button>
                                     </form>
                                 </div>
-
-                                <!-- Formulario para añadir canción desde la biblioteca -->
-                                <form method="post" action="/add-song-to-list" class="form-add-cancion">
-                                    <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}">
-                                    <label for="id_cancion_{{ loop.index }}">Añadir canción:</label>
-                                    <select name="id_cancion" id="id_cancion_{{ loop.index }}" required>
-                                        {% for cancion in canciones_biblioteca %}
-                                        <option value="{{ cancion.id }}">{{ cancion.titulo }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <button type="submit" class="btn-add">➕ Añadir</button>
-                                </form>
-
-                                <!-- Canciones de la lista -->
-                                <div class="div-carrusel div-pannel-sub">
-                                    <div class="grid-content-narrow-row">
-                                        {% for cancion in lista.songs %}
-                                        <div class="songs-cell">
-                                            <img src="{{ cancion.portada }}" alt="{{ cancion.titulo }}"
-                                                class="songs-image" />
-                                            <p>{{ cancion.titulo }}</p>
-                                            <form method="post" action="/remove-song-from-list">
-                                                <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}">
-                                                <input type="hidden" name="id_cancion" value="{{ cancion.id }}">
-                                                <button type="submit" class="btn-remove-cancion">❌</button>
-                                            </form>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
+                                {% endfor %}
                             </div>
                             {% endfor %}
                             {% else %}
