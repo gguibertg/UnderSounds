@@ -22,12 +22,6 @@
     <link href="/static/icons/favicons/site.webmanifest" rel="manifest">
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-    </link>
-    </meta>
-    </link>
-    </link>
-    </link>
-    </link>
 </head>
 
 <body>
@@ -95,62 +89,19 @@
                         <div class="grid-content">
                             <h1>Mi biblioteca</h1>
                             <div class="grid-biblioteca">
+                                {% for cancion in canciones_biblioteca %}
                                 <div class="div-pannel-sub songs-cell">
-                                    <img alt="Song Image" class="songs-image"
-                                        src="/static/img/artists/stromae-song-01.webp" />
-                                    <h3>Título canción</h3>
-                                    <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
-                                            canción</button></a>
+                                    <img alt="Portada de {{ cancion.titulo }}" class="songs-image"
+                                        src="{{ cancion.portada }}" />
+                                    <h3>{{ cancion.titulo }}</h3>
+                                    <p>{{ cancion.artista }}</p>
+                                    <a href="/song/{{ cancion.id }}" style="width: 100%;">
+                                        <button style="width: 100%;">Ver canción</button>
+                                    </a>
                                 </div>
-                                <div class="div-pannel-sub songs-cell">
-                                    <img alt="Song Image" class="songs-image"
-                                        src="/static/img/artists/stromae-song-01.webp" />
-                                    <h3>Título canción</h3>
-                                    <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
-                                            canción</button></a>
-                                </div>
-                                <div class="div-pannel-sub songs-cell">
-                                    <img alt="Song Image" class="songs-image"
-                                        src="/static/img/artists/stromae-song-01.webp" />
-                                    <h3>Título canción</h3>
-                                    <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
-                                            canción</button></a>
-                                </div>
-                                <div class="div-pannel-sub songs-cell">
-                                    <img alt="Song Image" class="songs-image"
-                                        src="/static/img/artists/stromae-song-01.webp" />
-                                    <h3>Título canción</h3>
-                                    <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
-                                            canción</button></a>
-                                </div>
-                                <div class="div-pannel-sub songs-cell">
-                                    <img alt="Song Image" class="songs-image"
-                                        src="/static/img/artists/stromae-song-01.webp" />
-                                    <h3>Título canción</h3>
-                                    <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
-                                            canción</button></a>
-                                </div>
-                                <div class="div-pannel-sub songs-cell">
-                                    <img alt="Song Image" class="songs-image"
-                                        src="/static/img/artists/stromae-song-01.webp" />
-                                    <h3>Título canción</h3>
-                                    <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
-                                            canción</button></a>
-                                </div>
-                                <div class="div-pannel-sub songs-cell">
-                                    <img alt="Song Image" class="songs-image"
-                                        src="/static/img/artists/stromae-song-01.webp" />
-                                    <h3>Título canción</h3>
-                                    <p>Álbum · Artista</p>
-                                    <a href="/song" style="width: 100%;"><button style="width: 100%;">Ver
-                                            canción</button></a>
-                                </div>
+                                {% else %}
+                                <p>¡Aún no tienes canciones en tu biblioteca! Las canciones que compres aparecerán aquí automáticamente.</p>
+                                {% endfor %}
                             </div>
                             <br />
                         </div>

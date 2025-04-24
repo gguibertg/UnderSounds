@@ -217,7 +217,7 @@ async def register_post(data: dict, response: Response, provider: str):
         user.set_esArtista(bool(data.get("esArtista", False)))
         user.set_studio_albumes([])  # Inicializamos el campo studio_albumes como una lista vacía
         user.set_studio_canciones([])  # Inicializamos el campo studio_canciones como una lista vacía
-        #user.set_songs_compradas([])  # No existe todavía!!!
+        user.set_biblioteca([])  # Inicializamos el campo biblioteca como una lista vacía
 
         # Añadir el usuario a la base de datos
         if model.add_usuario(user):
@@ -308,9 +308,20 @@ async def deregister(request: Request, response: Response):
 async def get_profile(request: Request):
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return res # Si es un Response, devolvemos el error
-    
-    return view.get_perfil_view(request, res)  # Si es un dict, pasamos los datos del usuario
+        return res  # Error: usuario no autorizado
+
+    # res es un dict con los datos del usuario, incluyendo 'biblioteca'
+    biblioteca_ids = res.get("biblioteca", [])
+
+    # Obtener las canciones completas a partir de los IDs
+    biblioteca_completa = []
+    for song_id in biblioteca_ids:
+        cancion = model.get_song(song_id)
+        if cancion:
+            biblioteca_completa.append(cancion)
+
+    # Pasar también las canciones al renderizado de la vista
+    return view.get_perfil_view(request, res, biblioteca_completa)
 
 # Ruta para actualizar el perfil del usuario
 @app.post("/update-profile")
@@ -1212,9 +1223,6 @@ async def delete_song_post(request: Request):
         print(PCTRL_WARN, "Song", song_id, "not deleted from database!")
         return {"success": False, "error": "Song not deleted from database"}
 
-
-
-
 # -------------------------------------------------------------- #
 # ---------------------------- STUDIO -------------------------- #
 # -------------------------------------------------------------- #
@@ -1303,7 +1311,7 @@ def verifySessionAndGetUserInfo(request : Request):
         print(PCTRL, "User", user_name, "requested access to user data")
 
         # Accedemos a los datos del usuario en la base de datos
-        user_info = model.get_usuario(user_id)
+        user_info = model.get_usuario(user_id) # Devuelve un dict del UsuarioDTO
 
         if user_info:
             return user_info

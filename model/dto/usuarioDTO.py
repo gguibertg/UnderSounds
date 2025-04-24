@@ -25,6 +25,7 @@ class UsuarioDTO():
         self.esArtista: bool = None
         self.studio_albumes: list[str] = []
         self.studio_canciones: list[str] = []
+        self.biblioteca: list[str] = []
         
     def get_id(self) -> str:
         return self.id
@@ -88,6 +89,20 @@ class UsuarioDTO():
         if cancion_id in self.studio_canciones:
             self.studio_canciones.remove(cancion_id)
 
+    def set_biblioteca(self, biblioteca: list[str]):
+        self.biblioteca = biblioteca
+    
+    def get_biblioteca(self) -> list[str]:
+        return self.biblioteca
+    
+    def add_song_to_biblioteca(self, song_id: str):
+        if song_id not in self.biblioteca:
+            self.biblioteca.append(song_id)
+        
+    def remove_song_from_biblioteca(self, song_id: str):
+        if song_id in self.biblioteca:
+            self.biblioteca.remove(song_id)
+
     def load_from_dict(self, data: dict):
         self.id = data.get("id")
         self.nombre = data.get("nombre")
@@ -98,6 +113,7 @@ class UsuarioDTO():
         self.esArtista = data.get("esArtista", False)
         self.studio_albumes = data.get("studio_albumes", [])
         self.studio_canciones = data.get("studio_canciones", [])
+        self.biblioteca = data.get("biblioteca", [])
 
     def usuario_to_dict(self) -> dict:
         return {
@@ -109,5 +125,6 @@ class UsuarioDTO():
             "url": self.url,
             "esArtista": self.esArtista,
             "studio_albumes": self.studio_albumes,
-            "studio_canciones": self.studio_canciones
+            "studio_canciones": self.studio_canciones,
+            "biblioteca": self.biblioteca
         }
