@@ -100,7 +100,8 @@
                                     </a>
                                 </div>
                                 {% else %}
-                                <p>¡Aún no tienes canciones en tu biblioteca! Las canciones que compres aparecerán aquí automáticamente.</p>
+                                <p>¡Aún no tienes canciones en tu biblioteca! Las canciones que compres aparecerán aquí
+                                    automáticamente.</p>
                                 {% endfor %}
                             </div>
                             <br />
@@ -110,120 +111,60 @@
                     <div class="div-pannel">
                         <div class="grid-content">
                             <h1>Listas de reproducción</h1>
-                            <br />
-                            <h2>MiLista</h2>
-                            <div class="div-carrusel div-pannel-sub">
-                                <div class="grid-content-narrow-row">
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
+
+                            <!-- Formulario para crear nueva lista -->
+                            <form method="post" action="/crear-lista" class="form-add-cancion"
+                                style="margin-bottom: 2rem;">
+                                <input type="text" name="nombre_lista" placeholder="Nombre de la nueva lista"
+                                    required />
+                                <button type="submit" class="btn-add">➕ Crear lista</button>
+                            </form>
+
+                            {% if listas_completas %}
+                            {% for lista in listas_completas %}
+                            <div class="lista-reproduccion">
+                                <div class="lista-header">
+                                    <h2>{{ lista.nombre }}</h2>
+                                    <form method="post" action="/remove-lista">
+                                        <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}">
+                                        <button type="submit" class="btn-remove-lista">🗑</button>
+                                    </form>
+                                </div>
+
+                                <!-- Formulario para añadir canción desde la biblioteca -->
+                                <form method="post" action="/add-song-to-list" class="form-add-cancion">
+                                    <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}">
+                                    <label for="id_cancion_{{ loop.index }}">Añadir canción:</label>
+                                    <select name="id_cancion" id="id_cancion_{{ loop.index }}" required>
+                                        {% for cancion in canciones_biblioteca %}
+                                        <option value="{{ cancion.id }}">{{ cancion.titulo }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button type="submit" class="btn-add">➕ Añadir</button>
+                                </form>
+
+                                <!-- Canciones de la lista -->
+                                <div class="div-carrusel div-pannel-sub">
+                                    <div class="grid-content-narrow-row">
+                                        {% for cancion in lista.songs %}
+                                        <div class="songs-cell">
+                                            <img src="{{ cancion.portada }}" alt="{{ cancion.titulo }}"
+                                                class="songs-image" />
+                                            <p>{{ cancion.titulo }}</p>
+                                            <form method="post" action="/remove-song-from-list">
+                                                <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}">
+                                                <input type="hidden" name="id_cancion" value="{{ cancion.id }}">
+                                                <button type="submit" class="btn-remove-cancion">❌</button>
+                                            </form>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
-                            <br />
-                            <h2>MiLista2</h2>
-                            <div class="div-carrusel div-pannel-sub">
-                                <div class="grid-content-narrow-row">
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                </div>
-                            </div>
-                            <br />
-                            <h2>MiLista3</h2>
-                            <div class="div-carrusel div-pannel-sub">
-                                <div class="grid-content-narrow-row">
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                    <img alt="placeholder" src="/static/img/utils/under-sounds-cover.webp"
-                                        style="width: 96px;" />
-                                </div>
-                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <p>No tienes listas de reproducción aún. ¡Crea una arriba!</p>
+                            {% endif %}
                         </div>
                     </div>
                     <br />

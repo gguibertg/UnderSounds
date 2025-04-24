@@ -12,8 +12,7 @@ class UsuariosDTO():
         
     def userlist_to_json(self) -> str:
         return json.dumps(self.userlist)
-        
-        
+
 class UsuarioDTO():
     def __init__(self):
         self.id: str = None
@@ -26,6 +25,7 @@ class UsuarioDTO():
         self.studio_albumes: list[str] = []
         self.studio_canciones: list[str] = []
         self.biblioteca: list[str] = []
+        self.listas_reproduccion: list[dict[str, list[str]]] = []
         
     def get_id(self) -> str:
         return self.id
@@ -103,6 +103,45 @@ class UsuarioDTO():
         if song_id in self.biblioteca:
             self.biblioteca.remove(song_id)
 
+    def set_listas_reproduccion(self, listas_reproduccion: list[dict[str, list[str]]]):
+        self.listas_reproduccion = listas_reproduccion
+
+    def get_listas_reproduccion(self):
+        return self.listas_reproduccion
+    
+    def add_lista_reproduccion(self, nombre: str):
+        if not any(l["nombre"] == nombre for l in self.listas_reproduccion):
+            self.listas_reproduccion.append({"nombre": nombre, "canciones": []})
+
+    def remove_lista_reproduccion(self, nombre: str):
+        for i, lista in enumerate(self.listas_reproduccion):
+            if lista["nombre"] == nombre:
+                del self.listas_reproduccion[i]
+                return True
+        return False  # Si no se encuentra
+
+    def add_song_to_lista_reproduccion(self, nombre_lista: str, id_cancion: str):
+        for lista in self.listas_reproduccion:
+            if lista["nombre"] == nombre_lista:
+                if id_cancion not in lista["canciones"]:
+                    lista["canciones"].append(id_cancion)
+                return True
+        return False
+    
+    def remove_song_from_lista_reproduccion(self, nombre_lista: str, id_cancion: str):
+        for lista in self.listas_reproduccion:
+            if lista["nombre"] == nombre_lista:
+                if id_cancion in lista["canciones"]:
+                    lista["canciones"].remove(id_cancion)
+                return True
+        return False
+
+    def get_canciones_from_lista_reproduccion(self, nombre: str):
+        for lista in self.listas_reproduccion:
+            if lista["nombre"] == nombre:
+                return lista["canciones"]
+        return None
+
     def load_from_dict(self, data: dict):
         self.id = data.get("id")
         self.nombre = data.get("nombre")
@@ -114,6 +153,7 @@ class UsuarioDTO():
         self.studio_albumes = data.get("studio_albumes", [])
         self.studio_canciones = data.get("studio_canciones", [])
         self.biblioteca = data.get("biblioteca", [])
+        self.listas_reproduccion = data.get("listas_reproduccion", [])
 
     def usuario_to_dict(self) -> dict:
         return {
@@ -126,5 +166,6 @@ class UsuarioDTO():
             "esArtista": self.esArtista,
             "studio_albumes": self.studio_albumes,
             "studio_canciones": self.studio_canciones,
-            "biblioteca": self.biblioteca
+            "biblioteca": self.biblioteca,
+            "listas_reproduccion": self.listas_reproduccion
         }

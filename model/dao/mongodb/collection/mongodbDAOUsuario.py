@@ -31,6 +31,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
                 user_dto.set_studio_albumes(doc.get("studio_albumes", []))
                 user_dto.set_studio_canciones(doc.get("studio_canciones", []))
                 user_dto.set_biblioteca(doc.get("biblioteca", []))
+                user_dto.set_listas_reproduccion(doc.get("listas_reproduccion", []))
 
                 users.insertUser(user_dto)
 
@@ -58,6 +59,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
                 user.set_studio_albumes(query.get("studio_albumes", []))
                 user.set_studio_canciones(query.get("studio_canciones", []))
                 user.set_biblioteca(query.get("biblioteca", []))
+                user.set_listas_reproduccion(query.get("listas_reproduccion", []))
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar el usuario: {e}")

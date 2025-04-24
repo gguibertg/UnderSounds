@@ -30,11 +30,12 @@ class View():
 
     # Renderizar la template profile.html
     # Necesita un user_info completo, no se contempla otro caso.
-    def get_perfil_view(self, request: Request, usuario_data, canciones_biblioteca):
+    def get_perfil_view(self, request: Request, usuario_data, canciones_biblioteca, listas_completas):
         return templates.TemplateResponse("user/profile.html", {
             "request": request,
             "user": usuario_data,
             "canciones_biblioteca": canciones_biblioteca,
+            "listas_completas": listas_completas,
             "API_CREDENTIALS" : apicreds
         })
     

@@ -320,8 +320,21 @@ async def get_profile(request: Request):
         if cancion:
             biblioteca_completa.append(cancion)
 
+    # Obtener listas de reproducción con canciones completas
+    listas_completas = []
+    for lista in res.get("listas_reproduccion", []):
+        canciones_de_lista = []
+        for song_id in lista.get("canciones", []):
+            cancion = model.get_song(song_id)
+            if cancion:
+                canciones_de_lista.append(cancion)
+        listas_completas.append({
+            "nombre": lista.get("nombre", "Sin nombre"),
+            "songs": canciones_de_lista
+        })
+
     # Pasar también las canciones al renderizado de la vista
-    return view.get_perfil_view(request, res, biblioteca_completa)
+    return view.get_perfil_view(request, res, biblioteca_completa, listas_completas)
 
 # Ruta para actualizar el perfil del usuario
 @app.post("/update-profile")
@@ -364,6 +377,42 @@ async def update_profile(request: Request, response: Response):
     else:
         print(PCTRL_WARN, "User", user_name, "not updated in database!")
         return {"success": False, "error": "User not updated in database"}
+    
+@app.post("/crear-lista")
+async def crear_lista(request: Request, nombre_lista: str = Form(...)):
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res
+
+    model.add_lista_usuario(res["id"], nombre_lista)
+    return RedirectResponse("/profile", status_code=302)
+
+@app.post("/remove-lista")
+async def remove_lista(request: Request, nombre_lista: str = Form(...)):
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res
+
+    model.remove_lista_usuario(res["id"], nombre_lista)
+    return RedirectResponse("/profile", status_code=302)
+
+@app.post("/add-song-to-list")
+async def add_song_to_list(request: Request, nombre_lista: str = Form(...), id_cancion: str = Form(...)):
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res
+
+    model.add_cancion_a_lista_usuario(res["id"], nombre_lista, id_cancion)
+    return RedirectResponse("/profile", status_code=302)
+
+@app.post("/remove-song-from-list")
+async def remove_song_from_list(request: Request, nombre_lista: str = Form(...), id_cancion: str = Form(...)):
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res
+
+    model.remove_cancion_de_lista_usuario(res["id"], nombre_lista, id_cancion)
+    return RedirectResponse("/profile", status_code=302)
 
 # ------------------------------------------------------------------- #
 # ----------------------------- ALBUM ------------------------------- #
