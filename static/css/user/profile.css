@@ -23,7 +23,7 @@
 
 .grid-biblioteca {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); /* Ajusta dinámicamente el número de columnas */
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); /* Todas las que quepan */
     gap: 20px; /* Espaciado entre filas y columnas */
     align-items: center; /* Centra los elementos verticalmente */
     justify-items: center; /* Centra los elementos horizontalmente */
