@@ -341,6 +341,7 @@ async def update_profile(request: Request, response: Response):
         return {"success": True, "message": "No changes to user profile"}
 
     user = UsuarioDTO()
+    user.load_from_dict(user_info)  # Cargamos los datos del usuario desde la base de datos
     user.set_id(user_id)
     user.set_nombre(user_name)
     user.set_email(user_email)
