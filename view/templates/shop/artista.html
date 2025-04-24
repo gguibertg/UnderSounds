@@ -24,10 +24,10 @@
     <div id="header-placeholder"></div>
     <main>
         <div class="div-bg">
-            <div class="album-page">
-                <section class="album-top">
-                    <div class="div-pannel album-info">
-                        <h2 class="album-title">{{artista.nombre}}</h2>
+            <div class="artista-page">
+                <section class="artista-top">
+                    <div class="div-pannel artista-info">
+                        <h2 class="artista-title">{{artista.nombre}}</h2>
                         <p><strong>Biografía:</strong> {{artista.bio}}</p>
                         <p><strong>Enlace social:</strong> {{artista.url}}</p>
                         {% if artista.emailVisible %}
@@ -38,14 +38,14 @@
                         <p><strong>Número de canciones (total) subidas:</strong> {{songs|length}}</p>
                         <p><strong>Número de álbumes subidos:</strong> {{albums|length}}</p>                        
                         <p><strong>Artista de UnderSounds desde</strong> {{artista.fechaIngreso}}</p>
-                        <div class="album-buttons">
+                        <div class="artista-buttons">
                             {% if tipoUsuario == 3 %}
                             <button class="btn" onclick="window.location.href='/studio';">Ir a Studio</button>
                             <button class="btn" onclick="window.location.href='/perfil';">Editar perfil</button>
                             {% endif %}
                         </div>
                     </div>
-                    <div class="div-pannel album-image">
+                    <div class="div-pannel artista-image">
                         <img alt="Portada del álbum Kamikaze" src="{{artista.imagen}}" />
                     </div>
                 </section>

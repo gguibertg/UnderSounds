@@ -1302,7 +1302,7 @@ def get_merch(request: Request):
     return view.get_merch_view(request)
 
 @app.get("/artista")
-async def artista_post(request: Request):
+async def get_artista(request: Request):
     # Recuperamos el ID del artista (usuario) desde la query
     if request.query_params.get("id") is not None:
         artista_id = request.query_params.get("id") # Developer
