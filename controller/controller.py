@@ -585,7 +585,7 @@ async def get_album(request: Request):
         if album_id in res["studio_albumes"]:
             tipoUsuario = 3 # Artista (creador)
 
-        elif all(song["id"] in res["songs_compradas"] for song in album_info["canciones"]):
+        elif all(song["id"] in res["biblioteca"] for song in album_info["canciones"]):
             tipoUsuario = 2 # Propietario (User o Artista)
 
         else:
@@ -1073,7 +1073,7 @@ async def get_song(request: Request):
         if song_id in res["studio_canciones"]:
             tipoUsuario = 3 # Artista (creador)
 
-        elif song_id in res["songs_compradas"]:
+        elif song_id in res["biblioteca"]:
             tipoUsuario = 2 # Propietario (User o Artista)
 
         else:
