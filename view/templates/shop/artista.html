@@ -29,6 +29,7 @@
                     <div class="div-pannel artista-info">
                         <h2 class="artista-title">{{artista.nombre}}</h2>
                         <p><strong>Biografía:</strong> {{artista.bio}}</p>
+                        <br>
                         <p><strong>Enlace social:</strong> {{artista.url}}</p>
                         {% if artista.emailVisible %}
                         <p><strong>Email de contacto:</strong> {{artista.email}}</p>
@@ -37,7 +38,7 @@
                         <p><strong>Número de singles subidos:</strong> {{singles|length}}</p>
                         <p><strong>Número de canciones (total) subidas:</strong> {{songs|length}}</p>
                         <p><strong>Número de álbumes subidos:</strong> {{albums|length}}</p>                        
-                        <p><strong>Artista de UnderSounds desde</strong> {{artista.fechaIngreso}}</p>
+                        <i>Artista de UnderSounds desde {{artista.fechaIngreso}}</i>
                         <div class="artista-buttons">
                             {% if tipoUsuario == 3 %}
                             <button class="btn" onclick="window.location.href='/studio';">Ir a Studio</button>
@@ -54,6 +55,7 @@
                 <h2>Singles</h2>
                 <div class="div-carrusel grid-entradas">
 
+                    {% if singles and singles|length > 0 %}
                     {% for single in singles %}
                     <div class="div-pannel-sub" style="margin-right: 1rem; margin-left: 1rem;">
                         <img src="{{ single.portada }}" class="foto-producto">
@@ -67,23 +69,60 @@
                         <button class="button-comprar-item" onclick="window.location.href='/song?id={{ single.id }}';">Ir a la canción</button>
                     </div>
                     {% endfor %}
+                    {% else %}
+                    <i>No hay Singles por aquí...</i>
+                    {% endif %}
 
                 </div>
             </section>
             <br>
             <section class="div-pannel song-list-section">
                 <h2>Albumes</h2>
-                <div class="song-grid-cards">
-
+                    <div class="div-carrusel grid-entradas">
+                    {% if albums and albums|length > 0 %}
+                    {% for album in albums %}
+                    <div class="div-pannel-sub" style="margin-right: 1rem; margin-left: 1rem;">
+                        <img src="{{ album.portada }}" class="foto-producto">
+                        <p class="texto-producto">{{ album.titulo }}</p>
+                        {% if album.colaboradores %}
+                        <p class="texto-desc">{{ album.autor }} y {{ album.colaboradores }}</p>
+                        {% else %}
+                        <p class="texto-desc">{{ album.autor }}</p>
+                        {% endif %}
+                        <b class="texto-precio">{{ album.precio }}€</b>
+                        <button class="button-comprar-item" onclick="window.location.href='/album?id={{ album.id }}';">Ir al álbum</button>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <i>No hay Álbumes por aquí...</i>
+                    {% endif %}
                 </div>
             </section>
             <br>
             <section class="div-pannel song-list-section">
                 <h2>Todas las canciones</h2>
-                <div class="song-grid-cards">
-
+                <div class="div-carrusel grid-entradas">
+                    {% if songs and songs|length > 0 %}
+                    {% for song in songs %}
+                    <div class="div-pannel-sub" style="margin-right: 1rem; margin-left: 1rem;">
+                        <img src="{{ song.portada }}" class="foto-producto">
+                        <p class="texto-producto">{{ song.titulo }}</p>
+                        {% if song.colaboradores %}
+                        <p class="texto-desc">{{ song.artista }} y {{ song.colaboradores }}</p>
+                        {% else %}
+                        <p class="texto-desc">{{ song.artista }}</p>
+                        {% endif %}
+                        <b class="texto-precio">{{ song.precio }}€</b>
+                        <button class="button-comprar-item" onclick="window.location.href='/song?id={{ song.id }}';">Ir a la canción</button>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <i>No hay Canciones por aquí...</i>
+                    {% endif %}
                 </div>
             </section>
+            <br>
+            <br>
         </div>
     </main>
     <div id="footer-placeholder"></div>
