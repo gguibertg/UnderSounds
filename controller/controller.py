@@ -1139,7 +1139,11 @@ async def get_song(request: Request):
     # 1 = User
     # 2 = Propietario (User o Artista)
     # 3 = Artista (creador)
-    return view.get_song_view(request, song_info, tipoUsuario) # Devolvemos la vista del song
+
+    user = UsuarioDTO()
+    user.load_from_dict(user_db)
+
+    return view.get_song_view(request, song_info, tipoUsuario, user) # Devolvemos la vista del song
 
 # Ruta para cargar vista edit-song
 @app.get("/edit-song")
@@ -1328,77 +1332,6 @@ async def get_studio(request: Request):
     return view.get_studio_view(request, user_songs_objects, user_albums_objects)
 
 
-
-
-# -------------------------------------------------------------------------- #
-# --------------------------- MÉTODOS AUXILIARES --------------------------- #
-# -------------------------------------------------------------------------- #
-
-def isUserSessionValid(session_id : str) -> bool:
-    return session_id and session_id in sessions and model.get_usuario(sessions[session_id]["user_id"])
-
-# Un session contiene un name, user_id y el tipo de login (google o credentials)
-def getSessionData(session_id: str) -> str:
-    if session_id in sessions:
-        return sessions[session_id]
-    return None
-
-# Este método automatiza la obtención de datos del usuario a partir de la sesión activa.
-#
-#   1º Comprueba que exista una sesión activa
-#   2º Descarga los datos del usuario enlazados a esa sesión
-#   3º Devuelve dos cosas:
-#       Si todo es correcto -> Devuelve user_info (dict)
-#       Si no -> Devuelve un Response con el error y escribe a consola
-#
-# Conveniente para rutas sencillas que solo requieran la info del usuario.
-def verifySessionAndGetUserInfo(request : Request):
-    # Comprobamos si el usuario tiene una sesión activa
-    session_id = request.cookies.get("session_id")
-    if not isUserSessionValid(session_id):
-        return Response("No autorizado", status_code=401)
-    
-    # Accedemos a los datos de la sesión del usuario
-    session_data = getSessionData(session_id)
-    if session_data:
-        user_id = session_data["user_id"]
-        user_name = session_data["name"]
-        print(PCTRL, "User", user_name, "requested access to user data")
-
-        # Accedemos a los datos del usuario en la base de datos
-        user_info = model.get_usuario(user_id) # Devuelve un dict del UsuarioDTO
-
-        if user_info:
-            return user_info
-        else:
-            print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")
-        
-    return Response("No autorizado", status_code=401)
-
-
-
-
-# --------------------------- HACKS DE MIERDA - ELIMINAR CUANDO HAYA UNA MEJOR IMPLEMENTACIÓN --------------------------- #
-# Guardar sesiones en un archivo JSON al cerrar el servidor y recuperarlas al iniciar.
-# Así evitamos perder las sesiones al reiniciar el servidor.
-@app.on_event("shutdown")
-def shutdown_event():
-    with open("sessions.json", "w") as f:
-        json.dump(sessions, f)
-    print(PCTRL, "Sessions saved to sessions.json")
-@app.on_event("startup")
-def startup_event():
-    if Path("sessions.json").is_file():
-        with open("sessions.json", "r") as f:
-            global sessions
-            sessions = json.load(f)
-        print(PCTRL, "Sessions loaded from sessions.json")
-    else:
-        print(PCTRL_WARN, "No sessions.json file found, starting with empty sessions")
-
-
-    
-
 # ------------------------------------------------------------ #
 # --------------------------- Reseña ------------------------- #
 # ------------------------------------------------------------ #
@@ -1527,3 +1460,74 @@ async def update_review(request: Request):
 
         except Exception as e:
             return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+# -------------------------------------------------------------------------- #
+# --------------------------- MÉTODOS AUXILIARES --------------------------- #
+# -------------------------------------------------------------------------- #
+
+def isUserSessionValid(session_id : str) -> bool:
+    return session_id and session_id in sessions and model.get_usuario(sessions[session_id]["user_id"])
+
+# Un session contiene un name, user_id y el tipo de login (google o credentials)
+def getSessionData(session_id: str) -> str:
+    if session_id in sessions:
+        return sessions[session_id]
+    return None
+
+# Este método automatiza la obtención de datos del usuario a partir de la sesión activa.
+#
+#   1º Comprueba que exista una sesión activa
+#   2º Descarga los datos del usuario enlazados a esa sesión
+#   3º Devuelve dos cosas:
+#       Si todo es correcto -> Devuelve user_info (dict)
+#       Si no -> Devuelve un Response con el error y escribe a consola
+#
+# Conveniente para rutas sencillas que solo requieran la info del usuario.
+def verifySessionAndGetUserInfo(request : Request):
+    # Comprobamos si el usuario tiene una sesión activa
+    session_id = request.cookies.get("session_id")
+    if not isUserSessionValid(session_id):
+        return Response("No autorizado", status_code=401)
+    
+    # Accedemos a los datos de la sesión del usuario
+    session_data = getSessionData(session_id)
+    if session_data:
+        user_id = session_data["user_id"]
+        user_name = session_data["name"]
+        print(PCTRL, "User", user_name, "requested access to user data")
+
+        # Accedemos a los datos del usuario en la base de datos
+        user_info = model.get_usuario(user_id) # Devuelve un dict del UsuarioDTO
+
+        if user_info:
+            return user_info
+        else:
+            print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")
+        
+    return Response("No autorizado", status_code=401)
+
+
+
+
+# --------------------------- HACKS DE MIERDA - ELIMINAR CUANDO HAYA UNA MEJOR IMPLEMENTACIÓN --------------------------- #
+# Guardar sesiones en un archivo JSON al cerrar el servidor y recuperarlas al iniciar.
+# Así evitamos perder las sesiones al reiniciar el servidor.
+@app.on_event("shutdown")
+def shutdown_event():
+    with open("sessions.json", "w") as f:
+        json.dump(sessions, f)
+    print(PCTRL, "Sessions saved to sessions.json")
+@app.on_event("startup")
+def startup_event():
+    if Path("sessions.json").is_file():
+        with open("sessions.json", "r") as f:
+            global sessions
+            sessions = json.load(f)
+        print(PCTRL, "Sessions loaded from sessions.json")
+    else:
+        print(PCTRL_WARN, "No sessions.json file found, starting with empty sessions")
+
+
+    
+

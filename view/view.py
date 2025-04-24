@@ -21,8 +21,8 @@ class View():
     def get_songs_view(self, request: Request, songs):
         return templates.TemplateResponse("main/index.html", {"request" :request, "songs" : songs})
     
-    def get_song_view(self, request: Request, song_info : dict, tipoUsuario: int):
-        return templates.TemplateResponse("music/song.html", {"request": request, "song": song_info, "tipoUsuario": tipoUsuario})
+    def get_song_view(self, request: Request, song_info : dict, tipoUsuario: int, user):
+        return templates.TemplateResponse("music/song.html", {"request": request, "song": song_info, "tipoUsuario": tipoUsuario, "usuario": user})
 
     def get_edit_song_view(self, request: Request, song_info):
         return templates.TemplateResponse("music/song-edit.html", {"request": request, "song": song_info})
