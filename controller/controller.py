@@ -817,6 +817,11 @@ def get_songs(request: Request):
 
 @app.get("/song")
 async def get_song(request: Request):
+
+    user_db = verifySessionAndGetUserInfo(request)
+    if isinstance(user_db, Response):
+        return user_db
+    
     if request.query_params.get("id") is not None:
         song_id = request.query_params.get("id") # Developer
     else:
@@ -832,7 +837,10 @@ async def get_song(request: Request):
         print(PCTRL_WARN, "La cancion no existe")
         return Response("No autorizado", status_code=403)
     
-    return view.get_song_view(request, song_info)
+    user = UsuarioDTO()
+    user.load_from_dict(user_db)
+    
+    return view.get_song_view(request, song_info, user)
 
     
     
@@ -898,25 +906,20 @@ async def add_review(request: Request):
     
     try:
         # Verificar si el usuario tiene una sesión activa y es artista 
-        #user_db = verifySessionAndGetUserInfo(request)
-        #if isinstance(user_db, Response):
-        #    return user_db # Si es un Response, devolvemos el error  
+        user_db = verifySessionAndGetUserInfo(request)
+        if isinstance(user_db, Response):
+            return user_db # Si es un Response, devolvemos el error  
         
         data_info = await request.json()
         song_id = data_info["song_id"]
         titulo = data_info["titulo"]
         texto = data_info["reseña"]
 
-        usuario = UsuarioDTO()
-        usuario.set_nombre("Adrian")
-        usuario.set_imagen("")
-        #usuario.load_from_dict(user_db)
-
         # Crear ReseñaDTO
         reseña = ReseñaDTO()
         reseña.set_titulo(titulo)
         reseña.set_reseña(texto)
-        reseña.set_usuario(usuario.usuario_to_dict())
+        reseña.set_usuario(user_db)
 
         # Guardar en base de datos
         reseña_id = model.add_reseña(reseña)
@@ -947,9 +950,9 @@ async def add_review(request: Request):
 async def delete_review(request: Request):
         try:
             # Verificar si el usuario tiene una sesión activa y es artista 
-            #user_db = verifySessionAndGetUserInfo(request)
-            #if isinstance(user_db, Response):
-            #    return user_db # Si es un Response, devolvemos el error  
+            user_db = verifySessionAndGetUserInfo(request)
+            if isinstance(user_db, Response):
+                return user_db # Si es un Response, devolvemos el error  
             
             data_info = await request.json()
             song_id = data_info["song_id"]
@@ -958,15 +961,18 @@ async def delete_review(request: Request):
             # Obtener la reseña
             reseña_data = model.get_reseña(reseña_id)
 
+            if user_db != reseña_data["usuario"]:
+                return JSONResponse(status_code=500, content={"error": "La reseña no te pertenece."})
+
             song_dict = model.get_song(song_id)
             song = SongDTO()
             song.load_from_dict(song_dict)
             song.remove_resena(reseña_data)
 
             if model.update_song(song):
-                print(PCTRL, "Reseña deleted of song", song_id )
+                print(PCTRL, "Reseña deleted of song ", song_id )
             else:
-                return JSONResponse(status_code=500, content={"error": "No se pudo eliminar la reseña."})
+                return JSONResponse(status_code=500, content={"error": "No se pudo eliminar la reseña de la cancion "})
 
             if model.delete_reseña(reseña_id):
                 return JSONResponse(status_code=200, content={"message": "Reseña eliminada."})
@@ -981,9 +987,9 @@ async def delete_review(request: Request):
 async def update_review(request: Request):
         try:
             # Verificar si el usuario tiene una sesión activa y es artista 
-            #user_db = verifySessionAndGetUserInfo(request)
-            #if isinstance(user_db, Response):
-            #    return user_db # Si es un Response, devolvemos el error  
+            user_db = verifySessionAndGetUserInfo(request)
+            if isinstance(user_db, Response):
+                return user_db # Si es un Response, devolvemos el error  
             
             data_info = await request.json()
             song_id = data_info["song_id"]
@@ -994,16 +1000,18 @@ async def update_review(request: Request):
             # Obtener la reseña
             reseña_data = model.get_reseña(reseña_id)
 
+            if user_db != reseña_data["usuario"]:
+                return JSONResponse(status_code=500, content={"error": "No se pudo eliminar la reseña."})
+
             song_dict = model.get_song(song_id)
             song = SongDTO()
             song.load_from_dict(song_dict)
-            song.remove_resena(reseña_data)
 
             reseña = ReseñaDTO()
             reseña.load_from_dict(reseña_data)
             reseña.set_titulo(str(titulo))
             reseña.set_reseña(str(texto))
-            song.add_resenas(reseña.reseñadto_to_dict())
+            song.update_resenas(reseña.reseñadto_to_dict())
 
             if model.update_song(song):
                 print(PCTRL, "Reseña update of song", song_id )

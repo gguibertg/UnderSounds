@@ -126,6 +126,12 @@ class SongDTO():
     def add_resenas(self, resenas: dict):
         self.lista_resenas.append(resenas)
 
+    def update_resenas(self, resenas: dict):
+        for i, r in enumerate(self.lista_resenas):
+            if r["id"] == resenas["id"]:
+                r["titulo"] = resenas["titulo"]
+                r["reseña"] = resenas["reseña"]
+
     def remove_resena(self, resenas: dict):
         if resenas in self.lista_resenas:
             self.lista_resenas.remove(resenas)
