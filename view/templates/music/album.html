@@ -23,6 +23,11 @@
 <body>
     <div id="header-placeholder"></div>
     <main>
+        {% if not album.visible %}
+        <div class="div-warn">
+            <p>Esta página de álbum está oculta y no es accesible al público. Solo tú puedes verla. Puedes cambiar esto editando la visibilidad del álbum en tu página de Studio.</p>
+        </div>
+        {% endif %}
         <div class="div-bg">
             <div class="album-page">
                 <section class="album-top">

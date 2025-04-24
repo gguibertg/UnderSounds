@@ -6,7 +6,7 @@
     <meta charset="utf-8" /> <!-- Codificación de caracteres -->
     <meta content="width=device-width, initial-scale=1.0" name="viewport" /> <!-- Escalabilidad de la página -->
     <meta content="L1-G4" name="author" />
-    <title>Canción</title> <!-- Título que aparece en la pestaña del navegador -->
+    <title>{{song.titulo}}</title> <!-- Título que aparece en la pestaña del navegador -->
     <!-- Estilos -->
     <link rel="stylesheet" href="/static/css/base/style.css"> <!-- Hoja de estilos principal -->
     <link rel="stylesheet" href="/static/css/base/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
@@ -29,7 +29,11 @@
     <div id="header-placeholder"></div>
     <!-- Contenido principal -->
     <main>
-
+        {% if not song.visible %}
+        <div class="div-warn">
+            <p>Esta página de canción está oculta y no es accesible al público. Solo tú puedes verla. Puedes cambiar esto editando la visibilidad de la canción en tu página de Studio.</p>
+        </div>
+        {% endif %}
         <div class="div-bg">
             <div class="song-page">
                 <section class="song-top">

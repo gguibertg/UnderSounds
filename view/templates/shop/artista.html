@@ -23,6 +23,12 @@
 <body>
     <div id="header-placeholder"></div>
     <main>
+        {% if not artista.esVisible %}
+        <div class="div-warn">
+            <p>Esta página de artista está oculta y no es accesible al público. Solo tú puedes verla. Puedes cambiar esto en tu página de Studio.</p>
+        </div>
+        {% endif %}
+
         <div class="div-bg">
             <div class="artista-page">
                 <section class="artista-top">

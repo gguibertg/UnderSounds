@@ -1,11 +1,11 @@
 function displayMessage(type, message) {
-    // Validar que el tipo sea "error" o "success"
-    if (type !== "error" && type !== "success") {
-        console.error("El tipo de mensaje debe ser 'error' o 'success'.");
+    // Validar que el tipo sea "error", "success" o "warn"
+    if (type !== "error" && type !== "success" && type !== "warn") {
+        console.error("El tipo de mensaje debe ser 'error', 'success' o 'warn'.");
         return;
     }
 
-    // Eliminar los divs existentes de tipo error o success si ya existen
+    // Eliminar los divs existentes de tipo error, success o warn si ya existen
     const existingErrorDiv = document.querySelector(".div-error");
     if (existingErrorDiv) {
         existingErrorDiv.remove();
@@ -13,6 +13,10 @@ function displayMessage(type, message) {
     const existingSuccessDiv = document.querySelector(".div-success");
     if (existingSuccessDiv) {
         existingSuccessDiv.remove();
+    }
+    const existingWarnDiv = document.querySelector(".div-warn");
+    if (existingWarnDiv) {
+        existingWarnDiv.remove();
     }
 
     // Crear un nuevo div de mensaje
