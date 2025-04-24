@@ -28,6 +28,10 @@ class View():
     def get_login_view(self, request: Request):
         return templates.TemplateResponse("auth/login.html", {"request": request, "API_CREDENTIALS" : apicreds })
 
+    # Renderizar la template logut.html
+    def get_logout_view(self, request: Request):
+        return templates.TemplateResponse("auth/logout.html", {"request": request, "API_CREDENTIALS" : apicreds })
+
     # Renderizar la template profile.html
     # Necesita un user_info completo, no se contempla otro caso.
     def get_perfil_view(self, request: Request, user_info : dict):

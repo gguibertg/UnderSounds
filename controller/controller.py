@@ -153,6 +153,7 @@ async def login_credentials(data: dict, response: Response):
 async def login_google(data: dict, response: Response):
     return await login_post(data, response, "google")
 
+# Ruta para procesar la petición de logout
 @app.post("/logout")
 async def logout(request: Request, response: Response):
     session_id = request.cookies.get("session_id")
@@ -162,6 +163,16 @@ async def logout(request: Request, response: Response):
     print(PCTRL, "User session", session_id, "destroyed")
     response.delete_cookie("session_id")
     return {"success": True}
+
+# Hack para que el header pueda acceder al script de logout correctamente
+@app.get("/logout")
+async def get_logout(request: Request):
+    # Verificar si el usuario tiene una sesión activa
+    session_id = request.cookies.get("session_id")
+    if not isUserSessionValid(session_id):
+        return Response("No autorizado", status_code=401)
+    
+    return view.get_logout_view(request)
 
 # --------------------------------------------------------------------- #
 # ----------------------------- REGISTER ------------------------------ #

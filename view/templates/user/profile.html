@@ -22,12 +22,7 @@
     <link href="/static/icons/favicons/site.webmanifest" rel="manifest">
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-    </link>
-    </meta>
-    </link>
-    </link>
-    </link>
-    </link>
+
 </head>
 
 <body>
@@ -318,6 +313,7 @@
     <script src="/static/js/header.js"></script>
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
+    
     <script>
         const firebaseConfig = {
             apiKey: "{{ API_CREDENTIALS.API_KEY }}",
@@ -342,6 +338,7 @@
                         }
                     }).catch(error => {
                         console.error("Error al cerrar sesión en Firebase:", error);
+                        alert("Error al cerrar sesión: " + error.message);
                     });
             }
         }

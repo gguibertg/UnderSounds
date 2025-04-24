@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script>
+        window.stop(); // Detiene la carga del resto del documento
+
+        const firebaseConfig = {
+            apiKey: "{{ API_CREDENTIALS.API_KEY }}",
+            authDomain: "{{ API_CREDENTIALS.AUTH_DOMAIN }}",
+            projectId: "{{ API_CREDENTIALS.PROJECT_ID }}",
+            storageBucket: "{{ API_CREDENTIALS.STORAGE_BUCKET }}",
+            messagingSenderId: "{{ API_CREDENTIALS.MESSAGING_SENDER_ID }}",
+            appId: "{{ API_CREDENTIALS.APP_ID }}",
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Asignar la función al objeto window para que esté en el ámbito global
+        window.logout = function() {
+            console.log("Logout function called"); // Para depuración
+            fetch("/logout", { method: "POST" })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        auth.signOut().then(() => { });
+                        window.location.href = "/";
+                    }
+                }).catch(error => {
+                    console.error("Error al cerrar sesión en Firebase:", error);
+                    alert("Error al cerrar sesión: " + error.message);
+                });
+        };
+
+        logout(); // Llama a la función de cierre de sesión inmediatamente
+    </script>
+</head>
+</html>
