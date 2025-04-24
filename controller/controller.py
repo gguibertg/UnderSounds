@@ -1266,6 +1266,17 @@ async def get_studio(request: Request):
 
 
 
+# --------------------------------------------------------------- #
+# ---------------------------- ARTISTA -------------------------- #
+# --------------------------------------------------------------- #
+
+@app.get("/merch")
+def get_merch(request: Request):
+    return view.get_merch_view(request)
+
+@app.get("/artista")
+async def artista_post(request: Request):
+    return view.get_artista_view(request)
 
 # -------------------------------------------------------------------------- #
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
