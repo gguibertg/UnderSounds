@@ -27,29 +27,15 @@
             <div class="album-page">
                 <section class="album-top">
                     <div class="div-pannel album-info">
-                        <h2 class="album-title">{{album.titulo}}</h2>
-                        <p><strong>Autor:</strong> {{album.autor}}</p>
-                        <p><strong>Colaboradores:</strong> {{album.colaboradores}}</p>
-                        <p><strong>Descripción:</strong> {{album.descripcion}}</p>
-                        <p><strong>Fecha:</strong> {{album.fecha}}</p>
-                        <p><strong>Géneros:</strong> {{album.generosStr}}</p> <!-- Este genero es especial -> Es un campo populado por los nombres de los generos, NO los IDs -->
-                        <p><strong>Número de canciones en total:</strong> {{album.canciones|length}}</p>
-                        <p><strong>Duración total:</strong> TODO</p> <!-- TODO: Hacer be-stream primero! y que los archivos tengan duración, no null! -->
-                        <!-- TODO: No se le puede dar un like a un album! (Es esto a proposito?) -->
-                        <p><strong>Visualizaciones:</strong> {{album.visitas}}</p>
-                        <p><strong>Precio:</strong> {{album.precio}}€</p>
+                        <h2 class="album-title">Nombre</h2>
+                        <p><strong>Biografía:</strong> TODO</p>
+                        <p><strong>Enlace social:</strong> TODO</p>
+                        <p><strong>Descripción:</strong> TODO</p>
+                        <p><strong>Artista de UnderSounds desde</strong> TODO</p>
                         <div class="album-buttons">
-                            {% if tipoUsuario >= 2 %}
-                            <button class="btn">Descargar álbum</button> <!-- TODO en be-stream! -->
-                            <button class="btn">Añadir a lista de reproducción</button> <!-- TODO: Necesitamos listas para eso! -->
-                            {% elif tipoUsuario == 1 %}
-                            <button class="btn">Comprar álbum</button> <!-- TODO ¡Que alguien lo enlace con carrito! -->
-                            {% else %}
-                            <button class="btn" onclick="window.location.href='/login';">Inicia sesión para comprar o descargar este álbum</button>
-                            {% endif %}
-
                             {% if tipoUsuario == 3 %}
-                            <button class="btn" onclick="window.location.href='/album-edit?id={{album.id}}';">Editar álbum</button>
+                            <button class="btn" onclick="window.location.href='/studio';">Ir a Studio</button>
+                            <button class="btn" onclick="window.location.href='/perfil';">Editar perfil</button>
                             {% endif %}
                         </div>
                     </div>
