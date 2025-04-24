@@ -57,7 +57,7 @@
 
                     {% if singles and singles|length > 0 %}
                     {% for single in singles %}
-                    <div class="div-pannel-sub" style="margin-right: 1rem; margin-left: 1rem;">
+                    <div class="div-pannel-sub item-element" style="margin-right: 1rem; margin-left: 1rem;">
                         <img src="{{ single.portada }}" class="foto-producto">
                         <p class="texto-producto">{{ single.titulo }}</p>
                         {% if single.colaboradores %}
@@ -81,7 +81,7 @@
                     <div class="div-carrusel grid-entradas">
                     {% if albums and albums|length > 0 %}
                     {% for album in albums %}
-                    <div class="div-pannel-sub" style="margin-right: 1rem; margin-left: 1rem;">
+                    <div class="div-pannel-sub item-element" style="margin-right: 1rem; margin-left: 1rem;">
                         <img src="{{ album.portada }}" class="foto-producto">
                         <p class="texto-producto">{{ album.titulo }}</p>
                         {% if album.colaboradores %}
@@ -104,7 +104,7 @@
                 <div class="div-carrusel grid-entradas">
                     {% if songs and songs|length > 0 %}
                     {% for song in songs %}
-                    <div class="div-pannel-sub" style="margin-right: 1rem; margin-left: 1rem;">
+                    <div class="div-pannel-sub item-element" style="margin-right: 1rem; margin-left: 1rem;">
                         <img src="{{ song.portada }}" class="foto-producto">
                         <p class="texto-producto">{{ song.titulo }}</p>
                         {% if song.colaboradores %}

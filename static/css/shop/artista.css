@@ -148,3 +148,7 @@
     margin-bottom: 10px;
     margin-top: 3px;
 }
+
+.item-element {
+    min-width: 14rem;
+}
