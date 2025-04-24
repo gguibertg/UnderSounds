@@ -30,7 +30,26 @@
     <main>
         <div class="div-bg">
             <br>
-            
+
+            <div class="div-pannel" style="width: 30%; align-items: center; margin: 0; padding-bottom: 0;">
+                <p class="songs-title">Studio</p>
+                <div class="div-pannel-sub grid-option">
+                    <input type="checkbox" id="enable-page" name="enable-page" {% if user.esVisible %}checked{% endif %}>
+                    <label for="enable-page">Hacer mi página de artista visible</label>
+                </div>
+                <br>
+                <div class="div-pannel-sub grid-option">
+                    <input type="checkbox" id="show-email" name="show-email" {% if user.emailVisible %}checked{% endif %}>
+                    <label for="show-email">Mostrar correo electrónico en mi página de artista</label>
+                </div>
+                <br>
+                <button type="button" onclick="saveSettings()">Guardar cambios</button>
+                <br>
+            </div>
+
+            <br>
+            <br>
+
             <div class="div-pannel" style="width: 80%; align-items: center;">
                 <p class="songs-title">Tus Álbumes</p>
                 <div class="parent">
@@ -171,6 +190,34 @@
             }
         }
         
+        function saveSettings() {
+            const enablePage = document.getElementById("enable-page").checked;
+            const showEmail = document.getElementById("show-email").checked;
+
+            fetch('/studio-settings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                esVisible: enablePage,
+                emailVisible: showEmail
+            })
+            })
+            .then(response => response.json())
+            .then(data => {
+            if (data.success) {
+                displayMessage("success", "Configuración guardada correctamente.");
+                window.location.href = '/studio';
+            } else {
+                displayMessage("error", "Error al guardar la configuración: " + data.error);
+            }
+            })
+            .catch(error => {
+            displayMessage("error", "Error al procesar la solicitud: " + error.message);
+            });
+        }
+
     </script>
 
     <!-- Pie de página -->

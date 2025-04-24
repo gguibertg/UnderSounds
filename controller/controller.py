@@ -1215,9 +1215,6 @@ async def delete_song_post(request: Request):
         print(PCTRL_WARN, "Song", song_id, "not deleted from database!")
         return {"success": False, "error": "Song not deleted from database"}
 
-
-
-
 # -------------------------------------------------------------- #
 # ---------------------------- STUDIO -------------------------- #
 # -------------------------------------------------------------- #
@@ -1265,9 +1262,36 @@ async def get_studio(request: Request):
         if not found:
             song["album"] = None
 
-    return view.get_studio_view(request, user_songs_objects, user_albums_objects)
+    return view.get_studio_view(request, user_songs_objects, user_albums_objects, res)
 
-
+# Ruta para procesar los ajustes de studio
+@app.post("/studio-settings")
+async def studio_settings_post(request: Request):
+    # Verificar si el usuario tiene una sesión activa y es artista 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return {"success": False, "error": "No autorizado"}
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return {"success": False, "error": "No autorizado"}
+    
+    # Recuperar los campos enablePage, showEmail de la request
+    data = await request.json()
+    esVisible = data.get("esVisible")
+    emailVisible = data.get("emailVisible")
+    print(esVisible, emailVisible)
+    
+    # Convertimos el usuario a objeto, aplicar cambios y volver a subirlo
+    user_object = UsuarioDTO()
+    user_object.load_from_dict(res)
+    user_object.set_esVisible(esVisible)
+    user_object.set_emailVisible(emailVisible)
+    if model.update_usuario(user_object):
+        print(PCTRL, "User", user_object.get_email(), "updated in database")
+        return {"success": True, "message": "Settings updated successfully"}
+    else:
+        print(PCTRL_WARN, "User", user_object.get_email(), "not updated in database!")
+        return {"success": False, "error": "User not updated in database"}
 
 # --------------------------------------------------------------- #
 # ---------------------------- ARTISTA -------------------------- #
@@ -1314,12 +1338,12 @@ def verifySessionAndGetUserInfo(request : Request):
     if session_data:
         user_id = session_data["user_id"]
         user_name = session_data["name"]
-        print(PCTRL, "User", user_name, "requested access to user data")
 
         # Accedemos a los datos del usuario en la base de datos
         user_info = model.get_usuario(user_id)
 
         if user_info:
+            print(PCTRL, "User", user_name, "requested access to user data through:", request.method, request.url.path)
             return user_info
         else:
             print(PCTRL_WARN, "User", user_name, "with id", user_id, "not found in database!")

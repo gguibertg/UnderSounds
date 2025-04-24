@@ -74,8 +74,8 @@ class View():
         return templates.TemplateResponse("shop/cart.html", {"request": request, "carrito": carrito})
     
     # Renderizar la template studio.html
-    def get_studio_view(self, request: Request, songs: list[dict], albums: list[dict]):
-        return templates.TemplateResponse("user/studio.html", {"request": request, "songs": songs, "albums": albums})
+    def get_studio_view(self, request: Request, songs: list[dict], albums: list[dict], user: dict):
+        return templates.TemplateResponse("user/studio.html", {"request": request, "songs": songs, "albums": albums, "user" : user})
 
     # Renderizar la template merch.html
     def get_merch_view(self, request: Request):

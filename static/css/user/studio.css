@@ -141,7 +141,16 @@
     background-color: #00ca3d;
 }
 
+.grid-option {
+    display: grid;
+    grid-template-columns: auto auto; /* Two columns with independent widths */
+    grid-template-rows: auto; /* One row */
+    gap: 20px; /* Optional: Adjust spacing between items */
+    justify-content: center; /* Center the grid items horizontally */
+    align-items: center; /* Center the grid items vertically */
+}
 
-
-
+label {
+    margin: 0;
+}
 
