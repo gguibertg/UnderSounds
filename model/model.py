@@ -4,6 +4,7 @@ from .dto.generoDTO import GeneroDTO
 from .dto.songDTO import SongDTO, SongsDTO
 from .dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 from .dto.contactoDTO import ContactoDTO
+from .dto.reseñasDTO import ReseñaDTO
 
 
 
@@ -20,6 +21,7 @@ class Model ():
         self.songsDAO = self.factory.getSongsDAO()
         self.carrito = self.factory.getCarritoDAO()
         self.daoContacto = self.factory.getContactoDAO()
+        self.daoReseña = self.factory.getReseñaDAO()
         pass
 
     # Usuario
@@ -105,3 +107,22 @@ class Model ():
 
     def get_songs(self):
         return self.songsDAO.get_all_songs()
+    
+    #Reseña
+    def get_all_reseñas_song(self, song: SongDTO):
+        return self.daoReseña.get_all_reseñas_song(song)
+
+    def get_reseña(self, id):
+        return self.daoReseña.get_reseña(id)
+
+    def get_reseña_song(self, id, song: SongDTO):
+        return self.daoReseña.get_reseña_song(id, song)
+
+    def add_reseña(self, reseña: ReseñaDTO):
+        return self.daoReseña.add_reseña(reseña)
+    
+    def update_reseña(self, reseña: ReseñaDTO):
+        return self.daoReseña.update_reseña(reseña)
+
+    def delete_reseña(self, id):
+        return self.daoReseña.delete_reseña(id)

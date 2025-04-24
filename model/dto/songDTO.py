@@ -1,4 +1,5 @@
 import json
+from .reseñasDTO import ReseñaDTO
 
 class SongsDTO():
     def __init__(self):
@@ -28,7 +29,7 @@ class SongDTO():
         self.visitas: int = None
         self.portada: str = None
         self.precio: float = None
-        self.lista_resenas: list[str] = []
+        self.lista_resenas: list[dict] = []
         self.visible: bool = None
         self.album: str = None
 
@@ -121,10 +122,23 @@ class SongDTO():
     def set_precio(self, precio: float):
         self.precio = precio
 
-    def get_lista_resenas(self) -> list[str]:
+    def get_lista_resenas(self) -> list[dict]:
         return self.lista_resenas
+    
+    def add_resenas(self, resenas: dict):
+        self.lista_resenas.append(resenas)
 
-    def set_lista_resenas(self, lista_resenas: list[str]):
+    def update_resenas(self, resenas: dict):
+        for i, r in enumerate(self.lista_resenas):
+            if r["id"] == resenas["id"]:
+                r["titulo"] = resenas["titulo"]
+                r["reseña"] = resenas["reseña"]
+
+    def remove_resena(self, resenas: dict):
+        if resenas in self.lista_resenas:
+            self.lista_resenas.remove(resenas)
+
+    def set_lista_resenas(self, lista_resenas: list[dict]):
         self.lista_resenas = lista_resenas
 
     def get_visible(self) -> bool:

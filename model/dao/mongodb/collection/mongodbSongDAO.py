@@ -41,7 +41,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                 songs.insertSong(song_dto)
 
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al recuperar los songs: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
 
         return [song.songdto_to_dict() for song in songs.songlist]
 
@@ -71,7 +71,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                 song.set_album(query.get("album"))
 
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al recuperar el song: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar la cancion: {e}")
 
         return song.songdto_to_dict() if song else None
     
@@ -84,7 +84,7 @@ class MongodbSongDAO(InterfaceSongDAO):
             return str(result.inserted_id)
         
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al agregar el song: {e}")
+            print(f"{PDAO_ERROR}Error al agregar la cancion: {e}")
             return None
         
 
@@ -98,7 +98,7 @@ class MongodbSongDAO(InterfaceSongDAO):
             return result.matched_count == 1
         
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al actualizar el song: {e}")
+            print(f"{PDAO_ERROR}Error al actualizar la cancion: {e}")
             return False
     
 
@@ -108,5 +108,5 @@ class MongodbSongDAO(InterfaceSongDAO):
             return result.deleted_count == 1
         
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al eliminar el song: {e}")
+            print(f"{PDAO_ERROR}Error al eliminar la cancion: {e}")
             return False
