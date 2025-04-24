@@ -5,6 +5,7 @@ from .dto.songDTO import SongDTO, SongsDTO
 from .dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 from .dto.contactoDTO import ContactoDTO
 from .dto.reseñasDTO import ReseñaDTO
+from .dto.tarjetaDTO import TarjetaDTO
 
 
 
@@ -20,6 +21,7 @@ class Model ():
         self.daoGenero = self.factory.getGeneroDAO()
         self.songsDAO = self.factory.getSongsDAO()
         self.carrito = self.factory.getCarritoDAO()
+        self.daoTarjeta = self.factory.getTarjetaDAO()
         self.daoContacto = self.factory.getContactoDAO()
         self.daoReseña = self.factory.getReseñaDAO()
         pass
@@ -78,6 +80,13 @@ class Model ():
     def get_carrito(self, usuario : str):
         return self.carrito.get_all_articulos(usuario)
     
+    #Prepaid
+    def get_tarjeta(self, usuario: str):
+        return self.daoTarjeta.get_tarjeta(usuario)
+
+    def add_tarjeta(self, tarjeta: TarjetaDTO):
+        return self.daoTarjeta.add_tarjeta(tarjeta)
+
     # Album
     def get_album(self, id : str):
         return self.daoAlbum.get_album(id)

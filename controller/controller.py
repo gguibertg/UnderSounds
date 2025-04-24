@@ -966,6 +966,28 @@ async def get_carrito(request: Request):
     carrito_json = model.get_carrito(user_id) 
     return view.get_carrito_view(request, carrito_json)
 
+
+# ------------------------------------------------------------------ #
+# ----------------------------- PREPAID ---------------------------- #
+# ------------------------------------------------------------------ #
+
+@app.get("/prepaid")
+def get_prepaid(request: Request):
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res
+
+    carrito_json = model.get_carrito(res["id"]) 
+    tarjeta_json = model.get_tarjeta(res["id"])
+
+    return view.get_contact_view(request, carrito_json, tarjeta_json)
+
+
+@app.post("/prepaid")
+def get_prepaid(request: Request):
+    pass
+
+
 # ------------------------------------------------------------ #
 # --------------------------- CONTACT ------------------------ #
 # ------------------------------------------------------------ #

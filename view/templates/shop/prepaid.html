@@ -50,23 +50,23 @@
                             <div class="grid-container2">
                                 <p style="color: red; font-size: small;">Es obligatorio completar todos los campos</p>
                                 <div style="grid-area: 1 / 1 / 2 / 3;">
-                                    <label style="font-size:medium;">Número de la tarjeta<input type="text" id="1"
+                                    <label style="font-size:medium;">Número de la tarjeta<input type="text" id="numero_tarjeta"
                                             name="Número de la tarjeta" maxlength="16" maxlength="16" required
                                             placeholder="Número de tarjeta" /></label>
                                 </div>
                                 <div style="grid-area: 2 / 1 / 3 / 2;">
-                                    <label style="font-size:medium;">Fecha de expiración<input type="month" id="2"
+                                    <label style="font-size:medium;">Fecha de expiración<input type="month" id="fecha_expiracion"
                                             name="Fecha de expiración" maxlength="5" maxlength="5" required
                                             placeholder="mm/yy" /></label>
                                 </div>
                                 <div style="grid-area: 2 / 2 / 3 / 3;">
-                                    <label style="font-size:medium;">Código de seguridad<input type="text" id="3"
+                                    <label style="font-size:medium;">Código de seguridad<input type="text" id="codigo"
                                             name="Código de seguridad" maxlength="3" maxlength="3" required
                                             placeholder="3 dígitos" /></label>
                                 </div>
                                 <div style="grid-area: 3 / 1 / 4 / 3;">
                                     <div class="div-row">
-                                        <input type="checkbox" id="4" name="Guardar Tarjeta"><label
+                                        <input type="checkbox" id="Guardar Tarjeta" name="Guardar Tarjeta"><label
                                             style="font-size: small;">Guardar datos para futuras compras. Si activas
                                             esta
                                             casilla se guardarán los datos de tu tarjeta para futuras compras. Podrás
@@ -122,6 +122,32 @@
             </div>
         </div>
     </main>
+
+    <script>
+
+        async function guardarTarjeta() {
+            const tarjetaData = {
+                numero: document.getElementById('numero_tarjeta').value,
+                fecha: document.getElementById('fecha_expiracion').value,
+                codigo: document.getElementById('codigo').value
+            }
+                        
+            const response = await fetch('/update-review', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(tarjetaData)
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert("Reseña actualizada.");
+                location.reload();
+            } else {
+                alert("Error: " + result.error);
+            }
+        }
+
+    </script>
 
     <!-- Pie de página -->
     <div id="footer-placeholder"></div>

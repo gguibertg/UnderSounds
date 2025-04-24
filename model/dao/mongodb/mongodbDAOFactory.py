@@ -6,6 +6,7 @@ from .collection.mongodbDAOAlbum import mongodbAlbumDAO
 from .collection.mongodbDAOGenero import mongodbGeneroDAO
 from .collection.mongodbSongDAO import MongodbSongDAO
 from .collection.mongodbDAOCarrito import mongodbCarritoDAO
+from .collection.mongodbDAOTarjeta import MongodbTarjetaDAO
 from .collection.mongodbDAOContacto import mongodbContactoDAO
 from .collection.mongodbDAOReseña import mongodbReseñaDAO
 
@@ -23,6 +24,9 @@ class MongodbDAOFactory(InterfaceDAOFactory):
     
     def getCarritoDAO(self):
         return mongodbCarritoDAO(self.connector.get_articulos_carrito())
+
+    def getTarjetaDAO(self):
+        return MongodbTarjetaDAO(self.connector.get_tarjetas_collection())
     
     def getAlbumDAO(self):
         return mongodbAlbumDAO(self.connector.get_album_collection())
