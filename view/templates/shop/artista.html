@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="L1-G4" name="author" />
-    <title>{{album.titulo}} · {{album.autor}}</title>
+    <title>Página de {{artista.nombre}}</title>
     <link href="/static/css/base/style.css" rel="stylesheet" />
     <link href="/static/css/base/darkmode.css" rel="stylesheet" />
     <link href="/static/css/base/header.css" rel="stylesheet" />
@@ -27,11 +27,17 @@
             <div class="album-page">
                 <section class="album-top">
                     <div class="div-pannel album-info">
-                        <h2 class="album-title">Nombre</h2>
-                        <p><strong>Biografía:</strong> TODO</p>
-                        <p><strong>Enlace social:</strong> TODO</p>
-                        <p><strong>Descripción:</strong> TODO</p>
-                        <p><strong>Artista de UnderSounds desde</strong> TODO</p>
+                        <h2 class="album-title">{{artista.nombre}}</h2>
+                        <p><strong>Biografía:</strong> {{artista.bio}}</p>
+                        <p><strong>Enlace social:</strong> {{artista.url}}</p>
+                        {% if artista.emailVisible %}
+                        <p><strong>Email de contacto:</strong> {{artista.email}}</p>
+                        {% endif %}
+                        <br>
+                        <p><strong>Número de singles subidos:</strong> {{singles|length}}</p>
+                        <p><strong>Número de canciones (total) subidas:</strong> {{songs|length}}</p>
+                        <p><strong>Número de álbumes subidos:</strong> {{albums|length}}</p>                        
+                        <p><strong>Artista de UnderSounds desde</strong> {{artista.fechaIngreso}}</p>
                         <div class="album-buttons">
                             {% if tipoUsuario == 3 %}
                             <button class="btn" onclick="window.location.href='/studio';">Ir a Studio</button>
@@ -40,13 +46,27 @@
                         </div>
                     </div>
                     <div class="div-pannel album-image">
-                        <img alt="Portada del álbum Kamikaze" src="{{album.portada}}" />
+                        <img alt="Portada del álbum Kamikaze" src="{{artista.imagen}}" />
                     </div>
                 </section>
             </div>
             <section class="div-pannel song-list-section">
                 <h2>Singles</h2>
-                <div class="song-grid-cards">
+                <div class="div-carrusel grid-entradas">
+
+                    {% for single in singles %}
+                    <div class="div-pannel-sub" style="margin-right: 1rem; margin-left: 1rem;">
+                        <img src="{{ single.portada }}" class="foto-producto">
+                        <p class="texto-producto">{{ single.titulo }}</p>
+                        {% if single.colaboradores %}
+                        <p class="texto-desc">{{ single.artista }} y {{ single.colaboradores }}</p>
+                        {% else %}
+                        <p class="texto-desc">{{ single.artista }}</p>
+                        {% endif %}
+                        <b class="texto-precio">{{ single.precio }}€</b>
+                        <button class="button-comprar-item" onclick="window.location.href='/song?id={{ single.id }}';">Ir a la canción</button>
+                    </div>
+                    {% endfor %}
 
                 </div>
             </section>

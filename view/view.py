@@ -82,5 +82,5 @@ class View():
         return templates.TemplateResponse("shop/merch.html", {"request": request})
     
     # Renderizar la template artista.html
-    def get_artista_view(self, request: Request):
-        return templates.TemplateResponse("shop/artista.html", {"request": request, "album": None, "tipoUsuario": 3})
+    def get_artista_view(self, request: Request, artista: dict, singles: list[dict], albums: list[dict], songs: list[dict], tipoUsuario: int):
+        return templates.TemplateResponse("shop/artista.html", {"request": request, "artista" : artista, "singles" : singles, "albums" : albums, "songs" : songs, "tipoUsuario" : tipoUsuario})

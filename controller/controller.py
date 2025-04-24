@@ -1303,7 +1303,63 @@ def get_merch(request: Request):
 
 @app.get("/artista")
 async def artista_post(request: Request):
-    return view.get_artista_view(request)
+    # Recuperamos el ID del artista (usuario) desde la query
+    if request.query_params.get("id") is not None:
+        artista_id = request.query_params.get("id") # Developer
+    else:
+        data = await request.json() # API
+        artista_id = data["id"]
+    if not artista_id:
+        return Response("Falta el parámetro 'id'", status_code=400)
+    
+    # Descargamos el artista (usuario) de la base de datos
+    artista_info = model.get_usuario(artista_id)
+    if not artista_info:
+        print(PCTRL_WARN, "El artista no existe")
+        return Response("No autorizado", status_code=403)
+    
+    # Descargamos los albumes del artista
+    user_albums_objects = []
+    for album_id in artista_info["studio_albumes"]:
+        album = model.get_album(album_id)
+        if not album:
+            print(PCTRL_WARN, "Album", album_id, "not found in database")
+            return Response("Error del sistema", status_code=403)
+        user_albums_objects.append(album)
+
+    # Descargamos todas las canciones del artista
+    user_songs_objects = []
+    for song_id in artista_info["studio_canciones"]:
+        song = model.get_song(song_id)
+        if not song:
+            print(PCTRL_WARN, "Song", song_id, "not found in database")
+            return Response("Error del sistema", status_code=403)
+        user_songs_objects.append(song)
+
+    # Filtramos que canciones son singles y las guardamos en una lista.
+    # Los singles son canciones que en su campo album tienen el valor None.
+    singles = []
+    for song in user_songs_objects:
+        if song["album"] is None:
+            singles.append(song)
+
+
+    # Recuperamos al usuario actualmente logeado y comprobamos si es el autor del album
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        tipoUsuario = 0 # Guest
+    else:
+        if artista_id == res["id"]:
+            tipoUsuario = 3 # Artista (creador)
+        else:
+            tipoUsuario = 1
+
+    # Donde tipo Usuario:
+    # 0 = Guest
+    # 1 = User
+    # x
+    # 3 = Artista (creador)
+    return view.get_artista_view(request, artista_info, singles, user_albums_objects, user_songs_objects, tipoUsuario) # Devolvemos la vista del artista
 
 # -------------------------------------------------------------------------- #
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
