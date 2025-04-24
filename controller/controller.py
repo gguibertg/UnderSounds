@@ -215,6 +215,9 @@ async def register_post(data: dict, response: Response, provider: str):
 
         user.set_url("")
         user.set_esArtista(bool(data.get("esArtista", False)))
+        user.set_fechaIngreso(datetime.now())  # Fecha de creación del usuario
+        user.set_esVisible(True)  # Por defecto, el usuario es visible
+        user.set_emailVisible(False) # Por defecto, el email no es visible
         user.set_studio_albumes([])  # Inicializamos el campo studio_albumes como una lista vacía
         user.set_studio_canciones([])  # Inicializamos el campo studio_canciones como una lista vacía
         #user.set_songs_compradas([])  # No existe todavía!!!
