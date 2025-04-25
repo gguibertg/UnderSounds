@@ -18,8 +18,8 @@ class View():
     def get_upload_song_view(self, request: Request):
         return templates.TemplateResponse("music/upload-song.html", {"request": request})
     
-    def get_song_view(self, request: Request, song_info : dict, tipoUsuario: int):
-        return templates.TemplateResponse("music/song.html", {"request": request, "song": song_info, "tipoUsuario": tipoUsuario})
+    def get_song_view(self, request: Request, song_info : dict, tipoUsuario: int, isLiked: bool):
+        return templates.TemplateResponse("music/song.html", {"request": request, "song": song_info, "tipoUsuario": tipoUsuario, "isLiked": isLiked})
 
     def get_edit_song_view(self, request: Request, song_info):
         return templates.TemplateResponse("music/song-edit.html", {"request": request, "song": song_info})
@@ -47,15 +47,15 @@ class View():
     
     # Renderizar la template album-edit.html
     def get_album_edit_view(self, request: Request, album_info : dict, songs: list[dict]):
-        return templates.TemplateResponse("music/album-edit.html", {"request": request, "album": album_info, "songs": songs })
+        return templates.TemplateResponse("music/album-edit.html", {"request": request, "album": album_info, "songs": songs})
 
     # Renderizar la template upload-album.html
     def get_upload_album_view(self, request: Request, songs: list[dict]):
         return templates.TemplateResponse("music/upload-album.html", {"request": request , "songs": songs}) 
     
     # Renderizar la template album.html
-    def get_album_view(self, request: Request, album_info : dict, tipoUsuario : int):
-        return templates.TemplateResponse("music/album.html", {"request": request, "album": album_info, "tipoUsuario": tipoUsuario})
+    def get_album_view(self, request: Request, album_info : dict, tipoUsuario : int, isLiked: bool):
+        return templates.TemplateResponse("music/album.html", {"request": request, "album": album_info, "tipoUsuario": tipoUsuario, "isLiked": isLiked})
     
     # Renderizar la template header.html
     def get_header_view(self, request: Request, user_info : dict):

@@ -122,6 +122,9 @@ class UsuarioDTO():
         if like_id in self.id_likes:
             self.id_likes.remove(like_id)
 
+    def get_id_likes(self) -> list[str]:
+        return self.id_likes
+
     def load_from_dict(self, data: dict):
         self.id = data.get("id")
         self.nombre = data.get("nombre")

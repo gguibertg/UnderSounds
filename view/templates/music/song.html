@@ -60,9 +60,6 @@
                         <div class="song-buttons">
                             <button class="btn download-btn">Descargar canción</button> <!-- TODO hacer en be-stream !-->
                             <button class="btn">Añadir a lista de reproducción</button> <!-- TODO Necesitamos listas para esto!-->
-                            <button class="btn fav-btn" title="Añadir a favoritos">
-                                <img alt="Favorito" class="fav-icon" src="/static/icons/site/favourite-icon-light.svg" />
-                            </button>
                             {% if tipoUsuario == 3 %}
                             <button class="btn" onclick="window.location.href='/edit-song?id={{song.id}}';">Editar canción</button>
                             {% endif %}
@@ -78,6 +75,9 @@
                             <input type="hidden" name="item_precio" value="{{song.precio}}">              
                             <button type="submit" class="button-comprar-item">Añadir al carrito</button>
                         </form>
+                        <button class="{% if isLiked %}button{% else %}button-alt{% endif %} fav-btn" title="Añadir a favoritos" onclick="toggleLike()">
+                            <img alt="Favorito" class="fav-icon" src="/static/icons/site/favourite-icon-light.svg" />
+                        </button>
                         {% else %}
                         <button class="btn" onclick="window.location.href='/login';">Inicia sesión para comprar y escuchar esta canción </button>
                         {% endif %}
@@ -166,6 +166,33 @@
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
     <script src="/static/js/radio.js"></script>
+    <script src="/static/js/displayMessage.js"></script>
+
+    <script>
+        async function toggleLike() {
+            const songId = "{{song.id}}"; // Get the song ID from the template
+            try {
+            const response = await fetch('/like-song', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: songId }),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                displayMessage('success', result.message || 'Acción completada con éxito.');
+                window.location.reload();
+            } else {
+                displayMessage('error', 'Error al procesar la solicitud.');
+            }
+            } catch (error) {
+            console.error('Error:', error);
+            displayMessage('error', 'Ocurrió un error al intentar realizar la acción.');
+            }
+        }
+    </script>
 </body>
 
 </html>

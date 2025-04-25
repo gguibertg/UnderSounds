@@ -534,7 +534,7 @@ async def get_album(request: Request):
     if not album_info:
         print(PCTRL_WARN, "Album does not exist")
         return Response("No autorizado", status_code=403)
-    
+
     # Antes de nada, verificamos si el album es visible o no. Si no lo es, no se puede ver... Excepto si el usuario es el autor del album.
     if not album_info["visible"]:
         res = verifySessionAndGetUserInfo(request)
@@ -543,14 +543,26 @@ async def get_album(request: Request):
         if album_id not in res["studio_albumes"]:
             print(PCTRL_WARN, "Album is not visible and user is not the author")
             return Response("No autorizado", status_code=403)
+        
+    # Incrementar el contador de visitas del album
+    album_info["visitas"] += 1
+    album_object = AlbumDTO()
+    album_object.load_from_dict(album_info)
+    if not model.update_album(album_object):
+        print(PCTRL_WARN, "Album", album_id, "not updated in database!")
+        return Response("Error del sistema", status_code=403)
 
     # Descargamos las canciones del album de la base de datos via su ID en el campo canciones y las insertamos en este album_info
     canciones_out : list[dict] = []
+    print(album_info)
     for cancion_id in album_info["canciones"]:
+        print("Processing id:", cancion_id)
         cancion = model.get_song(cancion_id)
         if not cancion:
-            print(PCTRL_WARN, "Cancion", cancion_id, "not found in database")
+            print(PCTRL_WARN, "Canción", cancion_id, "not found in database")
             return Response("Error del sistema", status_code=403)
+        
+        print(cancion)
         
         # Convertimos los generos de cada canción a un string sencillo
         # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en cancion["generosStr"]
@@ -588,6 +600,7 @@ async def get_album(request: Request):
     if isinstance(res, Response):
         tipoUsuario = 0 # Guest
     else:
+        res["songs_compradas"] = [] #TODO: QUITAR ESTA MIERDA
         if album_id in res["studio_albumes"]:
             tipoUsuario = 3 # Artista (creador)
 
@@ -596,21 +609,18 @@ async def get_album(request: Request):
 
         else:
             tipoUsuario = 1
-
-    # Incrementar el contador de visitas del album
-    album_info["visitas"] += 1
-    album_object = AlbumDTO()
-    album_object.load_from_dict(album_info)
-    if not model.update_album(album_object):
-        print(PCTRL_WARN, "Album", album_id, "not updated in database!")
-        return Response("Error del sistema", status_code=403)
+    
+    # Comprobamos si el usuario le ha dado like a la canción mirando si el id de la canción está en id_likes del usuario.
+    isLiked = False
+    if not isinstance(res, Response):
+        isLiked = album_id in res["id_likes"]
     
     # Donde tipo Usuario:
     # 0 = Guest
     # 1 = User
     # 2 = Propietario (User o Artista)
     # 3 = Artista (creador)
-    return view.get_album_view(request, album_info, tipoUsuario) # Devolvemos la vista del album
+    return view.get_album_view(request, album_info, tipoUsuario, isLiked) # Devolvemos la vista del album
 
 # Ruta para cargar la vista de álbum-edit
 @app.get("/album-edit")
@@ -852,6 +862,54 @@ async def delete_album_post(request: Request):
         print(PCTRL_WARN, "Album", album_id, "not deleted from database!")
         return {"success": False, "error": "Album not deleted from database"}
         
+# Ruta para darle like a un álbum
+@app.post("/like-album")
+async def like_album_post(request: Request):
+    # Verificar si el usuario tiene una sesión activa
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return {"success": False, "error": "No autorizado"}
+    
+    # Obtenemos el ID del álbum al que se le va a dar like desde la request
+    data = await request.json()
+    album_id = data.get("id")
+    if not album_id:
+        print(PCTRL_WARN, "Album ID not provided in request")
+        return {"success": False, "error": "Album ID not provided"}
+    
+    # Comprobamos que el usuario no le haya dado like al álbum ya.
+    # Para ello, comprobamos que el id del álbum no esté en id_likes.
+    # Si ya le ha dado like, entonces debemos quitarle el like.
+    # Si no, le damos like al álbum.
+    user_object = UsuarioDTO()
+    user_object.load_from_dict(res)
+
+    if album_id in user_object.get_id_likes():
+        user_object.remove_id_like(album_id)
+        delta = -1
+        message = "Like eliminado"
+    else:
+        user_object.add_id_like(album_id)
+        delta = 1
+        message = "Like añadido"
+
+    album = model.get_album(album_id)
+    if album:
+        album_object = AlbumDTO()
+        album_object.load_from_dict(album)
+        album_object.set_likes(album_object.get_likes() + delta)
+        if not model.update_album(album_object):
+            print(PCTRL_WARN, "Failed to update album likes in database!")
+            return {"success": False, "error": "Failed to update album in database"}
+    else:
+        print(PCTRL_WARN, "Album not found in database!")
+        return {"success": False, "error": "Album not found in database"}
+
+    if model.update_usuario(user_object):
+        return {"success": True, "message": message}
+    else:
+        print(PCTRL_WARN, "Failed to update user in database!")
+        return {"success": False, "error": "Failed to update user in database"}
 
 # ------------------------------------------------------------------ #
 # ----------------------------- INCLUDES --------------------------- #
@@ -1069,6 +1127,14 @@ async def get_song(request: Request):
         if isinstance(res, Response) or song_id not in res["studio_canciones"]:
             print(PCTRL_WARN, "Song is not visible and user is not the creator")
             return Response("No autorizado", status_code=403)
+        
+    # Incrementar el contador de visitas de song
+    song_info["visitas"] += 1
+    song_object = SongDTO()
+    song_object.load_from_dict(song_info)
+    if not model.update_song(song_object):
+        print(PCTRL_WARN, "Song", song_id, "not updated in database!")
+        return Response("Error del sistema", status_code=403)
 
     # Convertimos los generos de la canción a un string sencillo
     # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en song_info["generosStr"]
@@ -1081,6 +1147,20 @@ async def get_song(request: Request):
         generosStr += genero["nombre"] + ", "
     generosStr = generosStr[:-2] # Quitamos la última coma y espacio
     song_info["generosStr"] = generosStr
+    
+    # Recuperamos al usuario actualmente logeado y comprobamos si es el autor de la canción
+    if isinstance(res, Response):
+        tipoUsuario = 0 # Guest
+    else:
+        res["songs_compradas"] = [] #TODO: QUITAR ESTA MIERDA
+        if song_id in res["studio_canciones"]:
+            tipoUsuario = 3 # Artista (creador)
+
+        elif song_id in res["songs_compradas"]:
+            tipoUsuario = 2 # Propietario (User o Artista)
+
+        else:
+            tipoUsuario = 1
 
     # Descargamos el album asociado a la canción, extraemos su nombre y lo insertamos en el campo album de la canción.
     # Si no tiene album, lo dejamos como None.
@@ -1092,35 +1172,18 @@ async def get_song(request: Request):
         song_info["album"] = album["titulo"]
     else:
         song_info["album"] = None
-    
-    # Recuperamos al usuario actualmente logeado y comprobamos si es el autor de la canción
-    if isinstance(res, Response):
-        tipoUsuario = 0 # Guest
-    else:
-        #res["songs_compradas"] = []
-        if song_id in res["studio_canciones"]:
-            tipoUsuario = 3 # Artista (creador)
 
-        elif song_id in res["songs_compradas"]:
-            tipoUsuario = 2 # Propietario (User o Artista)
-
-        else:
-            tipoUsuario = 1
-
-    # Incrementar el contador de visitas de song
-    song_info["visitas"] += 1
-    song_object = SongDTO()
-    song_object.load_from_dict(song_info)
-    if not model.update_song(song_object):
-        print(PCTRL_WARN, "Song", song_id, "not updated in database!")
-        return Response("Error del sistema", status_code=403)
+    # Comprobamos si el usuario le ha dado like a la canción mirando si el id de la canción está en id_likes del usuario.
+    isLiked = False
+    if not isinstance(res, Response):
+        isLiked = song_id in res["id_likes"]
 
     # Donde tipo Usuario:
     # 0 = Guest
     # 1 = User
     # 2 = Propietario (User o Artista)
     # 3 = Artista (creador)
-    return view.get_song_view(request, song_info, tipoUsuario) # Devolvemos la vista del song
+    return view.get_song_view(request, song_info, tipoUsuario, isLiked) # Devolvemos la vista del song
 
 # Ruta para cargar vista edit-song
 @app.get("/edit-song")
@@ -1260,6 +1323,56 @@ async def delete_song_post(request: Request):
     else:
         print(PCTRL_WARN, "Song", song_id, "not deleted from database!")
         return {"success": False, "error": "Song not deleted from database"}
+
+# Ruta para darle like a una canción
+@app.post("/like-song")
+async def like_song_post(request: Request):
+    # Verificar si el usuario tiene una sesión activa
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return {"success": False, "error": "No autorizado"}
+    
+    # Obtenemos el ID de la canción a la que se le va a dar like desde la request
+    data = await request.json()
+    song_id = data.get("id")
+    if not song_id:
+        print(PCTRL_WARN, "Song ID not provided in request")
+        return {"success": False, "error": "Song ID not provided"}
+    
+    # Comprobamos que el usuario no le haya dado like a la canción ya.
+    # Para ello, comprobamos que el id de la canción no esté en id_likes.
+    # Si ya le ha dado like, entonces debemos quitarle el like.
+    # Si no, le damos like a la canción.
+    user_object = UsuarioDTO()
+    user_object.load_from_dict(res)
+
+    if song_id in user_object.get_id_likes():
+        user_object.remove_id_like(song_id)
+        delta = -1
+        message = "Like eliminado"
+    else:
+        user_object.add_id_like(song_id)
+        delta = 1
+        message = "Like añadido"
+
+    song = model.get_song(song_id)
+    if song:
+        song_object = SongDTO()
+        song_object.load_from_dict(song)
+        song_object.set_likes(song_object.get_likes() + delta)
+        if not model.update_song(song_object):
+            print(PCTRL_WARN, "Failed to update song likes in database!")
+            return {"success": False, "error": "Failed to update song in database"}
+    else:
+        print(PCTRL_WARN, "Song not found in database!")
+        return {"success": False, "error": "Song not found in database"}
+
+    if model.update_usuario(user_object):
+        return {"success": True, "message": message}
+    else:
+        print(PCTRL_WARN, "Failed to update user in database!")
+        return {"success": False, "error": "Failed to update user in database"}
+
 
 # -------------------------------------------------------------- #
 # ---------------------------- STUDIO -------------------------- #
