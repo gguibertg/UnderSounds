@@ -1,5 +1,4 @@
-<!-- Aquí va el mini-player o el contenido de la radio -->
-<link rel="stylesheet" href="/static/css/base/radio.css">
+<link rel="stylesheet" href="/static/css/base/radio.css"> <!-- Hoja de estilo del inicio -->
 <div class="mini-player">
     <button class="mini-close-btn" title="Cerrar">✖️</button>
     <img src="/static/img/albums/album-04.webp" alt="Portada" class="mini-album">
@@ -13,11 +12,16 @@
         <div class="mini-controls-bar">
             <div class="mini-controls">
                 <button class="mini-btn">⏮️</button>
-                <button class="mini-btn">⏯️</button>
+                <button class="mini-btn" id="play-pause-btn">⏯️</button>
                 <button class="mini-btn">⏭️</button>
             </div>
             <input type="range" class="mini-progress" min="0" max="100" value="0">
         </div>
     </div>
-</div>
 
+    <!-- Aquí añadimos el audio -->
+    <audio id="mini-audio" controls>
+        <source src="/static/img/releases/release-03.webp" type="audio/mp3">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+</div>
