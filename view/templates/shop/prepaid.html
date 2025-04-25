@@ -52,21 +52,20 @@
                                 <div style="grid-area: 1 / 1 / 2 / 3;">
                                     <label style="font-size:medium;">Número de la tarjeta<input type="text" id="numero_tarjeta"
                                             name="Número de la tarjeta" maxlength="16" maxlength="16" required
-                                            placeholder="Número de tarjeta" /></label>
+                                            placeholder="Número de tarjeta" value="{{ tarjeta.numero }}"/></label>
                                 </div>
                                 <div style="grid-area: 2 / 1 / 3 / 2;">
                                     <label style="font-size:medium;">Fecha de expiración<input type="month" id="fecha_expiracion"
-                                            name="Fecha de expiración" maxlength="5" maxlength="5" required
-                                            placeholder="mm/yy" /></label>
+                                            name="Fecha de expiración" placeholder="mm/yy" value="{{ tarjeta.fecha }}" required/></label>
                                 </div>
                                 <div style="grid-area: 2 / 2 / 3 / 3;">
                                     <label style="font-size:medium;">Código de seguridad<input type="text" id="codigo"
                                             name="Código de seguridad" maxlength="3" maxlength="3" required
-                                            placeholder="3 dígitos" /></label>
+                                            placeholder="3 dígitos"/></label>
                                 </div>
                                 <div style="grid-area: 3 / 1 / 4 / 3;">
                                     <div class="div-row">
-                                        <input type="checkbox" id="Guardar Tarjeta" name="Guardar Tarjeta"><label
+                                        <input type="checkbox" id="guardar_tarjeta" name="Guardar Tarjeta"><label
                                             style="font-size: small;">Guardar datos para futuras compras. Si activas
                                             esta
                                             casilla se guardarán los datos de tu tarjeta para futuras compras. Podrás
@@ -80,7 +79,7 @@
                                 </div>
                                 <div style="grid-area: 4 / 2 / 5 / 3;  align-self: center; justify-self: center;">
                                     <a href="/tpv">
-                                        <button style="width: 30vh;">Pagar</button>
+                                        <button style="width: 30vh;" onclick="guardarTarjeta()">Pagar</button>
                                     </a>
                                 </div>
                             </div>
@@ -95,15 +94,11 @@
                                 <h2>Resumen</h2>
                                 <hr>
                                 <div class="grid-lista">
-                                    <p>Articulos1</p>
+                                    {% for item in carrito.articulos %}
+                                    <p>{{ item.nombre }} x {{item.cantidad}}</p>
                                     <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
-                                    <p>$12</p>
-                                    <p>Articulos2</p>
-                                    <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
-                                    <p>$8</p>
-                                    <p>Articulos3</p>
-                                    <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
-                                    <p>$10</p>
+                                    <p>${{ "%.2f"|format(item.precio | float)}}</p>
+                                    {% endfor %}
                                 </div>
                                 <hr>
                                 <div class="grid-lista">
@@ -112,7 +107,7 @@
                                     </b>
                                     <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
                                     <b>
-                                        <p>$12</p>
+                                        <p>${{ '%.2f' | format(carrito.subtotal) }}</p>
                                     </b>
                                 </div>
                             </div>
@@ -126,24 +121,26 @@
     <script>
 
         async function guardarTarjeta() {
+            const guardarTarjeta = document.getElementById("guardar_tarjeta").checked;
             const tarjetaData = {
                 numero: document.getElementById('numero_tarjeta').value,
-                fecha: document.getElementById('fecha_expiracion').value,
-                codigo: document.getElementById('codigo').value
+                fecha: document.getElementById('fecha_expiracion').value
             }
                         
-            const response = await fetch('/update-review', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(tarjetaData)
-            });
+            if(guardarTarjeta){
+                const response = await fetch('/prepaid', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(tarjetaData)
+                });
 
-            const result = await response.json();
-            if (response.ok) {
-                alert("Reseña actualizada.");
-                location.reload();
-            } else {
-                alert("Error: " + result.error);
+                const result = await response.json();
+                if (response.ok) {
+                    alert("Reseña actualizada.");
+                    location.reload();
+                } else {
+                    alert("Error: " + result.error);
+                }
             }
         }
 

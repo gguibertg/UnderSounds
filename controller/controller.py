@@ -20,6 +20,7 @@ from model.dto.songDTO import SongDTO
 from model.dto.contactoDTO import ContactoDTO
 from model.dto.usuarioDTO import UsuarioDTO
 from model.dto.reseñasDTO import ReseñaDTO
+from model.dto.tarjetaDTO import TarjetaDTO
 from model.model import Model
 from view.view import View
 
@@ -984,9 +985,48 @@ def get_prepaid(request: Request):
 
 
 @app.post("/prepaid")
-def get_prepaid(request: Request):
-    pass
+async def get_prepaid(request: Request):
 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res
+    
+    try:
+        data = await request.json()
+
+        tarjeta = TarjetaDTO()
+        tarjeta.set_usuario(res["id"])
+        tarjeta.set_numero(data["numero"])
+        tarjeta.set_fecha(data["fecha"])
+        
+        if model.add_tarjeta(tarjeta):
+            return JSONResponse(status_code=200, content={"message": "Tarjeta añadida correctamente."})
+        else:
+            return JSONResponse(status_code=500, content={"error": "No se pudo guardar la tarjeta."})
+
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+# ------------------------------------------------------------------ #
+# ----------------------------- PREPAID ---------------------------- #
+# ------------------------------------------------------------------ #
+
+@app.get("/tpv")
+def get_tpv(request: Request):
+
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res
+    
+    try:
+        carrito_json = model.get_carrito(res["id"]) 
+
+        carrito = CarritoDTO()
+        
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+    return view.get_tpv_view(request)
 
 # ------------------------------------------------------------ #
 # --------------------------- CONTACT ------------------------ #
@@ -1162,10 +1202,7 @@ async def get_song(request: Request):
     # 2 = Propietario (User o Artista)
     # 3 = Artista (creador)
 
-    user = UsuarioDTO()
-    user.load_from_dict(user_db)
-
-    return view.get_song_view(request, song_info, tipoUsuario, user) # Devolvemos la vista del song
+    return view.get_song_view(request, song_info, tipoUsuario, res) # Devolvemos la vista del song
 
 # Ruta para cargar vista edit-song
 @app.get("/edit-song")
@@ -1549,7 +1586,3 @@ def startup_event():
         print(PCTRL, "Sessions loaded from sessions.json")
     else:
         print(PCTRL_WARN, "No sessions.json file found, starting with empty sessions")
-
-
-    
-
