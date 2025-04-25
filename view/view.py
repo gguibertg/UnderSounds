@@ -85,3 +85,7 @@ class View():
     # Renderizar la template studio.html
     def get_studio_view(self, request: Request, songs: list[dict], albums: list[dict]):
         return templates.TemplateResponse("user/studio.html", {"request": request, "songs": songs, "albums": albums})
+    
+    # Esta función se va a usar para renderizar la template index.html
+    def get_play_view(self, request: Request): 
+        return templates.TemplateResponse("includes/radio.html", {"request" : request})
