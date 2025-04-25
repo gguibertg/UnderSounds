@@ -205,7 +205,7 @@ async def register_post(data: dict, response: Response, provider: str):
         print(PCTRL, "\tUser user_id: ", user_id)
         print(PCTRL, "\tUser provider: ", provider)
 
-        # Registrar usuario en la base de datos (simulada)
+        # Registrar usuario en la base de datos
         # Verificar si el usuario ya está registrado en la base de datos
         if model.get_usuario(user_id):
             print(PCTRL, "User already registered in database")
@@ -596,6 +596,14 @@ async def get_album(request: Request):
         else:
             tipoUsuario = 1
 
+    # Incrementar el contador de visitas del album
+    album_info["visitas"] += 1
+    album_object = AlbumDTO()
+    album_object.load_from_dict(album_info)
+    if not model.update_album(album_object):
+        print(PCTRL_WARN, "Album", album_id, "not updated in database!")
+        return Response("Error del sistema", status_code=403)
+    
     # Donde tipo Usuario:
     # 0 = Guest
     # 1 = User
@@ -1085,6 +1093,14 @@ async def get_song(request: Request):
 
         else:
             tipoUsuario = 1
+
+    # Incrementar el contador de visitas de song
+    song_info["visitas"] += 1
+    song_object = SongDTO()
+    song_object.load_from_dict(song_info)
+    if not model.update_song(song_object):
+        print(PCTRL_WARN, "Song", song_id, "not updated in database!")
+        return Response("Error del sistema", status_code=403)
 
     # Donde tipo Usuario:
     # 0 = Guest
