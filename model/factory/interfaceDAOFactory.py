@@ -20,10 +20,6 @@ class InterfaceDAOFactory(ABC):
         pass
 
     @abstractmethod
-    def getTarjetaDAO (self):
-        pass
-
-    @abstractmethod
     def getAlbumDAO(self):
         pass
 

@@ -15,7 +15,7 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
     def __init__(self, collection):
         self.collection = collection
     
-    def get_all_articulos(self, usuario):
+    def get_all_articulos(self, usuario) -> CarritoDTO:
         articulos = CarritoDTO()
         subtotal = 0.0
         try:
@@ -132,6 +132,22 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
         }
         result = self.collection.insert_one(carrito_dict)
         return result.acknowledged
+    
+    def vaciar_carrito(self, usuario: str) -> bool:
+        try:
+            # Realizamos una actualización en la base de datos para eliminar todos los artículos
+            result = self.collection.update_one(
+                {"usuario": usuario},
+                {
+                    "$set": {"articulos": [], "subtotal": 0}  # Vaciar los artículos y poner subtotal en 0
+                }
+            )
+
+            # Retornamos True si se modificó el documento (carrito) correctamente
+            return result.modified_count == 1
+        except Exception as e:
+            print(f"{PDAO_ERROR}Error al vaciar el carrito: {e}")
+            return False
 
 
     def deleteArticuloDelCarrito(self, usuario, id_articulo) -> bool:

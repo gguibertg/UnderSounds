@@ -20,7 +20,6 @@ from model.dto.songDTO import SongDTO
 from model.dto.contactoDTO import ContactoDTO
 from model.dto.usuarioDTO import UsuarioDTO
 from model.dto.reseñasDTO import ReseñaDTO
-from model.dto.tarjetaDTO import TarjetaDTO
 from model.model import Model
 from view.view import View
 
@@ -979,37 +978,13 @@ def get_prepaid(request: Request):
         return res
 
     carrito_json = model.get_carrito(res["id"]) 
-    tarjeta_json = model.get_tarjeta(res["id"])
 
-    return view.get_contact_view(request, carrito_json, tarjeta_json)
+    return view.get_prepaid_view(request, carrito_json)
 
 
-@app.post("/prepaid")
-async def get_prepaid(request: Request):
-
-    res = verifySessionAndGetUserInfo(request)
-    if isinstance(res, Response):
-        return res
-    
-    try:
-        data = await request.json()
-
-        tarjeta = TarjetaDTO()
-        tarjeta.set_usuario(res["id"])
-        tarjeta.set_numero(data["numero"])
-        tarjeta.set_fecha(data["fecha"])
-        
-        if model.add_tarjeta(tarjeta):
-            return JSONResponse(status_code=200, content={"message": "Tarjeta añadida correctamente."})
-        else:
-            return JSONResponse(status_code=500, content={"error": "No se pudo guardar la tarjeta."})
-
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
-
-# ------------------------------------------------------------------ #
-# ----------------------------- PREPAID ---------------------------- #
-# ------------------------------------------------------------------ #
+# -------------------------------------------------------------- #
+# ----------------------------- TPV ---------------------------- #
+# -------------------------------------------------------------- #
 
 @app.get("/tpv")
 def get_tpv(request: Request):
@@ -1019,12 +994,31 @@ def get_tpv(request: Request):
         return res
     
     try:
-        carrito_json = model.get_carrito(res["id"]) 
-
+        user = UsuarioDTO()
+        user.load_from_dict(res)
+ 
         carrito = CarritoDTO()
+        carrito = model.get_carrito(user.id)
+        
+        for song in carrito.articulos:
+            user.add_song_to_biblioteca(song.id)
+
+        if model.update_usuario(user):
+            print(PCTRL, "User", user.nombre, "updated in database")
+        else:
+            print(PCTRL_WARN, "User", user.nombre, "not updated in database!")
+            return {"success": False, "error": "User not updated in database"}
+
+        if model.vaciar_carrito(res["id"]):
+            print(PCTRL, "Carrito vaciado en la base de datos")
+        else:
+            print(PCTRL_WARN, "Actualización del carrito fallida")
+            return {"success": False, "error": "Carrito update failed"}
+            
         
     except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
+        print(PCTRL_WARN, "Error while processing Tpv, database failed!")
+        return {"success": False, "error": "Carrito and User not updated to database"}
 
     return view.get_tpv_view(request)
 
@@ -1162,7 +1156,7 @@ async def get_song(request: Request):
     song_info = model.get_song(song_id)
     if not song_info:
         print(PCTRL_WARN, "La cancion no existe")
-        return Response("No autorizado", status_code=403)
+        return Response("No existe", status_code=403)
     
     # Antes de hacer nada, comprobamos si la canción es visible o no. Si no es visible, solo el artista creador puede verla.
     res = verifySessionAndGetUserInfo(request)

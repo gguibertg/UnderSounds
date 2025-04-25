@@ -51,12 +51,12 @@
                                 <p style="color: red; font-size: small;">Es obligatorio completar todos los campos</p>
                                 <div style="grid-area: 1 / 1 / 2 / 3;">
                                     <label style="font-size:medium;">Número de la tarjeta<input type="text" id="numero_tarjeta"
-                                            name="Número de la tarjeta" maxlength="16" maxlength="16" required
-                                            placeholder="Número de tarjeta" value="{{ tarjeta.numero }}"/></label>
+                                            name="Número de la tarjeta" maxlength="16" maxlength="16"
+                                            placeholder="Número de tarjeta" required/></label>
                                 </div>
                                 <div style="grid-area: 2 / 1 / 3 / 2;">
                                     <label style="font-size:medium;">Fecha de expiración<input type="month" id="fecha_expiracion"
-                                            name="Fecha de expiración" placeholder="mm/yy" value="{{ tarjeta.fecha }}" required/></label>
+                                            name="Fecha de expiración" placeholder="mm/yy" required/></label>
                                 </div>
                                 <div style="grid-area: 2 / 2 / 3 / 3;">
                                     <label style="font-size:medium;">Código de seguridad<input type="text" id="codigo"
@@ -78,9 +78,13 @@
                                     </a>
                                 </div>
                                 <div style="grid-area: 4 / 2 / 5 / 3;  align-self: center; justify-self: center;">
-                                    <a href="/tpv">
-                                        <button style="width: 30vh;" onclick="guardarTarjeta()">Pagar</button>
-                                    </a>
+                                    {% if carrito.articulos | length > 0 %}
+                                        <a href="/tpv">
+                                            <button id="btn_pagar" style="width: 30vh;">Pagar</button>
+                                        </a>
+                                    {% else %}
+                                        <button id="btn_pagar" style="width: 30vh;">Pagar</button>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -119,31 +123,27 @@
     </main>
 
     <script>
-
-        async function guardarTarjeta() {
-            const guardarTarjeta = document.getElementById("guardar_tarjeta").checked;
-            const tarjetaData = {
-                numero: document.getElementById('numero_tarjeta').value,
-                fecha: document.getElementById('fecha_expiracion').value
-            }
-                        
-            if(guardarTarjeta){
-                const response = await fetch('/prepaid', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(tarjetaData)
-                });
-
-                const result = await response.json();
-                if (response.ok) {
-                    alert("Reseña actualizada.");
-                    location.reload();
-                } else {
-                    alert("Error: " + result.error);
-                }
+        const numeroInput = document.getElementById("numero_tarjeta");
+        const fechaInput = document.getElementById("fecha_expiracion");
+        const codigoInput = document.getElementById("codigo");
+        const btnPagar = document.getElementById("btn_pagar");
+    
+        function validarCampos() {
+            const numero = numeroInput.value.trim();
+            const fecha = fechaInput.value.trim();
+            const codigo = codigoInput.value.trim();
+    
+            if (numero !== "" && fecha !== "" && codigo !== "") {
+                btnPagar.disabled = false;
+            } else {
+                btnPagar.disabled = true;
             }
         }
-
+    
+        // Escuchar cambios
+        numeroInput.addEventListener("input", validarCampos);
+        fechaInput.addEventListener("input", validarCampos);
+        codigoInput.addEventListener("input", validarCampos);
     </script>
 
     <!-- Pie de página -->

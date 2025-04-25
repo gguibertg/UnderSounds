@@ -6,7 +6,7 @@
     <meta charset="utf-8" /> <!-- Codificación de caracteres -->
     <meta content="width=device-width, initial-scale=1.0" name="viewport" /> <!-- Escalabilidad de la página -->
     <meta content="L1-G4" name="author" />
-    <title>Canción</title> <!-- Título que aparece en la pestaña del navegador -->
+    <title>{{song.titulo}}</title> <!-- Título que aparece en la pestaña del navegador -->
     <!-- Estilos -->
     <link rel="stylesheet" href="/static/css/base/style.css"> <!-- Hoja de estilos principal -->
     <link rel="stylesheet" href="/static/css/base/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
@@ -29,7 +29,11 @@
     <div id="header-placeholder"></div>
     <!-- Contenido principal -->
     <main>
-
+        {% if not song.visible %}
+        <div class="div-warn">
+            <p>Esta página de canción está oculta y no es accesible al público. Solo tú puedes verla. Puedes cambiar esto editando la visibilidad de la canción en tu página de Studio.</p>
+        </div>
+        {% endif %}
         <div class="div-bg">
             <div class="song-page">
                 <section class="song-top">
@@ -40,7 +44,11 @@
                         <p><strong>Descripción:</strong> {{song.descripcion}} </p>
                         <p><strong>Fecha de lanzamiento:</strong> {{song.fecha}}</p>
                         <p><strong>Duración:</strong> TODO</p> <!-- TODO: Hacer be-stream primero! y que los archivos tengan duración, no null! -->
-                        <p><strong>Álbum:</strong> TODO</p> <!-- TODO: AÑADIR CAMPO ALBUM! -->
+                        {% if song.album %}
+                        <p><strong>Álbum:</strong> {{song.album}}</p>
+                        {% else %}
+                        <p>Esta canción es un <i>Single</i></p>
+                        {% endif %}
                         <p><strong>Géneros:</strong> {{song.generosStr}} </p> <!-- Este genero es especial -> Es un campo populado por los nombres de los generos, NO los IDs -->
                         <p><strong>Likes:</strong> {{song.likes}} </p>
                         <p><strong>Visualizaciones:</strong> {{song.visitas}} </p>
@@ -52,16 +60,24 @@
                         <div class="song-buttons">
                             <button class="btn download-btn">Descargar canción</button> <!-- TODO hacer en be-stream !-->
                             <button class="btn">Añadir a lista de reproducción</button> <!-- TODO Necesitamos listas para esto!-->
-                            <button class="btn fav-btn" title="Añadir a favoritos">
-                                <img alt="Favorito" class="fav-icon"
-                                    src="/static/icons/site/favourite-icon-light.svg" />
-                            </button>
                             {% if tipoUsuario == 3 %}
                             <button class="btn" onclick="window.location.href='/edit-song?id={{song.id}}';">Editar canción</button>
                             {% endif %}
                         </div>
                         {% elif tipoUsuario == 1 %}
-                        <button class="btn">Comprar canción</button> <!-- TODO ¡Que alguien lo enlace con carrito! -->
+                        <form action="/cart" method="post">
+                            <input type="hidden" name="action" value="add">
+                            <input type="hidden" name="item_id" value="{{song.id}}">
+                            <input type="hidden" name="item_name" value="{{song.titulo}}">
+                            <input type="hidden" name="item_image" value="{{song.portada}}">
+                            <input type="hidden" name="artist_name" value="{{song.artista}}">
+                            <input type="hidden" name="item_desc" value="{{song.descripcion}}">
+                            <input type="hidden" name="item_precio" value="{{song.precio}}">              
+                            <button type="submit" class="button-comprar-item">Añadir al carrito</button>
+                        </form>
+                        <button class="{% if isLiked %}button{% else %}button-alt{% endif %} fav-btn" title="Añadir a favoritos" onclick="toggleLike()">
+                            <img alt="Favorito" class="fav-icon" src="/static/icons/site/favourite-icon-light.svg" />
+                        </button>
                         {% else %}
                         <button class="btn" onclick="window.location.href='/login';">Inicia sesión para comprar y escuchar esta canción </button>
                         {% endif %}
@@ -69,12 +85,14 @@
                     <div class="div-pannel song-image" style="width: auto;">
                         <img alt="Portada del álbum" src="{{song.portada}}" />
                     </div>
+                    {% if tipoUsuario >= 1 %}
                     <div class="div-pannel review-form">
                         <h3>Reseña nueva</h3>
                         <textarea id="titulo" placeholder="Escribe el titulo aquí..."></textarea>
                         <textarea id="reseña" placeholder="Escribe tu reseña aquí..."></textarea>
                         <button class="btn publish-btn" onclick="addReseña()" >Publicar</button>
                     </div>
+                    {% endif %}
                 </section>
                 <section class="div-pannel reviews" style="align-items: center;">
                     <h2>Reseñas</h2>
@@ -193,6 +211,33 @@
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
     <script src="/static/js/radio.js"></script>
+    <script src="/static/js/displayMessage.js"></script>
+
+    <script>
+        async function toggleLike() {
+            const songId = "{{song.id}}"; // Get the song ID from the template
+            try {
+            const response = await fetch('/like-song', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: songId }),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                displayMessage('success', result.message || 'Acción completada con éxito.');
+                window.location.reload();
+            } else {
+                displayMessage('error', 'Error al procesar la solicitud.');
+            }
+            } catch (error) {
+            console.error('Error:', error);
+            displayMessage('error', 'Ocurrió un error al intentar realizar la acción.');
+            }
+        }
+    </script>
 </body>
 
 </html>
