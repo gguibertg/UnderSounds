@@ -44,7 +44,11 @@
                         <p><strong>Descripción:</strong> {{song.descripcion}} </p>
                         <p><strong>Fecha de lanzamiento:</strong> {{song.fecha}}</p>
                         <p><strong>Duración:</strong> TODO</p> <!-- TODO: Hacer be-stream primero! y que los archivos tengan duración, no null! -->
-                        <p><strong>Álbum:</strong> TODO</p> <!-- TODO: AÑADIR CAMPO ALBUM! -->
+                        {% if song.album %}
+                        <p><strong>Álbum:</strong> {{song.album}}</p>
+                        {% else %}
+                        <p>Esta canción es un <i>Single</i></p>
+                        {% endif %}
                         <p><strong>Géneros:</strong> {{song.generosStr}} </p> <!-- Este genero es especial -> Es un campo populado por los nombres de los generos, NO los IDs -->
                         <p><strong>Likes:</strong> {{song.likes}} </p>
                         <p><strong>Visualizaciones:</strong> {{song.visitas}} </p>
@@ -57,15 +61,23 @@
                             <button class="btn download-btn">Descargar canción</button> <!-- TODO hacer en be-stream !-->
                             <button class="btn">Añadir a lista de reproducción</button> <!-- TODO Necesitamos listas para esto!-->
                             <button class="btn fav-btn" title="Añadir a favoritos">
-                                <img alt="Favorito" class="fav-icon"
-                                    src="/static/icons/site/favourite-icon-light.svg" />
+                                <img alt="Favorito" class="fav-icon" src="/static/icons/site/favourite-icon-light.svg" />
                             </button>
                             {% if tipoUsuario == 3 %}
                             <button class="btn" onclick="window.location.href='/edit-song?id={{song.id}}';">Editar canción</button>
                             {% endif %}
                         </div>
                         {% elif tipoUsuario == 1 %}
-                        <button class="btn">Comprar canción</button> <!-- TODO ¡Que alguien lo enlace con carrito! -->
+                        <form action="/cart" method="post">
+                            <input type="hidden" name="action" value="add">
+                            <input type="hidden" name="item_id" value="{{song.id}}">
+                            <input type="hidden" name="item_name" value="{{song.titulo}}">
+                            <input type="hidden" name="item_image" value="{{song.portada}}">
+                            <input type="hidden" name="artist_name" value="{{song.artista}}">
+                            <input type="hidden" name="item_desc" value="{{song.descripcion}}">
+                            <input type="hidden" name="item_precio" value="{{song.precio}}">              
+                            <button type="submit" class="button-comprar-item">Añadir al carrito</button>
+                        </form>
                         {% else %}
                         <button class="btn" onclick="window.location.href='/login';">Inicia sesión para comprar y escuchar esta canción </button>
                         {% endif %}

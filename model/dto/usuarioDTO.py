@@ -30,6 +30,7 @@ class UsuarioDTO():
         self.emailVisible: bool = None
         self.studio_albumes: list[str] = []
         self.studio_canciones: list[str] = []
+        self.id_likes: list[str] = []
 
     def get_id(self) -> str:
         return self.id
@@ -111,6 +112,16 @@ class UsuarioDTO():
         if cancion_id in self.studio_canciones:
             self.studio_canciones.remove(cancion_id)
 
+    def set_id_likes(self, id_likes: list[str]):
+        self.id_likes = id_likes
+
+    def add_id_like(self, like_id: str):
+        self.id_likes.append(like_id)
+
+    def remove_id_like(self, like_id: str):
+        if like_id in self.id_likes:
+            self.id_likes.remove(like_id)
+
     def load_from_dict(self, data: dict):
         self.id = data.get("id")
         self.nombre = data.get("nombre")
@@ -124,6 +135,7 @@ class UsuarioDTO():
         self.emailVisible = data.get("emailVisible", True)
         self.studio_albumes = data.get("studio_albumes", [])
         self.studio_canciones = data.get("studio_canciones", [])
+        self.id_likes = data.get("id_likes", [])
 
     def usuario_to_dict(self) -> dict:
         return {
@@ -138,5 +150,6 @@ class UsuarioDTO():
             "esVisible": self.esVisible,
             "emailVisible": self.emailVisible,
             "studio_albumes": self.studio_albumes,
-            "studio_canciones": self.studio_canciones
+            "studio_canciones": self.studio_canciones,
+            "id_likes": self.id_likes
         }

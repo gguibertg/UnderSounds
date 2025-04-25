@@ -230,6 +230,7 @@ async def register_post(data: dict, response: Response, provider: str):
         user.set_emailVisible(False) # Por defecto, el email no es visible
         user.set_studio_albumes([])  # Inicializamos el campo studio_albumes como una lista vacía
         user.set_studio_canciones([])  # Inicializamos el campo studio_canciones como una lista vacía
+        user.set_id_likes([])  # Inicializamos el campo id_likes como una lista vacía
         #user.set_songs_compradas([])  # No existe todavía!!!
 
         # Añadir el usuario a la base de datos
@@ -1080,11 +1081,23 @@ async def get_song(request: Request):
         generosStr += genero["nombre"] + ", "
     generosStr = generosStr[:-2] # Quitamos la última coma y espacio
     song_info["generosStr"] = generosStr
+
+    # Descargamos el album asociado a la canción, extraemos su nombre y lo insertamos en el campo album de la canción.
+    # Si no tiene album, lo dejamos como None.
+    if song_info["album"]:
+        album = model.get_album(song_info["album"])
+        if not album:
+            print(PCTRL_WARN, "Album", song_info["album"], "not found in database")
+            return Response("Error del sistema", status_code=403)
+        song_info["album"] = album["titulo"]
+    else:
+        song_info["album"] = None
     
     # Recuperamos al usuario actualmente logeado y comprobamos si es el autor de la canción
     if isinstance(res, Response):
         tipoUsuario = 0 # Guest
     else:
+        #res["songs_compradas"] = []
         if song_id in res["studio_canciones"]:
             tipoUsuario = 3 # Artista (creador)
 
