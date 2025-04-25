@@ -1,222 +1,173 @@
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
-    <meta charset="utf-8" /> <!-- Codificación de caracteres -->
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" /> <!-- Escalabilidad de la página -->
-    <meta content="L1-G4" name="author" />
-    <title>Perfil</title> <!-- Título que aparece en la pestaña del navegador -->
-    <!-- Estilos -->
-    <link href="/static/css/base/style.css" rel="stylesheet" /> <!-- Hoja de estilos principal -->
-    <link href="/static/css/base/darkmode.css" rel="stylesheet" /> <!-- Hoja de estilo de modo oscuro -->
-    <link href="/static/css/base/header.css" rel="stylesheet" /> <!-- Hoja de estilo del header -->
-    <link href="/static/css/base/footer.css" rel="stylesheet" /> <!-- Hoja de estilo del footer -->
-    <link href="/static/css/user/profile.css" rel="stylesheet" /> <!-- Hoja de estilo del perfil -->
-    <!-- Favicon -->
-    <link href="/static/icons/favicons/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png">
-    <link href="/static/icons/favicons/favicon.svg" rel="icon" type="image/svg+xml">
-    <link href="/static/icons/favicons/favicon.ico" rel="shortcut icon">
-    <link href="/static/icons/favicons/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
-    <meta content="UnderSounds" name="apple-mobile-web-app-title">
-    <link href="/static/icons/favicons/site.webmanifest" rel="manifest">
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="L1-G4" />
+    <title>Perfil</title>
+    <link rel="stylesheet" href="/static/css/base/style.css" />
+    <link rel="stylesheet" href="/static/css/base/darkmode.css" />
+    <link rel="stylesheet" href="/static/css/base/header.css" />
+    <link rel="stylesheet" href="/static/css/base/footer.css" />
+    <link rel="stylesheet" href="/static/css/user/profile.css" />
 </head>
 
 <body>
-    <!-- Barra de navegación -->
     <div id="header-placeholder"></div>
-    <!-- Contenido principal -->
     <main>
         <div class="div-bg">
-            <div class="grid-container">
-                <div style="grid-area: 1 / 1 / 2 / 2;">
-                    <div class="div-pannel" style="height: 100%;">
-                        <div class="grid-content">
-                            <p style="font-size: 10rem; word-break: break-all;">Panel dinámico</p>
-                        </div>
+            <!-- Sección 1: Información personal -->
+            <!-- Sección 1: Información personal -->
+            <section class="div-pannel">
+                <div class="grid-content-narrow-row" style="justify-content: flex-start;">
+                    <img alt="Imagen de perfil" src="{{ user.imagen }}" class="user-picture"
+                        style="width: 96px; height: 96px; border-radius: 50%;" />
+                    <h1 style="font-size: 2rem;">Bienvenido de vuelta, {{ user.nombre }}</h1>
+                    <button onclick="logout()" class="btn-danger">Cerrar sesión</button>
+                </div>
+
+                <div class="div-pannel" style="margin-top: 1rem;">
+                    <div class="grid-content">
+                        <h1>Información personal</h1>
+                        <form class="grid-form" onsubmit="update()">
+                            <!-- Nombre -->
+                            <div class="grid-content-narrow" style="grid-area: 1 / 1 / 2 / 2;">
+                                <label for="nombre">Nombre completo</label>
+                                <input id="nombre" name="nombre" type="text" value="{{ user.nombre }}" />
+                            </div>
+
+                            <!-- Email -->
+                            <div class="grid-content-narrow" style="grid-area: 1 / 2 / 2 / 3;">
+                                <label for="email">Correo electrónico</label>
+                                <input id="email" name="email" type="email" value="{{ user.email }}" />
+                            </div>
+
+                            <!-- Enlaces -->
+                            <div class="grid-content-narrow" style="grid-area: 1 / 3 / 2 / 4;">
+                                <label for="url">Enlaces sociales</label>
+                                <input id="url" name="url" type="text" value="{{ user.url }}" />
+                            </div>
+
+                            <!-- Imagen + botón -->
+                            <div class="grid-content-narrow" style="grid-area: 1 / 4 / 2 / 5; align-items: center;">
+                                <img id="user_image_upload" src="{{ user.imagen }}" alt="Imagen de perfil"
+                                    style="width: 96px; border-radius: 50%;" />
+                                <button onclick="loadImg()" type="button" style="margin-top: 0.5rem;">Subir
+                                    imagen</button>
+                            </div>
+
+                            <!-- Bio y botón -->
+                            <div class="grid-content-narrow" style="grid-area: 2 / 1 / 3 / 5;">
+                                <label for="bio">Acerca de mí</label>
+                                <textarea id="bio" class="textarea" placeholder="Cuéntanos sobre ti" rows="6"
+                                    style="resize: none;">{{ user.bio }}</textarea>
+                                <button type="submit" style="margin-top: 1rem; align-self: center;">Guardar
+                                    cambios</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div style="grid-area: 1 / 2 / 2 / 3;">
-                    <div class="grid-content-narrow-row" style="justify-content: flex-start;">
-                        <img alt="Imagen de perfil" src="{{ user.imagen }}"
-                            style="width: 96px; height: 96px; border-radius: 50%;" />
-                        <h1 style="font-size: 3rem;">Bienvenido de vuelta, {{ user.nombre }}</h1>
-                        <button onclick="logout()"
-                            style="margin: 20px 20px 20px 20px; width: 15%; background-color: #ff4646;">Cerrar
-                            sesión</button>
-                    </div>
-                    <br />
-                    <div class="div-pannel">
-                        <div class="grid-content">
-                            <h1>Información personal</h1>
-                            <form class="grid-form">
-                                <div class="grid-content-narrow" style="grid-area: 1 / 1 / 2 / 2;">
-                                    <label for="nombre">Nombre completo</label>
-                                    <input id="nombre" name="nombre" placeholder="Nombre y apellidos"
-                                        style="width: 100%;" type="text" value="{{ user.nombre }}" />
-                                </div>
-                                <div class="grid-content-narrow" style="grid-area: 1 / 2 / 2 / 3;">
-                                    <label for="email">Correo electrónico</label>
-                                    <input id="email" name="email" placeholder="Correo electrónico" type="email"
-                                        value="{{ user.email }}" />
-                                </div>
-                                <div class="grid-content-narrow" style="grid-area: 1 / 3 / 2 / 4;">
-                                    <label for="url">Enlaces sociales</label>
-                                    <input id="url" name="url" placeholder="Enlace de red social" type="text"
-                                        value="{{ user.url }}" />
-                                </div>
-                                <div class="grid-content-narrow" style="grid-area: 1 / 4 / 2 / 5; align-items: center;">
-                                    <img alt="Imagen de perfil" id="user_image_upload" src="{{ user.imagen }}"
-                                        style="width: 96px;" />
-                                    <button onclick="loadImg()" style="align-self: center; margin-top: 5px;"
-                                        type="submit">Subir imagen</button>
-                                </div>
-                                <div class="grid-content-narrow" style="grid-area: 2 / 1 / 3 / 5;">
-                                    <label for="bio">Acerca de mi</label>
-                                    <textarea class="textarea" cols="40" id="bio" placeholder="Cuéntanos sobre ti"
-                                        rows="6" style="resize: none;">{{ user.bio }}</textarea>
-                                    <br />
-                                    <button onclick="update()" style="align-self: center; width: 30%;"
-                                        type="submit">Guardar cambios</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="div-pannel">
-                        <div class="grid-content">
-                            <h1 class="songs-title">Mi biblioteca</h1>
-                            <div class="grid-biblioteca">
-                                {% for cancion in canciones_biblioteca %}
-                                <div class="songs-cell div-pannel-sub">
-                                    <img class="songs-image" src="{{ cancion.portada }}"
-                                        alt="Portada de {{ cancion.titulo }}" />
-                                    <h3>{{ cancion.titulo }}</h3>
-                                    <p>{{ cancion.artista }}</p>
-                                    <a href="/song/{{ cancion.id }}">
-                                        <button class="btn" onclick="window.location.href='/song?id={{ cancion.id }}'" >Ver canción</button>
-                                    </a>
-                                </div>
-                                {% else %}
-                                <p>¡Aún no tienes canciones en tu biblioteca! Las canciones que compres aparecerán aquí
-                                    automáticamente.</p>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
+            </section>
 
-                    <br />
-                    <div class="div-pannel">
-                        <div class="grid-content">
-                            <h1 class="songs-title">Listas de reproducción</h1>
-
-                            <!-- Crear lista -->
-                            <form method="post" action="/crear-lista" class="grid-form">
-                                <input type="text" name="nombre_lista" placeholder="Nombre de la nueva lista"
-                                    required />
-                                <button type="submit" class="btn" title="Añadir">
-                                    <img alt="Añadir" src="/static/icons/site/add-icon.svg" width="20" height="20" />
-                                </button>
-                            </form>
-
-                            {% if listas_completas %}
-                            {% for lista in listas_completas %}
-                            <div class="lista-header">
-                                <h2>{{ lista.nombre }}</h2>
-                                <form method="post" action="/remove-lista">
-                                    <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}">
-                                    <button type="submit" class="btn-delete-list">
-                                        <img alt="Borrar" src="/static/icons/site/delete-icon.svg" width="20"
-                                            height="20" /></button>
-                                </form>
-                            </div>
-
-                            <!-- Añadir canción -->
-                            <form method="post" action="/add-song-to-list" class="form-add-song">
-                                <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}">
-                                <label for="id_cancion_{{ loop.index }}">Añadir canción:</label>
-                                <select name="id_cancion" id="id_cancion_{{ loop.index }}" required>
-                                    {% for cancion in canciones_biblioteca %}
-                                    <option value="{{ cancion.id }}">{{ cancion.titulo }}</option>
-                                    {% endfor %}
-                                </select>
-                                <button type="submit" class="btn" title="Añadir">
-                                    <img alt="Añadir" src="/static/icons/site/add-icon.svg" width="20" height="20" />
-                                </button>
-                            </form>
-
-                            <!-- Canciones de la lista -->
-                            <div class="grid-biblioteca">
-                                {% for cancion in lista.songs %}
-                                <div class="songs-cell div-pannel-sub">
-                                    <img class="songs-image" src="{{ cancion.portada }}" alt="{{ cancion.titulo }}" />
-                                    <h3>{{ cancion.titulo }}</h3>
-                                    <p>{{ cancion.artista }}</p>
-                                    <form method="post" action="/remove-song-from-list">
-                                        <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}">
-                                        <input type="hidden" name="id_cancion" value="{{ cancion.id }}">
-                                        <a href="/song/{{ cancion.id }}">
-                                            <button class="btn" onclick="window.location.href='/song?id={{ cancion.id }}'" >Ver canción</button>
-                                        </a>
-                                        <button type="submit" class="btn" title="Borrar">
-                                            <img alt="Borrar" src="/static/icons/site/delete-icon.svg" width="20"
-                                                height="20" />
-                                        </button>
-                                    </form>
-                                </div>
-                                {% endfor %}
-                            </div>
-                            {% endfor %}
-                            {% else %}
-                            <p>No tienes listas de reproducción aún. ¡Crea una arriba!</p>
-                            {% endif %}
-                        </div>
+            <!-- Sección 2: Biblioteca -->
+            <section class="div-pannel">
+                <h1>Mi biblioteca</h1>
+                <div class="div-carrusel grid-entradas">
+                    {% for cancion in canciones_biblioteca %}
+                    <div class="div-pannel-sub item-element songs-cell">
+                        <img class="songs-image" src="{{ cancion.portada }}" alt="{{ cancion.titulo }}" />
+                        <h3>{{ cancion.titulo }}</h3>
+                        <p>{{ cancion.artista }}</p>
+                        <a href="/song/{{ cancion.id }}">
+                            <button class="btn">Ver canción</button>
+                        </a>
                     </div>
-                    <br />
-                    <div class="div-pannel">
-                        <div class="grid-content">
-                            <h1>Ajustes de seguridad</h1>
-                            <br />
-                            <div class="grid-warn-zone">
-                                <div style="grid-area: 1 / 1 / 2 / 2;">
-                                    <button onclick="sendPasswordReset()" style="width: 100%;">Cambiar
-                                        contraseña</button>
-                                </div>
-                                <div style="grid-area: 1 / 2 / 2 / 3;">
-                                    <label>Solicita un cambio de contraseña a tu correo electrónico.</label>
-                                </div>
-                                <div style="grid-area: 2 / 1 / 3 / 2;">
-                                    <button onclick="changeEmail()" style="width: 100%;">Cambiar correo
-                                        electrónico</button>
-                                </div>
-                                <div style="grid-area: 2 / 2 / 3 / 3;">
-                                    <label>Solicita un cambio de correo electrónico. Necesitarás acceso a tu correo
-                                        electrónico anterior.</label>
-                                </div>
-                                <div style="grid-area: 3 / 1 / 4 / 2;">
-                                    <button onclick="unregister()"
-                                        style="width: 100%; background-color: #ff4646;">Cerrar cuenta</button>
-                                </div>
-                                <div style="grid-area: 3 / 2 / 4 / 3;">
-                                    <label>Cierra la cuenta permanentemente y elimina todos tus datos. Tendrás 14 días
-                                        de margen antes de la eliminación sea efectiva por si cambias de
-                                        opinión.</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% else %}
+                    <p>No tienes canciones en tu biblioteca aún.</p>
+                    {% endfor %}
                 </div>
-            </div>
+            </section>
+
+            <!-- Sección 3: Playlists -->
+            <section class="div-pannel">
+                <h1>Listas de reproducción</h1>
+                <form method="post" action="/crear-lista" class="grid-form">
+                    <input type="text" name="nombre_lista" placeholder="Nombre de la nueva lista" required />
+                    <button type="submit" class="btn" title="Añadir">
+                        <img src="/static/icons/site/add-icon.svg" alt="" width="20" height="20" />
+                        Crear nueva lista
+                    </button>
+                </form>
+                {% if listas_completas %}
+                {% for lista in listas_completas %}
+                <div class="lista-header">
+                    <h2>{{ lista.nombre }}</h2>
+                    <form method="post" action="/remove-lista">
+                        <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}" />
+                        <button type="submit" class="btn-delete-list">
+                            <img src="/static/icons/site/delete-icon.svg" alt="Borrar" width="20" height="20" />
+                        </button>
+                    </form>
+                </div>
+                <form method="post" action="/add-song-to-list" class="form-add-song">
+                    <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}" />
+                    <label for="id_cancion_{{ loop.index }}">Añadir canción:</label>
+                    <select name="id_cancion" id="id_cancion_{{ loop.index }}" required>
+                        {% for cancion in canciones_biblioteca %}
+                        <option value="{{ cancion.id }}">{{ cancion.titulo }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn" title="Añadir">
+                        <img src="/static/icons/site/add-icon.svg" alt="Añadir" width="20" height="20" />
+                    </button>
+                </form>
+                <div class="div-carrusel grid-entradas">
+                    {% for cancion in lista.songs %}
+                    <div class="div-pannel-sub item-element songs-cell">
+                        <img class="songs-image" src="{{ cancion.portada }}" alt="{{ cancion.titulo }}" />
+                        <h3>{{ cancion.titulo }}</h3>
+                        <p>{{ cancion.artista }}</p>
+                        <form method="post" action="/remove-song-from-list">
+                            <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}" />
+                            <input type="hidden" name="id_cancion" value="{{ cancion.id }}" />
+                            <a href="/song/{{ cancion.id }}">
+                                <button class="btn" type="button">Ver canción</button>
+                            </a>
+                            <button type="submit" class="btn" title="Borrar">
+                                <img src="/static/icons/site/delete-icon.svg" alt="Borrar" width="20" height="20" />
+                            </button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>No tienes listas aún. ¡Crea una arriba!</p>
+                {% endif %}
+            </section>
+
+            <!-- Sección 4: Ajustes de seguridad -->
+            <section class="div-pannel">
+                <h1>Ajustes de seguridad</h1>
+                <div class="grid-warn-zone">
+                    <button onclick="sendPasswordReset()">Cambiar contraseña</button>
+                    <p>Solicita un cambio de contraseña a tu correo electrónico.</p>
+
+                    <button onclick="changeEmail()">Cambiar correo electrónico</button>
+                    <p>Necesitarás acceso al correo anterior.</p>
+
+                    <button onclick="unregister()" class="btn-danger">Cerrar cuenta</button>
+                    <p>Esta acción es irreversible. Se eliminarán tus datos tras 14 días.</p>
+                </div>
+            </section>
         </div>
     </main>
-    <!-- Pie de página -->
     <div id="footer-placeholder"></div>
-    <!-- Scripts -->
     <script src="/static/js/header.js"></script>
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
+
     <script>
         const firebaseConfig = {
             apiKey: "{{ API_CREDENTIALS.API_KEY }}",
@@ -363,6 +314,7 @@
             input.click();
         }
     </script>
+
 </body>
 
 </html>
