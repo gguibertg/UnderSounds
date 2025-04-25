@@ -661,7 +661,6 @@ async def get_album(request: Request):
     if isinstance(res, Response):
         tipoUsuario = 0 # Guest
     else:
-        res["songs_compradas"] = [] #TODO: QUITAR ESTA MIERDA
         if album_id in res["studio_albumes"]:
             tipoUsuario = 3 # Artista (creador)
 
@@ -1218,7 +1217,6 @@ async def get_song(request: Request):
     if isinstance(res, Response):
         tipoUsuario = 0 # Guest
     else:
-        res["songs_compradas"] = [] #TODO: QUITAR ESTA MIERDA
         if song_id in res["studio_canciones"]:
             tipoUsuario = 3 # Artista (creador)
 
@@ -1596,6 +1594,8 @@ async def get_artista(request: Request):
     # x
     # 3 = Artista (creador)
     return view.get_artista_view(request, artista_info, singles, user_albums_objects, user_songs_objects, tipoUsuario) # Devolvemos la vista del artista# ------------------------------------------------------------ #
+
+# ------------------------------------------------------------ #
 # --------------------------- Reseña ------------------------- #
 # ------------------------------------------------------------ #
 
