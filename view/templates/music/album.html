@@ -23,6 +23,11 @@
 <body>
     <div id="header-placeholder"></div>
     <main>
+        {% if not album.visible %}
+        <div class="div-warn">
+            <p>Esta página de álbum está oculta y no es accesible al público. Solo tú puedes verla. Puedes cambiar esto editando la visibilidad del álbum en tu página de Studio.</p>
+        </div>
+        {% endif %}
         <div class="div-bg">
             <div class="album-page">
                 <section class="album-top">
@@ -35,15 +40,30 @@
                         <p><strong>Géneros:</strong> {{album.generosStr}}</p> <!-- Este genero es especial -> Es un campo populado por los nombres de los generos, NO los IDs -->
                         <p><strong>Número de canciones en total:</strong> {{album.canciones|length}}</p>
                         <p><strong>Duración total:</strong> TODO</p> <!-- TODO: Hacer be-stream primero! y que los archivos tengan duración, no null! -->
-                        <!-- TODO: No se le puede dar un like a un album! (Es esto a proposito?) -->
+                        <p><strong>Likes:</strong> {{album.likes}}</p>
                         <p><strong>Visualizaciones:</strong> {{album.visitas}}</p>
                         <p><strong>Precio:</strong> {{album.precio}}€</p>
                         <div class="album-buttons">
                             {% if tipoUsuario >= 2 %}
                             <button class="btn">Descargar álbum</button> <!-- TODO en be-stream! -->
                             <button class="btn">Añadir a lista de reproducción</button> <!-- TODO: Necesitamos listas para eso! -->
+                            <button class="btn fav-btn" title="Añadir a favoritos">
+                                <img alt="Favorito" class="fav-icon" src="/static/icons/site/favourite-icon-light.svg" />
+                            </button>
                             {% elif tipoUsuario == 1 %}
-                            <button class="btn">Comprar álbum</button> <!-- TODO ¡Que alguien lo enlace con carrito! -->
+                            <form action="/cart" method="post">
+                                <input type="hidden" name="action" value="add">
+                                <input type="hidden" name="item_id" value="{{album.id}}">
+                                <input type="hidden" name="item_name" value="{{album.titulo}}">
+                                <input type="hidden" name="item_image" value="{{album.portada}}">
+                                <input type="hidden" name="artist_name" value="{{album.autor}}">
+                                <input type="hidden" name="item_desc" value="{{album.descripcion}}">
+                                <input type="hidden" name="item_precio" value="{{album.precio}}">              
+                                <button type="submit" class="button-comprar-item">Añadir al carrito</button>
+                            </form>
+                            <button class="{% if isLiked %}button{% else %}button-alt{% endif %} fav-btn" title="Añadir a favoritos" onclick="toggleLike()">
+                                <img alt="Favorito" class="fav-icon" src="/static/icons/site/favourite-icon-light.svg" />
+                            </button>
                             {% else %}
                             <button class="btn" onclick="window.location.href='/login';">Inicia sesión para comprar o descargar este álbum</button>
                             {% endif %}
@@ -99,6 +119,33 @@
     <script src="/static/js/header.js"></script>
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
+    <script src="/static/js/displayMessage.js"></script>
+
+    <script>
+        async function toggleLike() {
+            const songId = "{{album.id}}"; // Get the album ID from the template
+            try {
+            const response = await fetch('/like-album', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: songId }),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                displayMessage('success', result.message || 'Acción completada con éxito.');
+                window.location.reload();
+            } else {
+                displayMessage('error', 'Error al procesar la solicitud.');
+            }
+            } catch (error) {
+            console.error('Error:', error);
+            displayMessage('error', 'Ocurrió un error al intentar realizar la acción.');
+            }
+        }
+    </script>
 </body>
 
 </html>

@@ -2,15 +2,26 @@
 <html lang="es">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="L1-G4" />
-    <title>Perfil</title>
-    <link rel="stylesheet" href="/static/css/base/style.css" />
-    <link rel="stylesheet" href="/static/css/base/darkmode.css" />
-    <link rel="stylesheet" href="/static/css/base/header.css" />
-    <link rel="stylesheet" href="/static/css/base/footer.css" />
-    <link rel="stylesheet" href="/static/css/user/profile.css" />
+    <meta charset="utf-8" /> <!-- Codificación de caracteres -->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" /> <!-- Escalabilidad de la página -->
+    <meta content="L1-G4" name="author" />
+    <title>Perfil</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
+    <link href="/static/css/base/style.css" rel="stylesheet" /> <!-- Hoja de estilos principal -->
+    <link href="/static/css/base/darkmode.css" rel="stylesheet" /> <!-- Hoja de estilo de modo oscuro -->
+    <link href="/static/css/base/header.css" rel="stylesheet" /> <!-- Hoja de estilo del header -->
+    <link href="/static/css/base/footer.css" rel="stylesheet" /> <!-- Hoja de estilo del footer -->
+    <link href="/static/css/user/profile.css" rel="stylesheet" /> <!-- Hoja de estilo del perfil -->
+    <!-- Favicon -->
+    <link href="/static/icons/favicons/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png">
+    <link href="/static/icons/favicons/favicon.svg" rel="icon" type="image/svg+xml">
+    <link href="/static/icons/favicons/favicon.ico" rel="shortcut icon">
+    <link href="/static/icons/favicons/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+    <meta content="UnderSounds" name="apple-mobile-web-app-title">
+    <link href="/static/icons/favicons/site.webmanifest" rel="manifest">
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+
 </head>
 
 <body>
@@ -167,6 +178,7 @@
     <script src="/static/js/header.js"></script>
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
+    
 
     <script>
         const firebaseConfig = {
@@ -192,6 +204,7 @@
                         }
                     }).catch(error => {
                         console.error("Error al cerrar sesión en Firebase:", error);
+                        alert("Error al cerrar sesión: " + error.message);
                     });
             }
         }

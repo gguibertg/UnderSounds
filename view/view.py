@@ -21,8 +21,8 @@ class View():
     def get_songs_view(self, request: Request, songs):
         return templates.TemplateResponse("main/index.html", {"request" :request, "songs" : songs})
     
-    def get_song_view(self, request: Request, song_info : dict, tipoUsuario: int, user):
-        return templates.TemplateResponse("music/song.html", {"request": request, "song": song_info, "tipoUsuario": tipoUsuario, "usuario": user})
+    def get_song_view(self, request: Request, song_info : dict, tipoUsuario: int, user, isLiked: bool):
+        return templates.TemplateResponse("music/song.html", {"request": request, "song": song_info, "tipoUsuario": tipoUsuario, "usuario": user, "isLiked": isLiked})
 
     def get_edit_song_view(self, request: Request, song_info):
         return templates.TemplateResponse("music/song-edit.html", {"request": request, "song": song_info})
@@ -30,6 +30,10 @@ class View():
     # Renderizar la template login.html
     def get_login_view(self, request: Request):
         return templates.TemplateResponse("auth/login.html", {"request": request, "API_CREDENTIALS" : apicreds })
+
+    # Renderizar la template logut.html
+    def get_logout_view(self, request: Request):
+        return templates.TemplateResponse("auth/logout.html", {"request": request, "API_CREDENTIALS" : apicreds })
 
     # Renderizar la template profile.html
     # Necesita un user_info completo, no se contempla otro caso.
@@ -52,15 +56,15 @@ class View():
     
     # Renderizar la template album-edit.html
     def get_album_edit_view(self, request: Request, album_info : dict, songs: list[dict]):
-        return templates.TemplateResponse("music/album-edit.html", {"request": request, "album": album_info, "songs": songs })
+        return templates.TemplateResponse("music/album-edit.html", {"request": request, "album": album_info, "songs": songs})
 
     # Renderizar la template upload-album.html
     def get_upload_album_view(self, request: Request, songs: list[dict]):
         return templates.TemplateResponse("music/upload-album.html", {"request": request , "songs": songs}) 
     
     # Renderizar la template album.html
-    def get_album_view(self, request: Request, album_info : dict, tipoUsuario : int):
-        return templates.TemplateResponse("music/album.html", {"request": request, "album": album_info, "tipoUsuario": tipoUsuario})
+    def get_album_view(self, request: Request, album_info : dict, tipoUsuario : int, isLiked: bool):
+        return templates.TemplateResponse("music/album.html", {"request": request, "album": album_info, "tipoUsuario": tipoUsuario, "isLiked": isLiked})
     
     # Renderizar la template header.html
     def get_header_view(self, request: Request, user_info : dict):
@@ -83,5 +87,13 @@ class View():
         return templates.TemplateResponse("shop/cart.html", {"request": request, "carrito": carrito})
     
     # Renderizar la template studio.html
-    def get_studio_view(self, request: Request, songs: list[dict], albums: list[dict]):
-        return templates.TemplateResponse("user/studio.html", {"request": request, "songs": songs, "albums": albums})
+    def get_studio_view(self, request: Request, songs: list[dict], albums: list[dict], user: dict):
+        return templates.TemplateResponse("user/studio.html", {"request": request, "songs": songs, "albums": albums, "user" : user})
+
+    # Renderizar la template merch.html
+    def get_merch_view(self, request: Request):
+        return templates.TemplateResponse("shop/merch.html", {"request": request})
+    
+    # Renderizar la template artista.html
+    def get_artista_view(self, request: Request, artista: dict, singles: list[dict], albums: list[dict], songs: list[dict], tipoUsuario: int):
+        return templates.TemplateResponse("shop/artista.html", {"request": request, "artista" : artista, "singles" : singles, "albums" : albums, "songs" : songs, "tipoUsuario" : tipoUsuario})
