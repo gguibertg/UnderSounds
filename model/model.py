@@ -91,6 +91,9 @@ class Model ():
     # Genero
     def get_genero(self, id : str):
         return self.daoGenero.get_genero(id)
+
+    def get_generos(self):
+        return self.daoGenero.get_generos()
     
     # Songs
     def get_song(self, id: str):

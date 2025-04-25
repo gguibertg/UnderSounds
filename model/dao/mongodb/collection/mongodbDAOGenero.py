@@ -1,5 +1,5 @@
 from ...intefaceGeneroDAO import InterfaceGeneroDAO
-from ....dto.generoDTO import GeneroDTO
+from ....dto.generoDTO import GeneroDTO, GenerosDTO
 
 PDAO = "\033[95mDAO\033[0m:\t "
 PDAO_ERROR = "\033[96mDAO\033[0m|\033[91mERROR\033[0m:\t "
@@ -22,9 +22,28 @@ class mongodbGeneroDAO(InterfaceGeneroDAO):
                 genero = GeneroDTO()
                 genero.set_id(query.get("_id"))
                 genero.set_nombre(query.get("nombre"))
-                genero.set_esSubGen(query.get("esSubGenero"))
+                genero.set_esSubGen(query.get("esSubGen"))
                 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar el género: {e}")
 
         return genero.genero_to_dict() if genero else None
+
+    def get_generos(self):
+        generos = GenerosDTO()
+
+        try:
+            query = self.collection.find()
+
+            # doc ya es un diccionario en MongoDB.
+            for doc in query:
+                genero = GeneroDTO()
+                genero.set_id(str (doc.get("_id")))
+                genero.set_nombre(doc.get("nombre"))
+                genero.set_esSubGen(doc.get("esSubGen"))
+                generos.insertGenero(genero)
+
+        except Exception as e:
+            print(f"Error retrieving Generos: {e}")
+            
+        return [genero.genero_to_dict() for genero in generos.generolist]

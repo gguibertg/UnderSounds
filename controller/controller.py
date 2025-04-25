@@ -75,18 +75,12 @@ sessions = {}
 # ----------------------------- INDEX ------------------------------ #
 # ------------------------------------------------------------------ #
 
-# Ruta para cargar la vista index
+# Ruta para cargar la vista indexº
 @app.get("/")
-def index(request: Request):
-    return view.get_index_view(request)
-
-# En este caso servimos la template songs.html al cliente cuando se hace una petición GET a la ruta "/getsongs".
-@app.get("/getsongs", description="Hola esto es una descripcion")
-def getsongs(request: Request):
-    # Vamos a llamar al Model para que nos devuelva la lista de canciones en formato JSON.
-    songs = model.get_songs() # JSON
-    # Luego se lo pasamos al View para que lo renderice y lo devuelva al cliente.
-    return view.get_songs_view(request,songs)
+async def index(request: Request): 
+    genres_json = model.get_generos()
+    song_json = model.get_songs()
+    return view.get_index_view(request, song_json, genres_json)
 
 # ------------------------------------------------------------------ #
 # ----------------------------- LOGIN ------------------------------ #
