@@ -1281,8 +1281,6 @@ async def get_song(request: Request):
 
     # Verificar si el usuario tiene una sesión activa.
     user_db = verifySessionAndGetUserInfo(request)
-    if isinstance(user_db, Response):
-        return user_db
     
     # Comprobamos que tipo de usuario es
     if isinstance(user_db, Response):
