@@ -78,6 +78,9 @@ class Model ():
     def get_carrito(self, usuario : str):
         return self.carrito.get_all_articulos(usuario)
     
+    def vaciar_carrito(self, usuario: str):
+        return self.carrito.vaciar_carrito(usuario)
+
     # Album
     def get_album(self, id : str):
         return self.daoAlbum.get_album(id)

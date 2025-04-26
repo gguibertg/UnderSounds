@@ -85,12 +85,14 @@
                     <div class="div-pannel song-image" style="width: auto;">
                         <img alt="Portada del álbum" src="{{song.portada}}" />
                     </div>
+                    {% if tipoUsuario >= 1 %}
                     <div class="div-pannel review-form">
                         <h3>Reseña nueva</h3>
                         <textarea id="titulo" placeholder="Escribe el titulo aquí..."></textarea>
                         <textarea id="reseña" placeholder="Escribe tu reseña aquí..."></textarea>
                         <button class="btn publish-btn" onclick="addReseña()" >Publicar</button>
                     </div>
+                    {% endif %}
                 </section>
                 <section class="div-pannel reviews" style="align-items: center;">
                     <h2>Reseñas</h2>

@@ -1049,6 +1049,62 @@ async def get_carrito(request: Request):
     carrito_json = model.get_carrito(user_id) 
     return view.get_carrito_view(request, carrito_json)
 
+
+# ------------------------------------------------------------------ #
+# ----------------------------- PREPAID ---------------------------- #
+# ------------------------------------------------------------------ #
+
+@app.get("/prepaid")
+def get_prepaid(request: Request):
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res
+
+    carrito_json = model.get_carrito(res["id"]) 
+
+    return view.get_prepaid_view(request, carrito_json)
+
+
+# -------------------------------------------------------------- #
+# ----------------------------- TPV ---------------------------- #
+# -------------------------------------------------------------- #
+
+@app.get("/tpv")
+def get_tpv(request: Request):
+
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res
+    
+    try:
+        user = UsuarioDTO()
+        user.load_from_dict(res)
+ 
+        carrito = CarritoDTO()
+        carrito = model.get_carrito(user.id)
+        
+        for song in carrito.articulos:
+            user.add_song_to_biblioteca(song.id)
+
+        if model.update_usuario(user):
+            print(PCTRL, "User", user.nombre, "updated in database")
+        else:
+            print(PCTRL_WARN, "User", user.nombre, "not updated in database!")
+            return {"success": False, "error": "User not updated in database"}
+
+        if model.vaciar_carrito(res["id"]):
+            print(PCTRL, "Carrito vaciado en la base de datos")
+        else:
+            print(PCTRL_WARN, "Actualización del carrito fallida")
+            return {"success": False, "error": "Carrito update failed"}
+            
+        
+    except Exception as e:
+        print(PCTRL_WARN, "Error while processing Tpv, database failed!")
+        return {"success": False, "error": "Carrito and User not updated to database"}
+
+    return view.get_tpv_view(request)
+
 # ------------------------------------------------------------ #
 # --------------------------- CONTACT ------------------------ #
 # ------------------------------------------------------------ #
@@ -1184,7 +1240,7 @@ async def get_song(request: Request):
     song_info = model.get_song(song_id)
     if not song_info:
         print(PCTRL_WARN, "La cancion no existe")
-        return Response("No autorizado", status_code=403)
+        return Response("No existe", status_code=403)
     
     # Antes de hacer nada, comprobamos si la canción es visible o no. Si no es visible, solo el artista creador puede verla.
     res = verifySessionAndGetUserInfo(request)
@@ -1248,10 +1304,7 @@ async def get_song(request: Request):
     # 2 = Propietario (User o Artista)
     # 3 = Artista (creador)
 
-    user = UsuarioDTO()
-    user.load_from_dict(user_db)
-
-    return view.get_song_view(request, song_info, tipoUsuario, user, isLiked) # Devolvemos la vista del song
+    return view.get_song_view(request, song_info, tipoUsuario, res, isLiked) # Devolvemos la vista del song
 
 # Ruta para cargar vista edit-song
 @app.get("/edit-song")
@@ -1786,7 +1839,3 @@ def startup_event():
         print(PCTRL, "Sessions loaded from sessions.json")
     else:
         print(PCTRL_WARN, "No sessions.json file found, starting with empty sessions")
-
-
-    
-

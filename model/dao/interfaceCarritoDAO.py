@@ -21,6 +21,10 @@ class InterfaceCarritoDAO(ABC):
     @abstractmethod
     def crear_carrito(self, usuario, articulo_dict) -> bool:
         pass
+
+    @abstractmethod
+    def vaciar_carrito(self, usuario: str) -> bool:
+        pass
     
     @abstractmethod
     def deleteArticuloDelCarrito(self, usuario, id_articulo) -> bool:

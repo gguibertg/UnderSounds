@@ -85,6 +85,14 @@ class View():
     # Renderizar la template carrito.html
     def get_carrito_view(self, request: Request, carrito):
         return templates.TemplateResponse("shop/cart.html", {"request": request, "carrito": carrito})
+
+    # Renderizar la template prepaid.html
+    def get_prepaid_view(self, request: Request, carrito):
+        return templates.TemplateResponse("shop/prepaid.html", {"request": request, "carrito": carrito})
+    
+    # Renderizar la template tpv.html
+    def get_tpv_view(self, request: Request):
+        return templates.TemplateResponse("shop/tpv.html", {"request": request})
     
     # Renderizar la template studio.html
     def get_studio_view(self, request: Request, songs: list[dict], albums: list[dict], user: dict):
