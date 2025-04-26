@@ -62,6 +62,7 @@ h2 {
 .foto-artista {
     width: 150px;
     height: 150px;
+    cursor: pointer;
     border-radius: 25px;  /* Esto hace la imagen con bordes circulares */
     object-fit: cover;   /* Ajusta la imagen sin deformarla */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra suave */
@@ -99,4 +100,48 @@ h2 {
 
 .texto-producto {
    font-size: 1.2rem;
+}
+
+/* carrusel de canciones por genero */
+#canciones-filtradas-placeholder {
+    display: none;
+    overflow-x: scroll;
+    padding: 20px 0 0 0;
+    margin-top: 20px;
+}
+
+#canciones-filtradas-placeholder .carrusel-container {
+    display: flex;
+    gap: 20px; /* Espaciado entre las canciones */
+    padding-bottom: 20px;
+    justify-content: center; /* <--- Esta línea centra todo el carrusel */
+}
+
+#canciones-filtradas-placeholder .song-item {
+    text-align: center;
+    flex-shrink: 0;
+    width: 200px; /* Ajusta el tamaño del item como quieras */
+}
+
+.texto-producto,
+.texto-artista {
+    text-align: center;  /* Aseguramos que el texto esté centrado */
+    margin: 0;           /* Eliminar márgenes adicionales si es necesario */
+}
+
+/* carrusel de nuevos lanzamientos */
+#carrusel-nuevos-lanzamientos {
+    display: flex;
+    justify-content: center; /* Centra todos los items del carrusel en el eje horizontal */
+    gap: 20px;
+    flex-wrap: wrap; /* Por si quieres que hagan salto de línea en pantallas pequeñas */
+    padding: 20px 0;
+}
+
+#carrusel-nuevos-lanzamientos > div,
+#canciones-filtradas-placeholder > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra imagen, texto y botón en el eje horizontal */
+    text-align: center;
 }

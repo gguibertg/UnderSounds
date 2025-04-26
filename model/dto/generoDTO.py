@@ -1,3 +1,17 @@
+class GenerosDTO:
+    def __init__(self):
+        self.generolist = []
+
+    def get_generolist(self):
+        return self.generolist
+
+    def insertGenero(self, elem):
+        self.generolist.append(elem)
+
+    def generolist_to_json(self):
+        return json.dumps(self.generolist)
+
+
 class GeneroDTO:
     def __init__(self):
         self.id: str = None

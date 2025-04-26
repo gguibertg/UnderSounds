@@ -75,18 +75,41 @@ sessions = {}
 # ----------------------------- INDEX ------------------------------ #
 # ------------------------------------------------------------------ #
 
-# Ruta para cargar la vista index
+# Ruta para cargar la vista indexº
 @app.get("/")
-def index(request: Request):
-    return view.get_index_view(request)
+async def index(request: Request): 
+    genres_json = model.get_generos()
+    song_json = model.get_songs()
+    return view.get_index_view(request, song_json, genres_json)
 
-# En este caso servimos la template songs.html al cliente cuando se hace una petición GET a la ruta "/getsongs".
-@app.get("/getsongs", description="Hola esto es una descripcion")
-def getsongs(request: Request):
-    # Vamos a llamar al Model para que nos devuelva la lista de canciones en formato JSON.
-    songs = model.get_songs() # JSON
-    # Luego se lo pasamos al View para que lo renderice y lo devuelva al cliente.
-    return view.get_songs_view(request,songs)
+# Endpoint para obtener listado de canciones por genero
+@app.get("/songs/genre")
+async def get_song_list_by_genre(request: Request):
+    # Obtenemos el id del genero
+    '''user_db = verifySessionAndGetUserInfo(request)
+    if isinstance(user_db, Response):
+        return user_db'''
+    
+    if request.query_params.get("id") is not None:
+        genre_id = request.query_params.get("id") # Developer
+    else:
+        data = await request.json() # API
+        genre_id = data["id"]
+    if not genre_id:
+        return Response("Falta el parámetro 'id'", status_code=400)
+
+    try:
+        canciones = model.get_songs_by_genre(genre_id)
+
+        if canciones is not None and len(canciones) > 0:
+            print(f"Canciones filtradas por genero {genre_id}: {canciones}")
+            return JSONResponse(content=canciones, status_code=200)
+        else:
+            print("No existen canciones para ese genero")
+            return JSONResponse(content=[], status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+    
 
 # ------------------------------------------------------------------ #
 # ----------------------------- LOGIN ------------------------------ #
