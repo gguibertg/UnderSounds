@@ -596,34 +596,41 @@ async def get_album(request: Request):
         print(PCTRL_WARN, "Album does not exist")
         return Response("No autorizado", status_code=403)
 
+    # Obtenemos los datos del usuario y comprobamos que tipo de usuario es
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        tipoUsuario = 0 # Guest
+    else:
+        if album_id in res["studio_albumes"]:
+            tipoUsuario = 3 # Artista (creador)
+
+        elif all(song_id in res["biblioteca"] for song_id in album_info["canciones"]):
+            tipoUsuario = 2 # Propietario (User o Artista)
+
+        else:
+            tipoUsuario = 1 # Miembro (User)
+
     # Antes de nada, verificamos si el album es visible o no. Si no lo es, no se puede ver... Excepto si el usuario es el autor del album.
-    if not album_info["visible"]:
-        res = verifySessionAndGetUserInfo(request)
-        if isinstance(res, Response):
-            return res
-        if album_id not in res["studio_albumes"]:
+    if not album_info["visible"] and tipoUsuario != 3:
             print(PCTRL_WARN, "Album is not visible and user is not the author")
             return Response("No autorizado", status_code=403)
         
-    # Incrementar el contador de visitas del album
-    album_info["visitas"] += 1
-    album_object = AlbumDTO()
-    album_object.load_from_dict(album_info)
-    if not model.update_album(album_object):
-        print(PCTRL_WARN, "Album", album_id, "not updated in database!")
-        return Response("Error del sistema", status_code=403)
+    # Incrementar el contador de visitas del album, excepto si el usuario es el autor del album.
+    if tipoUsuario != 3:
+        album_info["visitas"] += 1
+        album_object = AlbumDTO()
+        album_object.load_from_dict(album_info)
+        if not model.update_album(album_object):
+            print(PCTRL_WARN, "Album", album_id, "not updated in database!")
+            return Response("Error del sistema", status_code=403)
 
     # Descargamos las canciones del album de la base de datos via su ID en el campo canciones y las insertamos en este album_info
     canciones_out : list[dict] = []
-    print(album_info)
     for cancion_id in album_info["canciones"]:
-        print("Processing id:", cancion_id)
         cancion = model.get_song(cancion_id)
         if not cancion:
             print(PCTRL_WARN, "Canción", cancion_id, "not found in database")
             return Response("Error del sistema", status_code=403)
-        
-        print(cancion)
         
         # Convertimos los generos de cada canción a un string sencillo
         # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en cancion["generosStr"]
@@ -655,24 +662,10 @@ async def get_album(request: Request):
     generosStr = generosStr[:-2] # Quitamos la última coma y espacio
     album_info["generosStr"] = generosStr # Añadimos el string a la canción
 
-
-    # Recuperamos al usuario actualmente logeado y comprobamos si es el autor del album
-    res = verifySessionAndGetUserInfo(request)
-    if isinstance(res, Response):
-        tipoUsuario = 0 # Guest
-    else:
-        if album_id in res["studio_albumes"]:
-            tipoUsuario = 3 # Artista (creador)
-
-        elif all(song["id"] in res["biblioteca"] for song in album_info["canciones"]):
-            tipoUsuario = 2 # Propietario (User o Artista)
-
-        else:
-            tipoUsuario = 1
     
     # Comprobamos si el usuario le ha dado like a la canción mirando si el id de la canción está en id_likes del usuario.
     isLiked = False
-    if not isinstance(res, Response):
+    if tipoUsuario > 0:
         isLiked = album_id in res["id_likes"]
     
     # Donde tipo Usuario:
