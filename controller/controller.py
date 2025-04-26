@@ -1217,6 +1217,15 @@ async def upload_song_post(request: Request):
 # Ruta para cargar vista song
 @app.get("/song")
 async def get_song(request: Request):
+    # Recuperamos el id de la canción desde la request
+    if request.query_params.get("id") is not None:
+        song_id = request.query_params.get("id") # Developer
+    else:
+        data = await request.json() # API
+        song_id = data["id"]
+    if not song_id:
+        return Response("Falta el parámetro 'id'", status_code=400)
+
     # Verificar si el usuario tiene una sesión activa.
     user_db = verifySessionAndGetUserInfo(request)
     if isinstance(user_db, Response):
@@ -1234,15 +1243,6 @@ async def get_song(request: Request):
 
         else:
             tipoUsuario = 1 # Miembro (User)
-
-    # Recuperamos el id de la canción desde la request
-    if request.query_params.get("id") is not None:
-        song_id = request.query_params.get("id") # Developer
-    else:
-        data = await request.json() # API
-        song_id = data["id"]
-    if not song_id:
-        return Response("Falta el parámetro 'id'", status_code=400)
 
     # Descargamos la canción de la base de datos via su ID y comprobamos si existe.
     song_info = model.get_song(song_id)
