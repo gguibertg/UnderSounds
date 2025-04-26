@@ -55,11 +55,12 @@
 
                 <h1><i>Nuevos lanzamientos</i></h1>
                 <br>
-                <div class="div-carrusel div-pannel">
+                <div class="div-carrusel div-pannel" id="carrusel-nuevos-lanzamientos">
                     {% for item in songs [-4:] %}
-                    <div style="margin: 0 1rem;">
+                    <div style="margin: 0 3rem;">
                         <img src="{{ item.portada }}" onclick="window.location.href='/song?id={{ item.id }}'" class="foto-artista">
                         <p class="texto-producto">{{ item.titulo }}</p>
+                        <p class="texto-artista">{{ item.artista }}</p>
 
                         <form action="/cart" method="post">
                             <input type="hidden" name="action" value="add">
@@ -83,40 +84,27 @@
                     {% for genero in genres %}
                         {% if not genero.esSubGen %}
                             <div style="margin: 0 1rem;">
-                                <form class="generos">
+                                <!--form class="generos">
                                     <input type="hidden" name="action" value="filtrar-genero">
                                     <button type="submit" style="border: none; background: none; padding: 0;">
-                                        <img id="ver-canciones" src="/static/img/genres/{{genero.id}}.webp" alt="Ver más canciones de {{genero.nombre}}" class="foto-genero">
+                                        <img id="ver-canciones" src="/static/img/genres/{{genero.id}}.webp" 
+                                        alt="Ver más canciones de {{genero.nombre}}" class="foto-genero"
+                                        data-genero-id="{{genero.id}}">
                                     </button>
-                                </form>
+                                </form-->
+                                <button style="border: none; background: none; padding: 0;">
+                                    <img id="ver-canciones" src="/static/img/genres/{{genero.id}}.webp" 
+                                    alt="Ver más canciones de {{genero.nombre}}" class="foto-genero"
+                                    data-genero-id="{{genero.nombre}}">
+                                </button>
                                 <p class="texto-producto">{{ genero.nombre }}</p>
                             </div>
                         {% endif %}
                     {% endfor %}
                 </div>
 
-                <div class="div-carrusel div-pannel">
-                    <div id="canciones-filtradas-placeholder" style="display: none;">
-                        {% for item in genre_songs %}
-                        <div style="margin: 0 1rem;">
-                            <a href="/song/{{ item.id }}">
-                                <img src="{{ item.portada }}" class="foto-artista">
-                            </a>
-                            <p class="texto-producto">{{ item.titulo }}</p>
-                
-                            <form action="/cart" method="post">
-                                <input type="hidden" name="action" value="add">
-                                <input type="hidden" name="item_id" value="{{ item.id }}">
-                                <input type="hidden" name="item_titulo" value="{{ item.titulo }}">
-                                <input type="hidden" name="item_portada" value="{{ item.portada }}">
-                                <input type="hidden" name="artist_name" value="{{ item.artista }}">
-                                <input type="hidden" name="item_desc" value="{{ item.descripcion }}">
-                                <input type="hidden" name="item_precio" value="{{ item.precio }}">
-                                <button type="submit" class="button-comprar-item">Añadir</button>
-                            </form>
-                        </div>
-                        {% endfor %}
-                    </div>
+                <h1 id="titulo_canciones_filtradas" style="display: none;"><i>Canciones de este género</i></h1>
+                <div class="div-carrusel div-pannel" id="canciones-filtradas-placeholder" style="display: none;">
                 </div>                  
             </section>
         </div>

@@ -110,6 +110,9 @@ class Model ():
 
     def get_songs(self):
         return self.songsDAO.get_all_songs()
+
+    def get_songs_by_genre(self, genre: str):
+        return self.songsDAO.get_all_by_genre(genre)
     
     #Reseña
     def get_all_reseñas_song(self, song: SongDTO):

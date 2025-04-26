@@ -23,3 +23,6 @@ class InterfaceSongDAO(ABC):
     def delete_song(self, id):
         pass
 
+    @abstractmethod
+    def get_all_by_genre(self, genre):
+        pass

@@ -82,6 +82,35 @@ async def index(request: Request):
     song_json = model.get_songs()
     return view.get_index_view(request, song_json, genres_json)
 
+# Endpoint para obtener listado de canciones por genero
+@app.get("/songs/genre")
+async def get_song_list_by_genre(request: Request):
+    # Obtenemos el id del genero
+    '''user_db = verifySessionAndGetUserInfo(request)
+    if isinstance(user_db, Response):
+        return user_db'''
+    
+    if request.query_params.get("id") is not None:
+        genre_id = request.query_params.get("id") # Developer
+    else:
+        data = await request.json() # API
+        genre_id = data["id"]
+    if not genre_id:
+        return Response("Falta el parámetro 'id'", status_code=400)
+
+    try:
+        canciones = model.get_songs_by_genre(genre_id)
+
+        if canciones is not None and len(canciones) > 0:
+            print(f"Canciones filtradas por genero {genre_id}: {canciones}")
+            return JSONResponse(content=canciones, status_code=200)
+        else:
+            print("No existen canciones para ese genero")
+            return JSONResponse(content=[], status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+    
+
 # ------------------------------------------------------------------ #
 # ----------------------------- LOGIN ------------------------------ #
 # ------------------------------------------------------------------ #
