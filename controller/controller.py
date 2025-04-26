@@ -495,7 +495,7 @@ async def upload_album_post(request: Request):
     data = await request.json()
 
     # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
-    required_fields = ["titulo", "autor", "colaboradores", "descripcion", "generos", "canciones", "portada", "precio", "visible"]
+    required_fields = ["titulo", "autor", "colaboradores", "descripcion", "generos", "portada", "precio"]
     for field in required_fields:
         if field not in data or not data[field]:
             print(PCTRL_WARN, f"Field '{field}' is missing or empty")
@@ -800,7 +800,7 @@ async def album_edit_post(request: Request):
         album.load_from_dict(album_dict)
 
         # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
-        required_fields = ["titulo", "autor", "colaboradores", "descripcion", "generos", "canciones", "portada", "precio", "visible"]
+        required_fields = ["titulo", "autor", "colaboradores", "descripcion", "generos", "portada", "precio"]
         for field in required_fields:
             if field not in data or not data[field]:
                 print(PCTRL_WARN, f"Field '{field}' is missing or empty")
@@ -1208,7 +1208,7 @@ async def upload_song_post(request: Request):
     data = await request.json()
 
     # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
-    required_fields = ["titulo", "artista", "colaboradores", "descripcion", "generos", "portada", "precio", "visible"]
+    required_fields = ["titulo", "artista", "colaboradores", "descripcion", "generos", "portada", "precio"]
     for field in required_fields:
         if field not in data or not data[field]:
             print(PCTRL_WARN, f"Field '{field}' is missing or empty")
@@ -1408,7 +1408,7 @@ async def edit_song_post(request: Request):
             return Response("No autorizado", status_code=403)
         
         # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
-        required_fields = ["titulo", "artista", "colaboradores", "descripcion", "generos", "portada", "precio", "visible"]
+        required_fields = ["titulo", "artista", "colaboradores", "descripcion", "generos", "portada", "precio"]
         for field in required_fields:
             if field not in data or not data[field]:
                 print(PCTRL_WARN, f"Field '{field}' is missing or empty")
@@ -1677,7 +1677,9 @@ async def get_artista(request: Request):
         if not album:
             print(PCTRL_WARN, "Album", album_id, "not found in database")
             return Response("Error del sistema", status_code=403)
-        user_albums_objects.append(album)
+        # Solo si el album es visible lo añadimos a la lista
+        if album["visible"]:
+            user_albums_objects.append(album)
 
     # Descargamos todas las canciones del artista
     user_songs_objects = []
@@ -1686,7 +1688,9 @@ async def get_artista(request: Request):
         if not song:
             print(PCTRL_WARN, "Song", song_id, "not found in database")
             return Response("Error del sistema", status_code=403)
-        user_songs_objects.append(song)
+        # Solo si la canción es visible lo añadimos a la lista
+        if song["visible"]:
+            user_songs_objects.append(song)
 
     # Filtramos que canciones son singles y las guardamos en una lista.
     # Los singles son canciones que en su campo album tienen el valor None.
@@ -1709,7 +1713,7 @@ async def get_artista(request: Request):
     # 1 = User
     # x
     # 3 = Artista (creador)
-    return view.get_artista_view(request, artista_info, singles, user_albums_objects, user_songs_objects, tipoUsuario) # Devolvemos la vista del artista# ------------------------------------------------------------ #
+    return view.get_artista_view(request, artista_info, singles, user_albums_objects, user_songs_objects, tipoUsuario)
 
 # ------------------------------------------------------------ #
 # --------------------------- Reseña ------------------------- #
