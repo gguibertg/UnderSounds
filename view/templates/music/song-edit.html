@@ -141,19 +141,38 @@
     <script>
         async function postSong() {
             event.preventDefault();
+            
             const songData = {
-            id: "{{song.id}}",
-            titulo: document.getElementById('titulo').value,
-            artista: document.getElementById('artista').value,
-            descripcion: document.getElementById('descripcion').value,
-            colaboradores: document.getElementById('colaboradores').value,
-            precio: document.getElementById('precio').value,
-            generos: Array.from(document.querySelectorAll('.upload-checkbox-container div:first-child input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
-            portada: document.getElementById('cover-preview').src,
-            visible: document.getElementById('is-visible').checked
-            // TODO: Al hacer be-stream, se debe pasar también la ruta del archuvo de audio en el backend (puede ser por ejemplo el nombre del archivo y ya)
-            // TODO: La duración de la canción se puede calcular en el backend.
+                id: "{{song.id}}",
+                titulo: document.getElementById('titulo').value,
+                artista: document.getElementById('artista').value,
+                descripcion: document.getElementById('descripcion').value,
+                colaboradores: document.getElementById('colaboradores').value,
+                precio: parseFloat(document.getElementById('precio').value),
+                generos: Array.from(document.querySelectorAll('.upload-checkbox-container div:first-child input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
+                portada: document.getElementById('cover-preview').src,
+                visible: document.getElementById('is-visible').checked
+                // TODO: Al hacer be-stream, se debe pasar también la ruta del archuvo de audio en el backend (puede ser por ejemplo el nombre del archivo y ya)
+                // TODO: La duración de la canción se puede calcular en el backend.
             };
+
+            // Validar que todos los campos requeridos estén completos y tienen un valor válido
+            if (!songData.titulo.trim()) {
+                return displayMessage("error", "El campo 'Título' no puede estar vacío.");
+            }
+            if (!songData.artista.trim()) {
+                return displayMessage("error", "El campo 'Autor' no puede estar vacío.");
+            }
+            if (!songData.descripcion.trim()) {
+                return displayMessage("error", "El campo 'Descripción' no puede estar vacío.");
+            }
+            if (isNaN(songData.precio) || parseFloat(songData.precio) < 0) {
+                return displayMessage("error", "El campo 'Precio' debe ser un número positivo.");
+            }
+            if (!songData.generos.length) {
+                return displayMessage("error", "Debes seleccionar al menos un género.");
+            }
+            // Validar que la canción esté subida
 
             try {
             const response = await fetch('/edit-song', {

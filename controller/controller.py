@@ -494,6 +494,23 @@ async def upload_album_post(request: Request):
     # Creamos un nuevo objeto AlbumDTO, utilizando los datos recibidos en el request
     data = await request.json()
 
+    # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
+    required_fields = ["titulo", "autor", "colaboradores", "descripcion", "generos", "canciones", "portada", "precio", "visible"]
+    for field in required_fields:
+        if field not in data or not data[field]:
+            print(PCTRL_WARN, f"Field '{field}' is missing or empty")
+            return {"success": False, "error": f"Field '{field}' is required and cannot be empty"}
+
+    # Validar que el precio sea un número positivo
+    if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
+        print(PCTRL_WARN, "Invalid price value")
+        return {"success": False, "error": "Price must be a positive number"}
+
+    # Validar que los géneros sean una lista no vacía
+    if not isinstance(data["generos"], list) or not data["generos"]:
+        print(PCTRL_WARN, "Genres must be a non-empty list")
+        return {"success": False, "error": "Genres must be a non-empty list"}
+
     album = AlbumDTO()
     album.set_titulo(data["titulo"])
     album.set_autor(data["autor"])
@@ -781,6 +798,23 @@ async def album_edit_post(request: Request):
     try:
         album = AlbumDTO()
         album.load_from_dict(album_dict)
+
+        # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
+        required_fields = ["titulo", "autor", "colaboradores", "descripcion", "generos", "canciones", "portada", "precio", "visible"]
+        for field in required_fields:
+            if field not in data or not data[field]:
+                print(PCTRL_WARN, f"Field '{field}' is missing or empty")
+                return {"success": False, "error": f"Field '{field}' is required and cannot be empty"}
+
+        # Validar que el precio sea un número positivo
+        if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
+            print(PCTRL_WARN, "Invalid price value")
+            return {"success": False, "error": "Price must be a positive number"}
+
+        # Validar que los géneros sean una lista no vacía
+        if not isinstance(data["generos"], list) or not data["generos"]:
+            print(PCTRL_WARN, "Genres must be a non-empty list")
+            return {"success": False, "error": "Genres must be a non-empty list"}
 
         # Editamos el album con los nuevos datos recibidos en la request
         album.set_titulo(data["titulo"])
@@ -1173,6 +1207,25 @@ async def upload_song_post(request: Request):
     # Registrar la cancion en la base de datos
     data = await request.json()
 
+    # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
+    required_fields = ["titulo", "artista", "colaboradores", "descripcion", "generos", "portada", "precio", "visible"]
+    for field in required_fields:
+        if field not in data or not data[field]:
+            print(PCTRL_WARN, f"Field '{field}' is missing or empty")
+            return {"success": False, "error": f"Field '{field}' is required and cannot be empty"}
+
+    # Validar que el precio sea un número positivo
+    if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
+        print(PCTRL_WARN, "Invalid price value")
+        return {"success": False, "error": "Price must be a positive number"}
+
+    # Validar que los géneros sean una lista no vacía
+    if not isinstance(data["generos"], list) or not data["generos"]:
+        print(PCTRL_WARN, "Genres must be a non-empty list")
+        return {"success": False, "error": "Genres must be a non-empty list"}
+    
+    # TODO: PROCESAR AQUÍ LA CANCIÓN!! (be-stream)
+
     song = SongDTO()
     song.set_titulo(data["titulo"])
     song.set_artista(data["artista"])
@@ -1355,6 +1408,25 @@ async def edit_song_post(request: Request):
         if song_id not in res["studio_canciones"]:
             print(PCTRL_WARN, "Song not found in user songs")
             return Response("No autorizado", status_code=403)
+        
+        # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
+        required_fields = ["titulo", "artista", "colaboradores", "descripcion", "generos", "portada", "precio", "visible"]
+        for field in required_fields:
+            if field not in data or not data[field]:
+                print(PCTRL_WARN, f"Field '{field}' is missing or empty")
+                return {"success": False, "error": f"Field '{field}' is required and cannot be empty"}
+
+        # Validar que el precio sea un número positivo
+        if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
+            print(PCTRL_WARN, "Invalid price value")
+            return {"success": False, "error": "Price must be a positive number"}
+
+        # Validar que los géneros sean una lista no vacía
+        if not isinstance(data["generos"], list) or not data["generos"]:
+            print(PCTRL_WARN, "Genres must be a non-empty list")
+            return {"success": False, "error": "Genres must be a non-empty list"}
+        
+        # TODO: PROCESAR AQUÍ LA CANCIÓN!! (be-stream)
     
         song = SongDTO()
         song.load_from_dict(song_dict)
