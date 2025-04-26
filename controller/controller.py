@@ -1217,11 +1217,25 @@ async def upload_song_post(request: Request):
 # Ruta para cargar vista song
 @app.get("/song")
 async def get_song(request: Request):
-
+    # Verificar si el usuario tiene una sesión activa.
     user_db = verifySessionAndGetUserInfo(request)
     if isinstance(user_db, Response):
         return user_db
     
+    # Comprobamos que tipo de usuario es
+    if isinstance(user_db, Response):
+        tipoUsuario = 0 # Guest
+    else:
+        if song_id in user_db["studio_canciones"]:
+            tipoUsuario = 3 # Artista (creador)
+
+        elif song_id in user_db["biblioteca"]:
+            tipoUsuario = 2 # Propietario (User o Artista)
+
+        else:
+            tipoUsuario = 1 # Miembro (User)
+
+    # Recuperamos el id de la canción desde la request
     if request.query_params.get("id") is not None:
         song_id = request.query_params.get("id") # Developer
     else:
@@ -1230,25 +1244,25 @@ async def get_song(request: Request):
     if not song_id:
         return Response("Falta el parámetro 'id'", status_code=400)
 
+    # Descargamos la canción de la base de datos via su ID y comprobamos si existe.
     song_info = model.get_song(song_id)
     if not song_info:
         print(PCTRL_WARN, "La cancion no existe")
         return Response("No existe", status_code=403)
     
     # Antes de hacer nada, comprobamos si la canción es visible o no. Si no es visible, solo el artista creador puede verla.
-    res = verifySessionAndGetUserInfo(request)
-    if not song_info["visible"]:
-        if isinstance(res, Response) or song_id not in res["studio_canciones"]:
+    if not song_info["visible"] and tipoUsuario != 3:
             print(PCTRL_WARN, "Song is not visible and user is not the creator")
             return Response("No autorizado", status_code=403)
         
-    # Incrementar el contador de visitas de song
-    song_info["visitas"] += 1
-    song_object = SongDTO()
-    song_object.load_from_dict(song_info)
-    if not model.update_song(song_object):
-        print(PCTRL_WARN, "Song", song_id, "not updated in database!")
-        return Response("Error del sistema", status_code=403)
+    # Incrementar el contador de visitas de song, excepto si el usuario es el autor de la canción.
+    if tipoUsuario != 3:
+        song_info["visitas"] += 1
+        song_object = SongDTO()
+        song_object.load_from_dict(song_info)
+        if not model.update_song(song_object):
+            print(PCTRL_WARN, "Song", song_id, "not updated in database!")
+            return Response("Error del sistema", status_code=403)
 
     # Convertimos los generos de la canción a un string sencillo
     # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en song_info["generosStr"]
@@ -1261,19 +1275,6 @@ async def get_song(request: Request):
         generosStr += genero["nombre"] + ", "
     generosStr = generosStr[:-2] # Quitamos la última coma y espacio
     song_info["generosStr"] = generosStr
-    
-    # Recuperamos al usuario actualmente logeado y comprobamos si es el autor de la canción
-    if isinstance(res, Response):
-        tipoUsuario = 0 # Guest
-    else:
-        if song_id in res["studio_canciones"]:
-            tipoUsuario = 3 # Artista (creador)
-
-        elif song_id in res["biblioteca"]:
-            tipoUsuario = 2 # Propietario (User o Artista)
-
-        else:
-            tipoUsuario = 1
 
     # Descargamos el album asociado a la canción, extraemos su nombre y lo insertamos en el campo album de la canción.
     # Si no tiene album, lo dejamos como None.
@@ -1288,16 +1289,15 @@ async def get_song(request: Request):
 
     # Comprobamos si el usuario le ha dado like a la canción mirando si el id de la canción está en id_likes del usuario.
     isLiked = False
-    if not isinstance(res, Response):
-        isLiked = song_id in res["id_likes"]
+    if tipoUsuario > 0:
+        isLiked = song_id in user_db["id_likes"]
 
     # Donde tipo Usuario:
     # 0 = Guest
     # 1 = User
     # 2 = Propietario (User o Artista)
     # 3 = Artista (creador)
-
-    return view.get_song_view(request, song_info, tipoUsuario, res, isLiked) # Devolvemos la vista del song
+    return view.get_song_view(request, song_info, tipoUsuario, user_db, isLiked) # Devolvemos la vista del song
 
 # Ruta para cargar vista edit-song
 @app.get("/edit-song")
