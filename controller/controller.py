@@ -12,6 +12,7 @@ from fastapi import FastAPI, Request, Response, Form, UploadFile, File
 from fastapi.responses import JSONResponse, RedirectResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from firebase_admin import auth, credentials
+from datetime import datetime
 
 # Imports locales del proyecto
 from model.dto.albumDTO import AlbumDTO
@@ -22,7 +23,6 @@ from model.dto.usuarioDTO import UsuarioDTO
 from model.dto.reseñasDTO import ReseñaDTO
 from model.model import Model
 from view.view import View
-
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
@@ -85,31 +85,26 @@ async def index(request: Request):
 # Endpoint para obtener listado de canciones por genero
 @app.get("/songs/genre")
 async def get_song_list_by_genre(request: Request):
-    # Obtenemos el id del genero
-    '''user_db = verifySessionAndGetUserInfo(request)
-    if isinstance(user_db, Response):
-        return user_db'''
+    genre_id = request.query_params.get("id")
     
-    if request.query_params.get("id") is not None:
-        genre_id = request.query_params.get("id") # Developer
-    else:
-        data = await request.json() # API
-        genre_id = data["id"]
     if not genre_id:
-        return Response("Falta el parámetro 'id'", status_code=400)
+        return JSONResponse(content={"error": "Falta el parámetro 'id'"}, status_code=400)
 
     try:
         canciones = model.get_songs_by_genre(genre_id)
 
-        if canciones is not None and len(canciones) > 0:
-            print(f"Canciones filtradas por genero {genre_id}: {canciones}")
+        # 🔥 Aquí conviertes todos los datetime a strings
+        canciones = convert_datetime(canciones)
+
+        if canciones:
+            print(f"Canciones filtradas por género {genre_id}: {canciones}")
             return JSONResponse(content=canciones, status_code=200)
         else:
-            print("No existen canciones para ese genero")
+            print("No existen canciones para ese género")
             return JSONResponse(content=[], status_code=200)
     except Exception as e:
+        print(f"Error al obtener canciones: {e}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
-    
 
 # ------------------------------------------------------------------ #
 # ----------------------------- LOGIN ------------------------------ #
@@ -1899,8 +1894,17 @@ def verifySessionAndGetUserInfo(request : Request):
 
     return Response("No autorizado", status_code=401)
 
+from datetime import datetime
 
-
+def convert_datetime(obj):
+    if isinstance(obj, list):
+        return [convert_datetime(item) for item in obj]
+    elif isinstance(obj, dict):
+        return {k: convert_datetime(v) for k, v in obj.items()}
+    elif isinstance(obj, datetime):
+        return obj.isoformat()
+    else:
+        return obj
 
 # --------------------------- HACKS DE MIERDA - ELIMINAR CUANDO HAYA UNA MEJOR IMPLEMENTACIÓN --------------------------- #
 # Guardar sesiones en un archivo JSON al cerrar el servidor y recuperarlas al iniciar.
