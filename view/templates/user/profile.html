@@ -91,7 +91,7 @@
                         <img class="songs-image" src="{{ cancion.portada }}" alt="{{ cancion.titulo }}" />
                         <h3>{{ cancion.titulo }}</h3>
                         <p>{{ cancion.artista }}</p>
-                        <a href="/song/{{ cancion.id }}">
+                        <a href="/song?id={{ cancion.id }}">
                             <button class="btn">Ver canción</button>
                         </a>
                     </div>
@@ -143,7 +143,7 @@
                         <form method="post" action="/remove-song-from-list">
                             <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}" />
                             <input type="hidden" name="id_cancion" value="{{ cancion.id }}" />
-                            <a href="/song/{{ cancion.id }}">
+                            <a href="/song?id={{ cancion.id }}">
                                 <button class="btn" type="button">Ver canción</button>
                             </a>
                             <button type="submit" class="btn" title="Borrar">

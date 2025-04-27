@@ -1121,7 +1121,7 @@ def get_tpv(request: Request):
  
         carrito = CarritoDTO()
         carrito = model.get_carrito(user.id)
-        
+
         for song in carrito.articulos:
             user.add_song_to_biblioteca(song.id)
 
@@ -1143,6 +1143,15 @@ def get_tpv(request: Request):
         return {"success": False, "error": "Carrito and User not updated to database"}
 
     return view.get_tpv_view(request)
+
+@app.get("/purchased")
+def get_purchased(request: Request):
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res
+
+    # Devolvemos la vista de purchased con el carrito
+    return view.get_purchased_view(request)
 
 # ------------------------------------------------------------ #
 # --------------------------- CONTACT ------------------------ #

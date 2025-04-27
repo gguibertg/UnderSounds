@@ -27,7 +27,7 @@ function startTimer(duration, display) {
 window.addEventListener("DOMContentLoaded", () => {
     const display = document.getElementById("timer");
     if (display) {
-        const duration = 60; // Cambia el tiempo según necesidad
+        const duration = 10; // Cambia el tiempo según necesidad
         startTimer(duration, display);
     }
 });
