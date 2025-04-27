@@ -280,18 +280,13 @@
                     body: JSON.stringify(albumData)
                 });
 
+                const result = await response.json();
+
                 if (response.ok) {
-                    const result = await response.json();
-                    if (result.success) {
-                        displayMessage('success', 'Álbum guardado exitosamente.');
-                        window.location.href = '/studio';
-                    } else {
-                        console.error('Error al guardar el álbum:', result.message);
-                        displayMessage('error', 'Error al guardar el álbum. Inténtalo nuevamente.');
-                    }
+                    displayMessage('success', 'Canción subida exitosamente');
+                    window.location.href = '/studio';
                 } else {
-                    console.error('Failed to upload album:', response.statusText);
-                    displayMessage('error', 'Error al guardar el álbum. Inténtalo nuevamente.');
+                    displayMessage('error', 'Error al subir la canción: ' + result.error);
                 }
             } catch (error) {
                 console.error('Error uploading album:', error);

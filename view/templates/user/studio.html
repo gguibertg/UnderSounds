@@ -152,13 +152,14 @@
                 },
                 body: JSON.stringify({ id: id })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                displayMessage("success", "Álbum eliminado correctamente.");
+            .then(async response => {
+                const result = await response.json();
+
+                if (response.ok) {
+                displayMessage('success', 'Álbum eliminado correctamente.');
                 window.location.href = '/studio';
                 } else {
-                displayMessage("error", "Error al eliminar el álbum: " + data.error);
+                displayMessage('error', 'Error al eliminar el álbum: ' + result.error);
                 }
             })
             .catch(error => {
@@ -170,23 +171,24 @@
         function removeSong(id) {
             if (confirm("¿Estás seguro de que deseas eliminar esta canción?\nAl eliminar la canción se borrará del album asociado.\n\nEsta acción no se puede deshacer.")) {
             fetch('/delete-song', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: id })
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: id })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                displayMessage("success", "Canción eliminada correctamente.");
+            .then(async response => {
+            const result = await response.json();
+
+            if (response.ok) {
+                displayMessage('success', 'Canción eliminada correctamente.');
                 window.location.href = '/studio';
-                } else {
-                displayMessage("error", "Error al eliminar la canción: " + data.error);
-                }
+            } else {
+                displayMessage('error', 'Error al eliminar la canción: ' + result.error);
+            }
             })
             .catch(error => {
-                displayMessage("error", "Error al procesar la solicitud: " + error.message);
+            displayMessage("error", "Error al procesar la solicitud: " + error.message);
             });
             }
         }
@@ -198,20 +200,21 @@
             fetch('/studio-settings', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                esVisible: enablePage,
-                emailVisible: showEmail
+            esVisible: enablePage,
+            emailVisible: showEmail
             })
             })
-            .then(response => response.json())
-            .then(data => {
-            if (data.success) {
-                displayMessage("success", "Configuración guardada correctamente.");
+            .then(async response => {
+            const result = await response.json();
+
+            if (response.ok) {
+                displayMessage('success', 'Configuración guardada correctamente.');
                 window.location.href = '/studio';
             } else {
-                displayMessage("error", "Error al guardar la configuración: " + data.error);
+                displayMessage('error', 'Error al guardar la configuración: ' + result.error);
             }
             })
             .catch(error => {

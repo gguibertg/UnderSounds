@@ -251,17 +251,16 @@
                     body: JSON.stringify(albumData)
                 });
 
+                const result = await response.json();
+
                 if (response.ok) {
-                    const result = await response.json();
-                    displayMessage("success", "Álbum subido correctamente.");
-                    console.log('Album uploaded successfully:', result);
+                    displayMessage('success', 'Álbum subido exitosamente');
                     window.location.href = '/studio';
                 } else {
-                    displayMessage("error", "Error al subir el álbum. Por favor, inténtalo de nuevo.");
-                    console.error('Failed to upload album:', response.statusText);
+                    displayMessage('error', 'Error al subir el álbum: ' + result.error);
                 }
             } catch (error) {
-                displayMessage("error", "Error al subir el álbum. Por favor, inténtalo de nuevo.");
+                displayMessage('error', 'Error al subir el álbum. Por favor, inténtalo de nuevo.');
                 console.error('Error uploading album:', error);
             }
 

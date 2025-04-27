@@ -182,12 +182,13 @@
                     body: JSON.stringify(songData)
                 });
 
+                const result = await response.json();
+
                 if (response.ok) {
-                    const result = await response.json();
                     displayMessage('success', 'Canción subida exitosamente');
                     window.location.href = '/studio';
                 } else {
-                    displayMessage('error', 'Error al subir la canción: ' + response.statusText);
+                    displayMessage('error', 'Error al subir la canción: ' + result.error);
                 }
             } catch (error) {
                 displayMessage('error', 'Error al subir la canción: ' + error.message);

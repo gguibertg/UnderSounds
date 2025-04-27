@@ -136,14 +136,14 @@ async def login_post(data: dict, response: Response, provider: str):
         print(PCTRL, "\tUser user_id: ", user_id)
         print(PCTRL, "\tUser provider: ", provider)
 
-        #Comprobar que el usuario existe en la base de datos
+        # Comprobar que el usuario existe en la base de datos
         usuario_db = model.get_usuario(user_id)
 
         if not usuario_db:
             # Eliminar al usuario de Firebase Auth
             auth.delete_user(user_id)
             print(PCTRL_WARN, "User is logged into Firebase, but not registered in database! Logon failed")
-            return {"success": False, "error": "User is not registered in database"}
+            return JSONResponse(content={"error": "User is not registered in database"}, status_code=400)
 
         # Verificar si el email ha cambiado en Firebase
         if usuario_db["email"] != user_email:
@@ -154,18 +154,17 @@ async def login_post(data: dict, response: Response, provider: str):
             success = model.update_usuario(usuario_dto)
             print(PCTRL, "Email updated in MongoDB" if success else f"{PCTRL_WARN} Failed to update email in MongoDB")
 
-
         # Creamos una sesión para el usuario
         session_id = str(uuid.uuid4())
-        #Faltaría asignar vigencia a la sesión
+        # Faltaría asignar vigencia a la sesión
         sessions[session_id] = {"name": user_email, "user_id": user_id, "type": provider}
         response.set_cookie(key="session_id", value=session_id, httponly=True)
         print(PCTRL, "User logon successful")
-        return {"success": True}
-        
+        return { "success" : True }
+
     except Exception as e:
         print("User logon failed due to", str(e))
-        return {"success": False, "error": str(e)}
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 
 # Ruta para procesar la petición de login con credenciales clásicas
 @app.post("/login-credentials")
@@ -186,7 +185,7 @@ async def logout(request: Request, response: Response):
         del sessions[session_id]
     print(PCTRL, "User session", session_id, "destroyed")
     response.delete_cookie("session_id")
-    return {"success": True}
+    return JSONResponse(content={"success": True}, status_code=200)
 
 # Hack para que el header pueda acceder al script de logout correctamente
 @app.get("/logout")
@@ -233,7 +232,7 @@ async def register_post(data: dict, response: Response, provider: str):
         # Verificar si el usuario ya está registrado en la base de datos
         if model.get_usuario(user_id):
             print(PCTRL, "User already registered in database")
-            return {"success": False, "error": "User already registered"}
+            return JSONResponse(content={"error": "User already registered"}, status_code=400)
 
         # Registrar al usuario en la base de datos
         user = UsuarioDTO()
@@ -262,7 +261,7 @@ async def register_post(data: dict, response: Response, provider: str):
             print(PCTRL, "User registered in database")
         else:
             print(PCTRL_WARN, "User registration failed in database!")
-            return {"success": False, "error": "User registration failed"}
+            return JSONResponse(content={"error": "User registration failed"}, status_code=500)
         
         # Creamos una sesión para el usuario (login)
         session_id = str(uuid.uuid4())
@@ -270,11 +269,11 @@ async def register_post(data: dict, response: Response, provider: str):
         sessions[session_id] = {"name": user_email, "user_id": user_id, "type": provider}
         response.set_cookie(key="session_id", value=session_id, httponly=True)
         print(PCTRL, "User logon successful")
-        return {"success": True}
+        return JSONResponse(content={"success": True}, status_code=200)
         
     except Exception as e:
         print("User register failed due to", str(e))
-        return {"success": False, "error": str(e)}
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 
 # Ruta para procesar la petición de login con credenciales clásicas
 @app.post("/register-credentials")
@@ -292,7 +291,7 @@ async def deregister(request: Request, response: Response):
     # Verificar si el usuario tiene una sesión activa y es artista 
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return res # Si es un Response, devolvemos el error  
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401)  # Si es un Response, devolvemos el error  
 
     print(PCTRL, "User", res["email"], "requested account deletion") 
 
@@ -328,11 +327,11 @@ async def deregister(request: Request, response: Response):
         print(PCTRL, "User session", session_id, "destroyed")
 
         print(PCTRL, "User account deleted successfully")
-        return {"success": True, "message": "User account deleted successfully"}
+        return JSONResponse(content={"success": True, "message": "User account deleted successfully"}, status_code=200)
     
     except Exception as e:
         print(PCTRL, "Error deleting user:", str(e))
-        return {"success": False, "error": str(e)}
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 
 # ------------------------------------------------------------------- #
 # ----------------------------- PERFIL ------------------------------ #
@@ -390,7 +389,7 @@ async def update_profile(request: Request, response: Response):
         user_info["url"] == data["url"]
     ]):
         print(PCTRL, "No changes to user profile")
-        return {"success": True, "message": "No changes to user profile"}
+        return JSONResponse(content={"success": True}, status_code=200)
 
     user = UsuarioDTO()
     user.load_from_dict(user_info)  # Cargamos los datos del usuario desde la base de datos
@@ -404,10 +403,10 @@ async def update_profile(request: Request, response: Response):
     # Actualizar el usuario en la base de datos
     if model.update_usuario(user):
         print(PCTRL, "User", user.get_email(), "updated in database")
-        return {"success": True, "message": "User updated successfully"}
+        return JSONResponse(content={"success": True}, status_code=200)
     else:
         print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
-        return {"success": False, "error": "User not updated in database"}
+        return JSONResponse(content={"error": "User not updated in database"}, status_code=500)
     
 @app.post("/crear-lista")
 async def crear_lista(request: Request, nombre_lista: str = Form(...)):
@@ -506,10 +505,10 @@ async def upload_album_post(request: Request):
     # Verificar si el usuario tiene una sesión activa y es artista 
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return {"success": False, "error": "No autorizado"}  # Si es un Response, devolvemos el error  
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401)
     if not res["esArtista"]:
         print(PCTRL_WARN, "User is not an artist")
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
     
     # Creamos un nuevo objeto AlbumDTO, utilizando los datos recibidos en el request
     data = await request.json()
@@ -519,17 +518,17 @@ async def upload_album_post(request: Request):
     for field in required_fields:
         if field not in data or not data[field]:
             print(PCTRL_WARN, f"Field '{field}' is missing or empty")
-            return {"success": False, "error": f"Field '{field}' is required and cannot be empty"}
+            return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
 
     # Validar que el precio sea un número positivo
     if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
         print(PCTRL_WARN, "Invalid price value")
-        return {"success": False, "error": "Price must be a positive number"}
+        return JSONResponse(content={"error": "Price must be a positive number"}, status_code=400)
 
     # Validar que los géneros sean una lista no vacía
     if not isinstance(data["generos"], list) or not data["generos"]:
         print(PCTRL_WARN, "Genres must be a non-empty list")
-        return {"success": False, "error": "Genres must be a non-empty list"}
+        return JSONResponse(content={"error": "Genres must be a non-empty list"}, status_code=400)
 
     album = AlbumDTO()
     album.set_titulo(data["titulo"])
@@ -551,7 +550,7 @@ async def upload_album_post(request: Request):
         print(PCTRL, "Album", album_id, "uploaded to database")
     else:
         print(PCTRL_WARN, "Album", album_id, "not uploaded to database!")
-        return {"success": False, "error": "Error del sistema"}
+        return JSONResponse(content={"error": "Error del sistema"}, status_code=500)
 
     try:
         # Por cada una de las canciones en el album, actualizamos su campo album con el id del nuevo album
@@ -570,7 +569,6 @@ async def upload_album_post(request: Request):
                 raise Exception(f"Song {song_id} not updated in database!")
 
         # Obtenemos los datos de usuario de la base de datos y creamos un nuevo objeto UsuarioDTO
-        # Ya tenemos estos datos (res), solo necesitamos castearlos.
         user = UsuarioDTO()
         user.load_from_dict(res)
 
@@ -580,7 +578,7 @@ async def upload_album_post(request: Request):
         # Actualizamos el usuario en la base de datos
         if model.update_usuario(user):
             print(PCTRL, "User", user.get_email(), "updated in database")
-            return {"success": True, "message": "Album uploaded successfully"}
+            return JSONResponse(content={"success": True}, status_code=200)
         else:
             raise Exception("User not updated in database")
         
@@ -597,7 +595,6 @@ async def upload_album_post(request: Request):
             if not song:
                 print(PCTRL_WARN, "Song", song_id, "not found in database")
             
-            # Actualizamos el campo album de la canción con el id del nuevo album
             song_object = SongDTO()
             song_object.load_from_dict(song)
             song_object.set_album(album_id)
@@ -607,15 +604,13 @@ async def upload_album_post(request: Request):
         # Intentar revertir los cambios en el usuario
         user = UsuarioDTO()
         user.load_from_dict(res)
-        # Eliminar la referencia al album
         user.remove_studio_album(album_id)
-        # Actualizar el usuario en la base de datos
         if model.update_usuario(user):
             print(PCTRL, "User", user.get_email(), "updated in database")
         else:
             print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
-            
-        return {"success": False, "error": "Error del sistema"}
+
+        return JSONResponse(content={"error": "Error del sistema"}, status_code=500)
 
 # Ruta para cargar la vista de album
 @app.get("/album")
@@ -798,22 +793,22 @@ async def album_edit_post(request: Request):
         album_id = data["id"]
     if not album_id:
         print(PCTRL_WARN, "Album ID not provided in request")
-        return {"success": False, "error": "Album ID not provided"}
+        return JSONResponse(content={"error": "Album ID not provided"}, status_code=400)
 
     # Verificar si el usuario tiene una sesión activa, si es artista y si el album existe, y si le pertenece.
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401)
     if not res["esArtista"]:
         print(PCTRL_WARN, "User is not an artist")
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
     album_dict = model.get_album(album_id)
     if not album_dict:
         print(PCTRL_WARN, "Album does not exist")
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
     if album_id not in res["studio_albumes"]:
         print(PCTRL_WARN, "Album not found in user albums")
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
 
     try:
         album = AlbumDTO()
@@ -824,17 +819,17 @@ async def album_edit_post(request: Request):
         for field in required_fields:
             if field not in data or not data[field]:
                 print(PCTRL_WARN, f"Field '{field}' is missing or empty")
-                return {"success": False, "error": f"Field '{field}' is required and cannot be empty"}
+                return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
 
         # Validar que el precio sea un número positivo
         if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
             print(PCTRL_WARN, "Invalid price value")
-            return {"success": False, "error": "Price must be a positive number"}
+            return JSONResponse(content={"error": "Price must be a positive number"}, status_code=400)
 
         # Validar que los géneros sean una lista no vacía
         if not isinstance(data["generos"], list) or not data["generos"]:
             print(PCTRL_WARN, "Genres must be a non-empty list")
-            return {"success": False, "error": "Genres must be a non-empty list"}
+            return JSONResponse(content={"error": "Genres must be a non-empty list"}, status_code=400)
 
         # Editamos el album con los nuevos datos recibidos en la request
         album.set_titulo(data["titulo"])
@@ -868,12 +863,11 @@ async def album_edit_post(request: Request):
         # Actualizamos el album en la base de datos
         if model.update_album(album):
             print(PCTRL, "Album", album_id, "updated in database")
-            return {"success": True, "message": "Album updated successfully"}
+            return JSONResponse(content={"success": True}, status_code=200)
         else:
             raise Exception(f"Album {album_id} not updated in database!")
     
     except Exception as e:
-
         # Intentamos revertir los cambios en el album
         album_object = AlbumDTO()
         album_object.load_from_dict(album_dict)
@@ -909,7 +903,7 @@ async def album_edit_post(request: Request):
                 print(PCTRL_WARN, "Song", song_id, "not updated in database!")
 
         print(PCTRL_WARN, "Error while processing Album", album_id, ", updating to database failed!")
-        return {"success": False, "error": "Error del sistema"}
+        return JSONResponse(content={"error": "Error del sistema"}, status_code=500)
 
 # Ruta para eliminar un álbum
 @app.post("/delete-album")
@@ -917,25 +911,25 @@ async def delete_album_post(request: Request):
     # Verificar si el usuario tiene una sesión activa y es artista 
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401)
     if not res["esArtista"]:
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
     
     # Obtenemos el ID del álbum a eliminar desde la request
     data = await request.json()
     album_id = data.get("id")
     if not album_id:
         print(PCTRL_WARN, "Album ID not provided in request")
-        return {"success": False, "error": "Album ID not provided"}
+        return JSONResponse(content={"error": "Album ID not provided"}, status_code=400)
     
     # Verificamos que el álbum existe y pertenece al usuario
     album = model.get_album(album_id)
     if not album:
         print(PCTRL_WARN, "Album does not exist")
-        return {"success": False, "error": "Album does not exist"}
+        return JSONResponse(content={"error": "Album does not exist"}, status_code=404)
     if album_id not in res["studio_albumes"]:
         print(PCTRL_WARN, "Album not found in user albums")
-        return {"success": False, "error": "Album not found in user albums"}
+        return JSONResponse(content={"error": "Album not found in user albums"}, status_code=403)
     
     # Procedemos a la eliminación del álbum
     # Primero, borramos el campo album de cada una de las canciones que lo componen. Si algo falla, nos da igual.
@@ -959,15 +953,15 @@ async def delete_album_post(request: Request):
     user.remove_studio_album(album_id)
     if not model.update_usuario(user):
         print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
-        return {"success": False, "error": "User not updated in database"}
+        return JSONResponse(content={"error": "User not updated in database"}, status_code=500)
     
-    # Por ultimo, borramos el álbum de la base de datos
+    # Por último, borramos el álbum de la base de datos
     if model.delete_album(album_id):
         print(PCTRL, "Album", album_id, "deleted from database")
-        return {"success": True, "message": "Album deleted successfully"}
+        return JSONResponse(content={"success": True}, status_code=200)
     else:
         print(PCTRL_WARN, "Album", album_id, "not deleted from database!")
-        return {"success": False, "error": "Album not deleted from database"}
+        return JSONResponse(content={"error": "Album not deleted from database"}, status_code=500)
         
 # Ruta para darle like a un álbum
 @app.post("/like-album")
@@ -975,14 +969,14 @@ async def like_album_post(request: Request):
     # Verificar si el usuario tiene una sesión activa
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401)
     
     # Obtenemos el ID del álbum al que se le va a dar like desde la request
     data = await request.json()
     album_id = data.get("id")
     if not album_id:
         print(PCTRL_WARN, "Album ID not provided in request")
-        return {"success": False, "error": "Album ID not provided"}
+        return JSONResponse(content={"error": "Album ID not provided"}, status_code=400)
     
     # Comprobamos que el usuario no le haya dado like al álbum ya.
     # Para ello, comprobamos que el id del álbum no esté en id_likes.
@@ -1007,16 +1001,16 @@ async def like_album_post(request: Request):
         album_object.set_likes(album_object.get_likes() + delta)
         if not model.update_album(album_object):
             print(PCTRL_WARN, "Failed to update album likes in database!")
-            return {"success": False, "error": "Failed to update album in database"}
+            return JSONResponse(content={"error": "Failed to update album in database"}, status_code=500)
     else:
         print(PCTRL_WARN, "Album not found in database!")
-        return {"success": False, "error": "Album not found in database"}
+        return JSONResponse(content={"error": "Album not found in database"}, status_code=404)
 
     if model.update_usuario(user_object):
-        return {"success": True, "message": message}
+        return JSONResponse(content={"success": True}, status_code=200)
     else:
         print(PCTRL_WARN, "Failed to update user in database!")
-        return {"success": False, "error": "Failed to update user in database"}
+        return JSONResponse(content={"error": "Failed to update user in database"}, status_code=500)
 
 # ------------------------------------------------------------------ #
 # ----------------------------- INCLUDES --------------------------- #
@@ -1169,11 +1163,7 @@ async def contact_post(request: Request):
     
     # Validar que los campos requeridos no estén vacíos
     if not data.get("name") or not data.get("email") or not data.get("telf") or not data.get("msg"):
-        return JSONResponse(
-            content={"status": "error", "message": "Formulario inválido"},
-            status_code=400,
-            headers={"Content-Type": "application/json"}
-        )
+        return JSONResponse(content={"error": "Formulario inválido"}, status_code=400)
     
     # Crear objeto ContactoDTO y asignar los valores del formulario
     contacto = ContactoDTO()
@@ -1184,17 +1174,9 @@ async def contact_post(request: Request):
     
     # Llamar a la función del modelo para guardar el reporte en la base de datos y devolver respuesta
     if model.add_contacto(contacto):
-        return JSONResponse(
-            content={"status": "success", "message": "Formulario enviado correctamente"},
-            status_code=200,
-            headers={"Content-Type": "application/json"}
-        )
+        return JSONResponse(content={"success": True}, status_code=200)
     else:
-        return JSONResponse(
-            content={"status": "error", "message": "Error al enviar el formulario"},
-            status_code=500,
-            headers={"Content-Type": "application/json"}
-        )
+        return JSONResponse(content={"error": "Error al enviar el formulario"}, status_code=500)
     
 # ------------------------------------------------------------ #
 # ---------------------------- SONG -------------------------- #
@@ -1219,10 +1201,10 @@ async def upload_song_post(request: Request):
     # Verificar si el usuario tiene una sesión activa y es artista 
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return res # Si es un Response, devolvemos el error  
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401) # Si es un Response, devolvemos el error
     if not res["esArtista"]:
         print(PCTRL_WARN, "User is not an artist")
-        return Response("No autorizado", status_code=403)
+        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
     
     # Registrar la cancion en la base de datos
     data = await request.json()
@@ -1232,17 +1214,17 @@ async def upload_song_post(request: Request):
     for field in required_fields:
         if field not in data or not data[field]:
             print(PCTRL_WARN, f"Field '{field}' is missing or empty")
-            return {"success": False, "error": f"Field '{field}' is required and cannot be empty"}
+            return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
 
     # Validar que el precio sea un número positivo
     if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
         print(PCTRL_WARN, "Invalid price value")
-        return {"success": False, "error": "Price must be a positive number"}
+        return JSONResponse(content={"error": "Price must be a positive number"}, status_code=400)
 
     # Validar que los géneros sean una lista no vacía
     if not isinstance(data["generos"], list) or not data["generos"]:
         print(PCTRL_WARN, "Genres must be a non-empty list")
-        return {"success": False, "error": "Genres must be a non-empty list"}
+        return JSONResponse(content={"error": "Genres must be a non-empty list"}, status_code=400)
     
     # TODO: PROCESAR AQUÍ LA CANCIÓN!! (be-stream)
 
@@ -1259,7 +1241,7 @@ async def upload_song_post(request: Request):
     song.set_precio(data["precio"])
     song.set_lista_resenas([])
     song.set_visible(data["visible"])
-    song.set_album(None) # El album se asigna posteriormente en el editor de albumes
+    song.set_album(None)  # El album se asigna posteriormente en el editor de albumes
 
     try:
         song_id = model.add_song(song)
@@ -1268,7 +1250,7 @@ async def upload_song_post(request: Request):
             print(PCTRL, "Song registered in database")
         else:
             print(PCTRL_WARN, "Song registration failed in database!")
-            return {"success": False, "error": "Song registration failed"}
+            return JSONResponse(content={"error": "Song registration failed"}, status_code=500)
 
         # Convertirmos res en un objeto UsuarioDTO, le añadimos la nueva canción a studio_canciones y lo actualizamos en la base de datos
         user = UsuarioDTO()
@@ -1276,7 +1258,7 @@ async def upload_song_post(request: Request):
         user.add_studio_cancion(song_id)
         if model.update_usuario(user):
             print(PCTRL, "User", user.get_email(), "updated in database")
-            return {"success": True, "message": "Song added successfully"}
+            return JSONResponse(content={"success": True}, status_code=200)
         else:
             print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
             raise Exception("User not updated in database")
@@ -1285,7 +1267,7 @@ async def upload_song_post(request: Request):
         print(PCTRL_WARN, "Error while processing Song", song_id, ", adding to database failed!")
         # Eliminar la canción subida (intentar tanto si se ha subido como si no)
         model.delete_song(song_id)
-        return {"success": False, "error": "Song not added to database"}
+        return JSONResponse(content={"error": "Song not added to database"}, status_code=500)
 
 # Ruta para cargar vista song
 @app.get("/song")
@@ -1408,41 +1390,41 @@ async def edit_song_post(request: Request):
     # Verificar si el usuario tiene una sesión activa y es artista 
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return res # Si es un Response, devolvemos el error  
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401)  
     if not res["esArtista"]:
         print(PCTRL_WARN, "User is not an artist")
-        return Response("No autorizado", status_code=403)
+        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
     
     try:
         # Recibimos los datos del nuevo song editado, junto con su ID.
         data = await request.json()
-        song_id = data["id"] # ID del album a editar
+        song_id = data["id"]  # ID del song a editar
 
         # Descargamos el song antiguo de la base de datos via su ID y verificamos que es creación del usuario.
         song_dict = model.get_song(song_id)
         if not song_dict:
             print(PCTRL_WARN, "Song does not exist")
-            return Response("No autorizado", status_code=403)
+            return JSONResponse(content={"error": "No autorizado"}, status_code=403)
         if song_id not in res["studio_canciones"]:
             print(PCTRL_WARN, "Song not found in user songs")
-            return Response("No autorizado", status_code=403)
+            return JSONResponse(content={"error": "No autorizado"}, status_code=403)
         
         # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
         required_fields = ["titulo", "artista", "generos", "portada", "precio"]
         for field in required_fields:
             if field not in data or not data[field]:
                 print(PCTRL_WARN, f"Field '{field}' is missing or empty")
-                return {"success": False, "error": f"Field '{field}' is required and cannot be empty"}
+                return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
 
         # Validar que el precio sea un número positivo
         if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
             print(PCTRL_WARN, "Invalid price value")
-            return {"success": False, "error": "Price must be a positive number"}
+            return JSONResponse(content={"error": "Price must be a positive number"}, status_code=400)
 
         # Validar que los géneros sean una lista no vacía
         if not isinstance(data["generos"], list) or not data["generos"]:
             print(PCTRL_WARN, "Genres must be a non-empty list")
-            return {"success": False, "error": "Genres must be a non-empty list"}
+            return JSONResponse(content={"error": "Genres must be a non-empty list"}, status_code=400)
         
         # TODO: PROCESAR AQUÍ LA CANCIÓN!! (be-stream)
     
@@ -1458,17 +1440,17 @@ async def edit_song_post(request: Request):
         song.set_precio(data["precio"])
         song.set_visible(data["visible"])
 
-        # Actualizamos el album en la base de datos
+        # Actualizamos el song en la base de datos
         if model.update_song(song):
             print(PCTRL, "Song", song_id, "updated in database")
-            return {"success": True, "message": "Album updated successfully"}
+            return JSONResponse(content={"success": True}, status_code=200)
         else:
             print(PCTRL_WARN, "Song", song_id, "not updated in database!")
-            return {"success": False, "error": "Album not updated in database"}
+            return JSONResponse(content={"error": "Album not updated in database"}, status_code=500)
     
     except Exception as e:
         print(PCTRL_WARN, "Error while processing Song", song_id, ", updating to database failed!")
-        return {"success": False, "error": "Song not updated in database"}
+        return JSONResponse(content={"error": "Song not updated in database"}, status_code=500)
 
 # Ruta para eliminar una canción
 @app.post("/delete-song")
@@ -1476,26 +1458,26 @@ async def delete_song_post(request: Request):
     # Verificar si el usuario tiene una sesión activa y es artista 
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401)
     if not res["esArtista"]:
         print(PCTRL_WARN, "User is not an artist")
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
     
     # Obtenemos el ID de la canción a eliminar desde la request
     data = await request.json()
     song_id = data.get("id")
     if not song_id:
         print(PCTRL_WARN, "Song ID not provided in request")
-        return {"success": False, "error": "Song ID not provided"}
+        return JSONResponse(content={"error": "Song ID not provided"}, status_code=400)
     
     # Verificamos que la canción existe y pertenece al usuario
     song = model.get_song(song_id)
     if not song:
         print(PCTRL_WARN, "Song does not exist")
-        return {"success": False, "error": "Song does not exist"}
+        return JSONResponse(content={"error": "Song does not exist"}, status_code=404)
     if song_id not in res["studio_canciones"]:
         print(PCTRL_WARN, "Song not found in user songs")
-        return {"success": False, "error": "Song not found in user songs"}
+        return JSONResponse(content={"error": "Song not found in user songs"}, status_code=403)
     
     # Procedemos a la eliminación de la canción
     # Primero, descargaremos el album al que pertenece la canción, y eliminaremos la canción de su campo canciones.
@@ -1504,13 +1486,13 @@ async def delete_song_post(request: Request):
         album = model.get_album(song["album"])
         if not album:
             print(PCTRL_WARN, "Album does not exist")
-            return {"success": False, "error": "Album does not exist"}
+            return JSONResponse(content={"error": "Album does not exist"}, status_code=404)
         album_object = AlbumDTO()
         album_object.load_from_dict(album)
         album_object.remove_cancion(song_id)
         if not model.update_album(album_object):
             print(PCTRL_WARN, "Album", album["id"], "not updated in database!")
-            return {"success": False, "error": "Album not updated in database"}
+            return JSONResponse(content={"error": "Album not updated in database"}, status_code=500)
     
     # Luego, borramos la canción del studio_canciones del usuario
     user = UsuarioDTO()
@@ -1518,15 +1500,15 @@ async def delete_song_post(request: Request):
     user.remove_studio_cancion(song_id)
     if not model.update_usuario(user):
         print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
-        return {"success": False, "error": "User not updated in database"}
+        return JSONResponse(content={"error": "User not updated in database"}, status_code=500)
 
     # Por último, borramos la canción de la base de datos
     if model.delete_song(song_id):
         print(PCTRL, "Song", song_id, "deleted from database")
-        return {"success": True, "message": "Song deleted successfully"}
+        return JSONResponse(content={"success": True}, status_code=200)
     else:
         print(PCTRL_WARN, "Song", song_id, "not deleted from database!")
-        return {"success": False, "error": "Song not deleted from database"}
+        return JSONResponse(content={"error": "Song not deleted from database"}, status_code=500)
 
 # Ruta para darle like a una canción
 @app.post("/like-song")
@@ -1534,14 +1516,14 @@ async def like_song_post(request: Request):
     # Verificar si el usuario tiene una sesión activa
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401)
     
     # Obtenemos el ID de la canción a la que se le va a dar like desde la request
     data = await request.json()
     song_id = data.get("id")
     if not song_id:
         print(PCTRL_WARN, "Song ID not provided in request")
-        return {"success": False, "error": "Song ID not provided"}
+        return JSONResponse(content={"error": "Song ID not provided"}, status_code=400)
     
     # Comprobamos que el usuario no le haya dado like a la canción ya.
     # Para ello, comprobamos que el id de la canción no esté en id_likes.
@@ -1566,16 +1548,16 @@ async def like_song_post(request: Request):
         song_object.set_likes(song_object.get_likes() + delta)
         if not model.update_song(song_object):
             print(PCTRL_WARN, "Failed to update song likes in database!")
-            return {"success": False, "error": "Failed to update song in database"}
+            return JSONResponse(content={"error": "Failed to update song in database"}, status_code=500)
     else:
         print(PCTRL_WARN, "Song not found in database!")
-        return {"success": False, "error": "Song not found in database"}
+        return JSONResponse(content={"error": "Song not found in database"}, status_code=404)
 
     if model.update_usuario(user_object):
-        return {"success": True, "message": message}
+        return JSONResponse(content={"success": True}, status_code=200)
     else:
         print(PCTRL_WARN, "Failed to update user in database!")
-        return {"success": False, "error": "Failed to update user in database"}
+        return JSONResponse(content={"error": "Failed to update user in database"}, status_code=500)
 
 
 # -------------------------------------------------------------- #
@@ -1633,10 +1615,10 @@ async def studio_settings_post(request: Request):
     # Verificar si el usuario tiene una sesión activa y es artista 
     res = verifySessionAndGetUserInfo(request)
     if isinstance(res, Response):
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401)
     if not res["esArtista"]:
         print(PCTRL_WARN, "User is not an artist")
-        return {"success": False, "error": "No autorizado"}
+        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
     
     # Recuperar los campos enablePage, showEmail de la request
     data = await request.json()
@@ -1651,10 +1633,10 @@ async def studio_settings_post(request: Request):
     user_object.set_emailVisible(emailVisible)
     if model.update_usuario(user_object):
         print(PCTRL, "User", user_object.get_email(), "updated in database")
-        return {"success": True, "message": "Settings updated successfully"}
+        return JSONResponse(content={"success": True}, status_code=200)
     else:
         print(PCTRL_WARN, "User", user_object.get_email(), "not updated in database!")
-        return {"success": False, "error": "User not updated in database"}
+        return JSONResponse(content={"error": "User not updated in database"}, status_code=500)
 
 # --------------------------------------------------------------- #
 # ---------------------------- ARTISTA -------------------------- #
@@ -1894,6 +1876,7 @@ def getSessionData(session_id: str) -> str:
 #
 # Conveniente para rutas sencillas que solo requieran la info del usuario.
 def verifySessionAndGetUserInfo(request : Request):
+    print(PCTRL, "Anonymous user trying to access a route")
     # Comprobamos si el usuario tiene una sesión activa
     session_id = request.cookies.get("session_id")
     if not (session_id and session_id in sessions):
@@ -1903,7 +1886,6 @@ def verifySessionAndGetUserInfo(request : Request):
     session_data = getSessionData(session_id)
     if session_data:
         user_id = session_data["user_id"]
-
         # Accedemos a los datos del usuario en la base de datos
         user_info = model.get_usuario(user_id) # Devuelve un dict del UsuarioDTO
 
@@ -1912,7 +1894,9 @@ def verifySessionAndGetUserInfo(request : Request):
             return user_info
         else:
             print(PCTRL_WARN, "User with id", user_id, "not found in database! - responding with Response type")
-        
+    else:
+        print(PCTRL_WARN, "Session data not found for user")
+
     return Response("No autorizado", status_code=401)
 
 

@@ -21,6 +21,7 @@
     <link href="/static/icons/favicons/site.webmanifest" rel="manifest">
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="/static/js/displayMessage.js"></script>
 
 </head>
 
@@ -218,23 +219,23 @@
             const imagen = document.getElementById('user_image_upload').src;
 
             fetch("/update-profile", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ nombre, email, url, bio, imagen })
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nombre, email, url, bio, imagen })
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Tu perfil ha sido actualizado exitosamente.');
-                        window.location.href = "/profile";
-                    } else {
-                        alert('Hubo un problema al actualizar tu perfil.');
-                    }
-                })
-                .catch(error => {
-                    console.error("Error al actualizar el perfil:", error);
-                    alert('Ocurrió un error inesperado.');
-                });
+            .then(async response => {
+                const result = await response.json();
+                if (response.ok) {
+                displayMessage('success', 'Tu perfil ha sido actualizado exitosamente.');
+                window.location.href = "/profile";
+                } else {
+                displayMessage('error', 'Hubo un problema al actualizar tu perfil: ' + result.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error al actualizar el perfil:", error);
+                displayMessage('error', 'Ocurrió un error inesperado.');
+            });
         }
 
         function sendPasswordReset() {
@@ -290,20 +291,20 @@
 
         function unregister() {
             if (confirm('¿Estás seguro de que deseas cerrar tu cuenta? Esta acción es irreversible.')) {
-                fetch("/unregister", { method: "POST" })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Tu cuenta ha sido cerrada exitosamente.');
-                            window.location.href = "/";
-                        } else {
-                            alert('Hubo un problema al cerrar tu cuenta.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error al cerrar la cuenta:", error);
-                        alert('Ocurrió un error inesperado.');
-                    });
+            fetch("/unregister", { method: "POST" })
+                .then(async response => {
+                const result = await response.json();
+                if (response.ok) {
+                    displayMessage('success', 'Tu cuenta ha sido cerrada exitosamente.');
+                    window.location.href = "/";
+                } else {
+                    displayMessage('error', 'Hubo un problema al cerrar tu cuenta: ' + result.error);
+                }
+                })
+                .catch(error => {
+                console.error("Error al cerrar la cuenta:", error);
+                displayMessage('error', 'Ocurrió un error inesperado.');
+                });
             }
         }
 

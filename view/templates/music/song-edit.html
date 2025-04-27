@@ -172,26 +172,25 @@
             // Validar que la canción esté subida
 
             try {
-            const response = await fetch('/edit-song', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(songData)
-            });
+                const response = await fetch('/edit-song', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(songData)
+                });
 
-            if (response.ok) {
                 const result = await response.json();
-                displayMessage('success', 'Canción editada exitosamente.');
-                console.log('Song edited successfully:', result);
-                window.location.href = '/studio';
-            } else {
-                displayMessage('error', `Error al editar la canción: ${response.statusText}`);
-                console.error('Failed to edit song:', response.statusText);
-            }
+
+                if (response.ok) {
+                    displayMessage('success', 'Canción subida exitosamente');
+                    window.location.href = '/studio';
+                } else {
+                    displayMessage('error', 'Error al subir la canción: ' + result.error);
+                }
             } catch (error) {
-            displayMessage('error', 'Ocurrió un error al editar la canción.');
-            console.error('Error editing song:', error);
+                displayMessage('error', 'Ocurrió un error al editar la canción.');
+                console.error('Error editing song:', error);
             }
         }
     </script>
