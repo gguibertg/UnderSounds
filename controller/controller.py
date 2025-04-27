@@ -1815,7 +1815,7 @@ def verifySessionAndGetUserInfo(request : Request):
             print(PCTRL, "User", user_info["email"], "requested access to user data through:", request.method, request.url.path)
             return user_info
         else:
-            print(PCTRL_WARN, "User", user_info["email"], "with id", user_id, "not found in database!")
+            print(PCTRL_WARN, "User with id", user_id, "not found in database! - responding with Response type")
         
     return Response("No autorizado", status_code=401)
 
