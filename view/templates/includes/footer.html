@@ -9,9 +9,10 @@
                     <li><a href="/">Inicio</a></li>
                 {% if user %}
                     <li><a href="/profile">Perfil</a></li>
-                    <li><a href="/merch">Tienda</a></li>
                     {% if user.esArtista %}
                     <li><a href="/studio">Studio</a></li>
+                    <li><a href="/upload-song">Subir canción</a></li>
+                    <li><a href="/upload-album">Subir álbum</a></li>
                     {% endif %}
                 {% endif %}
                 </ul>

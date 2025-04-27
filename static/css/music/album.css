@@ -46,8 +46,7 @@
 }
 
 .album-image {
-    width: 250px;
-    height: 250px;
+    width: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -172,15 +171,15 @@
     flex-wrap: wrap;
     gap: 0.75rem;
     margin-top: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
     align-items: center;
 }
 
 .song-stats img {
     vertical-align: middle;
     margin-right: 0.3rem;
-    width: 18px;
-    height: 18px;
+    width: 28px;
+    height: 28px;
 }
 
 .song-actions {

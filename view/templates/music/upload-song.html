@@ -13,12 +13,12 @@
     <link rel="stylesheet" href="/static/css/base/footer.css">
     <link rel="stylesheet" href="/static/css/music/upload.css">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg" />
-    <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/static/icons/favicons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/static/icons/favicons/favicon.svg" />
+    <link rel="shortcut icon" href="/static/icons/favicons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicons/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="UnderSounds" />
-    <link rel="manifest" href="/images/favicon/site.webmanifest" />
+    <link rel="manifest" href="/static/icons/favicons/site.webmanifest" />
 </head>
 
 <body>
@@ -148,7 +148,6 @@
                 titulo: document.getElementById('titulo').value,
                 artista: document.getElementById('artista').value,
                 descripcion: document.getElementById('descripcion').value,
-                fecha: new Date().toISOString().split('T')[0],
                 colaboradores: document.getElementById('colaboradores').value,
                 precio: parseFloat(document.getElementById('precio').value),
                 generos: Array.from(document.querySelectorAll('.upload-checkbox-container div:first-child input[type="checkbox"]:checked')).map(checkbox => checkbox.id),

@@ -41,11 +41,11 @@
                         <h2 class="song-title"> {{song.titulo}}</h2>
                         <p><strong>Autor:</strong> {{song.artista}}</p>
                         <p><strong>Colaboradores:</strong> {{song.colaboradores}}</p>
-                        <p><strong>Descripción:</strong> {{song.descripcion}} </p>
+                        <pre><strong>Descripción:</strong> {{song.descripcion}} </pre>
                         <p><strong>Fecha de lanzamiento:</strong> {{song.fecha}}</p>
                         <p><strong>Duración:</strong> TODO</p> <!-- TODO: Hacer be-stream primero! y que los archivos tengan duración, no null! -->
                         {% if song.album %}
-                        <p><strong>Álbum:</strong> {{song.album}}</p>
+                        <p><strong>Álbum:</strong> {{song.albumStr}}</p>
                         {% else %}
                         <p>Esta canción es un <i>Single</i></p>
                         {% endif %}
@@ -85,9 +85,18 @@
                         <button class="btn" onclick="window.location.href='/login';">Inicia sesión para comprar y escuchar esta canción </button>
                         {% endif %}
                     </div>
+
                     <div class="div-pannel song-image" style="width: auto;">
-                        <img alt="Portada del álbum" src="{{song.portada}}" />
+                        <img alt="Portada de la canción" src="{{song.portada}}" /> 
+                        <div style="display: block; margin: 5px auto 0; text-align: center;">
+                            <h2 class="song-title"> {{song.titulo}}</h2>
+                            <p><strong>{{song.artista}}</strong></p>
+                            {% if song.album %}
+                            <button class="btn" style="margin: 12px auto 0;" onclick="window.location.href='/album?id={{ song.album }}';">Ir al álbum</button>
+                            {% endif %}
+                        </div>             
                     </div>
+
                     {% if tipoUsuario >= 1 %}
                     <div class="div-pannel review-form">
                         <h3>Reseña nueva</h3>

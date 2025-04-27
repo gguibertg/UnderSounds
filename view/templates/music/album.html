@@ -34,8 +34,8 @@
                     <div class="div-pannel album-info">
                         <h2 class="album-title">{{album.titulo}}</h2>
                         <p><strong>Autor:</strong> {{album.autor}}</p>
-                        <p><strong>Colaboradores:</strong> {{album.colaboradores}}</p>
-                        <p><strong>Descripción:</strong> {{album.descripcion}}</p>
+                        <p><strong>Colaboradores:</strong>{{album.colaboradores}}</p>
+                        <pre><strong>Descripción:</strong> {{album.descripcion}}</pre>
                         <p><strong>Fecha:</strong> {{album.fecha}}</p>
                         <p><strong>Géneros:</strong> {{album.generosStr}}</p> <!-- Este genero es especial -> Es un campo populado por los nombres de los generos, NO los IDs -->
                         <p><strong>Número de canciones en total:</strong> {{album.canciones|length}}</p>
@@ -75,6 +75,17 @@
                     </div>
                     <div class="div-pannel album-image">
                         <img alt="Portada del álbum Kamikaze" src="{{album.portada}}" />
+                        <div style="display: block; margin: 5px auto 0; text-align: center;">
+                            <h2 class="song-title"> {{album.titulo}}</h2>
+                            <p><strong>{{album.autor}}</strong></p>
+                            {% if album.canciones and album.canciones|length > 0 %}
+                            {% for cancion in album.canciones %}
+                            <p>{{ album.canciones.index(cancion) + 1 }} - {{ cancion.titulo }}</p>
+                            {% endfor %}
+                            {% else %}
+                            <p>No hay canciones disponibles en este álbum.</p>
+                            {% endif %}
+                        </div>     
                     </div>
                 </section>
                 <section class="div-pannel song-list-section">
@@ -92,7 +103,7 @@
                                     <img src="{{ cancion.portada }}" alt="Portada" class="song-cover" />
                                     <div class="song-info">
                                         <p><strong>Géneros:</strong> {{ cancion.generosStr }}</p>
-                                        <p><strong>Precio:</strong> {{ cancion.precio }}</p>                                 
+                                        <p><strong>Precio:</strong> {{ cancion.precio }}€</p>                                 
                                         <div class="song-stats">
                                             <span><img src="/static/icons/site/favourite-icon-light.svg" alt="likes" /> {{ cancion.likes }}</span>
                                             <span><img src="/static/icons/site/comment-icon-light.svg" alt="comentarios" /> {{ cancion.lista_resenas|length }}</span>

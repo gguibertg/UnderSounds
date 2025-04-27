@@ -535,7 +535,7 @@ async def upload_album_post(request: Request):
     album.set_autor(data["autor"])
     album.set_colaboradores(data["colaboradores"])
     album.set_descripcion(data["descripcion"])
-    album.set_fecha(datetime.strptime(data["fecha"], "%Y-%m-%d")) # Convertimos el string tipo YYYY-MM-DD a un objeto datetime antes de guardar.
+    album.set_fecha(datetime.now()) # La fecha se caclula desde el lado del servidor
     album.set_generos(data["generos"])
     album.set_canciones(data["canciones"])
     album.set_visitas(0)
@@ -657,6 +657,7 @@ async def get_album(request: Request):
             return Response("Error del sistema", status_code=403)
 
     # Descargamos las canciones del album de la base de datos via su ID en el campo canciones y las insertamos en este album_info
+    print(PCTRL, "Starting to populate album with songs...")
     canciones_out : list[dict] = []
     for cancion_id in album_info["canciones"]:
         cancion = model.get_song(cancion_id)
@@ -667,6 +668,7 @@ async def get_album(request: Request):
         # Convertimos los generos de cada canción a un string sencillo
         # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en cancion["generosStr"]
         # Esto se hace por cada canción del album.
+        print(PCTRL, "Converting song genre to str...")
         generosStr = ""
         for genero_id in cancion["generos"]:
             genero = model.get_genero(genero_id)
@@ -684,6 +686,7 @@ async def get_album(request: Request):
 
     # Convertimos los generos del album a un string sencillo
     # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en album_info["generosStr"]
+    print(PCTRL, "Converting album genre to str...")
     generosStr = ""
     for genero_id in album_info["generos"]:
         genero = model.get_genero(genero_id)
@@ -836,7 +839,7 @@ async def album_edit_post(request: Request):
         album.set_autor(data["autor"])
         album.set_colaboradores(data["colaboradores"])
         album.set_descripcion(data["descripcion"])
-        # album.set_fecha(datetime.strptime(data["fecha"], "%Y-%m-%d")) # La fecha no se puede editar.
+        album.set_fecha(datetime.now()) # La fecha se actualiza a la fecha actual, ya que no se puede editar.
         album.set_generos(data["generos"])
         album.set_canciones(data["canciones"])
         # album.set_visitas() # La cantidad de visitas no se puede editar.
@@ -1232,7 +1235,7 @@ async def upload_song_post(request: Request):
     song.set_titulo(data["titulo"])
     song.set_artista(data["artista"])
     song.set_colaboradores(data["colaboradores"])
-    song.set_fecha(datetime.strptime(data["fecha"], "%Y-%m-%d"))
+    song.set_fecha(datetime.now())
     song.set_descripcion(data["descripcion"])
     song.set_generos(data["generos"])
     song.set_likes(0)
@@ -1329,16 +1332,16 @@ async def get_song(request: Request):
     generosStr = generosStr[:-2] # Quitamos la última coma y espacio
     song_info["generosStr"] = generosStr
 
-    # Descargamos el album asociado a la canción, extraemos su nombre y lo insertamos en el campo album de la canción.
-    # Si no tiene album, lo dejamos como None.
+    # Descargamos el album asociado a la canción, extraemos su nombre y lo insertamos en el campo albumStr de la canción.
+    # Si no tiene album, dejamos albumStr como None.
     if song_info["album"]:
         album = model.get_album(song_info["album"])
         if not album:
             print(PCTRL_WARN, "Album", song_info["album"], "not found in database")
             return Response("Error del sistema", status_code=403)
-        song_info["album"] = album["titulo"]
+        song_info["albumStr"] = album["titulo"]
     else:
-        song_info["album"] = None
+        song_info["albumStr"] = None
 
     # Comprobamos si el usuario le ha dado like a la canción mirando si el id de la canción está en id_likes del usuario.
     isLiked = False
@@ -1624,7 +1627,6 @@ async def studio_settings_post(request: Request):
     data = await request.json()
     esVisible = data.get("esVisible")
     emailVisible = data.get("emailVisible")
-    print(esVisible, emailVisible)
     
     # Convertimos el usuario a objeto, aplicar cambios y volver a subirlo
     user_object = UsuarioDTO()
@@ -1876,10 +1878,10 @@ def getSessionData(session_id: str) -> str:
 #
 # Conveniente para rutas sencillas que solo requieran la info del usuario.
 def verifySessionAndGetUserInfo(request : Request):
-    print(PCTRL, "Anonymous user trying to access a route")
     # Comprobamos si el usuario tiene una sesión activa
     session_id = request.cookies.get("session_id")
     if not (session_id and session_id in sessions):
+        print(PCTRL, "Anonymous user requested data through:", request.method, request.url.path)
         return Response("No autorizado", status_code=401)
     
     # Accedemos a los datos de la sesión del usuario
@@ -1893,9 +1895,9 @@ def verifySessionAndGetUserInfo(request : Request):
             print(PCTRL, "User", user_info["email"], "requested access to user data through:", request.method, request.url.path)
             return user_info
         else:
-            print(PCTRL_WARN, "User with id", user_id, "not found in database! - responding with Response type")
+            print(PCTRL_WARN, "User with id", user_id, " requested data though:", request.method, request.url.path, ", but the user_id is not found in database! - Now assuming user is anonymous.")
     else:
-        print(PCTRL_WARN, "Session data not found for user")
+        print(PCTRL, "Anonymous user requested data through:", request.method, request.url.path, ", but the specified session does not exist in backend.")
 
     return Response("No autorizado", status_code=401)
 

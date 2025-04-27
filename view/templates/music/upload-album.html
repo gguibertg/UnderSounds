@@ -219,7 +219,6 @@
                 titulo: document.getElementById('title').value,
                 autor: document.getElementById('author').value,
                 descripcion: document.getElementById('description').value,
-                fecha: new Date().toISOString().split('T')[0],
                 colaboradores: document.getElementById('collaborators').value,
                 precio: parseFloat(document.getElementById('price').value),
                 generos: Array.from(document.querySelectorAll('.upload-checkbox-container div:first-child input[type="checkbox"]:checked')).map(checkbox => checkbox.id),

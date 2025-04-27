@@ -48,7 +48,7 @@
                                     </div>
                                 </div>
                                 <div class="item-actions">
-                                    <p class="item-price">${{ "%.2f"|format(item.precio | float) }}</p>
+                                    <p class="item-price">{{ "%.2f"|format(item.precio | float) }}€</p>
                                     <form action="/cart" method="POST" style="display:inline;">
                                         <input type="hidden" name="action" value="decrement">
                                         <input type="hidden" name="item_id" value="{{ item.id }}">
@@ -87,7 +87,7 @@
                                     {% for item in carrito.articulos %}
                                     <p>{{ item.nombre }} x {{item.cantidad}}</p>
                                     <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
-                                    <p>${{ "%.2f"|format(item.precio | float)}}</p>
+                                    <p>{{ "%.2f"|format(item.precio | float)}}€</p>
                                     {% endfor %}
                                 </div>
                                 <hr>
@@ -97,7 +97,7 @@
                                     </b>
                                     <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
                                     <b>
-                                        <p>${{ '%.2f' | format(carrito.subtotal) }}</p>
+                                        <p>{{ '%.2f' | format(carrito.subtotal) }}€</p>
                                     </b>
                                 </div>
                             </div>
