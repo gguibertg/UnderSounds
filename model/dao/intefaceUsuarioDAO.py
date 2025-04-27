@@ -6,6 +6,14 @@ class InterfaceUsuarioDAO(ABC):
     def get_all_usuarios(self):
         pass
 
+    @abstractmethod
+    def get_all_by_fecha(self, fecha):
+        pass
+    
+    @abstractmethod
+    def get_all_by_nombre(self, nombre):
+        pass
+
     @abstractmethod	
     def get_usuario(self, id):
         pass

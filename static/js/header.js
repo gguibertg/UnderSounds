@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => console.error('Error al cargar el header:', error));
 });
 
-ocument.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const suggestionsContainer = document.getElementById("search-suggestions");
 

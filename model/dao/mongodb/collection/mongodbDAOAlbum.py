@@ -2,7 +2,7 @@ from bson import ObjectId
 import pymongo
 import pymongo.results
 from ...intefaceAlbumDAO import InterfaceAlbumDAO
-from ....dto.albumDTO import AlbumDTO
+from ....dto.albumDTO import AlbumDTO, AlbumsDTO
 
 PDAO = "\033[95mDAO\033[0m:\t "
 PDAO_ERROR = "\033[96mDAO\033[0m|\033[91mERROR\033[0m:\t "
@@ -15,32 +15,118 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
     def __init__(self, collection):
         self.collection = collection
 
-    def get_album(self, id):
-        album = None
-
+    def get_all_albums(self):
+        albums = AlbumsDTO()
         try:
-            query = self.collection.find_one({"_id": ObjectId(id)})
+            query = self.collection.find()
 
-            if query:
-                album = AlbumDTO()
-                album.set_id(str(query.get("_id")))  # Convertimos _id a str
-                album.set_titulo(query.get("titulo"))
-                album.set_autor(query.get("autor"))
-                album.set_colaboradores(query.get("colaboradores"))
-                album.set_descripcion(query.get("descripcion"))
-                album.set_fecha(query.get("fecha"))
-                album.set_generos(query.get("generos", []))
-                album.set_canciones(query.get("canciones", []))
-                album.set_visitas(query.get("visitas"))
-                album.set_portada(query.get("portada"))
-                album.set_precio(query.get("precio"))
-                album.set_likes(query.get("likes"))
-                album.set_visible(query.get("visible"))
+            for doc in query:
+                album_dto = AlbumDTO()
+                album_dto.set_id(str(doc.get("_id")))  # Convertimos _id a str
+                album_dto.set_titulo(doc.get("titulo"))
+                album_dto.set_autor(doc.get("autor"))
+                album_dto.set_colaboradores(doc.get("colaboradores"))
+                album_dto.set_descripcion(doc.get("descripcion"))
+                album_dto.set_fecha(doc.get("fecha"))
+                album_dto.set_generos(doc.get("generos", []))
+                album_dto.set_canciones(doc.get("canciones", []))
+                album_dto.set_visitas(doc.get("visitas"))
+                album_dto.set_portada(doc.get("portada"))
+                album_dto.set_precio(doc.get("precio"))
+                album_dto.set_likes(doc.get("likes"))
+                album_dto.set_visible(doc.get("visible"))
+
+                albums.insertSong(album_dto)
 
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al recuperar el álbum: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
 
-        return album.album_to_dict() if album else None
+        return [album.album_to_dict() for album in albums.albumlist]
+    
+
+    def get_all_by_genre(self, genre):
+        albums = AlbumsDTO()
+        try:
+            query = self.collection.find({"generos": genre})
+
+            for doc in query:
+                album_dto = AlbumDTO()
+                album_dto.set_id(str(doc.get("_id")))  # Convertimos _id a str
+                album_dto.set_titulo(doc.get("titulo"))
+                album_dto.set_autor(doc.get("autor"))
+                album_dto.set_colaboradores(doc.get("colaboradores"))
+                album_dto.set_descripcion(doc.get("descripcion"))
+                album_dto.set_fecha(doc.get("fecha"))
+                album_dto.set_generos(doc.get("generos", []))
+                album_dto.set_canciones(doc.get("canciones", []))
+                album_dto.set_visitas(doc.get("visitas"))
+                album_dto.set_portada(doc.get("portada"))
+                album_dto.set_precio(doc.get("precio"))
+                album_dto.set_likes(doc.get("likes"))
+                album_dto.set_visible(doc.get("visible"))
+
+                albums.insertSong(album_dto)
+
+        except Exception as e:
+            print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
+
+        return [album.album_to_dict() for album in albums.albumlist]
+    
+    def get_all_by_fecha(self, fecha):
+        albums = AlbumsDTO()
+        try:
+            query = self.collection.find({"fecha": {"$gte":fecha}})
+
+            for doc in query:
+                album_dto = AlbumDTO()
+                album_dto.set_id(str(doc.get("_id")))  # Convertimos _id a str
+                album_dto.set_titulo(doc.get("titulo"))
+                album_dto.set_autor(doc.get("autor"))
+                album_dto.set_colaboradores(doc.get("colaboradores"))
+                album_dto.set_descripcion(doc.get("descripcion"))
+                album_dto.set_fecha(doc.get("fecha"))
+                album_dto.set_generos(doc.get("generos", []))
+                album_dto.set_canciones(doc.get("canciones", []))
+                album_dto.set_visitas(doc.get("visitas"))
+                album_dto.set_portada(doc.get("portada"))
+                album_dto.set_precio(doc.get("precio"))
+                album_dto.set_likes(doc.get("likes"))
+                album_dto.set_visible(doc.get("visible"))
+
+                albums.insertSong(album_dto)
+
+        except Exception as e:
+            print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
+
+        return [album.album_to_dict() for album in albums.albumlist]
+    
+    def get_all_by_nombre(self, titulo):
+        albums = AlbumsDTO()
+        try:
+            query = self.collection.find({"titulo": {"$regex": titulo, "$options": "i"}})
+
+            for doc in query:
+                album_dto = AlbumDTO()
+                album_dto.set_id(str(doc.get("_id")))  # Convertimos _id a str
+                album_dto.set_titulo(doc.get("titulo"))
+                album_dto.set_autor(doc.get("autor"))
+                album_dto.set_colaboradores(doc.get("colaboradores"))
+                album_dto.set_descripcion(doc.get("descripcion"))
+                album_dto.set_fecha(doc.get("fecha"))
+                album_dto.set_generos(doc.get("generos", []))
+                album_dto.set_canciones(doc.get("canciones", []))
+                album_dto.set_visitas(doc.get("visitas"))
+                album_dto.set_portada(doc.get("portada"))
+                album_dto.set_precio(doc.get("precio"))
+                album_dto.set_likes(doc.get("likes"))
+                album_dto.set_visible(doc.get("visible"))
+
+                albums.insertSong(album_dto)
+
+        except Exception as e:
+            print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
+
+        return [album.album_to_dict() for album in albums.albumlist]
     
 
     def add_album(self, album: AlbumDTO) -> str:

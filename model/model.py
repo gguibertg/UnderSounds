@@ -27,6 +27,10 @@ class Model ():
     # Usuario
     def get_usuario(self, id : str):
         return self.daoUsuario.get_usuario(id)
+    def get_usuarios_by_fecha(self, fecha):
+        return self.daoUsuario.get_all_by_fecha(fecha)
+    def get_usuarios_by_nombre(self, nombre):
+        return self.daoUsuario.get_all_by_nombre(nombre)
     def add_usuario(self, usuario : UsuarioDTO):
         return self.daoUsuario.add_usuario(usuario)
     def update_usuario(self, usuario : UsuarioDTO):
@@ -82,6 +86,14 @@ class Model ():
         return self.carrito.vaciar_carrito(usuario)
 
     # Album
+    def get_albums(self):
+        return self.daoAlbum.get_all_albums()
+    def get_albums_by_genre(self, genre):
+        return self.daoAlbum.get_all_by_genre(genre)
+    def get_albums_by_fecha(self, fecha):
+        return self.daoAlbum.get_all_by_fecha(fecha)
+    def get_albums_by_titulo(self, titulo):
+        return self.daoAlbum.get_all_by_nombre(titulo)
     def get_album(self, id : str):
         return self.daoAlbum.get_album(id)
     def add_album(self, album : AlbumDTO):
@@ -117,6 +129,12 @@ class Model ():
     def get_songs_by_genre(self, genre: str):
         return self.songsDAO.get_all_by_genre(genre)
     
+    def get_songs_by_fecha(self, fecha):
+        return self.songsDAO.get_all_by_fecha(fecha)
+
+    def get_songs_by_titulo(self, titulo):
+        return self.songsDAO.get_all_by_nombre(titulo)
+        
     #Reseña
     def get_all_reseñas_song(self, song: SongDTO):
         return self.daoReseña.get_all_reseñas_song(song)

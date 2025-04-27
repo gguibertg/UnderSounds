@@ -1936,17 +1936,77 @@ def startup_event():
         print(PCTRL, "Sessions loaded from sessions.json")
     else:
         print(PCTRL_WARN, "No sessions.json file found, starting with empty sessions")
+    
 
-@app.get("/api/get-search-data")
-def get_search_data():
-    # Simulación de datos. Reemplaza esto con una consulta a tu base de datos.
-    #artistas = model.get_artists()  # Cambia esto según tu modelo
-    canciones = model.get_songs()  # Cambia esto según tu modelo
-    #albumes = model.get_albums()  # Cambia esto según tu modelo
+@app.get("/search213")
+def get_search(request: Request):
 
-    # Combina los datos en una lista
-    search_data = [
-        {"name": cancion["titulo"], "url": f"/song?id={cancion['id']}"} for cancion in canciones
-    ]
+    busqueda = request.query_params.get("busqueda")
 
-    return JSONResponse(content=search_data)
+    # detecta si la busqueda es None o vacia
+    if not busqueda:
+        return Response("No se proporcionó ninguna búsqueda", status_code=400)
+
+    palabras = busqueda.strip().split()
+
+    if all(p.startswith("#") for p in palabras):
+        tipo_busqueda = "generos"
+        genres = [p.lstrip("#") for p in palabras]
+
+    else:
+        primer_caracter = busqueda[0]
+
+        if primer_caracter.isalpha():
+            tipo_busqueda = "nombre"
+            name = " ".join(palabras)
+
+        elif primer_caracter.isdigit():
+            tipo_busqueda = "fecha"
+            date = next((palabra for palabra in palabras if palabra[0].isdigit()), None)
+        else:
+            return Response("Tipo de búsqueda no válido", status_code=400)
+    
+    all_items = []
+
+    if tipo_busqueda  == "nombre":
+        songs = model.get_songs_by_titulo(name)
+        artists = model.get_usuarios_by_nombre(name)
+        albums = model.get_albums_by_titulo(name)
+
+        for song in songs:
+            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"], "url": f"/song?id={song["id"]}"})
+        
+        for artist in artists:
+            all_items.append({"nombre": artist["nombre"], "portada": artist["imagen"], "descripcion": artist["bio"], "url": f"/artist?id={artist["id"]}"})
+        
+        for album in albums:
+            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"], "url": f"/album?id={album["id"]}"})
+
+    elif tipo_busqueda == "generos":
+        
+        songs = model.get_songs_by_genre(genres)
+        albums = model.get_albums_by_genre(genres)
+    
+        for song in songs:
+            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"], "url": f"/song?id={song["id"]}"})
+        
+        for album in albums:
+            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"], "url": f"/album?id={album["id"]}"})
+
+    elif tipo_busqueda == "fecha":
+        songs = model.get_songs_by_fecha(date)
+        artists = model.get_usuarios_by_fecha(date)
+        albums = model.get_albums_by_fecha(date)
+
+        for song in songs:
+            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"], "url": f"/song?id={song["id"]}"})
+
+        for artist in artists:
+            all_items.append({"nombre": artist["nombre"], "portada": artist["imagen"], "descripcion": artist["bio"], "url": f"/artist?id={artist["id"]}"})
+
+        for album in albums:
+            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"], "url": f"/album?id={album["id"]}"})
+
+
+    # list (dict (nombre, portada, descripcion))
+    return view.get_search_view(request, all_items)
