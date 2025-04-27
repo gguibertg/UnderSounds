@@ -46,9 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         songItem.style.margin = "0 1rem";
 
                         // Crear la imagen de la canción (portada)
-                        const img = document.createElement("img");
-                        img.src = 'https://i.etsystatic.com/33525265/r/il/f91956/3592770954/il_fullxfull.3592770954_kdac.jpg' 
-                        //img.src = cancion.portada; // Aquí tomamos la portada
+                        const img = document.createElement("img"); 
+                        img.src = cancion.portada; // Aquí tomamos la portada
                         img.alt = cancion.titulo;  // Usamos el título como alt
                         img.classList.add("foto-artista");
                         img.onclick = function() {
