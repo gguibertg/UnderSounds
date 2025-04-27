@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8"> <!-- Codificación de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Escalabilidad de la página -->
+    <meta name="author" content="L1-G4">
+    <title>Sobre nosotros</title> <!-- Título que aparece en la pestaña del navegador -->
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/static/css/base/style.css"> <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="/static/css/base/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
+    <link rel="stylesheet" href="/static/css/base/header.css"> <!-- Hoja de estilo del header -->
+    <link rel="stylesheet" href="/static/css/base/footer.css"> <!-- Hoja de estilo del footer -->
+    <link rel="stylesheet" href="/static/css/pages/search.css"> <!-- Hoja de estilo Acerca de y Copyright -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/icons/favicons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/static/icons/favicons/favicon.svg" />
+    <link rel="shortcut icon" href="/static/icons/favicons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UnderSounds" />
+    <link rel="manifest" href="/static/icons/favicons/site.webmanifest" />
+</head>
+
+<body>
+
+    <!-- Cabecera -->
+    <div id="header-placeholder"></div>
+
+    <!-- Contenido principal -->
+    <main>
+        <div class="div-bg">
+            <div class="div-pannel" style="position: relative; display: flex; align-items: flex-start;">
+                <h2>Resultados de la búsqueda</h2>
+                <br>
+                <div class="grid-list">
+                    <div class="parent div-pannel-sub" onclick="window.location.href='/song?id=1'">
+                        <div class="div-img">
+                            <img class="item-img" src="/static/img/utils/under-sounds-cover.webp" alt="Imagen de búsqueda" style="height:inherit;">
+                        </div>
+                        <div class="div-title">
+                            <h2>UnderSounds</h2>
+                        </div>
+                        <div class="div-desc">
+                            <p>Descripcion</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="/static/js/header.js"></script>
+    <script src="/static/js/footer.js"></script>
+    <script src="/static/js/dark-mode.js"></script>
+
+</body>
+
+</html>

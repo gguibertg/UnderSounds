@@ -112,3 +112,7 @@ class View():
     # Renderizar la template purchased.html
     def get_purchased_view(self, request: Request, user, songs):
         return templates.TemplateResponse("shop/purchased.html", {"request": request, "usuario": user, "songs": songs})
+    
+    # Renderizar la template search.html
+    def get_search_view(self, request: Request, all_items : list[dict]):
+        return templates.TemplateResponse("main/search.html", {"request": request, "items": all_items})

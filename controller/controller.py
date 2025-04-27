@@ -1936,6 +1936,12 @@ def startup_event():
         print(PCTRL, "Sessions loaded from sessions.json")
     else:
         print(PCTRL_WARN, "No sessions.json file found, starting with empty sessions")
+
+
+
+@app.get("/search")
+def get_search(request: Request):
+    return view.get_search_view(request, {})
     
 
 @app.get("/search213")
