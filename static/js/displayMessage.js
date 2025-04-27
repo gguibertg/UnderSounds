@@ -1,20 +1,36 @@
-function displayMessage(type, message) {
+function displayMessage(type, message, containerId = "") {
     // Validar que el tipo sea "error", "success" o "warn"
     if (type !== "error" && type !== "success" && type !== "warn") {
         console.error("El tipo de mensaje debe ser 'error', 'success' o 'warn'.");
         return;
     }
 
-    // Eliminar los divs existentes de tipo error, success o warn si ya existen
-    const existingErrorDiv = document.querySelector(".div-error");
+    // Obtener el contenedor donde se colocará el mensaje
+    let containerElement;
+    if (containerId === "") {
+        containerElement = document.querySelector("main");
+        if (!containerElement) {
+            console.error("No se encontró una etiqueta <main> en el documento.");
+            return;
+        }
+    } else {
+        containerElement = document.getElementById(containerId);
+        if (!containerElement) {
+            console.error(`No se encontró un elemento con el ID '${containerId}'.`);
+            return;
+        }
+    }
+
+    // Eliminar los divs existentes de tipo error, success o warn si ya existen en el contenedor
+    const existingErrorDiv = containerElement.querySelector(".div-error");
     if (existingErrorDiv) {
         existingErrorDiv.remove();
     }
-    const existingSuccessDiv = document.querySelector(".div-success");
+    const existingSuccessDiv = containerElement.querySelector(".div-success");
     if (existingSuccessDiv) {
         existingSuccessDiv.remove();
     }
-    const existingWarnDiv = document.querySelector(".div-warn");
+    const existingWarnDiv = containerElement.querySelector(".div-warn");
     if (existingWarnDiv) {
         existingWarnDiv.remove();
     }
@@ -26,8 +42,6 @@ function displayMessage(type, message) {
     messageContent.textContent = message;
     messageDiv.appendChild(messageContent);
 
-    // Insertar el div dentro de main, justo después del inicio de main y antes de div-bg
-    const mainElement = document.querySelector("main");
-    const divBgElement = mainElement.querySelector(".div-bg");
-    mainElement.insertBefore(messageDiv, divBgElement);
+    // Insertar el div justo después del contenedor especificado, antes de cualquier otro contenido
+    containerElement.insertAdjacentElement("afterbegin", messageDiv);
 }

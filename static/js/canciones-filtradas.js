@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", function () {
             // Evitar que el formulario se envíe (recurso de la página)
             event.preventDefault();
 
+            // Printear mensaje de carga
+            displayMessage("warn", "Buscando canciones...", "msg-spawner");
+
             // Obtener el ID del género desde el atributo `data-genero-id`
             const generoId = boton.getAttribute("data-genero-id");
 
@@ -91,13 +94,16 @@ document.addEventListener("DOMContentLoaded", function () {
                     
                     // Añadir el carrusel al contenedor de canciones
                     cancionesContainer.appendChild(carruselContainer);
+                    displayMessage("success", "Busqueda completada", "msg-spawner");
                 } else {
                     // Si no hay canciones, ocultamos el contenedor y mostramos un mensaje
                     cancionesContainer.style.display = "none";
-                    alert("No hay canciones disponibles para este género.");
+                    // Printear mensaje de carga
+                    displayMessage("error", "No hay canciones para este género", "msg-spawner");
                 }
 
             } catch (error) {
+                displayMessage("error", 'Error en la busqueda: ' + error, "msg-spawner");
                 console.error("Error:", error);
             }
         });
