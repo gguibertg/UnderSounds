@@ -163,9 +163,6 @@
             if (!songData.artista.trim()) {
                 return displayMessage("error", "El campo 'Autor' no puede estar vacío.");
             }
-            if (!songData.descripcion.trim()) {
-                return displayMessage("error", "El campo 'Descripción' no puede estar vacío.");
-            }
             if (isNaN(songData.precio) || parseFloat(songData.precio) < 0) {
                 return displayMessage("error", "El campo 'Precio' debe ser un número positivo.");
             }

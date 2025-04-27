@@ -515,7 +515,7 @@ async def upload_album_post(request: Request):
     data = await request.json()
 
     # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
-    required_fields = ["titulo", "autor", "colaboradores", "descripcion", "generos", "portada", "precio"]
+    required_fields = ["titulo", "autor", "generos", "portada", "precio"]
     for field in required_fields:
         if field not in data or not data[field]:
             print(PCTRL_WARN, f"Field '{field}' is missing or empty")
@@ -820,7 +820,7 @@ async def album_edit_post(request: Request):
         album.load_from_dict(album_dict)
 
         # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
-        required_fields = ["titulo", "autor", "colaboradores", "descripcion", "generos", "portada", "precio"]
+        required_fields = ["titulo", "autor", "generos", "portada", "precio"]
         for field in required_fields:
             if field not in data or not data[field]:
                 print(PCTRL_WARN, f"Field '{field}' is missing or empty")
@@ -1228,7 +1228,7 @@ async def upload_song_post(request: Request):
     data = await request.json()
 
     # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
-    required_fields = ["titulo", "artista", "colaboradores", "descripcion", "generos", "portada", "precio"]
+    required_fields = ["titulo", "artista", "generos", "portada", "precio"]
     for field in required_fields:
         if field not in data or not data[field]:
             print(PCTRL_WARN, f"Field '{field}' is missing or empty")
@@ -1428,7 +1428,7 @@ async def edit_song_post(request: Request):
             return Response("No autorizado", status_code=403)
         
         # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
-        required_fields = ["titulo", "artista", "colaboradores", "descripcion", "generos", "portada", "precio"]
+        required_fields = ["titulo", "artista", "generos", "portada", "precio"]
         for field in required_fields:
             if field not in data or not data[field]:
                 print(PCTRL_WARN, f"Field '{field}' is missing or empty")
