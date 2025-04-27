@@ -60,6 +60,9 @@
                         <div class="song-buttons">
                             <button class="btn download-btn">Descargar canción</button> <!-- TODO hacer en be-stream !-->
                             <button class="btn">Añadir a lista de reproducción</button> <!-- TODO Necesitamos listas para esto!-->
+                            <button class="{% if isLiked %}button{% else %}button-alt{% endif %} fav-btn" title="Añadir a favoritos" onclick="toggleLike()">
+                                <img alt="Favorito" class="fav-icon" src="/static/icons/site/favourite-icon-light.svg" />
+                            </button>
                             {% if tipoUsuario == 3 %}
                             <button class="btn" onclick="window.location.href='/edit-song?id={{song.id}}';">Editar canción</button>
                             {% endif %}

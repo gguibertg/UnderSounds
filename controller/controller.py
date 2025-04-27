@@ -9,7 +9,7 @@ from pathlib import Path
 import firebase_admin
 import requests
 from fastapi import FastAPI, Request, Response, Form, UploadFile, File
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse, RedirectResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from firebase_admin import auth, credentials
 
@@ -75,18 +75,41 @@ sessions = {}
 # ----------------------------- INDEX ------------------------------ #
 # ------------------------------------------------------------------ #
 
-# Ruta para cargar la vista index
+# Ruta para cargar la vista indexº
 @app.get("/")
-def index(request: Request):
-    return view.get_index_view(request)
+async def index(request: Request): 
+    genres_json = model.get_generos()
+    song_json = model.get_songs()
+    return view.get_index_view(request, song_json, genres_json)
 
-# En este caso servimos la template songs.html al cliente cuando se hace una petición GET a la ruta "/getsongs".
-@app.get("/getsongs", description="Hola esto es una descripcion")
-def getsongs(request: Request):
-    # Vamos a llamar al Model para que nos devuelva la lista de canciones en formato JSON.
-    songs = model.get_songs() # JSON
-    # Luego se lo pasamos al View para que lo renderice y lo devuelva al cliente.
-    return view.get_songs_view(request,songs)
+# Endpoint para obtener listado de canciones por genero
+@app.get("/songs/genre")
+async def get_song_list_by_genre(request: Request):
+    # Obtenemos el id del genero
+    '''user_db = verifySessionAndGetUserInfo(request)
+    if isinstance(user_db, Response):
+        return user_db'''
+    
+    if request.query_params.get("id") is not None:
+        genre_id = request.query_params.get("id") # Developer
+    else:
+        data = await request.json() # API
+        genre_id = data["id"]
+    if not genre_id:
+        return Response("Falta el parámetro 'id'", status_code=400)
+
+    try:
+        canciones = model.get_songs_by_genre(genre_id)
+
+        if canciones is not None and len(canciones) > 0:
+            print(f"Canciones filtradas por genero {genre_id}: {canciones}")
+            return JSONResponse(content=canciones, status_code=200)
+        else:
+            print("No existen canciones para ese genero")
+            return JSONResponse(content=[], status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+    
 
 # ------------------------------------------------------------------ #
 # ----------------------------- LOGIN ------------------------------ #
@@ -494,6 +517,23 @@ async def upload_album_post(request: Request):
     # Creamos un nuevo objeto AlbumDTO, utilizando los datos recibidos en el request
     data = await request.json()
 
+    # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
+    required_fields = ["titulo", "autor", "colaboradores", "descripcion", "generos", "portada", "precio"]
+    for field in required_fields:
+        if field not in data or not data[field]:
+            print(PCTRL_WARN, f"Field '{field}' is missing or empty")
+            return {"success": False, "error": f"Field '{field}' is required and cannot be empty"}
+
+    # Validar que el precio sea un número positivo
+    if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
+        print(PCTRL_WARN, "Invalid price value")
+        return {"success": False, "error": "Price must be a positive number"}
+
+    # Validar que los géneros sean una lista no vacía
+    if not isinstance(data["generos"], list) or not data["generos"]:
+        print(PCTRL_WARN, "Genres must be a non-empty list")
+        return {"success": False, "error": "Genres must be a non-empty list"}
+
     album = AlbumDTO()
     album.set_titulo(data["titulo"])
     album.set_autor(data["autor"])
@@ -596,34 +636,41 @@ async def get_album(request: Request):
         print(PCTRL_WARN, "Album does not exist")
         return Response("No autorizado", status_code=403)
 
+    # Obtenemos los datos del usuario y comprobamos que tipo de usuario es
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        tipoUsuario = 0 # Guest
+    else:
+        if album_id in res["studio_albumes"]:
+            tipoUsuario = 3 # Artista (creador)
+
+        elif all(song_id in res["biblioteca"] for song_id in album_info["canciones"]):
+            tipoUsuario = 2 # Propietario (User o Artista)
+
+        else:
+            tipoUsuario = 1 # Miembro (User)
+
     # Antes de nada, verificamos si el album es visible o no. Si no lo es, no se puede ver... Excepto si el usuario es el autor del album.
-    if not album_info["visible"]:
-        res = verifySessionAndGetUserInfo(request)
-        if isinstance(res, Response):
-            return res
-        if album_id not in res["studio_albumes"]:
+    if not album_info["visible"] and tipoUsuario != 3:
             print(PCTRL_WARN, "Album is not visible and user is not the author")
             return Response("No autorizado", status_code=403)
         
-    # Incrementar el contador de visitas del album
-    album_info["visitas"] += 1
-    album_object = AlbumDTO()
-    album_object.load_from_dict(album_info)
-    if not model.update_album(album_object):
-        print(PCTRL_WARN, "Album", album_id, "not updated in database!")
-        return Response("Error del sistema", status_code=403)
+    # Incrementar el contador de visitas del album, excepto si el usuario es el autor del album.
+    if tipoUsuario != 3:
+        album_info["visitas"] += 1
+        album_object = AlbumDTO()
+        album_object.load_from_dict(album_info)
+        if not model.update_album(album_object):
+            print(PCTRL_WARN, "Album", album_id, "not updated in database!")
+            return Response("Error del sistema", status_code=403)
 
     # Descargamos las canciones del album de la base de datos via su ID en el campo canciones y las insertamos en este album_info
     canciones_out : list[dict] = []
-    print(album_info)
     for cancion_id in album_info["canciones"]:
-        print("Processing id:", cancion_id)
         cancion = model.get_song(cancion_id)
         if not cancion:
             print(PCTRL_WARN, "Canción", cancion_id, "not found in database")
             return Response("Error del sistema", status_code=403)
-        
-        print(cancion)
         
         # Convertimos los generos de cada canción a un string sencillo
         # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en cancion["generosStr"]
@@ -655,24 +702,10 @@ async def get_album(request: Request):
     generosStr = generosStr[:-2] # Quitamos la última coma y espacio
     album_info["generosStr"] = generosStr # Añadimos el string a la canción
 
-
-    # Recuperamos al usuario actualmente logeado y comprobamos si es el autor del album
-    res = verifySessionAndGetUserInfo(request)
-    if isinstance(res, Response):
-        tipoUsuario = 0 # Guest
-    else:
-        if album_id in res["studio_albumes"]:
-            tipoUsuario = 3 # Artista (creador)
-
-        elif all(song["id"] in res["biblioteca"] for song in album_info["canciones"]):
-            tipoUsuario = 2 # Propietario (User o Artista)
-
-        else:
-            tipoUsuario = 1
     
     # Comprobamos si el usuario le ha dado like a la canción mirando si el id de la canción está en id_likes del usuario.
     isLiked = False
-    if not isinstance(res, Response):
+    if tipoUsuario > 0:
         isLiked = album_id in res["id_likes"]
     
     # Donde tipo Usuario:
@@ -788,6 +821,23 @@ async def album_edit_post(request: Request):
     try:
         album = AlbumDTO()
         album.load_from_dict(album_dict)
+
+        # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
+        required_fields = ["titulo", "autor", "colaboradores", "descripcion", "generos", "portada", "precio"]
+        for field in required_fields:
+            if field not in data or not data[field]:
+                print(PCTRL_WARN, f"Field '{field}' is missing or empty")
+                return {"success": False, "error": f"Field '{field}' is required and cannot be empty"}
+
+        # Validar que el precio sea un número positivo
+        if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
+            print(PCTRL_WARN, "Invalid price value")
+            return {"success": False, "error": "Price must be a positive number"}
+
+        # Validar que los géneros sean una lista no vacía
+        if not isinstance(data["generos"], list) or not data["generos"]:
+            print(PCTRL_WARN, "Genres must be a non-empty list")
+            return {"success": False, "error": "Genres must be a non-empty list"}
 
         # Editamos el album con los nuevos datos recibidos en la request
         album.set_titulo(data["titulo"])
@@ -1180,6 +1230,25 @@ async def upload_song_post(request: Request):
     # Registrar la cancion en la base de datos
     data = await request.json()
 
+    # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
+    required_fields = ["titulo", "artista", "colaboradores", "descripcion", "generos", "portada", "precio"]
+    for field in required_fields:
+        if field not in data or not data[field]:
+            print(PCTRL_WARN, f"Field '{field}' is missing or empty")
+            return {"success": False, "error": f"Field '{field}' is required and cannot be empty"}
+
+    # Validar que el precio sea un número positivo
+    if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
+        print(PCTRL_WARN, "Invalid price value")
+        return {"success": False, "error": "Price must be a positive number"}
+
+    # Validar que los géneros sean una lista no vacía
+    if not isinstance(data["generos"], list) or not data["generos"]:
+        print(PCTRL_WARN, "Genres must be a non-empty list")
+        return {"success": False, "error": "Genres must be a non-empty list"}
+    
+    # TODO: PROCESAR AQUÍ LA CANCIÓN!! (be-stream)
+
     song = SongDTO()
     song.set_titulo(data["titulo"])
     song.set_artista(data["artista"])
@@ -1224,11 +1293,7 @@ async def upload_song_post(request: Request):
 # Ruta para cargar vista song
 @app.get("/song")
 async def get_song(request: Request):
-
-    user_db = verifySessionAndGetUserInfo(request)
-    if isinstance(user_db, Response):
-        return user_db
-    
+    # Recuperamos el id de la canción desde la request
     if request.query_params.get("id") is not None:
         song_id = request.query_params.get("id") # Developer
     else:
@@ -1237,25 +1302,41 @@ async def get_song(request: Request):
     if not song_id:
         return Response("Falta el parámetro 'id'", status_code=400)
 
+    # Verificar si el usuario tiene una sesión activa.
+    user_db = verifySessionAndGetUserInfo(request)
+    
+    # Comprobamos que tipo de usuario es
+    if isinstance(user_db, Response):
+        tipoUsuario = 0 # Guest
+    else:
+        if song_id in user_db["studio_canciones"]:
+            tipoUsuario = 3 # Artista (creador)
+
+        elif song_id in user_db["biblioteca"]:
+            tipoUsuario = 2 # Propietario (User o Artista)
+
+        else:
+            tipoUsuario = 1 # Miembro (User)
+
+    # Descargamos la canción de la base de datos via su ID y comprobamos si existe.
     song_info = model.get_song(song_id)
     if not song_info:
         print(PCTRL_WARN, "La cancion no existe")
         return Response("No existe", status_code=403)
     
     # Antes de hacer nada, comprobamos si la canción es visible o no. Si no es visible, solo el artista creador puede verla.
-    res = verifySessionAndGetUserInfo(request)
-    if not song_info["visible"]:
-        if isinstance(res, Response) or song_id not in res["studio_canciones"]:
+    if not song_info["visible"] and tipoUsuario != 3:
             print(PCTRL_WARN, "Song is not visible and user is not the creator")
             return Response("No autorizado", status_code=403)
         
-    # Incrementar el contador de visitas de song
-    song_info["visitas"] += 1
-    song_object = SongDTO()
-    song_object.load_from_dict(song_info)
-    if not model.update_song(song_object):
-        print(PCTRL_WARN, "Song", song_id, "not updated in database!")
-        return Response("Error del sistema", status_code=403)
+    # Incrementar el contador de visitas de song, excepto si el usuario es el autor de la canción.
+    if tipoUsuario != 3:
+        song_info["visitas"] += 1
+        song_object = SongDTO()
+        song_object.load_from_dict(song_info)
+        if not model.update_song(song_object):
+            print(PCTRL_WARN, "Song", song_id, "not updated in database!")
+            return Response("Error del sistema", status_code=403)
 
     # Convertimos los generos de la canción a un string sencillo
     # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en song_info["generosStr"]
@@ -1268,19 +1349,6 @@ async def get_song(request: Request):
         generosStr += genero["nombre"] + ", "
     generosStr = generosStr[:-2] # Quitamos la última coma y espacio
     song_info["generosStr"] = generosStr
-    
-    # Recuperamos al usuario actualmente logeado y comprobamos si es el autor de la canción
-    if isinstance(res, Response):
-        tipoUsuario = 0 # Guest
-    else:
-        if song_id in res["studio_canciones"]:
-            tipoUsuario = 3 # Artista (creador)
-
-        elif song_id in res["biblioteca"]:
-            tipoUsuario = 2 # Propietario (User o Artista)
-
-        else:
-            tipoUsuario = 1
 
     # Descargamos el album asociado a la canción, extraemos su nombre y lo insertamos en el campo album de la canción.
     # Si no tiene album, lo dejamos como None.
@@ -1295,16 +1363,15 @@ async def get_song(request: Request):
 
     # Comprobamos si el usuario le ha dado like a la canción mirando si el id de la canción está en id_likes del usuario.
     isLiked = False
-    if not isinstance(res, Response):
-        isLiked = song_id in res["id_likes"]
+    if tipoUsuario > 0:
+        isLiked = song_id in user_db["id_likes"]
 
     # Donde tipo Usuario:
     # 0 = Guest
     # 1 = User
     # 2 = Propietario (User o Artista)
     # 3 = Artista (creador)
-
-    return view.get_song_view(request, song_info, tipoUsuario, res, isLiked) # Devolvemos la vista del song
+    return view.get_song_view(request, song_info, tipoUsuario, user_db, isLiked) # Devolvemos la vista del song
 
 # Ruta para cargar vista edit-song
 @app.get("/edit-song")
@@ -1362,6 +1429,25 @@ async def edit_song_post(request: Request):
         if song_id not in res["studio_canciones"]:
             print(PCTRL_WARN, "Song not found in user songs")
             return Response("No autorizado", status_code=403)
+        
+        # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
+        required_fields = ["titulo", "artista", "colaboradores", "descripcion", "generos", "portada", "precio"]
+        for field in required_fields:
+            if field not in data or not data[field]:
+                print(PCTRL_WARN, f"Field '{field}' is missing or empty")
+                return {"success": False, "error": f"Field '{field}' is required and cannot be empty"}
+
+        # Validar que el precio sea un número positivo
+        if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
+            print(PCTRL_WARN, "Invalid price value")
+            return {"success": False, "error": "Price must be a positive number"}
+
+        # Validar que los géneros sean una lista no vacía
+        if not isinstance(data["generos"], list) or not data["generos"]:
+            print(PCTRL_WARN, "Genres must be a non-empty list")
+            return {"success": False, "error": "Genres must be a non-empty list"}
+        
+        # TODO: PROCESAR AQUÍ LA CANCIÓN!! (be-stream)
     
         song = SongDTO()
         song.load_from_dict(song_dict)
@@ -1614,7 +1700,9 @@ async def get_artista(request: Request):
         if not album:
             print(PCTRL_WARN, "Album", album_id, "not found in database")
             return Response("Error del sistema", status_code=403)
-        user_albums_objects.append(album)
+        # Solo si el album es visible lo añadimos a la lista
+        if album["visible"]:
+            user_albums_objects.append(album)
 
     # Descargamos todas las canciones del artista
     user_songs_objects = []
@@ -1623,7 +1711,9 @@ async def get_artista(request: Request):
         if not song:
             print(PCTRL_WARN, "Song", song_id, "not found in database")
             return Response("Error del sistema", status_code=403)
-        user_songs_objects.append(song)
+        # Solo si la canción es visible lo añadimos a la lista
+        if song["visible"]:
+            user_songs_objects.append(song)
 
     # Filtramos que canciones son singles y las guardamos en una lista.
     # Los singles son canciones que en su campo album tienen el valor None.
@@ -1646,7 +1736,7 @@ async def get_artista(request: Request):
     # 1 = User
     # x
     # 3 = Artista (creador)
-    return view.get_artista_view(request, artista_info, singles, user_albums_objects, user_songs_objects, tipoUsuario) # Devolvemos la vista del artista# ------------------------------------------------------------ #
+    return view.get_artista_view(request, artista_info, singles, user_albums_objects, user_songs_objects, tipoUsuario)
 
 # ------------------------------------------------------------ #
 # --------------------------- Reseña ------------------------- #
@@ -1776,6 +1866,15 @@ async def update_review(request: Request):
 
         except Exception as e:
             return JSONResponse(status_code=500, content={"error": str(e)})
+        
+        
+# -------------------------------------------------------------------------- #
+# --------------------------- RADIO ---------------------------------------- #
+# -------------------------------------------------------------------------- #
+        
+@app.get("/play", response_class=HTMLResponse)
+def play(request: Request):
+    return view.get_play_view(request)
 
 
 # -------------------------------------------------------------------------- #

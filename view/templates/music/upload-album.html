@@ -221,12 +221,29 @@
                 descripcion: document.getElementById('description').value,
                 fecha: new Date().toISOString().split('T')[0],
                 colaboradores: document.getElementById('collaborators').value,
-                precio: document.getElementById('price').value,
+                precio: parseFloat(document.getElementById('price').value),
                 generos: Array.from(document.querySelectorAll('.upload-checkbox-container div:first-child input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
                 canciones: Array.from(document.querySelectorAll('.grid-biblioteca .songs-cell[style*="display: flex"]')).map(songDiv => songDiv.id),
                 portada: document.getElementById('cover-preview').src,
                 visible: document.getElementById('is-visible').checked
             };
+
+            // Validar que los campos no estén vacíos y que tienen el formato correcto
+            if (!albumData.titulo.trim()) {
+                return displayMessage("error", "El campo 'Título' no puede estar vacío.");
+            }
+            if (!albumData.autor.trim()) {
+                return displayMessage("error", "El campo 'Autor' no puede estar vacío.");
+            }
+            if (!albumData.descripcion.trim()) {
+                return displayMessage("error", "El campo 'Descripción' no puede estar vacío.");
+            }
+            if (isNaN(albumData.precio) || parseFloat(albumData.precio) < 0) {
+                return displayMessage("error", "El campo 'Precio' debe ser un número positivo.");
+            }
+            if (!albumData.generos.length) {
+                return displayMessage("error", "Debes seleccionar al menos un género.");
+            }
 
             try {
                 const response = await fetch('/upload-album', {

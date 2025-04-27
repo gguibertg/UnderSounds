@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="/static/css/base/radio.css"> <!-- Hoja de estilo del inicio -->
+<div class="mini-player">
+    <button class="mini-close-btn" title="Cerrar">✖️</button>
+    <img src="{{ song.portada }}" alt="Portada" class="mini-album">
+
+    <div class="mini-content">
+        <div class="mini-song-info">
+            <span class="mini-title">{{ song.titulo }}</span>
+            <span class="mini-artist">{{ song.artista }}</span>
+        </div>
+
+        <div class="mini-controls-bar">
+            <div class="mini-controls">
+                <button class="mini-btn">⏮️</button>
+                <button class="mini-btn" id="play-pause-btn">⏯️</button>
+                <button class="mini-btn">⏭️</button>
+            </div>
+            <input type="range" class="mini-progress" min="0" max="100" value="0">
+        </div>
+    </div>
+
+    <!-- Aquí añadimos el audio, pero oculto -->
+    <audio id="mini-audio" controls style="display:none;">
+        <source type="audio/mp3">
+    </audio>
+</div>

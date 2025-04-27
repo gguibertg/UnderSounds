@@ -42,123 +42,83 @@
                                 <h1>Tomorrowland</h1>
                                 <p>El momento del año que estabas esperando ha llegado.</p>
                                 <p> No pierdas la oportunidad de ser parte del festival de música electrónica más mágico
-                                    del mundo. Donde los escenarios de ensueño, los artistas más legendarios y una
-                                    comunidad global te esperan para crear recuerdos inolvidables.</p>
-                                <p>✈️ ¡El viaje comienza ahora! Asegura tu lugar en Tomorrowland 2024 y sé parte de la
-                                    historia.</p>
-                                <p>Compra tus entradas hoy. The People of Tomorrow te esperan… ¿Estás listo? </p>
+                                    del mundo...</p>
+                                <p>✈️ ¡El viaje comienza ahora!</p>
                                 <button onclick="window.location.href='https://www.tomorrowland.com/home/'"
                                     class="button-comprar-entradas">Comprar entradas</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <br>
-                <br>
-                <br>
+
+                <br><br><br>
+
                 <h1><i>Nuevos lanzamientos</i></h1>
                 <br>
-                <div class="div-carrusel div-pannel">
-                    <div style="margin-right: 1rem; margin-left: 1rem;">
-                        <a href="/song"><img src="/static/img/releases/release-03.webp" class="foto-artista"></a>
-                        <p class="texto-producto">Espresso</p>
+                <div class="div-carrusel div-pannel" id="carrusel-nuevos-lanzamientos">
+                    {% for item in songs [-4:] %}
+                    <div style="margin: 0 3rem;">
+                        <img src="{{ item.portada }}" onclick="window.location.href='/song?id={{ item.id }}'" class="foto-artista">
+                        <p class="texto-producto">{{ item.titulo }}</p>
+                        <p class="texto-artista">{{ item.artista }}</p>
+
                         <form action="/cart" method="post">
                             <input type="hidden" name="action" value="add">
-                            <input type="hidden" name="item_id" value="1">
-                            <input type="hidden" name="item_name" value="Espresso">
-                            <input type="hidden" name="item_image" value="https://m.media-amazon.com/images/I/411iqwJRPoL._UXNaN_FMjpg_QL85_.jpg">
-                            <input type="hidden" name="artist_name" value="Sabrina Carpenter">
-                            <input type="hidden" name="item_desc" value="Cancion">
-                            <input type="hidden" name="item_precio" value="3.99"> 
-                            <input type="hidden" name="item_usuario" value="2">                 
+                            <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <input type="hidden" name="item_titulo" value="{{ item.titulo }}">
+                            <input type="hidden" name="item_portada" value="{{ item.portada }}">
+                            <input type="hidden" name="artist_name" value="{{ item.artista }}">
+                            <input type="hidden" name="item_desc" value="{{ item.descripcion }}">
+                            <input type="hidden" name="item_precio" value="{{ item.precio }}">
                             <button type="submit" class="button-comprar-item">Añadir</button>
                         </form>
                     </div>
-                    <div style="margin-right: 1rem; margin-left: 1rem;">
-                        <a href="/song"><img src="/static/img/releases/release-03.webp" class="foto-artista"></a>
-                        <p class="texto-producto">Espresso test</p>
-                        <form action="/cart" method="post">
-                            <input type="hidden" name="action" value="add">
-                            <input type="hidden" name="item_id" value="2">
-                            <input type="hidden" name="item_name" value="Espresso">
-                            <input type="hidden" name="item_image" value="https://m.media-amazon.com/images/I/411iqwJRPoL._UXNaN_FMjpg_QL85_.jpg">
-                            <input type="hidden" name="artist_name" value="Sabrina Carpenter">
-                            <input type="hidden" name="item_desc" value="Cancion">
-                            <input type="hidden" name="item_precio" value="3.99"> 
-                            <input type="hidden" name="item_usuario" value="2">                 
-                            <button type="submit" class="button-comprar-item">Añadir</button>
-                        </form>
-                    </div>
-                    <div style="margin-right: 1rem; margin-left: 1rem;">
-                        <a href="/song"><img src="/static/img/releases/release-03.webp" class="foto-artista"></a>
-                        <p class="texto-producto">Espresso</p>
-                        <form action="/cart" method="post">
-                            <input type="hidden" name="action" value="add">
-                            <input type="hidden" name="item_id" value="3">
-                            <input type="hidden" name="item_name" value="Espresso">
-                            <input type="hidden" name="item_image" value="https://m.media-amazon.com/images/I/411iqwJRPoL._UXNaN_FMjpg_QL85_.jpg">
-                            <input type="hidden" name="artist_name" value="Sabrina Carpenter">
-                            <input type="hidden" name="item_desc" value="Cancion">
-                            <input type="hidden" name="item_precio" value="3.99"> 
-                            <input type="hidden" name="item_usuario" value="2">                 
-                            <button type="submit" class="button-comprar-item">Añadir</button>
-                        </form>
-                    </div>
-                    <div style="margin-right: 1rem; margin-left: 1rem;">
-                        <a href="/song"><img src="/static/img/releases/release-03.webp" class="foto-artista"></a>
-                        <p class="texto-producto">Espresso</p>
-                        <form action="/cart" method="post">
-                            <input type="hidden" name="action" value="add">
-                            <input type="hidden" name="item_id" value="4">
-                            <input type="hidden" name="item_name" value="Espresso">
-                            <input type="hidden" name="item_image" value="https://m.media-amazon.com/images/I/411iqwJRPoL._UXNaN_FMjpg_QL85_.jpg">
-                            <input type="hidden" name="artist_name" value="Sabrina Carpenter">
-                            <input type="hidden" name="item_desc" value="Cancion">
-                            <input type="hidden" name="item_precio" value="3.99"> 
-                            <input type="hidden" name="item_usuario" value="2">                 
-                            <button type="submit" class="button-comprar-item">Añadir</button>
-                        </form>
-                    </div>
+                    {% endfor %}
                 </div>
-                <br>
-                <br>
-                <br>
+
+                <br><br><br>
+
                 <h1><i>Géneros que te podrían interesar</i></h1>
                 <br>
                 <div class="div-carrusel div-pannel">
-                    <div style="margin-right: 1rem; margin-left: 1rem;">
-                        <img src="/static/img/genres/pop.webp" class="foto-genero">
-                        <p class="texto-producto">Pop</p>
-                        <button class="button-ver-más">Ver más</button>
-                    </div>
-                    <div style="margin-right: 1rem; margin-left: 1rem;">
-                        <img src="/static/img/genres/rock.webp" class="foto-genero">
-                        <p class="texto-producto">Rock</p>
-                        <button class="button-ver-más">Ver más</button>
-                    </div>
-                    <div style="margin-right: 1rem; margin-left: 1rem;">
-                        <img src="/static/img/genres/rap.webp" class="foto-genero">
-                        <p class="texto-producto">Trap</p>
-                        <button class="button-ver-más">Ver más</button>
-                    </div>
-                    <div style="margin-right: 1rem; margin-left: 1rem;">
-                        <img src="/static/img/genres/jazz.webp" class="foto-genero">
-                        <p class="texto-producto">Jazz</p>
-                        <button class="button-ver-más">Ver más</button>
-                    </div>
+                    {% for genero in genres %}
+                        {% if not genero.esSubGen %}
+                            <div style="margin: 0 1rem;">
+                                <!--form class="generos">
+                                    <input type="hidden" name="action" value="filtrar-genero">
+                                    <button type="submit" style="border: none; background: none; padding: 0;">
+                                        <img id="ver-canciones" src="/static/img/genres/{{genero.id}}.webp" 
+                                        alt="Ver más canciones de {{genero.nombre}}" class="foto-genero"
+                                        data-genero-id="{{genero.id}}">
+                                    </button>
+                                </form-->
+                                <button style="border: none; background: none; padding: 0;">
+                                    <img id="ver-canciones" src="/static/img/genres/{{genero.id}}.webp" 
+                                    alt="Ver más canciones de {{genero.nombre}}" class="foto-genero"
+                                    data-genero-id="{{genero.nombre}}">
+                                </button>
+                                <p class="texto-producto">{{ genero.nombre }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
+
+                <h1 id="titulo_canciones_filtradas" style="display: none;"><i>Canciones de este género</i></h1>
+                <div class="div-carrusel div-pannel" id="canciones-filtradas-placeholder" style="display: none;">
+                </div>                  
             </section>
         </div>
     </main>
 
-    <!-- Pie de página -->
     <div id="footer-placeholder"></div>
+    <div id="mini-player-placeholder"></div>
 
-    <!-- Scripts -->
     <script src="/static/js/header.js"></script>
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
+    <script src="/static/js/canciones-filtradas.js"></script>    <script src="/static/js/radio.js"></script>
 
 </body>
+
 
 </html>
