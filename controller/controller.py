@@ -306,23 +306,20 @@ async def deregister(request: Request, response: Response):
             if model.delete_song(song_id):
                 print(PCTRL, "Song", song_id, "deleted from database")
             else:
-                print(PCTRL_WARN, "Song", song_id, "not deleted from database!")
-                return {"success": False, "error": "Song not deleted from database"}
+                print(PCTRL_WARN, "Song", song_id, "not deleted from database! - skipping")
         
         # Eliminar cada uno de los albumes en studio_albumes de la base de datos
         for album_id in res["studio_albumes"]:
             if model.delete_album(album_id):
                 print(PCTRL, "Album", album_id, "deleted from database")
             else:
-                print(PCTRL_WARN, "Album", album_id, "not deleted from database!")
-                return {"success": False, "error": "Album not deleted from database"}
+                print(PCTRL_WARN, "Album", album_id, "not deleted from database! - skipping")
 
         # Eliminar al usuario de la base de datos
         if model.delete_usuario(res["id"]):
             print(PCTRL, "User", res["email"], "deleted from database")
         else:
-            print(PCTRL_WARN, "User", res["email"], "not deleted from database!")
-            return {"success": False, "error": "User not deleted from database"}
+            print(PCTRL_WARN, "User", res["email"], "not deleted from database! - skipping")
 
         # Eliminar la sesión del usuario
         session_id = request.cookies.get("session_id")
