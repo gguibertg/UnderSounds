@@ -95,7 +95,7 @@
                 })
                 .then(token => {
                     console.log("Token obtenido: " + token);
-                    return fetch("http://localhost:8000/login-credentials", {
+                    return fetch("/login-credentials", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ token })
@@ -123,7 +123,7 @@
                 .then(token => {
                     console.log("Token del usuario: ", token);
                     console.log("Solicitando acceso a la API...");
-                    return fetch("http://localhost:8000/login-google", {
+                    return fetch("/login-google", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ token })

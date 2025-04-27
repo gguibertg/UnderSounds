@@ -106,7 +106,7 @@
                 })
                 .then(token => {
                     console.log("Token obtenido: " + token);
-                    return fetch("http://localhost:8000/register-credentials", {
+                    return fetch("/register-credentials", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ token, username, esArtista })
@@ -135,7 +135,7 @@
             .then(token => {
                 console.log("Token del usuario: ", token);
                 console.log("Solicitando acceso a la API...");
-                return fetch("http://localhost:8000/register-google", {
+                return fetch("/register-google", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ token, esArtista })
