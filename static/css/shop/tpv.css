@@ -2,7 +2,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('../images/tpv-background.png');
+    background-image: url('/static/img/utils/tpv-background.webp');
     background-size: cover;
     background-position: center;
 }
