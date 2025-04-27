@@ -139,6 +139,7 @@ h2 {
     scroll-behavior: smooth;
     padding: 20px 0 0 0;
     margin-top: 20px;
+    max-width: 1440px
 }
 
 #canciones-filtradas-placeholder .carrusel-container {
