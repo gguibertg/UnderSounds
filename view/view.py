@@ -110,5 +110,5 @@ class View():
         return templates.TemplateResponse("includes/radio.html", {"request" : request})
 
     # Renderizar la template purchased.html
-    def get_purchased_view(self, request: Request):
-        return templates.TemplateResponse("shop/purchased.html", {"request": request})
+    def get_purchased_view(self, request: Request, user, songs):
+        return templates.TemplateResponse("shop/purchased.html", {"request": request, "usuario": user, "songs": songs})

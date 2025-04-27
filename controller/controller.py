@@ -1150,8 +1150,10 @@ def get_purchased(request: Request):
     if isinstance(res, Response):
         return res
 
+    songs = model.get_songs()
+
     # Devolvemos la vista de purchased con el carrito
-    return view.get_purchased_view(request)
+    return view.get_purchased_view(request, res, songs)
 
 # ------------------------------------------------------------ #
 # --------------------------- CONTACT ------------------------ #

@@ -45,28 +45,33 @@
             <div class="div-pannel"
                 style="width: 80%; margin: 0px; padding: 0px; align-items: center; margin-top: 1rem; margin-bottom: 1rem;">
                 <br>
+                {% set canciones_no_en_biblioteca = [] %}
+                {% for item in songs|reverse %}
+                    {% if item.id not in usuario.biblioteca %}
+                        {% set _ = canciones_no_en_biblioteca.append(item) %}
+                    {% endif %}
+                {% endfor %}
                 <h3><i>Podría gustarte</i></h3>
                 <div class="div-carrusel div-pannel">
-                    <div style="margin-right: 1rem; margin-left: 1rem;">
-                        <a href="/song"><img src="/static/img/releases/release-03.webp" class="foto-artista"></a>
-                        <p>Espresso</p>
-                        <button class="button-comprar-item">Añadir</button>
-                    </div>
-                    <div style="margin-right: 1rem; margin-left: 1rem;">
-                        <a href="/song"><img src="/static/img/releases/release-04.webp" class="foto-artista"></a>
-                        <p>Fein</p>
-                        <button class="button-comprar-item">Añadir</button>
-                    </div>
-                    <div style="margin-right: 1rem; margin-left: 1rem;">
-                        <a href="/song"><img src="/static/img/releases/release-02.webp" class="foto-artista"></a>
-                        <p>Donde quiero estar</p>
-                        <button class="button-comprar-item">Añadir</button>
-                    </div>
-                    <div style="margin-right: 1rem; margin-left: 1rem;">
-                        <a href="/song"><img src="/static/img/releases/release-01.webp" class="foto-artista"></a>
-                        <p>Debi</p>
-                        <button class="button-comprar-item">Añadir</button>
-                    </div>
+
+                    {% for item in canciones_no_en_biblioteca[:4] %}
+                        <div style="margin: 0 3rem;">
+                            <img src="{{ item.portada }}" onclick="window.location.href='/song?id={{ item.id }}'"
+                                class="foto-artista">
+                            <p class="texto-producto">{{ item.titulo }}</p>
+
+                            <form action="/cart" method="post">
+                                <input type="hidden" name="action" value="add">
+                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                                <input type="hidden" name="item_titulo" value="{{ item.titulo }}">
+                                <input type="hidden" name="item_portada" value="{{ item.portada }}">
+                                <input type="hidden" name="artist_name" value="{{ item.artista }}">
+                                <input type="hidden" name="item_desc" value="{{ item.descripcion }}">
+                                <input type="hidden" name="item_precio" value="{{ item.precio }}">
+                                <button type="submit" class="button-comprar-item">Añadir</button>
+                            </form>
+                        </div>
+                    {% endfor %}
                 </div>
                 <br>
             </div>
