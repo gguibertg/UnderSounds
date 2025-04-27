@@ -1,3 +1,4 @@
+/* --- BLOQUE DE ENTRADAS (Tomorrowland) --- */
 .grid-entradas {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -6,8 +7,8 @@
     grid-row-gap: 1rem;
     border: 2px solid black;
     border-radius: 10px;
-    width: auto;
     padding: 2%;
+    width: auto;
 }
 
 .dark-mode .grid-entradas {
@@ -16,20 +17,15 @@
 
 .grid-info {
     display: grid;
-    grid-auto-rows: minmax(10px, auto); /* Cada fila puede tener un tamaño independiente */
+    grid-auto-rows: minmax(10px, auto);
     grid-row-gap: 2rem;
 }
 
-.button-comprar-entradas{
-    justify-self: center;
-    width: 60%;
-    height: 5vh;
-}
-
-h1{
+/* --- TITULOS PRINCIPALES --- */
+h1 {
     text-align: left;
     font-size: 4.5vh;
-    margin-left: 5px; 
+    margin-left: 5px;
 }
 
 h2 {
@@ -39,109 +35,128 @@ h2 {
     margin-top: 25px;
 }
 
+/* --- BOTONES --- */
+.button-comprar-entradas {
+    justify-self: center;
+    width: 60%;
+    height: 5vh;
+}
+
+.button-comprar-item,
+.button-ver-más {
+    padding: 10px;
+    cursor: pointer;
+    width: 100px;
+    border-radius: 25px;
+    text-align: center;
+    margin-top: 10px;
+}
+
 .compra-button {
     border-radius: 20px;
     width: 50vh;
     height: 7vh;
 }
 
+/* --- MODO OSCURO PARA CONTENEDORES --- */
 .dark-mode .contenedor,
 .dark-mode .banner {
     border: 2px solid white;
 }
 
-.button-comprar-item {
-    padding: 10px;
-    cursor: pointer;
-    width: 100px; /* Ancho del botón */
-    border-radius: 25px;
-    text-align: center;
-    margin-top: 10px;
-}
-
-.foto-artista {
-    width: 150px;
-    height: 150px;
-    cursor: pointer;
-    border-radius: 25px;  /* Esto hace la imagen con bordes circulares */
-    object-fit: cover;   /* Ajusta la imagen sin deformarla */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra suave */
-    margin-bottom: 10px;  
-}
-
-.foto-artista:hover {
-    transform: scale(1.05);
-    transition: 0.4s;
-}
-
+/* --- IMÁGENES DE ARTISTAS Y GÉNEROS --- */
+.foto-artista,
 .foto-genero {
     width: 150px;
     height: 150px;
-    border-radius: 50%;  /* Esto hace la imagen circular */
-    object-fit: cover;   /* Ajusta la imagen sin deformarla */
-    border: 3px solid black;  /* Borde opcional */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra suave */
+    object-fit: cover;
     margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.4s;
 }
 
+.foto-artista {
+    border-radius: 25px;
+}
+
+.foto-genero {
+    border-radius: 50%;
+    border: 3px solid black;
+}
+
+.foto-artista:hover,
 .foto-genero:hover {
     transform: scale(1.05);
-    transition: 0.4s;
 }
 
-.button-ver-más {
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 25px;
-    width: 100px; 
-    text-align: center;
-    margin-top: 10px;
-}
-
+/* --- TEXTOS DE CANCIONES Y ARTISTAS --- */
 .texto-producto {
-   font-size: 1.2rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 5px 0 0 0;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* <-- máximo 2 líneas */
+    -webkit-box-orient: vertical;
+    max-height: 2.4em; /* altura máxima 2 líneas */
 }
 
-/* carrusel de canciones por genero */
+.texto-artista {
+    font-size: 1rem;
+    font-weight: normal;
+    color: #bbb;
+    margin: 5px 0 0 0;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+/* --- CARRUSEL DE NUEVOS LANZAMIENTOS --- */
+#carrusel-nuevos-lanzamientos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+#carrusel-nuevos-lanzamientos > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* --- CARRUSEL DE CANCIONES FILTRADAS --- */
 #canciones-filtradas-placeholder {
-    display: none;
-    overflow-x: scroll;
+    overflow-x: auto;
+    scroll-behavior: smooth;
     padding: 20px 0 0 0;
     margin-top: 20px;
 }
 
 #canciones-filtradas-placeholder .carrusel-container {
     display: flex;
-    gap: 20px; /* Espaciado entre las canciones */
+    flex-wrap: nowrap;
+    gap: 20px;
     padding-bottom: 20px;
-    justify-content: center; /* <--- Esta línea centra todo el carrusel */
+    justify-content: flex-start;
 }
 
 #canciones-filtradas-placeholder .song-item {
-    text-align: center;
     flex-shrink: 0;
-    width: 200px; /* Ajusta el tamaño del item como quieras */
-}
-
-.texto-producto,
-.texto-artista {
-    text-align: center;  /* Aseguramos que el texto esté centrado */
-    margin: 0;           /* Eliminar márgenes adicionales si es necesario */
-}
-
-/* carrusel de nuevos lanzamientos */
-#carrusel-nuevos-lanzamientos {
-    display: flex;
-    justify-content: center; /* Centra todos los items del carrusel en el eje horizontal */
-    gap: 20px;
-    flex-wrap: wrap; /* Por si quieres que hagan salto de línea en pantallas pequeñas */
-    padding: 20px 0;
-}
-
-#carrusel-nuevos-lanzamientos > div,
-#canciones-filtradas-placeholder > div {
+    width: 200px;
+    height: 330px;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra imagen, texto y botón en el eje horizontal */
+    align-items: center;
+    justify-content: space-between;
     text-align: center;
+    padding: 10px 0;
+    box-sizing: border-box;
 }

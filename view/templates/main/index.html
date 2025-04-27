@@ -58,7 +58,8 @@
                 <div class="div-carrusel div-pannel" id="carrusel-nuevos-lanzamientos">
                     {% for item in songs [-4:] %}
                     <div style="margin: 0 3rem;">
-                        <img src="{{ item.portada }}" onclick="window.location.href='/song?id={{ item.id }}'" class="foto-artista">
+                        <img src="{{ item.portada }}" onclick="window.location.href='/song?id={{ item.id }}'"
+                            class="foto-artista">
                         <p class="texto-producto">{{ item.titulo }}</p>
                         <p class="texto-artista">{{ item.artista }}</p>
 
@@ -83,9 +84,9 @@
                 <div id="msg-spawner"></div>
                 <div class="div-carrusel div-pannel">
                     {% for genero in genres %}
-                        {% if not genero.esSubGen %}
-                            <div style="margin: 0 1rem;">
-                                <!--form class="generos">
+                    {% if not genero.esSubGen %}
+                    <div style="margin: 0 1rem;">
+                        <!--form class="generos">
                                     <input type="hidden" name="action" value="filtrar-genero">
                                     <button type="submit" style="border: none; background: none; padding: 0;">
                                         <img id="ver-canciones" src="/static/img/genres/{{genero.id}}.webp" 
@@ -93,20 +94,19 @@
                                         data-genero-id="{{genero.id}}">
                                     </button>
                                 </form-->
-                                <button style="border: none; background: none; padding: 0;">
-                                    <img id="ver-canciones" src="/static/img/genres/{{genero.id}}.webp" 
-                                    alt="Ver más canciones de {{genero.nombre}}" class="foto-genero"
-                                    data-genero-id="{{genero.id}}">
-                                </button>
-                                <p class="texto-producto">{{ genero.nombre }}</p>
-                            </div>
-                        {% endif %}
+                        <button style="border: none; background: none; padding: 0;">
+                            <img class="foto-genero" src="/static/img/genres/{{genero.id}}.webp"
+                                alt="Ver más canciones de {{genero.nombre}}" data-genero-id="{{genero.id}}">
+                        </button>
+                        <p class="texto-producto">{{ genero.nombre }}</p>
+                    </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
 
                 <h1 id="titulo_canciones_filtradas" style="display: none;"><i>Canciones de este género</i></h1>
                 <div class="div-carrusel div-pannel" id="canciones-filtradas-placeholder" style="display: none;">
-                </div>                  
+                </div>
             </section>
         </div>
     </main>
