@@ -100,6 +100,7 @@ h2 {
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* <-- máximo 2 líneas */
+    line-clamp: 2; /* Standard property for compatibility */
     -webkit-box-orient: vertical;
     max-height: 2.4em; /* altura máxima 2 líneas */
 }
