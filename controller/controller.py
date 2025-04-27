@@ -1936,3 +1936,17 @@ def startup_event():
         print(PCTRL, "Sessions loaded from sessions.json")
     else:
         print(PCTRL_WARN, "No sessions.json file found, starting with empty sessions")
+
+@app.get("/api/get-search-data")
+def get_search_data():
+    # Simulación de datos. Reemplaza esto con una consulta a tu base de datos.
+    #artistas = model.get_artists()  # Cambia esto según tu modelo
+    canciones = model.get_songs()  # Cambia esto según tu modelo
+    #albumes = model.get_albums()  # Cambia esto según tu modelo
+
+    # Combina los datos en una lista
+    search_data = [
+        {"name": cancion["titulo"], "url": f"/song?id={cancion['id']}"} for cancion in canciones
+    ]
+
+    return JSONResponse(content=search_data)
