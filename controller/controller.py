@@ -9,7 +9,7 @@ from pathlib import Path
 import firebase_admin
 import requests
 from fastapi import FastAPI, Request, Response, Form, UploadFile, File
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse, RedirectResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from firebase_admin import auth, credentials
 
@@ -1866,6 +1866,15 @@ async def update_review(request: Request):
 
         except Exception as e:
             return JSONResponse(status_code=500, content={"error": str(e)})
+        
+        
+# -------------------------------------------------------------------------- #
+# --------------------------- RADIO ---------------------------------------- #
+# -------------------------------------------------------------------------- #
+        
+@app.get("/play", response_class=HTMLResponse)
+def play(request: Request):
+    return view.get_play_view(request)
 
 
 # -------------------------------------------------------------------------- #
