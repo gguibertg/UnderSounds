@@ -98,10 +98,10 @@
                     {% endif %}
                 </section>
                 <section class="div-pannel reviews" style="align-items: center;">
-                    <h2>Reseñas</h2>
+                    <h2>Reseñas ({{ song.lista_resenas|length }})</h2>
                     <div class="reviews-grid">
                         {% if song.lista_resenas|length == 0 %}
-                        <p id="no_reseñas" style="display: flex;">No hay reseñas.</p>
+                        <p id="no_reseñas" style="display: flex; justify-content: center; align-items: center;">No hay reseñas.</p>
                         {% else %}
                         {% for resena in song.lista_resenas %}
                         {% if usuario.id == resena.usuario.id %}

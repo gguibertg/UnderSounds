@@ -95,7 +95,7 @@
                                         <p><strong>Precio:</strong> {{ cancion.precio }}</p>                                 
                                         <div class="song-stats">
                                             <span><img src="/static/icons/site/favourite-icon-light.svg" alt="likes" /> {{ cancion.likes }}</span>
-                                            <span><img src="/static/icons/site/comment-icon-light.svg" alt="comentarios" /> TODO: LISTA RESEÑAS!</span>
+                                            <span><img src="/static/icons/site/comment-icon-light.svg" alt="comentarios" /> {{ cancion.lista_resenas|length }}</span>
                                             <span><img src="/static/icons/site/views-icon-light.svg" alt="reproducciones" /> {{ cancion.visitas }}</span>
                                         </div>
                                         <div class="song-actions">
