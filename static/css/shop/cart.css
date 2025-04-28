@@ -84,11 +84,12 @@ hr {
 .remove-btn {
     margin-top: 8px;
     width: 100%;
-    padding: 10px
+    padding: 10px;
+    background-color: #ff2828;
 }
 
 .remove-btn:hover {
-    background: #861622;
+    background: #c82333;
 }
 
 .add-btn {
@@ -126,6 +127,9 @@ hr {
     background: #218838;
 }
 
+.dark-mode .remove-btn {
+    background: #ff2828;
+}
 .dark-mode .remove-btn:hover {
     background: #c82333;
 }
