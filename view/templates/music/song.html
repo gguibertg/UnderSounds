@@ -68,21 +68,33 @@
                             {% endif %}
                         </div>
                         {% elif tipoUsuario == 1 %}
-                        <form action="/cart" method="post">
-                            <input type="hidden" name="action" value="add">
-                            <input type="hidden" name="item_id" value="{{song.id}}">
-                            <input type="hidden" name="item_name" value="{{song.titulo}}">
-                            <input type="hidden" name="item_image" value="{{song.portada}}">
-                            <input type="hidden" name="artist_name" value="{{song.artista}}">
-                            <input type="hidden" name="item_desc" value="{{song.descripcion}}">
-                            <input type="hidden" name="item_precio" value="{{song.precio}}">              
-                            <button type="submit" class="button-comprar-item">Añadir al carrito</button>
-                        </form>
-                        <button class="{% if isLiked %}button{% else %}button-alt{% endif %} fav-btn" title="Añadir a favoritos" onclick="toggleLike()">
-                            <img alt="Favorito" class="fav-icon" src="/static/icons/site/favourite-icon-light.svg" />
-                        </button>
-                        {% else %}
-                        <button class="btn" onclick="window.location.href='/login';">Inicia sesión para comprar y escuchar esta canción </button>
+                            {% set id_en_carrito = false %}
+                            {% for item in carrito.articulos %}
+                                {% if item.id == song.id %}
+                                    {% set id_en_carrito = true %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if id_en_carrito %}
+                                <button type="submit" class="button-comprar-item">Ya en el carrito</button>
+                            {% else %}
+                                <form action="/cart" method="post">
+                                    <input type="hidden" name="action" value="add">
+                                    <input type="hidden" name="item_id" value="{{song.id}}">
+                                    <input type="hidden" name="item_name" value="{{song.titulo}}">
+                                    <input type="hidden" name="item_image" value="{{song.portada}}">
+                                    <input type="hidden" name="artist_name" value="{{song.artista}}">
+                                    <input type="hidden" name="item_desc" value="{{song.descripcion}}">
+                                    <input type="hidden" name="item_precio" value="{{song.precio}}">              
+                                    <button type="submit" class="button-comprar-item">Añadir al carrito</button>
+                                </form>
+                            {% endif %}
+
+                            <button class="{% if isLiked %}button{% else %}button-alt{% endif %} fav-btn" title="Añadir a favoritos" onclick="toggleLike()">
+                                <img alt="Favorito" class="fav-icon" src="/static/icons/site/favourite-icon-light.svg" />
+                            </button>
+                            {% else %}
+                            <button class="btn" onclick="window.location.href='/login';">Inicia sesión para comprar y escuchar esta canción </button>
                         {% endif %}
                     </div>
 
@@ -147,7 +159,7 @@
 
     </main>
     <script>
-        
+
         async function addReseña() {
             const titulo = document.getElementById('titulo').value;
             const reseña = document.getElementById('reseña').value;

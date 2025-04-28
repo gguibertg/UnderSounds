@@ -50,10 +50,10 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
             existing_carrito = self.collection.find_one(filtro_usuario)
 
             if existing_carrito:
-                if self.articulo_existe_en_carrito(existing_carrito, articulo_dict["id"]):
-                    return self.incrementar_articulo_existente(usuario, articulo_dict["id"])
-                else:
-                    return self.agregar_articulo_a_carrito(usuario, articulo_dict)
+                #if self.articulo_existe_en_carrito(existing_carrito, articulo_dict["id"]):
+                    #return pass #self.incrementar_articulo_existente(usuario, articulo_dict["id"])
+                #else:
+                return self.agregar_articulo_a_carrito(usuario, articulo_dict)
             else:
                 return self.crear_carrito(usuario, articulo_dict)
 

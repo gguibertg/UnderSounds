@@ -1359,7 +1359,10 @@ async def get_song(request: Request):
     # 1 = User
     # 2 = Propietario (User o Artista)
     # 3 = Artista (creador)
-    return view.get_song_view(request, song_info, tipoUsuario, user_db, isLiked) # Devolvemos la vista del song
+
+    carrito = model.get_carrito(user_db["id"]) 
+
+    return view.get_song_view(request, song_info, tipoUsuario, user_db, isLiked, carrito) # Devolvemos la vista del song
 
 # Ruta para cargar vista edit-song
 @app.get("/edit-song")
