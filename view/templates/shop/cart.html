@@ -44,7 +44,6 @@
                                         <h3 class="item-title">{{ item.nombre }}</h3>
                                         <p class="item-description">{{ item.descripcion }}</p>
                                         <p class="item-author">Autor: {{ item.artista }}</p>
-                                        <p class="item-cantidad">Cantidad: {{item.cantidad}}</p>
                                     </div>
                                 </div>
                                 <div class="item-actions">
@@ -52,12 +51,7 @@
                                     <form action="/cart" method="POST" style="display:inline;">
                                         <input type="hidden" name="action" value="decrement">
                                         <input type="hidden" name="item_id" value="{{ item.id }}">
-                                        <button type="submit" class="remove-btn">➖</button>
-                                    </form>
-                                    <form action="/cart" method="POST" style="display:inline;">
-                                        <input type="hidden" name="action" value="add">
-                                        <input type="hidden" name="item_id" value="{{ item.id }}">
-                                        <button type="submit" class="add-btn">➕</button>
+                                        <button type="submit" class="remove-btn">🗑️</button>
                                     </form>
                                 </div>
                             </div>
