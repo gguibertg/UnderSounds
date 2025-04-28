@@ -1118,12 +1118,20 @@ def get_tpv(request: Request):
     try:
         user = UsuarioDTO()
         user.load_from_dict(res)
- 
+
         carrito = CarritoDTO()
         carrito = model.get_carrito(user.id)
 
-        for song in carrito.articulos:
-            user.add_song_to_biblioteca(song.id)
+        for item in carrito.articulos:
+            # Comprobamos si es una canción o un álbum
+            song = model.get_song(item.id)
+            if song:
+                user.add_song_to_biblioteca(song["id"])
+            else:
+                album = model.get_album(item.id)
+                if album:
+                    for song_id in album["canciones"]:
+                        user.add_song_to_biblioteca(song_id)
 
         if model.update_usuario(user):
             print(PCTRL, "User", user.nombre, "updated in database")
