@@ -88,10 +88,12 @@
                 <div class="div-carrusel grid-entradas">
                     {% for cancion in canciones_biblioteca %}
                     <div class="div-pannel-sub item-element songs-cell">
-                        <img class="songs-image" src="{{ cancion.portada }}" alt="{{ cancion.titulo }}" />
-                        <h3>{{ cancion.titulo }}</h3>
-                        <p>{{ cancion.artista }}</p>
-                        <a href="/song?id={{ cancion.id }}">
+                        <div class="songs-content">
+                            <img class="songs-image" src="{{ cancion.portada }}" alt="{{ cancion.titulo }}" />
+                            <h3>{{ cancion.titulo }}</h3>
+                            <p>{{ cancion.artista }}</p>
+                        </div>
+                        <a href="/song?id={{ cancion.id }}" class="btn-container">
                             <button class="btn">Ver canción</button>
                         </a>
                     </div>
