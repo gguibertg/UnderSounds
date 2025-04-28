@@ -1108,7 +1108,7 @@ def get_prepaid(request: Request):
 # ----------------------------- TPV ---------------------------- #
 # -------------------------------------------------------------- #
 
-@app.get("/tpv")
+@app.post("/tpv")
 def get_tpv(request: Request):
 
     res = verifySessionAndGetUserInfo(request)
