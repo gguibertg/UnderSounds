@@ -30,20 +30,52 @@
     <main>
         <div class="div-bg">
             <div class="div-pannel" style="position: relative; display: flex; align-items: flex-start;">
-                <h2>Resultados de la búsqueda</h2>
+                <h2>Resultados de la búsqueda ({{ items|length }})</h2>
                 <br>
                 <div class="grid-list">
-                    <div class="parent div-pannel-sub" onclick="window.location.href='/song?id=1'">
+
+                    {% if items|length == 0 %}
+                    <div>
+                        <center><p>No hay resultados para la busqueda.</p></center>
+                        <br>
+                        <br>
+                        <div class="div-pannel-sub" style="width: 40%;">
+                            <p>Prueba a utilizar el siguiente formato para mejorar la búsqueda:</p>
+                            <br>
+                            <ul style="margin-left: 30px;">
+                                <li>Busqueda por nombre: Escribe en la caja de texto para buscar."</li>
+                                <li>Busqueda por género: Escribe '#' seguido del ID de un género. Puedes concatenar varios usando espacios.</li>
+                                <li>Busqueda por tiempo: Escribe '@' seguido de una fecha en formato DD-MM-AAAA para buscar todos los resultados después de la fecha indicada.</li>
+                            </ul>
+                            <br>
+                            <ul style="margin-left: 30px;">
+                                <li>Ejemplo: "mario casas"</li>
+                                <li>Ejemplo: "#rock #heavy-metal"</li>
+                                <li>Ejemplo: "@14-01-2004"</li>
+                            </ul>
+                            <br>
+                            <p>Recuerde que, actualmente, no se permiten mezclar varios tipos de busqueda al mismo tiempo.</p>
+                        </div>
+                        <br>
+                        <br
+                    </div>
+                    {% endif %}
+
+                    {% for item in items %}
+                    <div class="parent div-pannel-sub" onclick="window.location.href='{{ item.url }}'">
                         <div class="div-img">
-                            <img class="item-img" src="/static/img/utils/under-sounds-cover.webp" alt="Imagen de búsqueda" style="height:inherit;">
+                            <img class="item-img" src="{{ item.portada }}" alt="Imagen de búsqueda" style="height:inherit;">
+                            <i>{{ item.tipo }}</i>
                         </div>
                         <div class="div-title">
-                            <h2>UnderSounds</h2>
+                            <h2>{{ item.titulo }}</h2>
                         </div>
                         <div class="div-desc">
-                            <p>Descripcion</p>
+                            <p>{{ item.descripcion }}</p>
                         </div>
                     </div>
+                    {% endfor %}
+
                 </div>
             </div>
         </div>
