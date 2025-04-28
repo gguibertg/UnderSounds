@@ -1941,17 +1941,15 @@ def startup_event():
 
 @app.get("/search")
 def get_search(request: Request):
-    return view.get_search_view(request, {})
-    
-
-@app.get("/search213")
-def get_search(request: Request):
 
     busqueda = request.query_params.get("busqueda")
 
+    print(PCTRL, "Buscando:", busqueda)
+
     # detecta si la busqueda es None o vacia
     if not busqueda:
-        return Response("No se proporcionó ninguna búsqueda", status_code=400)
+        print(PCTRL, "Busqueda vacia")
+        return view.get_search_view(request, {})
 
     palabras = busqueda.strip().split()
 
@@ -1970,7 +1968,8 @@ def get_search(request: Request):
             tipo_busqueda = "fecha"
             date = next((palabra for palabra in palabras if palabra[0].isdigit()), None)
         else:
-            return Response("Tipo de búsqueda no válido", status_code=400)
+            print(PCTRL, "Busqueda no valida")
+            return view.get_search_view(request, {})
     
     all_items = []
 
@@ -2015,4 +2014,5 @@ def get_search(request: Request):
 
 
     # list (dict (nombre, portada, descripcion))
+    print(PCTRL, "Busqueda terminada")
     return view.get_search_view(request, all_items)
