@@ -1,3 +1,4 @@
+from datetime import datetime
 from .dao.mongodb.mongodbDAOFactory import MongodbDAOFactory
 from .dto.albumDTO import AlbumDTO
 from .dto.generoDTO import GeneroDTO
@@ -129,10 +130,10 @@ class Model ():
     def get_songs_by_genre(self, genre: str):
         return self.songsDAO.get_all_by_genre(genre)
     
-    def get_songs_by_fecha(self, fecha):
+    def get_songs_by_fecha(self, fecha : datetime):
         return self.songsDAO.get_all_by_fecha(fecha)
 
-    def get_songs_by_titulo(self, titulo):
+    def get_songs_by_titulo(self, titulo : str):
         return self.songsDAO.get_all_by_nombre(titulo)
         
     #Reseña

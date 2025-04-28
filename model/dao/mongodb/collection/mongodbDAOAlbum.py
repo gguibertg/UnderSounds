@@ -128,6 +128,32 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
 
         return [album.album_to_dict() for album in albums.albumlist]
     
+    def get_album(self, id):
+        album = None
+
+        try:
+            query = self.collection.find_one({"_id": ObjectId(id)})
+
+            if query:
+                album = AlbumDTO()
+                album.set_id(str(query.get("_id")))  # Convertimos _id a str
+                album.set_titulo(query.get("titulo"))
+                album.set_autor(query.get("autor"))
+                album.set_colaboradores(query.get("colaboradores"))
+                album.set_descripcion(query.get("descripcion"))
+                album.set_fecha(query.get("fecha"))
+                album.set_generos(query.get("generos", []))
+                album.set_canciones(query.get("canciones", []))
+                album.set_visitas(query.get("visitas"))
+                album.set_portada(query.get("portada"))
+                album.set_precio(query.get("precio"))
+                album.set_likes(query.get("likes"))
+                album.set_visible(query.get("visible"))
+
+        except Exception as e:
+            print(f"{PDAO_ERROR}Error al recuperar el álbum: {e}")
+
+        return album.album_to_dict() if album else None
 
     def add_album(self, album: AlbumDTO) -> str:
         try:

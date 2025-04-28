@@ -1980,13 +1980,13 @@ def get_search(request: Request):
         albums = model.get_albums_by_titulo(name)
 
         for song in songs:
-            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"], "url": f"/song?id={song["id"]}"})
+            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"], "url": f"/song?id={song['id']}"})
         
         for artist in artists:
-            all_items.append({"nombre": artist["nombre"], "portada": artist["imagen"], "descripcion": artist["bio"], "url": f"/artist?id={artist["id"]}"})
+            all_items.append({"nombre": artist["nombre"], "portada": artist["imagen"], "descripcion": artist["bio"], "url": f"/artist?id={artist['id']}"})
         
         for album in albums:
-            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"], "url": f"/album?id={album["id"]}"})
+            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"], "url": f"/album?id={album['id']}"})
 
     elif tipo_busqueda == "generos":
         
@@ -1994,10 +1994,10 @@ def get_search(request: Request):
         albums = model.get_albums_by_genre(genres)
     
         for song in songs:
-            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"], "url": f"/song?id={song["id"]}"})
+            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"], "url": f"/song?id={song['id']}"})
         
         for album in albums:
-            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"], "url": f"/album?id={album["id"]}"})
+            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"], "url": f"/album?id={album['id']}"})
 
     elif tipo_busqueda == "fecha":
         songs = model.get_songs_by_fecha(date)
@@ -2005,13 +2005,13 @@ def get_search(request: Request):
         albums = model.get_albums_by_fecha(date)
 
         for song in songs:
-            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"], "url": f"/song?id={song["id"]}"})
+            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"], "url": f"/song?id={song['id']}"})
 
         for artist in artists:
-            all_items.append({"nombre": artist["nombre"], "portada": artist["imagen"], "descripcion": artist["bio"], "url": f"/artist?id={artist["id"]}"})
+            all_items.append({"nombre": artist["nombre"], "portada": artist["imagen"], "descripcion": artist["bio"], "url": f"/artist?id={artist['id']}"})
 
         for album in albums:
-            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"], "url": f"/album?id={album["id"]}"})
+            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"], "url": f"/album?id={album['id']}"})
 
 
     # list (dict (nombre, portada, descripcion))
