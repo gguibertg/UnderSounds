@@ -1552,16 +1552,17 @@ async def edit_song_post(request: Request):
     
         song = SongDTO()
         song.load_from_dict(song_dict)
-
+        
         song.set_titulo(data["titulo"])
         song.set_artista(data["artista"])
         song.set_colaboradores(data["colaboradores"])
-        song.set_fechaUltimaModificacion(datetime.now()) 
         song.set_descripcion(data["descripcion"])
         song.set_generos(data["generos"])
         song.set_portada(data["portada"])
         song.set_precio(data["precio"])
         song.set_visible(data["visible"])
+
+        song_dict["fechaUltimaModificacion"] = datetime.now()
         song.add_historial(song_dict)
 
         # Actualizamos el song en la base de datos
