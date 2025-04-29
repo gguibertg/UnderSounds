@@ -1,5 +1,5 @@
 # Utilizamos una imagen base de Python. Puedes elegir la versión que necesites.
-FROM python:3.12-slim-buster
+FROM python:3.12-slim
 
 # Establecemos el directorio de trabajo dentro del contenedor.
 WORKDIR /app
@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8000
 
 # Comando para ejecutar la aplicación FastAPI. TODO
-CMD 
+CMD ["uvicorn", "controller.controller:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] 
