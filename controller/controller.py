@@ -20,7 +20,7 @@ from model.dto.albumDTO import AlbumDTO
 from model.dto.carritoDTO import ArticuloCestaDTO, CarritoDTO
 from model.dto.songDTO import SongDTO
 from model.dto.contactoDTO import ContactoDTO
-from model.dto.usuarioDTO import UsuarioDTO
+from model.dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 from model.dto.reseñasDTO import ReseñaDTO
 from model.model import Model
 from view.view import View
@@ -1331,6 +1331,7 @@ async def upload_song_post(request: Request):
         user = UsuarioDTO()
         user.load_from_dict(res)
         user.add_studio_cancion(song_id)
+        user.add_song_to_biblioteca(song_id)
         if model.update_usuario(user):
             print(PCTRL, "User", user.get_email(), "updated in database")
             return JSONResponse(content={"success": True}, status_code=200)
@@ -1645,6 +1646,16 @@ async def delete_song_post(request: Request):
     if not model.update_usuario(user):
         print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
         return JSONResponse(content={"error": "User not updated in database"}, status_code=500)
+    
+    # Borrado en cascada de la canción de las listas de reproducción del usuario
+    usuarios = model.get_usuarios()
+    for usuario_dict in usuarios:
+        usuario_dto = UsuarioDTO()
+        usuario_dto.load_from_dict(usuario_dict)
+
+        for lista in usuario_dto.get_listas_reproduccion():
+            if song_id in lista.get("canciones", []):
+                model.remove_cancion_de_lista_usuario(usuario_dto.get_id(), lista.get("nombre"), song_id)        
     
     # Ruta completa al archivo .mp3
     mp3_path = os.path.join(os.path.dirname(__file__), "..", "static", "mp3", data.get("pista"))
