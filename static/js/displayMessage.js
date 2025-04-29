@@ -44,4 +44,10 @@ function displayMessage(type, message, containerId = "") {
 
     // Insertar el div justo después del contenedor especificado, antes de cualquier otro contenido
     containerElement.insertAdjacentElement("afterbegin", messageDiv);
+
+    // Forzar a la página a desplazarse al mensaje con desplazamiento suave
+    window.scrollTo({
+        top: messageDiv.offsetTop,
+        behavior: "smooth"
+    });
 }
