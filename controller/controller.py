@@ -1964,9 +1964,9 @@ def get_search(request: Request):
             tipo_busqueda = "nombre"
             name = " ".join(palabras)
 
-        elif primer_caracter.isdigit():
+        elif primer_caracter.startswith("@"):
             tipo_busqueda = "fecha"
-            date = next((palabra for palabra in palabras if palabra[0].isdigit()), None)
+            date =  next((p[1:] for p in palabras if p.startswith("@")), None)
         else:
             print(PCTRL, "Busqueda no valida")
             return view.get_search_view(request, {})
@@ -1979,38 +1979,38 @@ def get_search(request: Request):
         albums = model.get_albums_by_titulo(name)
 
         for song in songs:
-            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"], "url": f"/song?id={song['id']}"})
-        
+            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"][:50] + "..." if len(song["descripcion"]) > 50 else song["descripcion"], "url": f"/song?id={song['id']}"})
+
         for artist in artists:
-            all_items.append({"nombre": artist["nombre"], "portada": artist["imagen"], "descripcion": artist["bio"], "url": f"/artist?id={artist['id']}"})
+            all_items.append({"nombre": artist["nombre"], "portada": artist["imagen"], "descripcion": artist["bio"][:50] + "..." if len(artist["bio"]) > 50 else artist["bio"], "url": f"/artist?id={artist['id']}"})
         
         for album in albums:
-            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"], "url": f"/album?id={album['id']}"})
+            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"][:50] + "..." if len(album["descripcion"]) > 50 else album["descripcion"], "url": f"/album?id={album['id']}"})
 
     elif tipo_busqueda == "generos":
-        
         songs = model.get_songs_by_genre(genres)
         albums = model.get_albums_by_genre(genres)
     
         for song in songs:
-            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"], "url": f"/song?id={song['id']}"})
+            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"][:50] + "..." if len(song["descripcion"]) > 50 else song["descripcion"], "url": f"/song?id={song['id']}"})
         
         for album in albums:
-            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"], "url": f"/album?id={album['id']}"})
+            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"][:50] + "..." if len(album["descripcion"]) > 50 else album["descripcion"], "url": f"/album?id={album['id']}"})
 
     elif tipo_busqueda == "fecha":
+        print(PCTRL, "Buscando por fecha:", date)
         songs = model.get_songs_by_fecha(date)
         artists = model.get_usuarios_by_fecha(date)
         albums = model.get_albums_by_fecha(date)
 
         for song in songs:
-            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"], "url": f"/song?id={song['id']}"})
+            all_items.append({"nombre": song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"][:50] + "..." if len(song["descripcion"]) > 50 else song["descripcion"], "url": f"/song?id={song['id']}"})
 
         for artist in artists:
-            all_items.append({"nombre": artist["nombre"], "portada": artist["imagen"], "descripcion": artist["bio"], "url": f"/artist?id={artist['id']}"})
+            all_items.append({"nombre": artist["nombre"], "portada": artist["imagen"], "descripcion": artist["bio"][:50] + "..." if len(artist["bio"]) > 50 else artist["bio"], "url": f"/artist?id={artist['id']}"})
 
         for album in albums:
-            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"], "url": f"/album?id={album['id']}"})
+            all_items.append({"nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"][:50] + "..." if len(album["descripcion"]) > 50 else album["descripcion"], "url": f"/album?id={album['id']}"})
 
 
     # list (dict (nombre, portada, descripcion))

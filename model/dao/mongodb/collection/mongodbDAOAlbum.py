@@ -1,6 +1,7 @@
 from bson import ObjectId
 import pymongo
 import pymongo.results
+from datetime import datetime, timedelta
 from ...intefaceAlbumDAO import InterfaceAlbumDAO
 from ....dto.albumDTO import AlbumDTO, AlbumsDTO
 
@@ -72,10 +73,36 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
 
         return [album.album_to_dict() for album in albums.albumlist]
     
-    def get_all_by_fecha(self, fecha):
+    def get_all_by_fecha(self, fecha_str):
         albums = AlbumsDTO()
         try:
-            query = self.collection.find({"fecha": {"$gte":fecha}})
+            fecha_min = None
+            fecha_max = None
+
+            if len(fecha_str) == 4:  # Año: "2025"
+                fecha_min = datetime.strptime(fecha_str, "%Y")
+                fecha_max = datetime(fecha_min.year + 1, 1, 1)
+
+            elif len(fecha_str) == 7:  # Año y mes: "2025-04"
+                fecha_min = datetime.strptime(fecha_str, "%Y-%m")
+                if fecha_min.month == 12:
+                    fecha_max = datetime(fecha_min.year + 1, 1, 1)
+                else:
+                    fecha_max = datetime(fecha_min.year, fecha_min.month + 1, 1)
+
+            elif len(fecha_str) == 10:  # Fecha completa: "2025-04-27"
+                fecha_min = datetime.strptime(fecha_str, "%Y-%m-%d")
+                fecha_max = fecha_min + timedelta(days=1)
+
+            else:
+                raise ValueError("Formato de fecha inválido")
+
+            query = self.collection.find({
+                "fecha": {
+                    "$gte": fecha_min,
+                    "$lt": fecha_max
+                }
+            })
 
             for doc in query:
                 album_dto = AlbumDTO()
