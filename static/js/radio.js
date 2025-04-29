@@ -113,3 +113,115 @@ function seekAudio(audio, progressBar) {
         audio.currentTime = (progressBar.value / 100) * audio.duration; // Mover el audio al tiempo seleccionado en la barra de progreso
     }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".playlist-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            // Obtener las listas de canciones (títulos, artistas, portadas, pistas)
+            const titulos = button.getAttribute("data-titulos").split("|||");
+            const artistas = button.getAttribute("data-artistas").split("|||");
+            const covers = button.getAttribute("data-covers").split("|||");
+            const pistas = button.getAttribute("data-pistas").split("|||");
+
+            // Comprobamos que haya al menos una canción
+            if (titulos.length > 0) {
+                let currentIndex = 0; // Índice de la canción actual
+
+                // Realizamos el fetch para cargar el mini-player
+                fetch("/play")
+                    .then(response => response.text())
+                    .then(data => {
+                        // Cargar el mini-player en el contenedor placeholder
+                        const placeholder = document.getElementById("mini-player-placeholder");
+                        placeholder.innerHTML = data;
+
+                        // Configuramos los controles después de cargar el mini-player
+                        const miniPlayerContainer = placeholder.querySelector(".mini-player");
+                        const audio = miniPlayerContainer.querySelector("#mini-audio");
+                        const playPauseBtn = miniPlayerContainer.querySelector("#play-pause-btn");
+                        const progressBar = miniPlayerContainer.querySelector(".mini-progress");
+                        const closeBtn = miniPlayerContainer.querySelector(".mini-close-btn");
+
+                        // Actualizamos la portada, título y artista
+                        const miniCover = miniPlayerContainer.querySelector("#mini-cover");
+                        const miniTitle = miniPlayerContainer.querySelector("#mini-title");
+                        const miniArtist = miniPlayerContainer.querySelector("#mini-artist");
+
+                        // Función para actualizar la canción actual
+                        function updateSong(index) {
+                            const song = {
+                                titulo: titulos[index],
+                                artista: artistas[index],
+                                portada: covers[index],
+                                pista: pistas[index]
+                            };
+
+                            if (miniCover) {
+                                miniCover.src = song.portada;
+                                miniCover.style.maxWidth = "100px";
+                                miniCover.style.maxHeight = "100px";
+                            }
+                            if (miniTitle) {
+                                miniTitle.textContent = song.titulo;
+                            }
+                            if (miniArtist) {
+                                miniArtist.textContent = song.artista;
+                            }
+
+                            if (audio) {
+                                audio.src = `/static/mp3/${song.pista}`;
+                                audio.play();
+                            }
+                        }
+
+                        // Cargar la primera canción al principio
+                        updateSong(currentIndex);
+
+                        // Configurar la acción de play/pause
+                        playPauseBtn.addEventListener("click", function () {
+                            if (audio.paused) {
+                                audio.play();
+                            } else {
+                                audio.pause();
+                            }
+                        });
+
+                        // Acción de siguiente canción
+                        const nextBtn = miniPlayerContainer.querySelector("#next-btn");
+                        nextBtn.addEventListener("click", function () {
+                            if (currentIndex < titulos.length - 1) {
+                                currentIndex++; // Aumentar el índice para la siguiente canción
+                                updateSong(currentIndex);
+                            } else {
+                                currentIndex = 0; // Volver al principio si es la última canción
+                                updateSong(currentIndex);
+                            }
+                        });
+
+                        // Acción de anterior canción
+                        const prevBtn = miniPlayerContainer.querySelector("#prev-btn");
+                        prevBtn.addEventListener("click", function () {
+                            if (currentIndex > 0) {
+                                currentIndex--; // Disminuir el índice para la canción anterior
+                                updateSong(currentIndex);
+                            } else {
+                                currentIndex = titulos.length - 1; // Ir a la última canción si estamos en la primera
+                                updateSong(currentIndex);
+                            }
+                        });
+
+                        // Cerrar el mini-player
+                        if (closeBtn) {
+                            closeBtn.addEventListener("click", () => {
+                                placeholder.innerHTML = ""; // Limpiar el mini-player
+                            });
+                        }
+                    })
+                    .catch(error => console.error("Error al cargar el mini-player:", error));
+            }
+        });
+    });
+});
+
+
+
