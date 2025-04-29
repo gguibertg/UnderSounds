@@ -1,6 +1,7 @@
 import pymongo
 from pymongo.results import *
 from bson import ObjectId
+from datetime import datetime, timedelta
 from ...interfaceSongDAO import InterfaceSongDAO
 from ....dto.songDTO import SongDTO, SongsDTO
 
@@ -142,10 +143,36 @@ class MongodbSongDAO(InterfaceSongDAO):
         return [song.songdto_to_dict() for song in songs.songlist]
     
 
-    def get_all_by_fecha(self, fecha):
+    def get_all_by_fecha(self, fecha_str):
         songs = SongsDTO()
         try:
-            query = self.collection.find({"fecha": {"$gte":fecha}})
+            fecha_min = None
+            fecha_max = None
+
+            if len(fecha_str) == 4:  # Año: "2025"
+                fecha_min = datetime.strptime(fecha_str, "%Y")
+                fecha_max = datetime(fecha_min.year + 1, 1, 1)
+
+            elif len(fecha_str) == 7:  # Año y mes: "2025-04"
+                fecha_min = datetime.strptime(fecha_str, "%Y-%m")
+                if fecha_min.month == 12:
+                    fecha_max = datetime(fecha_min.year + 1, 1, 1)
+                else:
+                    fecha_max = datetime(fecha_min.year, fecha_min.month + 1, 1)
+
+            elif len(fecha_str) == 10:  # Fecha completa: "2025-04-27"
+                fecha_min = datetime.strptime(fecha_str, "%Y-%m-%d")
+                fecha_max = fecha_min + timedelta(days=1)
+
+            else:
+                raise ValueError("Formato de fecha inválido")
+
+            query = self.collection.find({
+                "fecha": {
+                    "$gte": fecha_min,
+                    "$lt": fecha_max
+                }
+            })
 
             for doc in query:
                 song_dto = SongDTO()
@@ -175,7 +202,7 @@ class MongodbSongDAO(InterfaceSongDAO):
     def get_all_by_nombre(self, titulo):
         songs = SongsDTO()
         try:
-            query = self.collection.find({"fecha": {"$regex": titulo, "$options": "i"}})
+            query = self.collection.find({"titulo": {"$regex": titulo, "$options": "i"}})
 
             for doc in query:
                 song_dto = SongDTO()

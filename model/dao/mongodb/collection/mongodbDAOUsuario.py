@@ -1,5 +1,6 @@
 import pymongo
 import pymongo.results
+from datetime import datetime, timedelta
 from ...intefaceUsuarioDAO import InterfaceUsuarioDAO
 from ....dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 
@@ -45,11 +46,36 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
 
         return [user.usuario_to_dict() for user in users.userlist]
 
-    def get_all_by_fecha(self, fecha):
+    def get_all_by_fecha(self, fecha_str):
         users = UsuariosDTO()
         try:
-            query = self.collection.find({"fechaIngreso": {"$gte":fecha}})
+            fecha_min = None
+            fecha_max = None
 
+            if len(fecha_str) == 4:  # Año: "2025"
+                fecha_min = datetime.strptime(fecha_str, "%Y")
+                fecha_max = datetime(fecha_min.year + 1, 1, 1)
+
+            elif len(fecha_str) == 7:  # Año y mes: "2025-04"
+                fecha_min = datetime.strptime(fecha_str, "%Y-%m")
+                if fecha_min.month == 12:
+                    fecha_max = datetime(fecha_min.year + 1, 1, 1)
+                else:
+                    fecha_max = datetime(fecha_min.year, fecha_min.month + 1, 1)
+
+            elif len(fecha_str) == 10:  # Fecha completa: "2025-04-27"
+                fecha_min = datetime.strptime(fecha_str, "%Y-%m-%d")
+                fecha_max = fecha_min + timedelta(days=1)
+
+            else:
+                raise ValueError("Formato de fecha inválido")
+
+            query = self.collection.find({
+                "fechaIngreso": {
+                    "$gte": fecha_min,
+                    "$lt": fecha_max
+                }
+            })
             for doc in query:
                 if doc.get("esArtista") == True:
                     user_dto = UsuarioDTO()
