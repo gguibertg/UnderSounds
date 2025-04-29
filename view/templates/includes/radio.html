@@ -1,12 +1,12 @@
 <link rel="stylesheet" href="/static/css/base/radio.css"> <!-- Hoja de estilo del inicio -->
 <div class="mini-player">
     <button class="mini-close-btn" title="Cerrar">✖️</button>
-    <img src="{{ song.portada }}" alt="Portada" class="mini-album">
+    <img src="" alt="Portada" id="mini-cover">
 
     <div class="mini-content">
         <div class="mini-song-info">
-            <span class="mini-title">{{ song.titulo }}</span>
-            <span class="mini-artist">{{ song.artista }}</span>
+    <span style="font-size: 1.5rem; font-weight: bold;" id="mini-title"></span>
+    <span style="font-size: 1rem; color: #777;" id="mini-artist"></span>
         </div>
 
         <div class="mini-controls-bar">

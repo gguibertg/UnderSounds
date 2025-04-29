@@ -4,6 +4,7 @@ import json
 import uuid
 from datetime import datetime
 from pathlib import Path
+import os
 
 # Imports de terceros
 import firebase_admin
@@ -1291,7 +1292,10 @@ async def upload_song_post(request: Request):
         print(PCTRL_WARN, "Genres must be a non-empty list")
         return JSONResponse(content={"error": "Genres must be a non-empty list"}, status_code=400)
     
-    # TODO: PROCESAR AQUÍ LA CANCIÓN!! (be-stream)
+    if not isinstance(data["pista"], str) or not data["pista"]:
+        print(PCTRL_WARN, "Pista must be a non-empty file")
+        return JSONResponse(content={"error": "Pista must be a non-empty file"}, status_code=400)
+
 
     song = SongDTO()
     song.set_titulo(data["titulo"])
@@ -1306,7 +1310,8 @@ async def upload_song_post(request: Request):
     song.set_precio(data["precio"])
     song.set_lista_resenas([])
     song.set_visible(data["visible"])
-    song.set_album(None)  # El album se asigna posteriormente en el editor de albumes
+    song.set_album(None) 
+    song.set_pista(data["pista"])
 
     try:
         song_id = model.add_song(song)
@@ -1333,6 +1338,55 @@ async def upload_song_post(request: Request):
         # Eliminar la canción subida (intentar tanto si se ha subido como si no)
         model.delete_song(song_id)
         return JSONResponse(content={"error": "Song not added to database"}, status_code=500)
+
+# Ruta para la subida del archivo mp3
+@app.post("/upload-song-file")
+async def upload_song_file(request: Request, pista: UploadFile = File(...)):
+    """
+    Endpoint para procesar y almacenar el archivo de audio.
+    """
+    # Verificar si el usuario tiene una sesión activa y es artista
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401)  # Si es un Response, devolvemos el error
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
+
+    # Obtener el nombre del archivo y la ruta de almacenamiento
+    filename = pista.filename
+    file_path = os.path.join("static", "mp3", filename)
+
+    # Validar el archivo
+    if not filename:
+        print(PCTRL_WARN, "No file selected")
+        return JSONResponse(content={"error": "No file selected"}, status_code=400)
+
+    if pista.content_type not in ["audio/mpeg", "audio/mp3", "audio/wav"]:
+        print(PCTRL_WARN, f"Invalid file type: {pista.content_type}")
+        return JSONResponse(content={"error": "Invalid file type. Only MP3 and WAV allowed."}, status_code=400)
+
+    file_content = await pista.read()
+
+    # Intentar guardar el archivo
+    try:
+        # Asegurarse de que la carpeta exista
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        # Guardar el archivo en el sistema
+        with open(file_path, "wb") as f:
+            f.write(file_content)
+
+        # Respuesta exitosa
+        print(PCTRL, f"File {filename} uploaded successfully to {file_path}")
+        return JSONResponse(content={"success": True, "filename": filename}, status_code=200)
+
+    except Exception as e:
+        print(PCTRL_WARN, f"Error while uploading file {filename}: {str(e)}")
+        return JSONResponse(content={"error": "Error while uploading file"}, status_code=500)
+    
+    
+    
 
 # Ruta para cargar vista song
 @app.get("/song")
