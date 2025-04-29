@@ -26,3 +26,11 @@ class InterfaceSongDAO(ABC):
     @abstractmethod
     def get_all_by_genre(self, genre):
         pass
+
+    @abstractmethod
+    def get_all_by_fecha(self, fecha):
+        pass
+
+    @abstractmethod
+    def get_all_by_nombre(self, titulo):
+        pass

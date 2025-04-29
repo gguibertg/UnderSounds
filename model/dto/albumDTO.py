@@ -1,5 +1,18 @@
+import json
 from datetime import datetime
 
+class AlbumsDTO:
+    def __init__(self):
+        self.albumlist = []
+
+    def get_albumlist(self):
+        return self.albumlist
+
+    def insertSong(self, elem):
+        self.albumlist.append(elem)
+
+    def albumlist_to_json(self):
+        return json.dumps(self.albumlist)
 
 class AlbumDTO:
     def __init__(self):

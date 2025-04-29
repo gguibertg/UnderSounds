@@ -1,6 +1,7 @@
 import pymongo
 from pymongo.results import *
 from bson import ObjectId
+from datetime import datetime, timedelta
 from ...interfaceSongDAO import InterfaceSongDAO
 from ....dto.songDTO import SongDTO, SongsDTO
 
@@ -115,6 +116,93 @@ class MongodbSongDAO(InterfaceSongDAO):
         songs = SongsDTO()
         try:
             query = self.collection.find({"generos": genre})
+
+            for doc in query:
+                song_dto = SongDTO()
+                song_dto.set_id(str(doc.get("_id")))
+                song_dto.set_titulo(doc.get("titulo"))
+                song_dto.set_artista(doc.get("artista"))
+                song_dto.set_colaboradores(doc.get("colaboradores"))
+                song_dto.set_fecha(doc.get("fecha"))
+                song_dto.set_descripcion(doc.get("descripcion"))
+                song_dto.set_duracion(doc.get("duracion"))
+                song_dto.set_generos(doc.get("generos"))
+                song_dto.set_likes(doc.get("likes"))
+                song_dto.set_visitas(doc.get("visitas"))
+                song_dto.set_portada(doc.get("portada"))
+                song_dto.set_precio(doc.get("precio"))
+                song_dto.set_lista_resenas(doc.get("lista_resenas"))
+                song_dto.set_visible(doc.get("visible"))
+                song_dto.set_album(doc.get("album"))
+
+                songs.insertSong(song_dto)
+
+        except Exception as e:
+            print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
+
+        return [song.songdto_to_dict() for song in songs.songlist]
+    
+
+    def get_all_by_fecha(self, fecha_str):
+        songs = SongsDTO()
+        try:
+            fecha_min = None
+            fecha_max = None
+
+            if len(fecha_str) == 4:  # Año: "2025"
+                fecha_min = datetime.strptime(fecha_str, "%Y")
+                fecha_max = datetime(fecha_min.year + 1, 1, 1)
+
+            elif len(fecha_str) == 7:  # Año y mes: "2025-04"
+                fecha_min = datetime.strptime(fecha_str, "%Y-%m")
+                if fecha_min.month == 12:
+                    fecha_max = datetime(fecha_min.year + 1, 1, 1)
+                else:
+                    fecha_max = datetime(fecha_min.year, fecha_min.month + 1, 1)
+
+            elif len(fecha_str) == 10:  # Fecha completa: "2025-04-27"
+                fecha_min = datetime.strptime(fecha_str, "%Y-%m-%d")
+                fecha_max = fecha_min + timedelta(days=1)
+
+            else:
+                raise ValueError("Formato de fecha inválido")
+
+            query = self.collection.find({
+                "fecha": {
+                    "$gte": fecha_min,
+                    "$lt": fecha_max
+                }
+            })
+
+            for doc in query:
+                song_dto = SongDTO()
+                song_dto.set_id(str(doc.get("_id")))
+                song_dto.set_titulo(doc.get("titulo"))
+                song_dto.set_artista(doc.get("artista"))
+                song_dto.set_colaboradores(doc.get("colaboradores"))
+                song_dto.set_fecha(doc.get("fecha"))
+                song_dto.set_descripcion(doc.get("descripcion"))
+                song_dto.set_duracion(doc.get("duracion"))
+                song_dto.set_generos(doc.get("generos"))
+                song_dto.set_likes(doc.get("likes"))
+                song_dto.set_visitas(doc.get("visitas"))
+                song_dto.set_portada(doc.get("portada"))
+                song_dto.set_precio(doc.get("precio"))
+                song_dto.set_lista_resenas(doc.get("lista_resenas"))
+                song_dto.set_visible(doc.get("visible"))
+                song_dto.set_album(doc.get("album"))
+
+                songs.insertSong(song_dto)
+
+        except Exception as e:
+            print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
+
+        return [song.songdto_to_dict() for song in songs.songlist]
+
+    def get_all_by_nombre(self, titulo):
+        songs = SongsDTO()
+        try:
+            query = self.collection.find({"titulo": {"$regex": titulo, "$options": "i"}})
 
             for doc in query:
                 song_dto = SongDTO()

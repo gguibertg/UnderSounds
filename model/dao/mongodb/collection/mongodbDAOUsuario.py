@@ -1,5 +1,6 @@
 import pymongo
 import pymongo.results
+from datetime import datetime, timedelta
 from ...intefaceUsuarioDAO import InterfaceUsuarioDAO
 from ....dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 
@@ -20,30 +21,117 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
             query = self.collection.find()
 
             for doc in query:
-                user_dto = UsuarioDTO()
-                user_dto.set_id(str(doc.get("_id")))
-                user_dto.set_nombre(doc.get("nombre"))
-                user_dto.set_bio(doc.get("bio"))
-                user_dto.set_email(doc.get("email"))
-                user_dto.set_imagen(doc.get("imagen"))
-                user_dto.set_url(doc.get("url"))
-                user_dto.set_fechaIngreso(doc.get("fechaIngreso"))
-                user_dto.set_esArtista(doc.get("esArtista"))
-                user_dto.set_esVisible(doc.get("esVisible"))
-                user_dto.set_emailVisible(doc.get("emailVisible"))
-                user_dto.set_id_likes(doc.get("id_likes", []))
-                user_dto.set_studio_albumes(doc.get("studio_albumes", []))
-                user_dto.set_studio_canciones(doc.get("studio_canciones", []))
-                user_dto.set_biblioteca(doc.get("biblioteca", []))
-                user_dto.set_listas_reproduccion(doc.get("listas_reproduccion", []))
+                if doc.get("esArtista") == True:
+                    user_dto = UsuarioDTO()
+                    user_dto.set_id(str(doc.get("_id")))
+                    user_dto.set_nombre(doc.get("nombre"))
+                    user_dto.set_bio(doc.get("bio"))
+                    user_dto.set_email(doc.get("email"))
+                    user_dto.set_imagen(doc.get("imagen"))
+                    user_dto.set_url(doc.get("url"))
+                    user_dto.set_fechaIngreso(doc.get("fechaIngreso"))
+                    user_dto.set_esArtista(doc.get("esArtista"))
+                    user_dto.set_esVisible(doc.get("esVisible"))
+                    user_dto.set_emailVisible(doc.get("emailVisible"))
+                    user_dto.set_id_likes(doc.get("id_likes", []))
+                    user_dto.set_studio_albumes(doc.get("studio_albumes", []))
+                    user_dto.set_studio_canciones(doc.get("studio_canciones", []))
+                    user_dto.set_biblioteca(doc.get("biblioteca", []))
+                    user_dto.set_listas_reproduccion(doc.get("listas_reproduccion", []))
 
-                users.insertUser(user_dto)
+                    users.insertUser(user_dto)
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar los usuarios: {e}")
 
         return [user.usuario_to_dict() for user in users.userlist]
 
+    def get_all_by_fecha(self, fecha_str):
+        users = UsuariosDTO()
+        try:
+            fecha_min = None
+            fecha_max = None
+
+            if len(fecha_str) == 4:  # Año: "2025"
+                fecha_min = datetime.strptime(fecha_str, "%Y")
+                fecha_max = datetime(fecha_min.year + 1, 1, 1)
+
+            elif len(fecha_str) == 7:  # Año y mes: "2025-04"
+                fecha_min = datetime.strptime(fecha_str, "%Y-%m")
+                if fecha_min.month == 12:
+                    fecha_max = datetime(fecha_min.year + 1, 1, 1)
+                else:
+                    fecha_max = datetime(fecha_min.year, fecha_min.month + 1, 1)
+
+            elif len(fecha_str) == 10:  # Fecha completa: "2025-04-27"
+                fecha_min = datetime.strptime(fecha_str, "%Y-%m-%d")
+                fecha_max = fecha_min + timedelta(days=1)
+
+            else:
+                raise ValueError("Formato de fecha inválido")
+
+            query = self.collection.find({
+                "fechaIngreso": {
+                    "$gte": fecha_min,
+                    "$lt": fecha_max
+                }
+            })
+            for doc in query:
+                if doc.get("esArtista") == True:
+                    user_dto = UsuarioDTO()
+                    user_dto.set_id(str(doc.get("_id")))
+                    user_dto.set_nombre(doc.get("nombre"))
+                    user_dto.set_bio(doc.get("bio"))
+                    user_dto.set_email(doc.get("email"))
+                    user_dto.set_imagen(doc.get("imagen"))
+                    user_dto.set_url(doc.get("url"))
+                    user_dto.set_fechaIngreso(doc.get("fechaIngreso"))
+                    user_dto.set_esArtista(doc.get("esArtista"))
+                    user_dto.set_esVisible(doc.get("esVisible"))
+                    user_dto.set_emailVisible(doc.get("emailVisible"))
+                    user_dto.set_id_likes(doc.get("id_likes", []))
+                    user_dto.set_studio_albumes(doc.get("studio_albumes", []))
+                    user_dto.set_studio_canciones(doc.get("studio_canciones", []))
+                    user_dto.set_biblioteca(doc.get("biblioteca", []))
+                    user_dto.set_listas_reproduccion(doc.get("listas_reproduccion", []))
+
+                    users.insertUser(user_dto)
+
+        except Exception as e:
+            print(f"{PDAO_ERROR}Error al recuperar los usuarios: {e}")
+
+        return [user.usuario_to_dict() for user in users.userlist]
+    
+    def get_all_by_nombre(self, nombre):
+        users = UsuariosDTO()
+        try:
+            query = self.collection.find({"nombre": {"$regex": nombre, "$options": "i"}})
+
+            for doc in query:
+                if doc.get("esArtista") == True:
+                    user_dto = UsuarioDTO()
+                    user_dto.set_id(str(doc.get("_id")))
+                    user_dto.set_nombre(doc.get("nombre"))
+                    user_dto.set_bio(doc.get("bio"))
+                    user_dto.set_email(doc.get("email"))
+                    user_dto.set_imagen(doc.get("imagen"))
+                    user_dto.set_url(doc.get("url"))
+                    user_dto.set_fechaIngreso(doc.get("fechaIngreso"))
+                    user_dto.set_esArtista(doc.get("esArtista"))
+                    user_dto.set_esVisible(doc.get("esVisible"))
+                    user_dto.set_emailVisible(doc.get("emailVisible"))
+                    user_dto.set_id_likes(doc.get("id_likes", []))
+                    user_dto.set_studio_albumes(doc.get("studio_albumes", []))
+                    user_dto.set_studio_canciones(doc.get("studio_canciones", []))
+                    user_dto.set_biblioteca(doc.get("biblioteca", []))
+                    user_dto.set_listas_reproduccion(doc.get("listas_reproduccion", []))
+
+                    users.insertUser(user_dto)
+
+        except Exception as e:
+            print(f"{PDAO_ERROR}Error al recuperar los usuarios: {e}")
+
+        return [user.usuario_to_dict() for user in users.userlist]
 
     def get_usuario(self, id):
         user = None

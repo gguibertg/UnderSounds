@@ -100,6 +100,26 @@ header {
     vertical-align: middle;
 }
 
+.suggestions-container {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    width: 100%;
+    z-index: 999;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
 /* =======================
     HEADER EN MODO OSCURO
    ======================= */
