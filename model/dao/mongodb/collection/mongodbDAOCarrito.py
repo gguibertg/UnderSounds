@@ -42,7 +42,7 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
         return articulos.to_dict()
 
 
-    def upsert_articulo_en_carrito(self, usuario, articulo) -> bool:
+    def upsert_articulo_en_carrito(self, usuario, articulo: ArticuloCestaDTO) -> bool:
         try:
             articulo_dict = articulo.articulocestadto_to_dict()
             filtro_usuario = {"usuario": usuario}
@@ -50,9 +50,6 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
             existing_carrito = self.collection.find_one(filtro_usuario)
 
             if existing_carrito:
-                #if self.articulo_existe_en_carrito(existing_carrito, articulo_dict["id"]):
-                    #return pass #self.incrementar_articulo_existente(usuario, articulo_dict["id"])
-                #else:
                 return self.agregar_articulo_a_carrito(usuario, articulo_dict)
             else:
                 return self.crear_carrito(usuario, articulo_dict)
@@ -61,56 +58,9 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
             print(f"{PDAO_ERROR}Error al insertar/actualizar artículo en carrito: {e}")
             return False
         
-    def articulo_existe_en_carrito(self, carrito, articulo_id) -> bool:
+
+    def articulo_existe_en_carrito(self, carrito: dict, articulo_id: str) -> bool:
         return any(art["id"] == articulo_id for art in carrito.get("articulos", []))
-
-    def incrementar_articulo_existente(self, usuario, articulo_id) -> bool:
-        articulo = self.collection.find_one(
-            {"usuario": usuario, "articulos.id": articulo_id},
-            {"articulos.$": 1}
-        )
-        if not articulo or not articulo.get("articulos"):
-            return False
-
-        precio_unitario = float(articulo["articulos"][0].get("precio_unitario", 0))
-
-        result = self.collection.update_one(
-            {"usuario": usuario, "articulos.id": articulo_id},
-            {
-                "$inc": {
-                    "articulos.$.cantidad": 1,
-                    "subtotal": precio_unitario
-                }
-            }
-        )
-        return result.modified_count == 1
-
-
-    def decrementar_articulo_existente(self, usuario, articulo_id) -> bool:
-        articulo = self.collection.find_one(
-            {"usuario": usuario, "articulos.id": articulo_id},
-            {"articulos.$": 1}
-        )
-        if not articulo or not articulo.get("articulos"):
-            return False
-
-        precio_unitario = float(articulo["articulos"][0].get("precio", 0))
-
-        result = self.collection.update_one(
-            {"usuario": usuario, "articulos": {"$elemMatch": {"id": articulo_id, "cantidad": {"$gt": 1}}}},
-            {
-                "$inc": {
-                    "articulos.$.cantidad": -1,
-                    "subtotal": -precio_unitario
-                }
-            }
-        )
-
-        if result.modified_count == 1:
-            return True
-
-        # Si la cantidad era 1, eliminamos el artículo
-        return self.deleteArticuloDelCarrito(usuario, articulo_id)
 
 
     def agregar_articulo_a_carrito(self, usuario, articulo_dict) -> bool:

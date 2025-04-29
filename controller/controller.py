@@ -1099,37 +1099,57 @@ def get_faqs(request: Request):
 async def get_carrito(request: Request):
     
     # Así se obtendría el usuario, por motivos de prueba, se probará un usuario fijo
-    session_id = request.cookies.get("session_id")
-    session_data = getSessionData(session_id)
-    user_id = (session_data["user_id"])
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return res
+    
     form_data = await request.form()
     action = form_data.get("action")  # Por defecto: añadir
     item_id = form_data.get("item_id")
     
     if request.method == "POST":
 
+        carrito_json = model.get_carrito(res["id"])
+        if not carrito_json:
+            print(PCTRL_WARN, "Carrito not found in database! - skipping")
+            return JSONResponse(content={"error": "Carrito not found in database"}, status_code=500)
+        
         if action == "decrement":
             if not item_id:
                 return "Falta el ID del artículo para decrementarlo/eliminarlo", 400 
             # Eliminar el artículo del carrito
-            model.carrito.decrementar_articulo_existente(user_id, item_id)
+            model.deleteArticulo(res["id"], item_id)
         
         elif action == "add":
             
-            articulo = ArticuloCestaDTO()
-            articulo.set_id(form_data.get("item_id"))
-            articulo.set_nombre(form_data.get("item_name"))
-            articulo.set_precio(form_data.get("item_precio"))
-            articulo.set_descripcion(form_data.get("item_desc"))
-            articulo.set_artista(form_data.get("artist_name"))
-            articulo.set_cantidad(1)
-            articulo.set_imagen(form_data.get("item_image"))
+            if model.articulo_existe(carrito_json, item_id):
+                print(PCTRL_WARN, "El artículo ya existe en el carrito")
 
-            # Añadir el artículo al carrito
-            model.carrito.upsert_articulo_en_carrito(user_id, articulo)
+                carrito_json = model.get_carrito(res["id"])
+                if not carrito_json:
+                    print(PCTRL_WARN, "Carrito not found in database! - skipping")
+                    return JSONResponse(content={"error": "Carrito not found in database"}, status_code=500)
+                    
+                return view.get_carrito_view(request, carrito_json)
+            
+            else:
+                articulo = ArticuloCestaDTO()
+                articulo.set_id(form_data.get("item_id"))
+                articulo.set_nombre(form_data.get("item_name"))
+                articulo.set_precio(form_data.get("item_precio"))
+                articulo.set_descripcion(form_data.get("item_desc"))
+                articulo.set_artista(form_data.get("artist_name"))
+                articulo.set_cantidad(1)
+                articulo.set_imagen(form_data.get("item_image"))
 
-    # Si la petición es GET, mostrar el carrito
-    carrito_json = model.get_carrito(user_id) 
+                # Añadir el artículo al carrito
+                model.upsert_articulo(res["id"], articulo)
+
+    carrito_json = model.get_carrito(res["id"])
+    if not carrito_json:
+        print(PCTRL_WARN, "Carrito not found in database! - skipping")
+        return JSONResponse(content={"error": "Carrito not found in database"}, status_code=500)
+        
     return view.get_carrito_view(request, carrito_json)
 
 

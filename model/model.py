@@ -6,6 +6,7 @@ from .dto.songDTO import SongDTO, SongsDTO
 from .dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 from .dto.contactoDTO import ContactoDTO
 from .dto.reseñasDTO import ReseñaDTO
+from .dto.carritoDTO import ArticuloCestaDTO
 
 
 
@@ -83,8 +84,23 @@ class Model ():
     def get_carrito(self, usuario : str):
         return self.carrito.get_all_articulos(usuario)
     
+    def upsert_articulo(self, usuario, articulo: ArticuloCestaDTO):
+        return self.carrito.upsert_articulo_en_carrito(usuario, articulo)
+    
+    def articulo_existe(self, carrito: dict, articulo_id: str):
+        return self.carrito.articulo_existe_en_carrito(carrito, articulo_id)
+
+    def agregar_articulo(self, usuario, articulo_dict):
+        return self.carrito.agregar_articulo_a_carrito(usuario, articulo_dict)
+    
+    def crear_carrito(self, usuario, articulo_dict):
+        return self.carrito.crear_carrito(usuario, articulo_dict)
+    
     def vaciar_carrito(self, usuario: str):
         return self.carrito.vaciar_carrito(usuario)
+    
+    def deleteArticulo(self, usuario, id_articulo):
+        return self.carrito.deleteArticuloDelCarrito(usuario, id_articulo)
 
     # Album
     def get_albums(self):

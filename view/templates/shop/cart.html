@@ -79,7 +79,7 @@
                                 <hr>
                                 <div class="grid-lista">
                                     {% for item in carrito.articulos %}
-                                    <p>{{ item.nombre }} x {{item.cantidad}}</p>
+                                    <p>{{ item.nombre }}</p>
                                     <p style="text-align: right; width: 100%; border-bottom: 2px dotted;">&nbsp;</p>
                                     <p>{{ "%.2f"|format(item.precio | float)}}€</p>
                                     {% endfor %}

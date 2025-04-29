@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from model.dto.carritoDTO import ArticuloCestaDTO
 class InterfaceCarritoDAO(ABC):
 
     @abstractmethod
@@ -7,11 +7,11 @@ class InterfaceCarritoDAO(ABC):
         pass
     
     @abstractmethod
-    def upsert_articulo_en_carrito(self, usuario, articulo) -> bool:
+    def upsert_articulo_en_carrito(self, usuario, articulo: ArticuloCestaDTO) -> bool:
         pass
 
     @abstractmethod
-    def articulo_existe_en_carrito(self, carrito, articulo_id) -> bool:
+    def articulo_existe_en_carrito(self, carrito: dict, articulo_id: str) -> bool:
         pass
     
     @abstractmethod
