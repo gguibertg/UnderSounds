@@ -20,8 +20,8 @@ class View():
     def get_songs_view(self, request: Request, songs):
         return templates.TemplateResponse("main/index.html", {"request" :request, "songs" : songs})
     
-    def get_song_view(self, request: Request, song_info : dict, tipoUsuario: int, user, isLiked: bool, carrito):
-        return templates.TemplateResponse("music/song.html", {"request": request, "song": song_info, "tipoUsuario": tipoUsuario, "usuario": user, "isLiked": isLiked, "carrito": carrito})
+    def get_song_view(self, request: Request, song_info : dict, tipoUsuario: int, user, isLiked: bool, inCarrito: bool):
+        return templates.TemplateResponse("music/song.html", {"request": request, "song": song_info, "tipoUsuario": tipoUsuario, "usuario": user, "isLiked": isLiked, "inCarrito": inCarrito})
 
     def get_edit_song_view(self, request: Request, song_info):
         return templates.TemplateResponse("music/song-edit.html", {"request": request, "song": song_info})
@@ -62,8 +62,8 @@ class View():
         return templates.TemplateResponse("music/upload-album.html", {"request": request , "songs": songs}) 
     
     # Renderizar la template album.html
-    def get_album_view(self, request: Request, album_info : dict, tipoUsuario : int, isLiked: bool):
-        return templates.TemplateResponse("music/album.html", {"request": request, "album": album_info, "tipoUsuario": tipoUsuario, "isLiked": isLiked})
+    def get_album_view(self, request: Request, album_info : dict, tipoUsuario : int, isLiked: bool, inCarrito: bool):
+        return templates.TemplateResponse("music/album.html", {"request": request, "album": album_info, "tipoUsuario": tipoUsuario, "isLiked": isLiked, "inCarrito": inCarrito})
     
     # Renderizar la template header.html
     def get_header_view(self, request: Request, user_info : dict):
@@ -82,11 +82,11 @@ class View():
         return templates.TemplateResponse("main/contact.html", {"request" : request})
         
     # Renderizar la template carrito.html
-    def get_carrito_view(self, request: Request, carrito):
+    def get_carrito_view(self, request: Request, carrito : dict):
         return templates.TemplateResponse("shop/cart.html", {"request": request, "carrito": carrito})
 
     # Renderizar la template prepaid.html
-    def get_prepaid_view(self, request: Request, carrito):
+    def get_prepaid_view(self, request: Request, carrito : dict):
         return templates.TemplateResponse("shop/prepaid.html", {"request": request, "carrito": carrito})
     
     # Renderizar la template tpv.html

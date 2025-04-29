@@ -15,7 +15,7 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
     def __init__(self, collection):
         self.collection = collection
     
-    def get_all_articulos(self, usuario) -> CarritoDTO:
+    def get_all_articulos(self, usuario) -> dict:
         articulos = CarritoDTO()
         subtotal = 0.0
         try:
@@ -39,7 +39,7 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar los artículos: {e}")
 
-        return articulos
+        return articulos.to_dict()
 
 
     def upsert_articulo_en_carrito(self, usuario, articulo) -> bool:
@@ -170,6 +170,7 @@ class mongodbCarritoDAO(InterfaceCarritoDAO):
                 }
             )
             return result.modified_count == 1
+        
         except Exception as e:
             print(f"{PDAO_ERROR}Error al eliminar artículo del carrito: {e}")
             return False

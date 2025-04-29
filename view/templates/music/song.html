@@ -68,14 +68,8 @@
                             {% endif %}
                         </div>
                         {% elif tipoUsuario == 1 %}
-                            {% set id_en_carrito = false %}
-                            {% for item in carrito.articulos %}
-                                {% if item.id == song.id %}
-                                    {% set id_en_carrito = true %}
-                                {% endif %}
-                            {% endfor %}
 
-                            {% if id_en_carrito %}
+                            {% if inCarrito %}
                                 <button type="submit" class="button-comprar-item">Ya en el carrito</button>
                             {% else %}
                                 <form action="/cart" method="post">

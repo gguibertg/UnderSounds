@@ -698,12 +698,24 @@ async def get_album(request: Request):
     if tipoUsuario > 0:
         isLiked = album_id in res["id_likes"]
     
+    # Comprobarmos finalmente si el usuario (en caso de estar logeado) tiene un carrito activo el cual contiene el álbum.
+    inCarrito = False
+    if tipoUsuario > 0:
+        carrito = model.get_carrito(res["id"]) 
+        if carrito:
+            for item in carrito["articulos"]:
+                if item["id"] == album_id:
+                    inCarrito = True
+                    break
+        else:
+            print(PCTRL_WARN, "Carrito not found in database! - skipping")
+
     # Donde tipo Usuario:
     # 0 = Guest
     # 1 = User
     # 2 = Propietario (User o Artista)
     # 3 = Artista (creador)
-    return view.get_album_view(request, album_info, tipoUsuario, isLiked) # Devolvemos la vista del album
+    return view.get_album_view(request, album_info, tipoUsuario, isLiked, inCarrito) # Devolvemos la vista del album
 
 # Ruta para cargar la vista de álbum-edit
 @app.get("/album-edit")
@@ -1119,10 +1131,9 @@ def get_tpv(request: Request):
         user = UsuarioDTO()
         user.load_from_dict(res)
 
-        carrito = CarritoDTO()
         carrito = model.get_carrito(user.id)
 
-        for item in carrito.articulos:
+        for item in carrito["articulos"]:
             # Comprobamos si es una canción o un álbum
             song = model.get_song(item.id)
             if song:
@@ -1368,9 +1379,19 @@ async def get_song(request: Request):
     # 2 = Propietario (User o Artista)
     # 3 = Artista (creador)
 
-    carrito = model.get_carrito(user_db["id"]) 
-
-    return view.get_song_view(request, song_info, tipoUsuario, user_db, isLiked, carrito) # Devolvemos la vista del song
+    # Comprobarmos finalmente si el usuario (en caso de estar logeado) tiene un carrito activo el cual contiene la canción.
+    inCarrito = False
+    if tipoUsuario > 0:
+        carrito = model.get_carrito(user_db["id"]) 
+        if carrito:
+            for item in carrito["articulos"]:
+                if item["id"] == song_id:
+                    inCarrito = True
+                    break
+        else:
+            print(PCTRL_WARN, "Carrito not found in database! - skipping")
+        
+    return view.get_song_view(request, song_info, tipoUsuario, user_db, isLiked, inCarrito) # Devolvemos la vista del song
 
 # Ruta para cargar vista edit-song
 @app.get("/edit-song")
