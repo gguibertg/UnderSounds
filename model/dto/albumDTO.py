@@ -29,6 +29,7 @@ class AlbumDTO:
         self.precio: float = None
         self.likes: int = None
         self.visible: bool = None
+        self.historial: list[dict] = []
 
     def get_id(self) -> str:
         return self.id
@@ -122,6 +123,19 @@ class AlbumDTO:
     def set_visible(self, visible: bool):
         self.visible = visible
 
+    def get_historial(self) -> list[dict]:
+        return self.historial
+    
+    def add_historial(self, historial: dict):
+        self.historial.append(historial)
+
+    def remove_historial(self, historial: dict):
+        if historial in self.historial:
+            self.historial.remove(historial)
+
+    def set_historial(self, historial: list[dict]):
+        self.historial = historial
+
     def load_from_dict(self, data: dict):
         self.id = data.get("id")
         self.titulo = data.get("titulo")
@@ -136,6 +150,7 @@ class AlbumDTO:
         self.precio = data.get("precio")
         self.likes = data.get("likes")
         self.visible = data.get("visible")
+        self.historial = data.get("historial", [])
 
     def album_to_dict(self) -> dict:
         return {
@@ -151,5 +166,6 @@ class AlbumDTO:
             "portada": self.portada,
             "precio": self.precio,
             "likes": self.likes,
-            "visible": self.visible
+            "visible": self.visible,
+            "historial": self.historial
         }

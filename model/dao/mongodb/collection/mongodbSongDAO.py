@@ -29,6 +29,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_artista(doc.get("artista"))
                     song_dto.set_colaboradores(doc.get("colaboradores"))
                     song_dto.set_fecha(doc.get("fecha"))
+                    song_dto.set_fechaUltimaModificacion(doc.get("fechaUltimaModificacion"))
                     song_dto.set_descripcion(doc.get("descripcion"))
                     song_dto.set_duracion(doc.get("duracion"))
                     song_dto.set_generos(doc.get("generos"))
@@ -39,6 +40,8 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_lista_resenas(doc.get("lista_resenas"))
                     song_dto.set_visible(doc.get("visible"))
                     song_dto.set_album(doc.get("album"))
+                    song_dto.set_pista(doc.get("pista"))
+                    song_dto.set_historial(doc.get("historial"))
 
                     songs.insertSong(song_dto)
 
@@ -61,6 +64,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                 song.set_artista(query.get("artista"))
                 song.set_colaboradores(query.get("colaboradores"))
                 song.set_fecha(query.get("fecha"))
+                song.set_fechaUltimaModificacion(query.get("fechaUltimaModificacion"))
                 song.set_descripcion(query.get("descripcion"))
                 song.set_duracion(query.get("duracion"))
                 song.set_generos(query.get("generos"))
@@ -71,6 +75,8 @@ class MongodbSongDAO(InterfaceSongDAO):
                 song.set_lista_resenas(query.get("lista_resenas"))
                 song.set_visible(query.get("visible"))
                 song.set_album(query.get("album"))
+                song.set_pista(query.get("pista"))
+                song.set_historial(query.get("historial"))
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar la cancion: {e}")
@@ -113,6 +119,7 @@ class MongodbSongDAO(InterfaceSongDAO):
             print(f"{PDAO_ERROR}Error al eliminar la cancion: {e}")
             return False
 
+
     def get_all_by_genre(self, genre: str):
         songs = SongsDTO()
         try:
@@ -126,6 +133,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_artista(doc.get("artista"))
                     song_dto.set_colaboradores(doc.get("colaboradores"))
                     song_dto.set_fecha(doc.get("fecha"))
+                    song_dto.set_fechaUltimaModificacion(doc.get("fechaUltimaModificacion"))
                     song_dto.set_descripcion(doc.get("descripcion"))
                     song_dto.set_duracion(doc.get("duracion"))
                     song_dto.set_generos(doc.get("generos"))
@@ -136,6 +144,8 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_lista_resenas(doc.get("lista_resenas"))
                     song_dto.set_visible(doc.get("visible"))
                     song_dto.set_album(doc.get("album"))
+                    song_dto.set_pista(doc.get("pista"))
+                    song_dto.set_historial(doc.get("historial"))
 
                     songs.insertSong(song_dto)
 
@@ -184,6 +194,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_artista(doc.get("artista"))
                     song_dto.set_colaboradores(doc.get("colaboradores"))
                     song_dto.set_fecha(doc.get("fecha"))
+                    song_dto.set_fechaUltimaModificacion(doc.get("fechaUltimaModificacion"))
                     song_dto.set_descripcion(doc.get("descripcion"))
                     song_dto.set_duracion(doc.get("duracion"))
                     song_dto.set_generos(doc.get("generos"))
@@ -194,6 +205,8 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_lista_resenas(doc.get("lista_resenas"))
                     song_dto.set_visible(doc.get("visible"))
                     song_dto.set_album(doc.get("album"))
+                    song_dto.set_pista(doc.get("pista"))
+                    song_dto.set_historial(doc.get("historial"))
 
                     songs.insertSong(song_dto)
 
@@ -201,6 +214,7 @@ class MongodbSongDAO(InterfaceSongDAO):
             print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
 
         return [song.songdto_to_dict() for song in songs.songlist]
+
 
     def get_all_by_nombre(self, titulo):
         songs = SongsDTO()
@@ -215,6 +229,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_artista(doc.get("artista"))
                     song_dto.set_colaboradores(doc.get("colaboradores"))
                     song_dto.set_fecha(doc.get("fecha"))
+                    song_dto.set_fechaUltimaModificacion(doc.get("fechaUltimaModificacion"))
                     song_dto.set_descripcion(doc.get("descripcion"))
                     song_dto.set_duracion(doc.get("duracion"))
                     song_dto.set_generos(doc.get("generos"))
@@ -225,6 +240,8 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_lista_resenas(doc.get("lista_resenas"))
                     song_dto.set_visible(doc.get("visible"))
                     song_dto.set_album(doc.get("album"))
+                    song_dto.set_pista(doc.get("pista"))   
+                    song_dto.set_historial(doc.get("historial"))
 
                     songs.insertSong(song_dto)
 

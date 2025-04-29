@@ -112,6 +112,7 @@ async def get_song_list_by_genre(request: Request):
         print(PCTRL_WARN, "Error al obtener canciones:", e)
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+
 # ------------------------------------------------------------------ #
 # ----------------------------- LOGIN ------------------------------ #
 # ------------------------------------------------------------------ #
@@ -196,6 +197,7 @@ async def get_logout(request: Request):
     if isinstance(res, Response):
         return res   
     return view.get_logout_view(request)
+
 
 # --------------------------------------------------------------------- #
 # ----------------------------- REGISTER ------------------------------ #
@@ -334,6 +336,7 @@ async def deregister(request: Request, response: Response):
         print(PCTRL, "Error deleting user:", str(e))
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+
 # ------------------------------------------------------------------- #
 # ----------------------------- PERFIL ------------------------------ #
 # ------------------------------------------------------------------- #
@@ -459,6 +462,7 @@ async def remove_song_from_list(request: Request, nombre_lista: str = Form(...),
     model.remove_cancion_de_lista_usuario(res["id"], nombre_lista, id_cancion)
     return RedirectResponse("/profile", status_code=302)
 
+
 # ------------------------------------------------------------------- #
 # ----------------------------- ALBUM ------------------------------- #
 # ------------------------------------------------------------------- #
@@ -564,6 +568,7 @@ async def upload_album_post(request: Request):
     album.set_precio(data["precio"])
     album.set_likes(0)
     album.set_visible(data["visible"])
+    album.set_historial([]) # Inicializamos el campo historial como una lista vacía
 
     # Subir el album a la base de datos
     album_id = model.add_album(album)
@@ -886,6 +891,7 @@ async def album_edit_post(request: Request):
         album.set_precio(data["precio"])
         # album.set_likes() # La cantidad de likes no se puede editar.
         album.set_visible(data["visible"])
+        album.add_historial(album_dict)
         
         # Por cada una de las canciones en el album, actualizamos su campo album con el id del nuevo album
         for song_id in album.get_canciones():
@@ -1054,6 +1060,7 @@ async def like_album_post(request: Request):
         print(PCTRL_WARN, "Failed to update user in database!")
         return JSONResponse(content={"error": "Failed to update user in database"}, status_code=500)
 
+
 # ------------------------------------------------------------------ #
 # ----------------------------- INCLUDES --------------------------- #
 # ------------------------------------------------------------------ #
@@ -1066,6 +1073,7 @@ def header(request: Request):
     
     return view.get_header_view(request, res)  # Si es un dict, pasamos los datos del usuario
 
+
 @app.get("/footer")
 def footer(request: Request):
     res = verifySessionAndGetUserInfo(request)
@@ -1073,6 +1081,7 @@ def footer(request: Request):
         return view.get_footer_view(request, None)
     
     return view.get_footer_view(request, res)  # Si es un dict, pasamos los datos del usuario
+
 
 # ------------------------------------------------------------- #
 # --------------------------- ABOUT --------------------------- #
@@ -1082,6 +1091,7 @@ def footer(request: Request):
 def about(request: Request):
     return view.get_about_view(request)
 
+
 # ------------------------------------------------------------ #
 # --------------------------- FAQS --------------------------- #
 # ------------------------------------------------------------ #
@@ -1090,6 +1100,7 @@ def about(request: Request):
 def get_faqs(request: Request):
     faqs_json = model.get_faqs()
     return view.get_faqs_view(request, faqs_json)
+
 
 # ------------------------------------------------------------------ #
 # ----------------------------- CARRITO ---------------------------- #
@@ -1214,6 +1225,11 @@ def get_tpv(request: Request):
 
     return view.get_tpv_view(request)
 
+
+# -------------------------------------------------------------------- #
+# ----------------------------- PURCHASED ---------------------------- #
+# -------------------------------------------------------------------- #
+
 @app.get("/purchased")
 def get_purchased(request: Request):
     res = verifySessionAndGetUserInfo(request)
@@ -1318,6 +1334,7 @@ async def upload_song_post(request: Request):
     song.set_artista(data["artista"])
     song.set_colaboradores(data["colaboradores"])
     song.set_fecha(datetime.now())
+    song.set_fechaUltimaModificacion("")
     song.set_descripcion(data["descripcion"])
     song.set_generos(data["generos"])
     song.set_likes(0)
@@ -1327,6 +1344,7 @@ async def upload_song_post(request: Request):
     song.set_lista_resenas([])
     song.set_visible(data["visible"])
     song.set_album(None)  # El album se asigna posteriormente en el editor de albumes
+    song.set_historial([])  # Inicializamos el historial como una lista vacía
 
     try:
         song_id = model.add_song(song)
@@ -1538,12 +1556,13 @@ async def edit_song_post(request: Request):
         song.set_titulo(data["titulo"])
         song.set_artista(data["artista"])
         song.set_colaboradores(data["colaboradores"])
-        #song.set_fecha(datetime.now()) # La fecha no se puede editar.
+        song.set_fechaUltimaModificacion(datetime.now()) 
         song.set_descripcion(data["descripcion"])
         song.set_generos(data["generos"])
         song.set_portada(data["portada"])
         song.set_precio(data["precio"])
         song.set_visible(data["visible"])
+        song.add_historial(song_dict)
 
         # Actualizamos el song en la base de datos
         if model.update_song(song):
@@ -2041,6 +2060,9 @@ def get_search(request: Request):
     print(PCTRL, "Busqueda terminada")
     return view.get_search_view(request, all_items)
 
+@app.get("/search")
+def get_search(request: Request):
+    return view.get_search_view(request, {})
 
 # -------------------------------------------------------------------------- #
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
@@ -2114,9 +2136,3 @@ def startup_event():
         print(PCTRL, "Sessions loaded from sessions.json")
     else:
         print(PCTRL_WARN, "No sessions.json file found, starting with empty sessions")
-
-
-
-@app.get("/search")
-def get_search(request: Request):
-    return view.get_search_view(request, {})

@@ -36,6 +36,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
                 album_dto.set_precio(doc.get("precio"))
                 album_dto.set_likes(doc.get("likes"))
                 album_dto.set_visible(doc.get("visible"))
+                album_dto.set_historial(doc.get("historial", []))
 
                 albums.insertSong(album_dto)
 
@@ -66,6 +67,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
                     album_dto.set_precio(doc.get("precio"))
                     album_dto.set_likes(doc.get("likes"))
                     album_dto.set_visible(doc.get("visible"))
+                    album_dto.set_historial(doc.get("historial", []))
 
                     albums.insertSong(album_dto)
 
@@ -121,6 +123,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
                     album_dto.set_precio(doc.get("precio"))
                     album_dto.set_likes(doc.get("likes"))
                     album_dto.set_visible(doc.get("visible"))
+                    album_dto.set_historial(doc.get("historial", []))
 
                     albums.insertSong(album_dto)
 
@@ -150,6 +153,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
                     album_dto.set_precio(doc.get("precio"))
                     album_dto.set_likes(doc.get("likes"))
                     album_dto.set_visible(doc.get("visible"))
+                    album_dto.set_historial(doc.get("historial", []))
 
                     albums.insertSong(album_dto)
 
@@ -179,6 +183,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
                 album.set_precio(query.get("precio"))
                 album.set_likes(query.get("likes"))
                 album.set_visible(query.get("visible"))
+                album.set_historial(query.get("historial", []))
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar el álbum: {e}")
