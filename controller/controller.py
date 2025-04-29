@@ -1569,8 +1569,6 @@ async def edit_song_post(request: Request):
         if not isinstance(data["generos"], list) or not data["generos"]:
             print(PCTRL_WARN, "Genres must be a non-empty list")
             return JSONResponse(content={"error": "Genres must be a non-empty list"}, status_code=400)
-        
-        # TODO: PROCESAR AQUÍ LA CANCIÓN!! (be-stream)
     
         song = SongDTO()
         song.load_from_dict(song_dict)
