@@ -1959,7 +1959,6 @@ def get_search(request: Request):
             all_items.append({"tipo": "Álbum", "nombre": album["titulo"][:25] + "..." if len(album["titulo"]) > 25 else album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"][:50] + "..." if len(album["descripcion"]) > 50 else album["descripcion"], "url": f"/album?id={album['id']}"})
 
     elif tipo_busqueda == "fecha":
-        print(PCTRL, "Buscando por fecha:", date)
         songs = model.get_songs_by_fecha(date)
         artists = model.get_usuarios_by_fecha(date)
         albums = model.get_albums_by_fecha(date)
