@@ -1190,7 +1190,6 @@ def get_tpv(request: Request):
             
         
     except Exception as e:
-        raise e
         print(PCTRL_WARN, "Error while processing Tpv, database failed with error:", str(e))
         return {"success": False, "error": "Carrito and User not updated to database"}
 
