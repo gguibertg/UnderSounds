@@ -1163,23 +1163,23 @@ def get_tpv(request: Request):
         user = UsuarioDTO()
         user.load_from_dict(res)
 
-        carrito = model.get_carrito(user.id)
+        carrito = model.get_carrito(user.get_id())
 
         for item in carrito["articulos"]:
             # Comprobamos si es una canción o un álbum
-            song = model.get_song(item.id)
+            song = model.get_song(item["id"])
             if song:
                 user.add_song_to_biblioteca(song["id"])
             else:
-                album = model.get_album(item.id)
+                album = model.get_album(item["id"])
                 if album:
                     for song_id in album["canciones"]:
                         user.add_song_to_biblioteca(song_id)
 
         if model.update_usuario(user):
-            print(PCTRL, "User", user.nombre, "updated in database")
+            print(PCTRL, "User", user.get_nombre(), "updated in database")
         else:
-            print(PCTRL_WARN, "User", user.nombre, "not updated in database!")
+            print(PCTRL_WARN, "User", user.get_nombre(), "not updated in database!")
             return {"success": False, "error": "User not updated in database"}
 
         if model.vaciar_carrito(res["id"]):
@@ -1190,7 +1190,8 @@ def get_tpv(request: Request):
             
         
     except Exception as e:
-        print(PCTRL_WARN, "Error while processing Tpv, database failed!")
+        raise e
+        print(PCTRL_WARN, "Error while processing Tpv, database failed with error:", str(e))
         return {"success": False, "error": "Carrito and User not updated to database"}
 
     return view.get_tpv_view(request)
