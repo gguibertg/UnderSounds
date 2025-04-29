@@ -1180,18 +1180,17 @@ def get_tpv(request: Request):
             print(PCTRL, "User", user.get_nombre(), "updated in database")
         else:
             print(PCTRL_WARN, "User", user.get_nombre(), "not updated in database!")
-            return {"success": False, "error": "User not updated in database"}
+            return JSONResponse(content={"error": "User not updated in database"}, status_code=500)
 
         if model.vaciar_carrito(res["id"]):
             print(PCTRL, "Carrito vaciado en la base de datos")
         else:
             print(PCTRL_WARN, "Actualización del carrito fallida")
-            return {"success": False, "error": "Carrito update failed"}
+            return JSONResponse(content={"error": "Carrito update failed"}, status_code=500)
             
-        
     except Exception as e:
         print(PCTRL_WARN, "Error while processing Tpv, database failed with error:", str(e))
-        return {"success": False, "error": "Carrito and User not updated to database"}
+        return JSONResponse(content={"error": "Carrito and User not updated to database"}, status_code=500)
 
     return view.get_tpv_view(request)
 
