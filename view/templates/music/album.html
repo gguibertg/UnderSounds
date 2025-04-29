@@ -46,7 +46,6 @@
                         <div class="album-buttons">
                             {% if tipoUsuario >= 2 %}
                             <button class="btn">Descargar álbum</button> <!-- TODO en be-stream! -->
-                            <button class="btn">Añadir a lista de reproducción</button> <!-- TODO: Necesitamos listas para eso! -->
                             <button class="{% if isLiked %}button{% else %}button-alt{% endif %} fav-btn" title="Añadir a favoritos" onclick="toggleLike()">
                                 <img alt="Favorito" class="fav-icon" src="/static/icons/site/favourite-icon-light.svg" />
                             </button>
