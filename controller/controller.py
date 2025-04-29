@@ -78,9 +78,15 @@ sessions = {}
 # Ruta para cargar la vista indexº
 @app.get("/")
 async def index(request: Request): 
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        tipoUsuario = False # Guest
+    else:
+       tipoUsuario = True # Miembro (User)
+
     genres_json = model.get_generos()
     song_json = model.get_songs()
-    return view.get_index_view(request, song_json, genres_json)
+    return view.get_index_view(request, song_json, genres_json, tipoUsuario)
 
 # Endpoint para obtener listado de canciones por genero
 @app.get("/songs/genre")

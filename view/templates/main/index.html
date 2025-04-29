@@ -62,7 +62,7 @@
                             class="foto-artista">
                         <p class="texto-producto">{{ item.titulo }}</p>
                         <p class="texto-artista">{{ item.artista }}</p>
-
+                        {% if tipoUsuario %}
                         <form action="/cart" method="post">
                             <input type="hidden" name="action" value="add">
                             <input type="hidden" name="item_id" value="{{ item.id }}">
@@ -73,6 +73,7 @@
                             <input type="hidden" name="item_precio" value="{{ item.precio }}">
                             <button type="submit" class="button-comprar-item">Añadir</button>
                         </form>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>
