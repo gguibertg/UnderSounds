@@ -210,6 +210,31 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         });
 
+                        // Configuración de la barra de progreso
+                        if (progressBar) {
+                            // Actualizar la barra de progreso mientras se reproduce el audio
+                            audio.addEventListener("timeupdate", function () {
+                                const progress = (audio.currentTime / audio.duration) * 100;
+                                progressBar.value = progress;
+                            });
+
+                            // Permitir que el usuario mueva la barra de progreso para cambiar la posición del audio
+                            progressBar.addEventListener("input", function () {
+                                const newTime = (progressBar.value / 100) * audio.duration;
+                                audio.currentTime = newTime;
+                            });
+                        }
+
+                        // Evento para pasar a la siguiente canción cuando se termine
+                        audio.addEventListener("ended", function () {
+                            if (currentIndex < titulos.length - 1) {
+                                currentIndex++; // Pasar a la siguiente canción
+                            } else {
+                                currentIndex = 0; // Volver a la primera canción si es la última
+                            }
+                            updateSong(currentIndex); // Actualizar la canción
+                        });
+
                         // Cerrar el mini-player
                         if (closeBtn) {
                             closeBtn.addEventListener("click", () => {
@@ -222,6 +247,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+
 
 
 
