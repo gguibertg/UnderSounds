@@ -1312,6 +1312,11 @@ async def upload_song_post(request: Request):
     song.set_visible(data["visible"])
     song.set_album(None) 
     song.set_pista(data["pista"])
+    duracion = data["duracion"]
+    minutos = duracion/60
+    segundos = duracion % 60
+    tiempo = f"{int(minutos):02d}:{int(segundos):02d}"
+    song.set_duracion(tiempo)
 
     try:
         song_id = model.add_song(song)
@@ -1640,6 +1645,16 @@ async def delete_song_post(request: Request):
     if not model.update_usuario(user):
         print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
         return JSONResponse(content={"error": "User not updated in database"}, status_code=500)
+    
+    # Ruta completa al archivo .mp3
+    mp3_path = os.path.join(os.path.dirname(__file__), "..", "static", "mp3", data.get("pista"))
+
+    # Borrar el archivo si existe
+    if os.path.exists(mp3_path):
+        os.remove(mp3_path)
+        print(PCTRL, "Deleted MP3 file:", mp3_path)
+    else:
+        print(PCTRL_WARN, "MP3 file not found:", mp3_path)
 
     # Por último, borramos la canción de la base de datos
     if model.delete_song(song_id):
@@ -1648,6 +1663,7 @@ async def delete_song_post(request: Request):
     else:
         print(PCTRL_WARN, "Song", song_id, "not deleted from database!")
         return JSONResponse(content={"error": "Song not deleted from database"}, status_code=500)
+
 
 # Ruta para darle like a una canción
 @app.post("/like-song")

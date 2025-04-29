@@ -142,10 +142,27 @@
     </main>
 
     <script>
+
+        function getAudioDuration(file) {
+            return new Promise((resolve, reject) => {
+                const audio = new Audio();
+                audio.src = URL.createObjectURL(file);
+
+                audio.addEventListener("loadedmetadata", () => {
+                    resolve(audio.duration); // duración en segundos
+                });
+
+                audio.addEventListener("error", (e) => {
+                    reject("No se pudo cargar el archivo de audio");
+                });
+            });
+        }
+
         async function postSong() {
             event.preventDefault();
 
             const pista = document.getElementById('song-upload').files[0];
+            const duracion = await getAudioDuration(pista);
 
             const songData = {
                 titulo: document.getElementById('titulo').value,
@@ -156,7 +173,8 @@
                 generos: Array.from(document.querySelectorAll('.upload-checkbox-container div:first-child input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
                 portada: document.getElementById('cover-preview').src,
                 visible: document.getElementById('is-visible').checked,
-                pista: pista.name
+                pista: pista.name,
+                duracion: duracion
             };
 
             // Validar que los campos no estén vacíos y tengan el formato correcto
