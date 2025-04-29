@@ -77,7 +77,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
                 }
             })
             for doc in query:
-                if doc.get("esArtista") == True:
+                if doc.get("esArtista") == True and doc.get("esVisible") == True:
                     user_dto = UsuarioDTO()
                     user_dto.set_id(str(doc.get("_id")))
                     user_dto.set_nombre(doc.get("nombre"))
@@ -108,7 +108,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
             query = self.collection.find({"nombre": {"$regex": nombre, "$options": "i"}})
 
             for doc in query:
-                if doc.get("esArtista") == True:
+                if doc.get("esArtista") == True and doc.get("esVisible") == True:
                     user_dto = UsuarioDTO()
                     user_dto.set_id(str(doc.get("_id")))
                     user_dto.set_nombre(doc.get("nombre"))

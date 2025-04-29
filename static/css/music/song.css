@@ -33,10 +33,12 @@
 }
 
 .song-image img {
-    width: 250px;
-    height: 250px;
+    width: 300px;
+    height: 300px;
     border-radius: 10px;
     object-fit: cover;
+    display: block;
+    margin: 0 auto;
 }
 
 .review-form {

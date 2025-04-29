@@ -51,22 +51,23 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
             query = self.collection.find({"generos": genre})
 
             for doc in query:
-                album_dto = AlbumDTO()
-                album_dto.set_id(str(doc.get("_id")))  # Convertimos _id a str
-                album_dto.set_titulo(doc.get("titulo"))
-                album_dto.set_autor(doc.get("autor"))
-                album_dto.set_colaboradores(doc.get("colaboradores"))
-                album_dto.set_descripcion(doc.get("descripcion"))
-                album_dto.set_fecha(doc.get("fecha"))
-                album_dto.set_generos(doc.get("generos", []))
-                album_dto.set_canciones(doc.get("canciones", []))
-                album_dto.set_visitas(doc.get("visitas"))
-                album_dto.set_portada(doc.get("portada"))
-                album_dto.set_precio(doc.get("precio"))
-                album_dto.set_likes(doc.get("likes"))
-                album_dto.set_visible(doc.get("visible"))
+                if doc.get("visible") == True:
+                    album_dto = AlbumDTO()
+                    album_dto.set_id(str(doc.get("_id")))  # Convertimos _id a str
+                    album_dto.set_titulo(doc.get("titulo"))
+                    album_dto.set_autor(doc.get("autor"))
+                    album_dto.set_colaboradores(doc.get("colaboradores"))
+                    album_dto.set_descripcion(doc.get("descripcion"))
+                    album_dto.set_fecha(doc.get("fecha"))
+                    album_dto.set_generos(doc.get("generos", []))
+                    album_dto.set_canciones(doc.get("canciones", []))
+                    album_dto.set_visitas(doc.get("visitas"))
+                    album_dto.set_portada(doc.get("portada"))
+                    album_dto.set_precio(doc.get("precio"))
+                    album_dto.set_likes(doc.get("likes"))
+                    album_dto.set_visible(doc.get("visible"))
 
-                albums.insertSong(album_dto)
+                    albums.insertSong(album_dto)
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
@@ -105,22 +106,23 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
             })
 
             for doc in query:
-                album_dto = AlbumDTO()
-                album_dto.set_id(str(doc.get("_id")))  # Convertimos _id a str
-                album_dto.set_titulo(doc.get("titulo"))
-                album_dto.set_autor(doc.get("autor"))
-                album_dto.set_colaboradores(doc.get("colaboradores"))
-                album_dto.set_descripcion(doc.get("descripcion"))
-                album_dto.set_fecha(doc.get("fecha"))
-                album_dto.set_generos(doc.get("generos", []))
-                album_dto.set_canciones(doc.get("canciones", []))
-                album_dto.set_visitas(doc.get("visitas"))
-                album_dto.set_portada(doc.get("portada"))
-                album_dto.set_precio(doc.get("precio"))
-                album_dto.set_likes(doc.get("likes"))
-                album_dto.set_visible(doc.get("visible"))
+                if doc.get("visible") == True:
+                    album_dto = AlbumDTO()
+                    album_dto.set_id(str(doc.get("_id")))  # Convertimos _id a str
+                    album_dto.set_titulo(doc.get("titulo"))
+                    album_dto.set_autor(doc.get("autor"))
+                    album_dto.set_colaboradores(doc.get("colaboradores"))
+                    album_dto.set_descripcion(doc.get("descripcion"))
+                    album_dto.set_fecha(doc.get("fecha"))
+                    album_dto.set_generos(doc.get("generos", []))
+                    album_dto.set_canciones(doc.get("canciones", []))
+                    album_dto.set_visitas(doc.get("visitas"))
+                    album_dto.set_portada(doc.get("portada"))
+                    album_dto.set_precio(doc.get("precio"))
+                    album_dto.set_likes(doc.get("likes"))
+                    album_dto.set_visible(doc.get("visible"))
 
-                albums.insertSong(album_dto)
+                    albums.insertSong(album_dto)
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
@@ -133,22 +135,23 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
             query = self.collection.find({"titulo": {"$regex": titulo, "$options": "i"}})
 
             for doc in query:
-                album_dto = AlbumDTO()
-                album_dto.set_id(str(doc.get("_id")))  # Convertimos _id a str
-                album_dto.set_titulo(doc.get("titulo"))
-                album_dto.set_autor(doc.get("autor"))
-                album_dto.set_colaboradores(doc.get("colaboradores"))
-                album_dto.set_descripcion(doc.get("descripcion"))
-                album_dto.set_fecha(doc.get("fecha"))
-                album_dto.set_generos(doc.get("generos", []))
-                album_dto.set_canciones(doc.get("canciones", []))
-                album_dto.set_visitas(doc.get("visitas"))
-                album_dto.set_portada(doc.get("portada"))
-                album_dto.set_precio(doc.get("precio"))
-                album_dto.set_likes(doc.get("likes"))
-                album_dto.set_visible(doc.get("visible"))
+                if doc.get("visible") == True:
+                    album_dto = AlbumDTO()
+                    album_dto.set_id(str(doc.get("_id")))  # Convertimos _id a str
+                    album_dto.set_titulo(doc.get("titulo"))
+                    album_dto.set_autor(doc.get("autor"))
+                    album_dto.set_colaboradores(doc.get("colaboradores"))
+                    album_dto.set_descripcion(doc.get("descripcion"))
+                    album_dto.set_fecha(doc.get("fecha"))
+                    album_dto.set_generos(doc.get("generos", []))
+                    album_dto.set_canciones(doc.get("canciones", []))
+                    album_dto.set_visitas(doc.get("visitas"))
+                    album_dto.set_portada(doc.get("portada"))
+                    album_dto.set_precio(doc.get("precio"))
+                    album_dto.set_likes(doc.get("likes"))
+                    album_dto.set_visible(doc.get("visible"))
 
-                albums.insertSong(album_dto)
+                    albums.insertSong(album_dto)
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")

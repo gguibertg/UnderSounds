@@ -59,7 +59,6 @@
                         </div>
                         <div class="song-buttons">
                             <button class="btn download-btn">Descargar canción</button> <!-- TODO hacer en be-stream !-->
-                            <button class="btn">Añadir a lista de reproducción</button> <!-- TODO Necesitamos listas para esto!-->
                             <button class="{% if isLiked %}button{% else %}button-alt{% endif %} fav-btn" title="Añadir a favoritos" onclick="toggleLike()">
                                 <img alt="Favorito" class="fav-icon" src="/static/icons/site/favourite-icon-light.svg" />
                             </button>
@@ -68,14 +67,8 @@
                             {% endif %}
                         </div>
                         {% elif tipoUsuario == 1 %}
-                            {% set id_en_carrito = false %}
-                            {% for item in carrito.articulos %}
-                                {% if item.id == song.id %}
-                                    {% set id_en_carrito = true %}
-                                {% endif %}
-                            {% endfor %}
 
-                            {% if id_en_carrito %}
+                            {% if inCarrito %}
                                 <button type="submit" class="button-comprar-item">Ya en el carrito</button>
                             {% else %}
                                 <form action="/cart" method="post">
@@ -112,8 +105,8 @@
                     {% if tipoUsuario >= 1 %}
                     <div class="div-pannel review-form">
                         <h3>Reseña nueva</h3>
-                        <textarea id="titulo" placeholder="Escribe el titulo aquí..."></textarea>
-                        <textarea id="reseña" placeholder="Escribe tu reseña aquí..."></textarea>
+                        <textarea id="titulo" placeholder="Escribe el titulo aquí..." required></textarea>
+                        <textarea id="reseña" placeholder="Escribe tu reseña aquí..." required></textarea>
                         <button class="btn publish-btn" onclick="addReseña()" >Publicar</button>
                     </div>
                     {% endif %}
@@ -133,11 +126,10 @@
                             <input id="editar_titulo_{{ resena.id }}" type="text" name="titulo" value="{{ resena.titulo }}" required></summary>
                             <textarea id="editar_reseña_{{ resena.id }}" name="texto" required>{{ resena.reseña }}</textarea>
                             <div class="review-actions">
-                                <button class="btn" title="Editar" onclick="editarReseña('{{ resena.id }}')"><img alt="Editar" height="20"
-                                        src="/static/icons/site/edit-icon.svg" width="20" /></button>
-                                    
+                                <button class="btn" title="Editar" onclick="editarReseña('{{ resena.id }}', '{{ resena.titulo }}', '{{ resena.reseña }}')"><img alt="Editar" height="20"
+                                        src="/static/icons/site/edit-icon.svg" width="20" /></button> 
                                 <button class="btn" title="Borrar" onclick="borrarReseña('{{ resena.id }}')"><img alt="Borrar" height="20"
-                                        src="/static/icons/site/delete-icon.svg" width="20" /></button>
+                                    src="/static/icons/site/delete-icon.svg" width="20" /></button>
                             </div>
                         </details>
                         {% else %}
@@ -164,22 +156,27 @@
             const titulo = document.getElementById('titulo').value;
             const reseña = document.getElementById('reseña').value;
 
-            const response = await fetch('/add-review', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    song_id: "{{ song.id }}",
-                    titulo: titulo,
-                    reseña: reseña
-                })
-            });
+            if (!titulo || !reseña) {
+                displayMessage('error', 'Ambos campos son obligatorios, para publicar una reseña.');
+            }
+            else {
+                const response = await fetch('/add-review', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        song_id: "{{ song.id }}",
+                        titulo: titulo,
+                        reseña: reseña
+                    })
+                });
 
-            const result = await response.json();
-            if (response.ok) {
-                alert("Reseña publicada!");
-                location.reload();
-            } else {
-                alert("Error: " + result.error);
+                const result = await response.json();
+                if (response.ok) {
+                    alert("Reseña publicada!");
+                    location.reload();
+                } else {
+                    alert("Error: " + result.error);
+                }
             }
         }
 
@@ -203,27 +200,37 @@
             }
         }
 
-        async function editarReseña(reseñaId) {
+        async function editarReseña(reseñaId, rTitulo, rReseña) {
             const titulo = document.getElementById('editar_titulo_' + reseñaId).value;
             const reseña = document.getElementById('editar_reseña_' + reseñaId).value;
-                        
-            const response = await fetch('/update-review', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    song_id: "{{ song.id }}",
-                    reseña_id: reseñaId,
-                    titulo: titulo,
-                    reseña: reseña
-                })
-            });
+            
+            if (!titulo || !reseña) {
+                displayMessage('error', 'Ambos campos son obligatorios, para editar la reseña.');
+            }
+            else{
+                if (titulo == rTitulo && reseña == rReseña) {
+                    displayMessage('error', 'La reseña que se intenta editar es igual a la anterior.');
+                }
+                else {
+                    const response = await fetch('/update-review', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            song_id: "{{ song.id }}",
+                            reseña_id: reseñaId,
+                            titulo: titulo,
+                            reseña: reseña
+                        })
+                    });
 
-            const result = await response.json();
-            if (response.ok) {
-                alert("Reseña actualizada.");
-                location.reload();
-            } else {
-                alert("Error: " + result.error);
+                    const result = await response.json();
+                    if (response.ok) {
+                        alert("Reseña actualizada.");
+                        location.reload();
+                    } else {
+                        alert("Error: " + result.error);
+                    }
+                }
             }
         }
     </script>
