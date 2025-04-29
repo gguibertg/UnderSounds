@@ -97,13 +97,13 @@ async def get_song_list_by_genre(request: Request):
         canciones = convert_datetime(canciones)
 
         if canciones:
-            print(f"Canciones filtradas por género {genre_id}: {canciones}")
+            print(PCTRL, "Canciones filtradas por el género: ", genre_id)
             return JSONResponse(content=canciones, status_code=200)
         else:
-            print("No existen canciones para ese género")
+            print(PCTRL_WARN, "No existen canciones para ese género")
             return JSONResponse(content=[], status_code=200)
     except Exception as e:
-        print(f"Error al obtener canciones: {e}")
+        print(PCTRL_WARN, "Error al obtener canciones:", e)
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 # ------------------------------------------------------------------ #
