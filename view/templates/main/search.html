@@ -62,13 +62,13 @@
                     {% endif %}
 
                     {% for item in items %}
-                    <div class="parent div-pannel-sub" onclick="window.location.href='{{ item.url }}'">
+                    <div class="parent div-pannel-sub">
                         <div class="div-img">
                             <img class="item-img" src="{{ item.portada }}" alt="Imagen de búsqueda" style="height:inherit;">
-                            <i>{{ item.tipo }}</i>
                         </div>
                         <div class="div-title">
-                            <h2>{{ item.nombre }}</h2>
+                            <h3>{{ item.nombre }}</h3>
+                            <i>{{ item.tipo }}</i>
                         </div>
                         <div class="div-desc">
                             <p>{{ item.descripcion }}</p>
