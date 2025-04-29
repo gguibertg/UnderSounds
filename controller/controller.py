@@ -381,6 +381,20 @@ async def update_profile(request: Request, response: Response):
     
     # Obtenemos los datos de usuario a actualizar desde la request.
     data = await request.json()
+
+    # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
+    required_fields = ["nombre", "email", "imagen"]
+    for field in required_fields:
+        if field not in data or data[field] is None:
+            print(PCTRL_WARN, f"Field '{field}' is missing or empty")
+            return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
+
+    # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
+    optional_fields = ["url", "bio"]
+    for field in optional_fields:
+        if field not in data or data[field] is None:
+            data[field] = ""
+
     # Comprobamos si los cambios proporcionados no difieren de los que ya tiene el usuario, en cuyo caso no se haría nada (devuelve un mensaje de éxito)
     if all([
         user_info["nombre"] == data["nombre"],
@@ -517,9 +531,15 @@ async def upload_album_post(request: Request):
     # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
     required_fields = ["titulo", "autor", "generos", "portada", "precio"]
     for field in required_fields:
-        if field not in data or not data[field]:
+        if field not in data or data[field] is None:
             print(PCTRL_WARN, f"Field '{field}' is missing or empty")
             return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
+        
+    # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
+    optional_fields = ["descripcion", "colaboradores"]
+    for field in optional_fields:
+        if field not in data or data[field] is None:
+            data[field] = ""
 
     # Validar que el precio sea un número positivo
     if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
@@ -833,9 +853,15 @@ async def album_edit_post(request: Request):
         # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
         required_fields = ["titulo", "autor", "generos", "portada", "precio"]
         for field in required_fields:
-            if field not in data or not data[field]:
+            if field not in data or data[field] is None:
                 print(PCTRL_WARN, f"Field '{field}' is missing or empty")
                 return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
+
+        # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
+        optional_fields = ["descripcion", "colaboradores"]
+        for field in optional_fields:
+            if field not in data or data[field] is None:
+               data[field] = ""
 
         # Validar que el precio sea un número positivo
         if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
@@ -1246,9 +1272,15 @@ async def upload_song_post(request: Request):
     # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
     required_fields = ["titulo", "artista", "generos", "portada", "precio"]
     for field in required_fields:
-        if field not in data or not data[field]:
+        if field not in data or data[field] is None:
             print(PCTRL_WARN, f"Field '{field}' is missing or empty")
             return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
+        
+    # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
+    optional_fields = ["descripcion", "colaboradores"]
+    for field in optional_fields:
+        if field not in data or data[field] is None:
+            data[field] = ""
 
     # Validar que el precio sea un número positivo
     if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
@@ -1459,9 +1491,15 @@ async def edit_song_post(request: Request):
         # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
         required_fields = ["titulo", "artista", "generos", "portada", "precio"]
         for field in required_fields:
-            if field not in data or not data[field]:
+            if field not in data or data[field] is None:
                 print(PCTRL_WARN, f"Field '{field}' is missing or empty")
                 return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
+
+        # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
+        optional_fields = ["descripcion", "colaboradores"]
+        for field in optional_fields:
+            if field not in data or data[field] is None:
+               data[field] = ""
 
         # Validar que el precio sea un número positivo
         if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
