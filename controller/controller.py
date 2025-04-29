@@ -846,7 +846,7 @@ async def album_edit_post(request: Request):
         album.set_autor(data["autor"])
         album.set_colaboradores(data["colaboradores"])
         album.set_descripcion(data["descripcion"])
-        #album.set_fecha(datetime.now()) # La fecha no se puede editar.
+        album.set_fecha(datetime.now()) # La fecha se actualiza a la fecha actual, ya que no se puede editar.
         album.set_generos(data["generos"])
         album.set_canciones(data["canciones"])
         # album.set_visitas() # La cantidad de visitas no se puede editar.
@@ -1475,7 +1475,6 @@ async def edit_song_post(request: Request):
         song.set_titulo(data["titulo"])
         song.set_artista(data["artista"])
         song.set_colaboradores(data["colaboradores"])
-        #song.set_fecha(datetime.now()) # La fecha no se puede editar.
         song.set_descripcion(data["descripcion"])
         song.set_generos(data["generos"])
         song.set_portada(data["portada"])
