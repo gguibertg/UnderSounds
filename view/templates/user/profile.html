@@ -215,11 +215,27 @@
 
         function update() {
             event.preventDefault();
-            const nombre = document.getElementById("nombre").value;
-            const email = document.getElementById("email").value;
+            const nombre = document.getElementById("nombre").value.trim();
+            const email = document.getElementById("email").value.trim();
             const url = document.getElementById("url").value;
             const bio = document.getElementById("bio").value;
             const imagen = document.getElementById('user_image_upload').src;
+
+            if (!nombre) {
+            displayMessage('error', "El campo 'Nombre completo' es obligatorio.");
+            return;
+            }
+
+            if (!email) {
+            displayMessage('error', "El campo 'Correo electrónico' es obligatorio.");
+            return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+            displayMessage('error', "Por favor, introduce un correo electrónico válido.");
+            return;
+            }
 
             fetch("/update-profile", {
             method: "POST",
@@ -227,17 +243,17 @@
             body: JSON.stringify({ nombre, email, url, bio, imagen })
             })
             .then(async response => {
-                const result = await response.json();
-                if (response.ok) {
+            const result = await response.json();
+            if (response.ok) {
                 displayMessage('success', 'Tu perfil ha sido actualizado exitosamente.');
                 window.location.href = "/profile";
-                } else {
+            } else {
                 displayMessage('error', 'Hubo un problema al actualizar tu perfil: ' + result.error);
-                }
+            }
             })
             .catch(error => {
-                console.error("Error al actualizar el perfil:", error);
-                displayMessage('error', 'Ocurrió un error inesperado.');
+            console.error("Error al actualizar el perfil:", error);
+            displayMessage('error', 'Ocurrió un error inesperado.');
             });
         }
 

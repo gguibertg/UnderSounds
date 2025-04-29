@@ -381,6 +381,20 @@ async def update_profile(request: Request, response: Response):
     
     # Obtenemos los datos de usuario a actualizar desde la request.
     data = await request.json()
+
+    # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
+    required_fields = ["nombre", "email", "imagen"]
+    for field in required_fields:
+        if field not in data or data[field] is None:
+            print(PCTRL_WARN, f"Field '{field}' is missing or empty")
+            return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
+
+    # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
+    optional_fields = ["url", "bio"]
+    for field in optional_fields:
+        if field not in data or data[field] is None:
+            data[field] = ""
+
     # Comprobamos si los cambios proporcionados no difieren de los que ya tiene el usuario, en cuyo caso no se haría nada (devuelve un mensaje de éxito)
     if all([
         user_info["nombre"] == data["nombre"],
@@ -517,9 +531,15 @@ async def upload_album_post(request: Request):
     # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
     required_fields = ["titulo", "autor", "generos", "portada", "precio"]
     for field in required_fields:
-        if field not in data or not data[field]:
+        if field not in data or data[field] is None:
             print(PCTRL_WARN, f"Field '{field}' is missing or empty")
             return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
+        
+    # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
+    optional_fields = ["descripcion", "colaboradores"]
+    for field in optional_fields:
+        if field not in data or data[field] is None:
+            data[field] = ""
 
     # Validar que el precio sea un número positivo
     if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
@@ -833,9 +853,15 @@ async def album_edit_post(request: Request):
         # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
         required_fields = ["titulo", "autor", "generos", "portada", "precio"]
         for field in required_fields:
-            if field not in data or not data[field]:
+            if field not in data or data[field] is None:
                 print(PCTRL_WARN, f"Field '{field}' is missing or empty")
                 return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
+
+        # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
+        optional_fields = ["descripcion", "colaboradores"]
+        for field in optional_fields:
+            if field not in data or data[field] is None:
+               data[field] = ""
 
         # Validar que el precio sea un número positivo
         if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
@@ -1137,35 +1163,34 @@ def get_tpv(request: Request):
         user = UsuarioDTO()
         user.load_from_dict(res)
 
-        carrito = model.get_carrito(user.id)
+        carrito = model.get_carrito(user.get_id())
 
         for item in carrito["articulos"]:
             # Comprobamos si es una canción o un álbum
-            song = model.get_song(item.id)
+            song = model.get_song(item["id"])
             if song:
                 user.add_song_to_biblioteca(song["id"])
             else:
-                album = model.get_album(item.id)
+                album = model.get_album(item["id"])
                 if album:
                     for song_id in album["canciones"]:
                         user.add_song_to_biblioteca(song_id)
 
         if model.update_usuario(user):
-            print(PCTRL, "User", user.nombre, "updated in database")
+            print(PCTRL, "User", user.get_nombre(), "updated in database")
         else:
-            print(PCTRL_WARN, "User", user.nombre, "not updated in database!")
-            return {"success": False, "error": "User not updated in database"}
+            print(PCTRL_WARN, "User", user.get_nombre(), "not updated in database!")
+            return JSONResponse(content={"error": "User not updated in database"}, status_code=500)
 
         if model.vaciar_carrito(res["id"]):
             print(PCTRL, "Carrito vaciado en la base de datos")
         else:
             print(PCTRL_WARN, "Actualización del carrito fallida")
-            return {"success": False, "error": "Carrito update failed"}
+            return JSONResponse(content={"error": "Carrito update failed"}, status_code=500)
             
-        
     except Exception as e:
-        print(PCTRL_WARN, "Error while processing Tpv, database failed!")
-        return {"success": False, "error": "Carrito and User not updated to database"}
+        print(PCTRL_WARN, "Error while processing Tpv, database failed with error:", str(e))
+        return JSONResponse(content={"error": "Carrito and User not updated to database"}, status_code=500)
 
     return view.get_tpv_view(request)
 
@@ -1246,9 +1271,15 @@ async def upload_song_post(request: Request):
     # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
     required_fields = ["titulo", "artista", "generos", "portada", "precio"]
     for field in required_fields:
-        if field not in data or not data[field]:
+        if field not in data or data[field] is None:
             print(PCTRL_WARN, f"Field '{field}' is missing or empty")
             return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
+        
+    # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
+    optional_fields = ["descripcion", "colaboradores"]
+    for field in optional_fields:
+        if field not in data or data[field] is None:
+            data[field] = ""
 
     # Validar que el precio sea un número positivo
     if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
@@ -1459,9 +1490,15 @@ async def edit_song_post(request: Request):
         # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
         required_fields = ["titulo", "artista", "generos", "portada", "precio"]
         for field in required_fields:
-            if field not in data or not data[field]:
+            if field not in data or data[field] is None:
                 print(PCTRL_WARN, f"Field '{field}' is missing or empty")
                 return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
+
+        # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
+        optional_fields = ["descripcion", "colaboradores"]
+        for field in optional_fields:
+            if field not in data or data[field] is None:
+               data[field] = ""
 
         # Validar que el precio sea un número positivo
         if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
