@@ -1975,14 +1975,23 @@ async def delete_song_post(request: Request):
         return JSONResponse(content={"error": "User not updated in database"}, status_code=500)
     
     # Borrado en cascada de la canción de las listas de reproducción del usuario
-    usuarios = model.get_usuarios_by_song(song_id)
+    usuarios = model.get_usuarios_by_song_in_list(song_id)
     for usuario_dict in usuarios:
         usuario_dto = UsuarioDTO()
         usuario_dto.load_from_dict(usuario_dict)
 
         for lista in usuario_dto.get_listas_reproduccion():
             if song_id in lista.get("canciones", []):
-                model.remove_cancion_de_lista_usuario(usuario_dto.get_id(), lista.get("nombre"), song_id)        
+                usuario_dto.remove_song_from_lista_reproduccion(lista.get("nombre"), song_id)
+                model.update_usuario(usuario_dto)
+                
+    # Borrado en cascada de la canción de la biblioteca del usuario
+    usuarios = model.get_usuarios_by_song(song_id)
+    for usuario_dict in usuarios:
+        usuario_dto = UsuarioDTO()
+        usuario_dto.load_from_dict(usuario_dict)
+        usuario_dto.remove_song_from_biblioteca(song_id)
+        model.update_usuario(usuario_dto)
     
     # Ruta completa al archivo .mp3
     mp3_path = os.path.join(os.path.dirname(__file__), "..", "static", "mp3", data.get("pista"))
