@@ -170,8 +170,8 @@
                         </div>
                     
                         <div class="historial-actions">
-                            <button class="btn" title="Editar"><img alt="Editar" height="20"
-                                    src="/static/icons/site/edit-icon.svg" width="20" /></button>
+                            <button class="btn" title="Editar" onclick="lastVersion('{{ cambios.fechaUltimaModificacion }}')">
+                                <img alt="Editar" height="20" src="/static/icons/site/edit-icon.svg" width="20" /></button>
                         </div>
                     </details>
                     {% endfor %}
@@ -213,9 +213,42 @@
                 return displayMessage("error", "Debes seleccionar al menos un género.");
             }
             // Validar que la canción esté subida
+            if (titulo == "{{ song.titulo }}" && artista == "{{song.artista}}" && colaboradores == "{{song.colaboradores}}" && descripcion == "{{song.descripcion}}" && precio == "{{song.precio}}" && generos == "{{song.generos}}" && portada == "{{song.portada}}" && visible == "{{song.visible}}") {
+                return displayMessage("error", "No se han realizado cambios en la canción."); 
+            }
+            else{
+                try {
+                    const response = await fetch('/edit-song', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(songData)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        displayMessage('success', 'Canción subida exitosamente');
+                        window.location.href = '/studio';
+                    } else {
+                        displayMessage('error', 'Error al subir la canción: ' + result.error);
+                    }
+                } catch (error) {
+                    displayMessage('error', 'Ocurrió un error al editar la canción.');
+                    console.error('Error editing song:', error);
+                }
+            }
+        }
+
+        async function lastVersion(fechaModificacion){
+            const songData = {
+                id: "{{song.id}}",
+                fechaModificacion: fechaModificacion
+            };
 
             try {
-                const response = await fetch('/edit-song', {
+                const response = await fetch('/last-version', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -226,13 +259,13 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    displayMessage('success', 'Canción subida exitosamente');
+                    displayMessage('success', 'Versión restaurada exitosamente');
                     window.location.href = '/studio';
                 } else {
-                    displayMessage('error', 'Error al subir la canción: ' + result.error);
+                    displayMessage('error', 'Error al restaurar la canción: ' + result.error);
                 }
             } catch (error) {
-                displayMessage('error', 'Ocurrió un error al editar la canción.');
+                displayMessage('error', 'Ocurrió un error al restaurar la canción.');
                 console.error('Error editing song:', error);
             }
         }

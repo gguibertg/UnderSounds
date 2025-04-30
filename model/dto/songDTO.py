@@ -254,19 +254,13 @@ class SongDTO():
         return False  # No se encontró una versión anterior a esa fecha
 
     def _load_partial(self, data: dict):
-        """Carga solo los campos de edición, sin tocar historial ni id"""
+        #Carga solo los campos de edición
         self.titulo = data.get("titulo")
         self.artista = data.get("artista")
         self.colaboradores = data.get("colaboradores")
-        self.fecha = data.get("fecha")
         self.descripcion = data.get("descripcion")
-        self.duracion = data.get("duracion")
         self.generos = data.get("generos", [])
-        self.likes = data.get("likes")
-        self.visitas = data.get("visitas")
         self.portada = data.get("portada")
         self.precio = data.get("precio")
-        self.lista_resenas = data.get("lista_resenas", [])
         self.visible = data.get("visible")
         self.album = data.get("album")
-        self.pista = data.get("pista")
