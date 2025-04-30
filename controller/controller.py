@@ -158,9 +158,12 @@ async def login_post(data: dict, response: Response, provider: str):
         session_id = str(uuid.uuid4())
         # Faltaría asignar vigencia a la sesión
         sessions[session_id] = {"name": user_email, "user_id": user_id, "type": provider}
-        response.set_cookie(key="session_id", value=session_id, httponly=True)
+        # Creamos una instancia de JSONResponse
+        resp = JSONResponse(content={"success": True}, status_code=200)
+        # Le añadimos la cookie
+        resp.set_cookie(key="session_id", value=session_id, httponly=True)
         print(PCTRL, "Inicio de sesión exitoso")
-        return { "success" : True }
+        return resp
 
     except Exception as e:
         print("El inicio de sesión falló debido a", str(e))
@@ -267,9 +270,13 @@ async def register_post(data: dict, response: Response, provider: str):
         session_id = str(uuid.uuid4())
         #Faltaría asignar vigencia a la sesión
         sessions[session_id] = {"name": user_email, "user_id": user_id, "type": provider}
-        response.set_cookie(key="session_id", value=session_id, httponly=True)
+        # Creamos una instancia de JSONResponse
+        resp = JSONResponse(content={"success": True}, status_code=200)
+        # Le añadimos la cookie
+        resp.set_cookie(key="session_id", value=session_id, httponly=True)
         print(PCTRL, "Inicio de sesión exitoso")
-        return JSONResponse(content={"success": True}, status_code=200)
+        return resp
+
         
     except Exception as e:
         print("El registro del usuario falló debido a", str(e))
