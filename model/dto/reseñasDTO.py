@@ -20,7 +20,7 @@ class ReseñaDTO():
         self.id: str = None
         self.titulo: str = None
         self.reseña: str = None
-        self.usuario: dict = None
+        self.usuario: str = None
 
     def is_empty(self):
         return (self.id is None and self.titulo is None and self.reseña is None and self.usuario is None)
@@ -43,10 +43,10 @@ class ReseñaDTO():
     def set_reseña(self, reseña: str):
         self.reseña = reseña
 
-    def get_usuario(self) -> dict:
+    def get_usuario(self) -> str:
         return self.usuario
 
-    def set_usuario(self, usuario: dict):
+    def set_usuario(self, usuario: str):
         self.usuario = usuario
 
     def reseñadto_to_dict(self) -> dict:

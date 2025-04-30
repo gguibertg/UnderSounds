@@ -1430,9 +1430,6 @@ async def upload_song_file(request: Request, pista: UploadFile = File(...)):
         print(PCTRL_WARN, f"Error al subir el archivo {filename}: {str(e)}")
         return JSONResponse(content={"error": "Error al subir el archivo"}, status_code=500)
     
-    
-    
-
 # Ruta para cargar vista song
 @app.get("/song")
 async def get_song(request: Request):
@@ -1945,7 +1942,7 @@ async def add_review(request: Request):
         reseña = ReseñaDTO()
         reseña.set_titulo(titulo)
         reseña.set_reseña(texto)
-        reseña.set_usuario(user_db)
+        reseña.set_usuario(user_db["id"])
 
         # Guardar en base de datos
         reseña_id = model.add_reseña(reseña)
@@ -1987,7 +1984,7 @@ async def delete_review(request: Request):
             # Obtener la reseña
             reseña_data = model.get_reseña(reseña_id)
 
-            if user_db != reseña_data["usuario"]:
+            if user_db["id"] != reseña_data["usuario"]:
                 return JSONResponse(status_code=500, content={"error": "La reseña no te pertenece."})
 
             song_dict = model.get_song(song_id)
@@ -2026,7 +2023,7 @@ async def update_review(request: Request):
             # Obtener la reseña
             reseña_data = model.get_reseña(reseña_id)
 
-            if user_db != reseña_data["usuario"]:
+            if user_db["id"] != reseña_data["usuario"]:
                 return JSONResponse(status_code=500, content={"error": "No puedes actualizar una reseña que no te pertenece."})
 
             song_dict = model.get_song(song_id)
@@ -2147,9 +2144,6 @@ def get_search(request: Request):
     print(PCTRL, "Busqueda terminada")
     return view.get_search_view(request, all_items)
 
-@app.get("/search")
-def get_search(request: Request):
-    return view.get_search_view(request, {})
 
 # -------------------------------------------------------------------------- #
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
