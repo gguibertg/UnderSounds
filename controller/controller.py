@@ -786,6 +786,17 @@ async def get_album_edit(request: Request):
         canciones_out.append(cancion)
     album_info["canciones"] = canciones_out
 
+    for historial in album_info["historial"]:
+        canciones_historial: list[dict] = []
+        for cancion_id in historial["canciones"]:
+            cancion = model.get_song(cancion_id)
+            if not cancion:
+                print(PCTRL_WARN, "Canción", cancion_id, "not found in database")
+                return Response("Error del sistema", status_code=403)
+            canciones_historial.append(cancion)
+        historial["canciones"] = canciones_historial
+        
+
     # Ya tenemos el album preparado. Pero ahora, tenemos que emular basicamente la misma funcionalidad que en upload-album, para que el artista pueda editar el album con nuevas canciones.
     # Así pues, copiamos y pegamos el código de upload-album para obtener las canciones válidas para un album nuevo.
 
@@ -891,6 +902,8 @@ async def album_edit_post(request: Request):
         album.set_precio(data["precio"])
         # album.set_likes() # La cantidad de likes no se puede editar.
         album.set_visible(data["visible"])
+
+        album_dict["fechaUltimaModificacion"] = datetime.now() # Actualizamos la fecha de la última edición
         album.add_historial(album_dict)
         
         # Por cada una de las canciones en el album, actualizamos su campo album con el id del nuevo album
@@ -903,6 +916,8 @@ async def album_edit_post(request: Request):
             # Actualizamos el campo album de la canción con el id del nuevo album
             song_object = SongDTO()
             song_object.load_from_dict(song)
+            song_object.add_historial(song)
+            
             song_object.set_album(album_id)
             if not model.update_song(song_object):
                 print(PCTRL_WARN, "Song", song_id, "not updated in database!")
@@ -1491,6 +1506,18 @@ async def get_edit_song(request: Request):
 
     # Descargamos la canción de la base de datos via su ID y comprobamos si es creación del usuario.
     song_info = model.get_song(song_id)
+
+    for historial in song_info["historial"]:
+        if historial["album"]:
+            album = model.get_album(historial["album"])
+            if not album:
+                print(PCTRL_WARN, "Album", historial["album"], "not found in database")
+                historial["albumStr"] = None
+            historial["albumStr"] = album["titulo"]
+        else:
+            historial["albumStr"] = None
+
+    
     if not song_info:
         print(PCTRL_WARN, "Song does not exist")
         return Response("No autorizado", status_code=403)

@@ -141,7 +141,7 @@
                     {% if song.historial |length == 0 %}
                     <p id="no_reseñas" style="display: flex; justify-content: center; align-items: center;">No hay historial de cambios.</p>
                     {% else %}
-                    {% for cambios in song.historial %}
+                    {% for cambios in song.historial | reverse %}
                     <details class="historial" id="cambio -¨{{ cambios.fechaUltimaModificacion }}">
                         <summary><img alt="Desplegar" class="chevron" height="16"
                                 src="/static/icons/site/dropdown-icon.svg" width="16" />
@@ -153,11 +153,11 @@
                                 <h2 class="song-title"> {{cambios.titulo}}</h2>
                                 <p><strong>Autor:</strong> {{cambios.artista}}</p>
                                 <p><strong>Colaboradores:</strong> {{cambios.colaboradores}}</p>
-                                <pre><strong>Descripción:</strong> {{cambios.descripcion}} </pre>
+                                <p><strong>Descripción:</strong> <pre> {{cambios.descripcion}} </pre></p>
                                 {% if cambios.album %}
                                     <p><strong>Álbum:</strong> {{cambios.albumStr}}</p>
                                 {% else %}
-                                    <p>Esta canción es un <i>Single</i></p>
+                                    <p><strong> La canción es un <i>Single</i></strong></p>
                                 {% endif %}
                                 <p><strong>Géneros:</strong> {{cambios.generos}} </p>
                                 <p><strong>Precio:</strong> {{cambios.precio}}€</p>

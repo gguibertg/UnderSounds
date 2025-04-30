@@ -22,6 +22,7 @@ class AlbumDTO:
         self.colaboradores: str = None # Si, se que es un string y no una lista, pero a quien le importa realmente? Nunca lo vamos a usar como una lista de todas formas
         self.descripcion: str = None
         self.fecha: datetime = None
+        self.fechaUltimaModificacion: datetime = None
         self.generos: list[str] = []
         self.canciones: list[str] = []       
         self.visitas: int = None
@@ -66,6 +67,12 @@ class AlbumDTO:
 
     def set_fecha(self, fecha: datetime):
         self.fecha = fecha
+
+    def get_fechaUltimaModificacion(self) -> datetime:
+        return self.fechaUltimaModificacion
+    
+    def set_fechaUltimaModificacion(self, fecha: datetime):
+        self.fechaUltimaModificacion = fecha
 
     def set_generos(self, generos: list[str]):
         self.generos = generos
@@ -126,8 +133,14 @@ class AlbumDTO:
     def get_historial(self) -> list[dict]:
         return self.historial
     
-    def add_historial(self, historial: dict):
-        self.historial.append(historial)
+    def add_historial(self, old_song_dict: dict):
+        def clean_historial(d: dict) -> dict:
+            cleaned = dict(d)  # copia superficial
+            cleaned.pop("historial", None)  # elimina historial si existe
+            return cleaned
+        
+        cleaned_version = clean_historial(old_song_dict)
+        self.historial.append(cleaned_version)
 
     def remove_historial(self, historial: dict):
         if historial in self.historial:
@@ -143,6 +156,7 @@ class AlbumDTO:
         self.colaboradores = data.get("colaboradores")
         self.descripcion = data.get("descripcion")
         self.fecha = data.get("fecha")
+        self.fechaUltimaModificacion = data.get("fechaUltimaModificacion")
         self.generos = data.get("generos", [])
         self.canciones = data.get("canciones", [])
         self.visitas = data.get("visitas")
@@ -150,7 +164,11 @@ class AlbumDTO:
         self.precio = data.get("precio")
         self.likes = data.get("likes")
         self.visible = data.get("visible")
-        self.historial = data.get("historial", [])
+        self.historial = []
+        for entry in data.get("historial", []):
+            if isinstance(entry, dict):
+                cleaned = {k: v for k, v in entry.items() if k != "historial"}
+                self.historial.append(cleaned)
 
     def album_to_dict(self) -> dict:
         return {
@@ -160,6 +178,7 @@ class AlbumDTO:
             "colaboradores": self.colaboradores,
             "descripcion": self.descripcion,
             "fecha": self.fecha,
+            "fechaUltimaModificacion": self.fechaUltimaModificacion,
             "generos": self.generos,
             "canciones": self.canciones,
             "visitas": self.visitas,
@@ -167,5 +186,8 @@ class AlbumDTO:
             "precio": self.precio,
             "likes": self.likes,
             "visible": self.visible,
-            "historial": self.historial
+            "historial": [self._clean_historial_entry(h) for h in self.historial]
         }
+    
+    def _clean_historial_entry(self, h: dict) -> dict:
+        return {k: v for k, v in h.items() if k != "historial"}
