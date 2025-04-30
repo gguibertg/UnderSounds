@@ -40,7 +40,7 @@
                         <h2 class="song-title"> {{song.titulo}}</h2>
                         <p><strong>Autor:</strong> {{song.artista}}</p>
                         <p><strong>Colaboradores:</strong> {{song.colaboradores}}</p>
-                        <pre><strong>Descripción:</strong> {{song.descripcion}} </pre>
+                        <pre style="max-width: 30rem; word-wrap: break-word; white-space: pre-wrap;"><strong>Descripción:</strong> {{song.descripcion}} </pre>
                         <p><strong>Fecha de lanzamiento:</strong> {{song.fecha}}</p>
                         <p><strong>Duración:</strong> {{song.duracion}}</p> <!-- TODO: Hacer be-stream primero! y que los archivos tengan duración, no null! -->
                         {% if song.album %}
