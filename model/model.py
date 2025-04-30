@@ -7,6 +7,7 @@ from .dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 from .dto.contactoDTO import ContactoDTO
 from .dto.reseñasDTO import ReseñaDTO
 from .dto.carritoDTO import ArticuloCestaDTO
+from .dto.sesionDTO import SesionDTO
 
 
 
@@ -24,6 +25,7 @@ class Model ():
         self.carrito = self.factory.getCarritoDAO()
         self.daoContacto = self.factory.getContactoDAO()
         self.daoReseña = self.factory.getReseñaDAO()
+        self.daoSesion = self.factory.getSesionDAO()
         pass
 
     # Usuario
@@ -173,3 +175,21 @@ class Model ():
 
     def delete_reseña(self, id):
         return self.daoReseña.delete_reseña(id)
+    
+    # Sesiones
+    def get_all_sesiones(self):
+        return self.daoSesion.get_all_sesiones()
+
+    def get_sesion(self, id : str):
+        return self.daoSesion.get_sesion(id)
+    
+    def add_sesion(self, sesion : SesionDTO):
+        return self.daoSesion.add_sesion(sesion)
+    
+    def update_sesion(self, sesion : SesionDTO):
+        return self.daoSesion.update_sesion(sesion)
+    
+    def delete_sesion(self, id : str):
+        return self.daoSesion.delete_sesion(id)
+    
+    

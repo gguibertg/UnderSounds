@@ -1,9 +1,7 @@
 # Imports estándar de Python
 import base64
-import json
 import re
-import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 import os
 
@@ -19,6 +17,7 @@ from datetime import datetime
 # Imports locales del proyecto
 from model.dto.albumDTO import AlbumDTO
 from model.dto.carritoDTO import ArticuloCestaDTO, CarritoDTO
+from model.dto.sesionDTO import SesionDTO
 from model.dto.songDTO import SongDTO
 from model.dto.contactoDTO import ContactoDTO
 from model.dto.usuarioDTO import UsuarioDTO, UsuariosDTO
@@ -63,9 +62,21 @@ app.mount(
 view = View()
 model = Model()
 
-# Almacenamiento en memoria para sesiones
-sessions = {}
+# Almacenamiento caché en memoria para sesiones
+sessions : dict[dict] = {}
 
+# Descargamos todas las sesiones de la base de datos al inicio y las guardamos en la caché en memoria,
+# descartando aquellas que estén caducadas por el camino y también eliminandolas de la base de datos.
+# Esto invalida la necesidad de tener que comprobar en el método auxiliar verifySessionAndGetUserInfo(request)
+# si hay una sesión en mongo que poder descargar. Aún así, lo mantenemos por si acaso queremos quitar el descargar todo de la base de datos al inicio.
+for sesion in model.get_all_sesiones():
+    if sesion["caducidad"] < datetime.now():
+        # Si ha caducado, la eliminamos de la base de datos y de la caché en memoria
+        model.delete_sesion(sesion["id"])
+        print(PCTRL, "La sesión", sesion["id"], "ha caducado y ha sido eliminada de la base de datos")
+    else:
+        # Si no ha caducado, la añadimos a la caché en memoria
+        sessions[sesion["id"]] = sesion
 
 # ===============================================================================
 # =========================== DEFINICIÓN DE RUTAS ===============================
@@ -122,9 +133,19 @@ def login(request: Request):
 
 # Ruta para procesar la petición de login
 @app.post("/login")
-async def login_post(data: dict, response: Response, provider: str):
+async def login_post(data: dict, request : Request, provider: str):
     token = data.get("token")
     try:
+        # Si el usuario está logeado, es decir, tiene un cookie de sesión válido + sesión en el backend, entonces no debería poder logearse de nuevo (¡la anterior sesión se quedaría fantasma!).
+        # Sin embargo, si la sesión en el backend ha caducado (o no existe), entonces el usuario debería poder logearse de nuevo.
+        # Verificamos si el usuario tiene una sesión activa y existe en la base de datos.
+        res = verifySessionAndGetUserInfo(request)
+        if not isinstance(res, Response):
+            # Si el usuario tiene una sesión activa, échalo.
+            return JSONResponse(content={"error": "El usuario ya tiene una sesión activa válida"}, status_code=400)
+        # Llegados a este punto, o el usuario no tiene una sesión activa, o la sesión ha caducado (o no existe en el backend)
+        # y verifySessionAndGetUserInfo() se ha encargado de eliminarla de la caché en memoria y de la base de datos.
+        # Así entonces, podemos crear sin preocupaciones otro cookie y SesionDTO sin miedo a llenar la base de datos de sesiones basura.
 
         # Verificamos el token de Firebase dado por el usuario
         decoded_token = auth.verify_id_token(token, None, False, 3)
@@ -154,41 +175,59 @@ async def login_post(data: dict, response: Response, provider: str):
             success = model.update_usuario(usuario_dto)
             print(PCTRL, "Correo electrónico actualizado en MongoDB" if success else f"{PCTRL_WARN} Error al actualizar el correo electrónico en MongoDB")
 
-        # Creamos una sesión para el usuario
-        session_id = str(uuid.uuid4())
-        # Faltaría asignar vigencia a la sesión
-        sessions[session_id] = {"name": user_email, "user_id": user_id, "type": provider}
+        # Creamos una sesión para el usuario y la subimos a la base de datos
+        session_obj = SesionDTO()
+        session_obj.set_name(user_email)
+        session_obj.set_user_id(user_id)
+        session_obj.set_type(provider)
+        delta = timedelta(hours=12) # Hoy + 12 horas
+        session_obj.set_caducidad(datetime.now() + delta)
+        session_id = model.add_sesion(session_obj)
+        if session_id is None:
+            print(PCTRL_WARN, "Error al crear la sesión en la base de datos")
+            return JSONResponse(content={"error": "Error al crear la sesión"}, status_code=500)
+        # Añadimos la sesión a la caché en memoria
+        sessions[session_id] = session_obj.to_dict()
+
         # Creamos una instancia de JSONResponse
         resp = JSONResponse(content={"success": True}, status_code=200)
         # Le añadimos la cookie
-        resp.set_cookie(key="session_id", value=session_id, httponly=True)
-        print(PCTRL, "Inicio de sesión exitoso")
+        resp.set_cookie(key="session_id", value=session_id, httponly=True, max_age=delta.total_seconds())
+        print(PCTRL, "Inicio de sesión exitoso para", user_email)
         return resp
 
     except Exception as e:
-        print("El inicio de sesión falló debido a", str(e))
+        print(PCTRL_WARN, "El inicio de sesión falló debido a:", str(e))
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 # Ruta para procesar la petición de login con credenciales clásicas
 @app.post("/login-credentials")
-async def login_credentials(data: dict, response: Response):
-    return await login_post(data, response, "credentials")
+async def login_credentials(data: dict, request: Request):
+    return await login_post(data, request, "credentials")
 
 # Ruta para procesar la petición de login con credenciales de Google
 @app.post("/login-google")
-async def login_google(data: dict, response: Response):
-    return await login_post(data, response, "google")
+async def login_google(data: dict, request: Request):
+    return await login_post(data, request, "google")
 
 # Ruta para procesar la petición de logout
 @app.post("/logout")
 async def logout(request: Request, response: Response):
     session_id = request.cookies.get("session_id")
-    print(PCTRL, "La sesión del usuario", session_id, "está cerrando sesión")
+    print(PCTRL, "La sesión de usuario", session_id, "se está cerrando")
+    # Eliminar de la base de datos
+    if not model.delete_sesion(session_id):
+        print(PCTRL_WARN, "Error al eliminar la sesión de la base de datos - omitiendo")
+    # Eliminar de la caché en memoria 
     if session_id in sessions:
         del sessions[session_id]
+
+    # Creamos una instancia de JSONResponse
+    resp = JSONResponse(content={"success": True}, status_code=200)
+    # Le eliminamos la cookie
+    resp.delete_cookie("session_id")
     print(PCTRL, "La sesión del usuario", session_id, "ha sido destruida")
-    response.delete_cookie("session_id")
-    return JSONResponse(content={"success": True}, status_code=200)
+    return resp
 
 # Hack para que el header pueda acceder al script de logout correctamente
 @app.get("/logout")
@@ -266,20 +305,29 @@ async def register_post(data: dict, response: Response, provider: str):
             print(PCTRL_WARN, "¡El registro del usuario falló en la base de datos!")
             return JSONResponse(content={"error": "El registro del usuario falló"}, status_code=500)
         
-        # Creamos una sesión para el usuario (login)
-        session_id = str(uuid.uuid4())
-        #Faltaría asignar vigencia a la sesión
-        sessions[session_id] = {"name": user_email, "user_id": user_id, "type": provider}
+        # Creamos una sesión para el usuario y la subimos a la base de datos
+        session_obj = SesionDTO()
+        session_obj.set_name(user_email)
+        session_obj.set_user_id(user_id)
+        session_obj.set_type(provider)
+        delta = timedelta(hours=12) # Hoy + 12 horas
+        session_obj.set_caducidad(datetime.now() + delta)
+        session_id = model.add_sesion(session_obj)
+        if session_id is None:
+            print(PCTRL_WARN, "Error al crear la sesión en la base de datos")
+            return JSONResponse(content={"error": "Error al crear la sesión"}, status_code=500)
+        # Añadimos la sesión a la caché en memoria
+        sessions[session_id] = session_obj.to_dict()
+
         # Creamos una instancia de JSONResponse
         resp = JSONResponse(content={"success": True}, status_code=200)
         # Le añadimos la cookie
-        resp.set_cookie(key="session_id", value=session_id, httponly=True)
-        print(PCTRL, "Inicio de sesión exitoso")
+        resp.set_cookie(key="session_id", value=session_id, httponly=True, expires=delta.total_seconds())
+        print(PCTRL, "Registro (e inicio de sesión) exitoso para", user_email)
         return resp
-
         
     except Exception as e:
-        print("El registro del usuario falló debido a", str(e))
+        print(PCTRL_WARN, "El registro del usuario falló debido a:", str(e))
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 # Ruta para procesar la petición de login con credenciales clásicas
@@ -329,12 +377,20 @@ async def deregister(request: Request, response: Response):
 
         # Eliminar la sesión del usuario
         session_id = request.cookies.get("session_id")
-        del sessions[session_id]
-        response.delete_cookie("session_id")
-        print(PCTRL, "La sesión del usuario", session_id, "fue destruida")
+        # Eliminar de la base de datos
+        if not model.delete_sesion(session_id):
+            print(PCTRL_WARN, "Error al eliminar la sesión de la base de datos - omitiendo")
+        # Eliminar de la caché en memoria 
+        if session_id in sessions:
+            del sessions[session_id]
+        # Creamos una instancia de JSONResponse
+        resp = JSONResponse(content={"success": True, "message": "La cuenta del usuario fue eliminada exitosamente"}, status_code=200)
+        # Le eliminamos la cookie
+        resp.delete_cookie("session_id")
+        print(PCTRL, "La sesión del usuario", session_id, "ha sido destruida")
 
         print(PCTRL, "La cuenta del usuario fue eliminada exitosamente")
-        return JSONResponse(content={"success": True, "message": "La cuenta del usuario fue eliminada exitosamente"}, status_code=200)
+        return resp
     
     except Exception as e:
         print(PCTRL, "Error al eliminar al usuario:", str(e))
@@ -2092,43 +2148,69 @@ def get_search(request: Request):
 # --------------------------- MÉTODOS AUXILIARES --------------------------- #
 # -------------------------------------------------------------------------- #
 
-# Un session contiene un name, user_id y el tipo de login (google o credentials)
-def getSessionData(session_id: str) -> str:
-    if session_id in sessions:
-        return sessions[session_id]
-    return None
-
 # Este método automatiza la obtención de datos del usuario a partir de la sesión activa.
 #
-#   1º Comprueba que exista una sesión activa
+#   1º Comprueba que exista una sesión activa en memoria (caché) o en la base de datos
 #   2º Descarga los datos del usuario enlazados a esa sesión
 #   3º Devuelve dos cosas:
-#       Si todo es correcto -> Devuelve user_info (dict)
-#       Si no -> Devuelve un Response con el error y escribe a consola
+#       Si todo es correcto -> Devuelve user_info (dict) con la info del usuario
+#       Si no -> Devuelve un Response con el error
+#   Además, si la sesión ha caducado, la elimina de la caché, de la base de datos y responde con un Response con el error.
 #
 # Conveniente para rutas sencillas que solo requieran la info del usuario.
 def verifySessionAndGetUserInfo(request : Request):
-    # Comprobamos si el usuario tiene una sesión activa
+
+    # Obtenemos el id de la sesión del usuario desde la cookie
     session_id = request.cookies.get("session_id")
-    if not (session_id and session_id in sessions):
-        print(PCTRL, "Usuario anónimo solicitó datos a través de:", request.method, request.url.path)
+    if not session_id:
+        print(PCTRL, "Usuario invitado (sin sesión activa) accediendo a:", request.method, request.url.path)
         return Response("No autorizado", status_code=401)
+
+    # Comprobamos si la sesión está en caché (en memoria)
+    if session_id not in sessions:
+        # Si la sesión no está en caché, la buscamos en la base de datos
+        print(PCTRL, "Un usuario intenta verificarse con una cookie con sesión fuera de caché, descargando sesión...")
+        session_data = model.get_sesion(session_id)
+        if not session_data:
+            sessions[session_id] = "expired" # Añadimos la sesión como invitado a la caché
+            print(PCTRL_WARN, "Usuario con cookie no válida (sesión no existe en caché/BD) accediendo a:", request.method, request.url.path + ". Registrada sesión como Invitado.")
+            return Response("La sesión ha caducado. Debes iniciar sesión de nuevo.", status_code=401)
+        else:
+            # Si la sesión existe en la base de datos, la añadimos a la caché
+
+            sessions[session_id] = session_data
+    else:
+        # Si la sesión está en caché, la obtenemos de ahí
+        session_data = sessions[session_id]
     
     # Accedemos a los datos de la sesión del usuario
-    session_data = getSessionData(session_id)
     if session_data:
-        user_id = session_data["user_id"]
-        # Accedemos a los datos del usuario en la base de datos
-        user_info = model.get_usuario(user_id) # Devuelve un dict del UsuarioDTO
 
+        # Comprobamos si la sesión es de tipo expired
+        if session_data == "expired":
+            print(PCTRL_WARN, "Usuario invitado (con sesión caducada) accediendo a:", request.method, request.url.path)
+            return Response("La sesión ha caducado. Debes iniciar sesión de nuevo.", status_code=401)
+        
+        # Comprobamos si la sesión ha caducado
+        if session_data["caducidad"] < datetime.now():
+            # Si ha caducado, la eliminamos de la caché y de la base de datos
+            del sessions[session_id]
+            model.delete_sesion(session_id)
+            sessions[session_id] = "expired" # Añadimos la sesión como invitado a la caché
+            print(PCTRL_WARN, "Usuario con cookie no válida (sesión caducada) accediendo a:", request.method, request.url.path + ". Su sesión se ha eliminado de la caché/BD y se ha registrado como Invitado.")
+            return Response("La sesión ha caducado. Debes iniciar sesión de nuevo.", status_code=401)
+
+        # Descargamos los datos del usuario en la base de datos
+        user_id = session_data["user_id"]
+        user_info = model.get_usuario(user_id) # Devuelve un dict del UsuarioDTO
         if user_info:
             print(PCTRL, "El usuario", user_info["email"], "solicitó acceso a los datos del usuario a través de:", request.method, request.url.path)
             return user_info
         else:
             print(PCTRL_WARN, "El usuario con id", user_id, "solicitó datos a través de:", request.method, request.url.path, ", pero el user_id no se encuentra en la base de datos. Asumiendo ahora que el usuario es anónimo.")
     else:
-        print(PCTRL, "Usuario anónimo solicitó datos a través de:", request.method, request.url.path, ", pero la sesión especificada no existe en el backend.")
-
+        print(PCTRL, "Usuario con cookie válida solicitó datos a través de:", request.method, request.url.path, ", pero la sesión especificada no existe en el backend.")
+    
     return Response("No autorizado", status_code=401)
 
 # Valida los campos genéricos de un upload data su data = request.json()
@@ -2188,22 +2270,3 @@ def validate_song_fields(data) -> JSONResponse | bool:
         return JSONResponse(content={"error": "La pista debe ser un archivo no vacío"}, status_code=400)
 
     return validate_fields(data)
-
-
-# --------------------------- HACKS DE MIERDA - ELIMINAR CUANDO HAYA UNA MEJOR IMPLEMENTACIÓN --------------------------- #
-# Guardar sesiones en un archivo JSON al cerrar el servidor y recuperarlas al iniciar.
-# Así evitamos perder las sesiones al reiniciar el servidor.
-@app.on_event("shutdown")
-def shutdown_event():
-    with open("sessions.json", "w") as f:
-        json.dump(sessions, f)
-    print(PCTRL, "Sessions saved to sessions.json")
-@app.on_event("startup")
-def startup_event():
-    if Path("sessions.json").is_file():
-        with open("sessions.json", "r") as f:
-            global sessions
-            sessions = json.load(f)
-        print(PCTRL, "Sessions loaded from sessions.json")
-    else:
-        print(PCTRL_WARN, "No sessions.json file found, starting with empty sessions")
