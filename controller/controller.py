@@ -4,6 +4,7 @@ import json
 import uuid
 from datetime import datetime
 from pathlib import Path
+import os
 
 # Imports de terceros
 import firebase_admin
@@ -19,7 +20,7 @@ from model.dto.albumDTO import AlbumDTO
 from model.dto.carritoDTO import ArticuloCestaDTO, CarritoDTO
 from model.dto.songDTO import SongDTO
 from model.dto.contactoDTO import ContactoDTO
-from model.dto.usuarioDTO import UsuarioDTO
+from model.dto.usuarioDTO import UsuarioDTO, UsuariosDTO
 from model.dto.reseñasDTO import ReseñaDTO
 from model.model import Model
 from view.view import View
@@ -1311,7 +1312,10 @@ async def upload_song_post(request: Request):
         print(PCTRL_WARN, "Genres must be a non-empty list")
         return JSONResponse(content={"error": "Genres must be a non-empty list"}, status_code=400)
     
-    # TODO: PROCESAR AQUÍ LA CANCIÓN!! (be-stream)
+    if not isinstance(data["pista"], str) or not data["pista"]:
+        print(PCTRL_WARN, "Pista must be a non-empty file")
+        return JSONResponse(content={"error": "Pista must be a non-empty file"}, status_code=400)
+
 
     song = SongDTO()
     song.set_titulo(data["titulo"])
@@ -1326,7 +1330,13 @@ async def upload_song_post(request: Request):
     song.set_precio(data["precio"])
     song.set_lista_resenas([])
     song.set_visible(data["visible"])
-    song.set_album(None)  # El album se asigna posteriormente en el editor de albumes
+    song.set_album(None) 
+    song.set_pista(data["pista"])
+    duracion = data["duracion"]
+    minutos = duracion/60
+    segundos = duracion % 60
+    tiempo = f"{int(minutos):02d}:{int(segundos):02d}"
+    song.set_duracion(tiempo)
 
     try:
         song_id = model.add_song(song)
@@ -1341,6 +1351,7 @@ async def upload_song_post(request: Request):
         user = UsuarioDTO()
         user.load_from_dict(res)
         user.add_studio_cancion(song_id)
+        user.add_song_to_biblioteca(song_id)
         if model.update_usuario(user):
             print(PCTRL, "User", user.get_email(), "updated in database")
             return JSONResponse(content={"success": True}, status_code=200)
@@ -1353,6 +1364,55 @@ async def upload_song_post(request: Request):
         # Eliminar la canción subida (intentar tanto si se ha subido como si no)
         model.delete_song(song_id)
         return JSONResponse(content={"error": "Song not added to database"}, status_code=500)
+
+# Ruta para la subida del archivo mp3
+@app.post("/upload-song-file")
+async def upload_song_file(request: Request, pista: UploadFile = File(...)):
+    """
+    Endpoint para procesar y almacenar el archivo de audio.
+    """
+    # Verificar si el usuario tiene una sesión activa y es artista
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401)  # Si es un Response, devolvemos el error
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
+
+    # Obtener el nombre del archivo y la ruta de almacenamiento
+    filename = pista.filename
+    file_path = os.path.join("static", "mp3", filename)
+
+    # Validar el archivo
+    if not filename:
+        print(PCTRL_WARN, "No file selected")
+        return JSONResponse(content={"error": "No file selected"}, status_code=400)
+
+    if pista.content_type not in ["audio/mpeg", "audio/mp3", "audio/wav"]:
+        print(PCTRL_WARN, f"Invalid file type: {pista.content_type}")
+        return JSONResponse(content={"error": "Invalid file type. Only MP3 and WAV allowed."}, status_code=400)
+
+    file_content = await pista.read()
+
+    # Intentar guardar el archivo
+    try:
+        # Asegurarse de que la carpeta exista
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        # Guardar el archivo en el sistema
+        with open(file_path, "wb") as f:
+            f.write(file_content)
+
+        # Respuesta exitosa
+        print(PCTRL, f"File {filename} uploaded successfully to {file_path}")
+        return JSONResponse(content={"success": True, "filename": filename}, status_code=200)
+
+    except Exception as e:
+        print(PCTRL_WARN, f"Error while uploading file {filename}: {str(e)}")
+        return JSONResponse(content={"error": "Error while uploading file"}, status_code=500)
+    
+    
+    
 
 # Ruta para cargar vista song
 @app.get("/song")
@@ -1529,8 +1589,6 @@ async def edit_song_post(request: Request):
         if not isinstance(data["generos"], list) or not data["generos"]:
             print(PCTRL_WARN, "Genres must be a non-empty list")
             return JSONResponse(content={"error": "Genres must be a non-empty list"}, status_code=400)
-        
-        # TODO: PROCESAR AQUÍ LA CANCIÓN!! (be-stream)
     
         song = SongDTO()
         song.load_from_dict(song_dict)
@@ -1606,6 +1664,26 @@ async def delete_song_post(request: Request):
     if not model.update_usuario(user):
         print(PCTRL_WARN, "User", user.get_email(), "not updated in database!")
         return JSONResponse(content={"error": "User not updated in database"}, status_code=500)
+    
+    # Borrado en cascada de la canción de las listas de reproducción del usuario
+    usuarios = model.get_usuarios()
+    for usuario_dict in usuarios:
+        usuario_dto = UsuarioDTO()
+        usuario_dto.load_from_dict(usuario_dict)
+
+        for lista in usuario_dto.get_listas_reproduccion():
+            if song_id in lista.get("canciones", []):
+                model.remove_cancion_de_lista_usuario(usuario_dto.get_id(), lista.get("nombre"), song_id)        
+    
+    # Ruta completa al archivo .mp3
+    mp3_path = os.path.join(os.path.dirname(__file__), "..", "static", "mp3", data.get("pista"))
+
+    # Borrar el archivo si existe
+    if os.path.exists(mp3_path):
+        os.remove(mp3_path)
+        print(PCTRL, "Deleted MP3 file:", mp3_path)
+    else:
+        print(PCTRL_WARN, "MP3 file not found:", mp3_path)
 
     # Por último, borramos la canción de la base de datos
     if model.delete_song(song_id):
@@ -1614,6 +1692,7 @@ async def delete_song_post(request: Request):
     else:
         print(PCTRL_WARN, "Song", song_id, "not deleted from database!")
         return JSONResponse(content={"error": "Song not deleted from database"}, status_code=500)
+
 
 # Ruta para darle like a una canción
 @app.post("/like-song")

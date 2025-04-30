@@ -39,6 +39,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_lista_resenas(doc.get("lista_resenas"))
                     song_dto.set_visible(doc.get("visible"))
                     song_dto.set_album(doc.get("album"))
+                    song_dto.set_pista(doc.get("pista"))
 
                     songs.insertSong(song_dto)
 
@@ -71,6 +72,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                 song.set_lista_resenas(query.get("lista_resenas"))
                 song.set_visible(query.get("visible"))
                 song.set_album(query.get("album"))
+                song.set_pista(query.get("pista"))
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar la cancion: {e}")
@@ -136,6 +138,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_lista_resenas(doc.get("lista_resenas"))
                     song_dto.set_visible(doc.get("visible"))
                     song_dto.set_album(doc.get("album"))
+                    song_dto.set_pista(doc.get("pista"))
 
                     songs.insertSong(song_dto)
 
@@ -194,6 +197,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_lista_resenas(doc.get("lista_resenas"))
                     song_dto.set_visible(doc.get("visible"))
                     song_dto.set_album(doc.get("album"))
+                    song_dto.set_pista(doc.get("pista"))
 
                     songs.insertSong(song_dto)
 
@@ -225,6 +229,7 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_lista_resenas(doc.get("lista_resenas"))
                     song_dto.set_visible(doc.get("visible"))
                     song_dto.set_album(doc.get("album"))
+                    song_dto.set_pista(doc.get("pista"))
 
                     songs.insertSong(song_dto)
 
