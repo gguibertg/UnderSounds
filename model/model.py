@@ -71,6 +71,9 @@ class Model ():
 
     def get_usuarios_by_song(self, song_id):
         return self.daoUsuario.get_all_usuarios_by_song(song_id)
+    
+    def get_usuarios_by_song_in_list(self, song_id):
+        return self.daoUsuario.get_all_usuarios_by_song_in_list(song_id)
 
     # Faqs
     def get_faqs(self):
