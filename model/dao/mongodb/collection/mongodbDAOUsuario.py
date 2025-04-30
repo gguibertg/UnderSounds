@@ -48,7 +48,7 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
     def get_all_usuarios_by_song_in_list(self, song_id):
         users = UsuariosDTO()
         try:
-            query = self.collection.find({"biblioteca": song_id})
+            query = self.collection.find({"listas_reproduccion": song_id})
 
             for doc in query:
                 user_dto = UsuarioDTO()
