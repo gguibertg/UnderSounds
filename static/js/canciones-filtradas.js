@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     canciones.forEach(cancion => {
                         const songItem = document.createElement("div");
                         songItem.classList.add("song-item");
+                        songItem.classList.add("div-pannel-sub");
                         
                             let htmlContent = `
                                 <img src="${cancion.portada}" alt="${cancion.titulo}" class="foto-artista" onclick="window.location.href='/song?id=${cancion.id}'">
