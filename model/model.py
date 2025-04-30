@@ -68,10 +68,12 @@ class Model ():
         usuario_dto.load_from_dict(usuario_dict)
         usuario_dto.remove_song_from_lista_reproduccion(nombre_lista, id_cancion)
         self.daoUsuario.update_usuario(usuario_dto)
-            
-    # Sin uso
-    def get_usuarios(self):
-        return self.daoUsuario.get_all_usuarios()
+
+    def get_usuarios_by_song(self, song_id):
+        return self.daoUsuario.get_all_usuarios_by_song(song_id)
+    
+    def get_usuarios_by_song_in_list(self, song_id):
+        return self.daoUsuario.get_all_usuarios_by_song_in_list(song_id)
 
     # Faqs
     def get_faqs(self):

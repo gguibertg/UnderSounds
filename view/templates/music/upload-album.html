@@ -221,7 +221,7 @@
                 descripcion: document.getElementById('description').value,
                 colaboradores: document.getElementById('collaborators').value,
                 precio: parseFloat(document.getElementById('price').value),
-                generos: Array.from(document.querySelectorAll('.upload-checkbox-container div:first-child input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
+                generos: Array.from(document.querySelectorAll('.upload-checkbox-container input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
                 canciones: Array.from(document.querySelectorAll('.grid-biblioteca .songs-cell[style*="display: flex"]')).map(songDiv => songDiv.id),
                 portada: document.getElementById('cover-preview').src,
                 visible: document.getElementById('is-visible').checked

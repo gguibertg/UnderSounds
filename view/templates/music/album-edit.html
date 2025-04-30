@@ -49,7 +49,7 @@
                         <input type="text" id="price" name="price" placeholder="Precio del álbum" value="{{ album.precio }}" required>
 
                         <label for="album">Descripción</label>
-                        <textarea id="description" name="desc" rows="6" cols="40" style="resize: none;" placeholder="Descripción del álbum">{{ album.descripcion }}</textarea>
+                        <textarea id="description" name="desc" rows="7" cols="40" style="resize: none;" placeholder="Descripción del álbum">{{ album.descripcion }}</textarea>
 
                         <label for="is-visible">Visible al público</label>
                         <input type="checkbox" id="is-visible" name="is_visible" {% if album.visible %} checked {% endif %}>
@@ -250,7 +250,7 @@
                 descripcion: document.getElementById('description').value,
                 colaboradores: document.getElementById('collaborators').value,
                 precio: parseFloat(document.getElementById('price').value),
-                generos: Array.from(document.querySelectorAll('.upload-checkbox-container div:first-child input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
+                generos: Array.from(document.querySelectorAll('.upload-checkbox-container input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
                 canciones: Array.from(document.querySelectorAll('.grid-biblioteca .songs-cell[style*="display: flex"]')).map(songDiv => songDiv.id),
                 portada: document.getElementById('cover-preview').src,
                 visible: document.getElementById('is-visible').checked
