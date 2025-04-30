@@ -192,7 +192,7 @@
                 descripcion: document.getElementById('descripcion').value,
                 colaboradores: document.getElementById('colaboradores').value,
                 precio: parseFloat(document.getElementById('precio').value),
-                generos: Array.from(document.querySelectorAll('.upload-checkbox-container div:first-child input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
+                generos: Array.from(document.querySelectorAll('.upload-checkbox-container input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
                 portada: document.getElementById('cover-preview').src,
                 visible: document.getElementById('is-visible').checked
                 // TODO: Al hacer be-stream, se debe pasar también la ruta del archuvo de audio en el backend (puede ser por ejemplo el nombre del archivo y ya)
@@ -213,7 +213,24 @@
                 return displayMessage("error", "Debes seleccionar al menos un género.");
             }
             // Validar que la canción esté subida
-            if (titulo == "{{ song.titulo }}" && artista == "{{song.artista}}" && colaboradores == "{{song.colaboradores}}" && descripcion == "{{song.descripcion}}" && precio == "{{song.precio}}" && generos == "{{song.generos}}" && portada == "{{song.portada}}" && visible == "{{song.visible}}") {
+            let generosBackend = "{{ song.generos }}";  // Esto es una cadena que representa un array
+            generosBackend = generosBackend.replace(/&#39;/g, "'")  // Reemplazar &#39; por '
+                                            .replace(/&quot;/g, '"') // Reemplazar &quot; por "
+                                            .replace(/'/g, '"');
+            const generosArray = JSON.parse(generosBackend); 
+            const generosCoinciden = songData.generos.every(genero => generosArray.includes(genero)) &&
+                                generosArray.every(genero => songData.generos.includes(genero));
+
+            
+            if (    Boolean(songData.titulo == "{{ song.titulo }}") &&
+                    Boolean(songData.artista == "{{ song.artista }}") &&
+                    Boolean(songData.colaboradores == "{{ song.colaboradores }}") &&
+                    Boolean(songData.descripcion.trim() == "{{song.descripcion}}".trim()) &&
+                    Boolean(songData.portada == "{{ song.portada }}") &&
+                    generosCoinciden &&
+                    Boolean(songData.precio == "{{ song.precio }}") &&
+                    Boolean(String(songData.visible) == "{{ song.visible }}".toLowerCase())) {
+
                 return displayMessage("error", "No se han realizado cambios en la canción."); 
             }
             else{
@@ -229,10 +246,12 @@
                     const result = await response.json();
 
                     if (response.ok) {
-                        displayMessage('success', 'Canción subida exitosamente');
-                        window.location.href = '/studio';
+                        displayMessage('success', 'Canción editada exitosamente, espero un momento...');
+                        setTimeout(() => {
+                            window.location.href = '/studio';
+                        }, 2000);
                     } else {
-                        displayMessage('error', 'Error al subir la canción: ' + result.error);
+                        displayMessage('error', 'Error al editar la canción: ' + result.error);
                     }
                 } catch (error) {
                     displayMessage('error', 'Ocurrió un error al editar la canción.');
@@ -244,7 +263,7 @@
         async function lastVersion(fechaModificacion){
             const songData = {
                 id: "{{song.id}}",
-                fechaModificacion: fechaModificacion
+                fechaUltimaModificacion: fechaModificacion
             };
 
             try {
@@ -259,8 +278,10 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    displayMessage('success', 'Versión restaurada exitosamente');
-                    window.location.href = '/studio';
+                    displayMessage('success', 'Versión restaurada exitosamente, espero un momento...');
+                    setTimeout(() => {
+                        window.location.href = '/studio';
+                    }, 2000);
                 } else {
                     displayMessage('error', 'Error al restaurar la canción: ' + result.error);
                 }
@@ -269,6 +290,7 @@
                 console.error('Error editing song:', error);
             }
         }
+        
     </script>
 
     <div id="footer-placeholder"></div>

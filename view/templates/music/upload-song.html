@@ -150,7 +150,7 @@
                 descripcion: document.getElementById('descripcion').value,
                 colaboradores: document.getElementById('colaboradores').value,
                 precio: parseFloat(document.getElementById('precio').value),
-                generos: Array.from(document.querySelectorAll('.upload-checkbox-container div:first-child input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
+                generos: Array.from(document.querySelectorAll('.upload-checkbox-container input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
                 portada: document.getElementById('cover-preview').src,
                 visible: document.getElementById('is-visible').checked
                 // TODO: Al hacer be-stream, se debe pasar también la ruta del archuvo de audio en el backend (puede ser por ejemplo el nombre del archivo y ya)

@@ -568,7 +568,8 @@ async def upload_album_post(request: Request):
     album.set_precio(data["precio"])
     album.set_likes(0)
     album.set_visible(data["visible"])
-    album.set_historial([]) # Inicializamos el campo historial como una lista vacía
+    album.set_historial([])
+    # Inicializamos el campo historial como una lista vacía
 
     # Subir el album a la base de datos
     album_id = model.add_album(album)
@@ -589,6 +590,10 @@ async def upload_album_post(request: Request):
             # Actualizamos el campo album de la canción con el id del nuevo album
             song_object = SongDTO()
             song_object.load_from_dict(song)
+
+            song["fechaUltimaModificacion"] = datetime.now() # Actualizamos la fecha de la canción
+            song_object.add_historial(song)
+
             song_object.set_album(album_id)
             if not model.update_song(song_object):
                 print(PCTRL_WARN, "Song", song_id, "not updated in database!")
@@ -916,6 +921,8 @@ async def album_edit_post(request: Request):
             # Actualizamos el campo album de la canción con el id del nuevo album
             song_object = SongDTO()
             song_object.load_from_dict(song)
+
+            song["fechaUltimaModificacion"] = datetime.now() # Actualizamos la fecha de la última edición
             song_object.add_historial(song)
 
             song_object.set_album(album_id)
@@ -968,6 +975,93 @@ async def album_edit_post(request: Request):
         print(PCTRL_WARN, "Error while processing Album", album_id, ", updating to database failed!")
         return JSONResponse(content={"error": "Error del sistema"}, status_code=500)
 
+@app.post("/last-version-album")
+async def last_version_album_post(request: Request):
+    res = verifySessionAndGetUserInfo(request)
+    if isinstance(res, Response):
+        return JSONResponse(content={"error": "No autorizado"}, status_code=401)  
+    if not res["esArtista"]:
+        print(PCTRL_WARN, "User is not an artist")
+        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
+    
+    try:
+        # Recibimos los datos del nuevo song editado, junto con su ID.
+        data = await request.json()
+        album_id = data["id"]  # ID del song a editar
+        # Descargamos el song antiguo de la base de datos via su ID y verificamos que es creación del usuario.
+        album_dict = model.get_album(album_id)
+
+        if not album_dict:
+            print(PCTRL_WARN, "Album does not exist")
+            return JSONResponse(content={"error": "No autorizado"}, status_code=403)
+        
+        if album_id not in res["studio_albumes"]:
+            print(PCTRL_WARN, "Album not found in user albums")
+            return JSONResponse(content={"error": "No autorizado"}, status_code=403)
+        
+        album = AlbumDTO()
+        album.load_from_dict(album_dict)
+        
+        if album.revert_to_version_by_fecha(data["fechaUltimaModificacion"]):
+            print(PCTRL, "Album", album_id, "reverted to version", data["fechaUltimaModificacion"])
+        else:
+            print(PCTRL_WARN, "Album", album_id, "not reverted to version", data["fechaUltimaModificacion"])
+            return JSONResponse(content={"error": "Song not reverted"}, status_code=500)
+
+        album_dict["fechaUltimaModificacion"] = datetime.now()
+        album.add_historial(album_dict)
+        album.set_fechaUltimaModificacion("")
+
+        if album.get_canciones() is not None:
+            for song_id in album_dict["canciones"]:
+                song_dict = model.get_song(song_id)
+                if not song_dict:
+                    print(PCTRL_WARN, "Song", song_id, "not found in database")
+                    return JSONResponse(content={"error": "El Album de la versión que se quiere recuperar no existe"}, status_code=403)
+                
+                song_object = SongDTO()
+                song_object.load_from_dict(song_dict)
+                song_object.set_album(album_id)
+
+                song_dict["fechaUltimaModificacion"] = datetime.now()
+                song_object.add_historial(song_dict)
+
+                if not model.update_song(song_object):
+                    print(PCTRL_WARN, "Song", song_id, "not updated in database!")
+                    return JSONResponse(content={"error": "Album not updated in database"}, status_code=500)
+                
+        
+        elif album_dict["canciones"] is not None:
+            # Si la canción no tiene un album, lo descargamos y lo actualizamos
+            for song_id in album_dict["canciones"]:
+                song_dict = model.get_song(song_id)
+            
+                if not song_dict:
+                    print(PCTRL_WARN, "Song", song_id, "not found in database")
+                    return JSONResponse(content={"error": "El Album de la versión que se quiere recuperar no existe"}, status_code=403)
+                
+                song_object = SongDTO()
+                song_object.load_from_dict(song_dict)
+                song_object.set_album(None)
+
+                song_dict["fechaUltimaModificacion"] = datetime.now()
+                song_object.add_historial(song_dict)
+
+                if not model.update_song(song_object):
+                    print(PCTRL_WARN, "Song", song_id, "not updated in database!")
+                    return JSONResponse(content={"error": "Album not updated in database"}, status_code=500)
+        
+        if model.update_album(album):
+            print(PCTRL, "Album", album_id, "updated in database")
+            return JSONResponse(content={"success": True}, status_code=200)
+        else:
+            print(PCTRL_WARN, "Album", album_id, "not updated in database!")
+            return JSONResponse(content={"error": "Album not updated in database"}, status_code=500)
+    
+    except Exception as e:
+        print(PCTRL_WARN, "Error while processing Album", album_id, ", updating to database failed!")
+        return JSONResponse(content={"error": "Album not updated in database"}, status_code=500)
+    
 # Ruta para eliminar un álbum
 @app.post("/delete-album")
 async def delete_album_post(request: Request):
@@ -1005,6 +1099,10 @@ async def delete_album_post(request: Request):
         # Actualizamos el campo album de la canción con el id del nuevo album
         song_object = SongDTO()
         song_object.load_from_dict(song)
+
+        song["fechaUltimaModificacion"] = datetime.now() # Actualizamos la fecha de la canción
+        song_object.add_historial(song)
+
         song_object.set_album(None)
         if not model.update_song(song_object):
             print(PCTRL_WARN, "Song", song_id, "not updated in database! - skipping")
@@ -1513,7 +1611,8 @@ async def get_edit_song(request: Request):
             if not album:
                 print(PCTRL_WARN, "Album", historial["album"], "not found in database")
                 historial["albumStr"] = None
-            historial["albumStr"] = album["titulo"]
+            else:
+                historial["albumStr"] = album["titulo"]
         else:
             historial["albumStr"] = None
 
@@ -1604,7 +1703,7 @@ async def edit_song_post(request: Request):
         print(PCTRL_WARN, "Error while processing Song", song_id, ", updating to database failed!")
         return JSONResponse(content={"error": "Song not updated in database"}, status_code=500)
 
-
+# Ruta para procesar la petición de last-version (cargar una versión anterior de la canción)
 @app.post("/last-version")
 async def last_version_post(request: Request):
     res = verifySessionAndGetUserInfo(request)
@@ -1618,12 +1717,13 @@ async def last_version_post(request: Request):
         # Recibimos los datos del nuevo song editado, junto con su ID.
         data = await request.json()
         song_id = data["id"]  # ID del song a editar
-
         # Descargamos el song antiguo de la base de datos via su ID y verificamos que es creación del usuario.
         song_dict = model.get_song(song_id)
+
         if not song_dict:
             print(PCTRL_WARN, "Song does not exist")
             return JSONResponse(content={"error": "No autorizado"}, status_code=403)
+        
         if song_id not in res["studio_canciones"]:
             print(PCTRL_WARN, "Song not found in user songs")
             return JSONResponse(content={"error": "No autorizado"}, status_code=403)
@@ -1635,11 +1735,48 @@ async def last_version_post(request: Request):
             print(PCTRL, "Song", song_id, "reverted to version", data["fechaUltimaModificacion"])
         else:
             print(PCTRL_WARN, "Song", song_id, "not reverted to version", data["fechaUltimaModificacion"])
-            return JSONResponse(content={"error": "Song not updated in database"}, status_code=500)
+            return JSONResponse(content={"error": "Song not reverted"}, status_code=500)
 
         song_dict["fechaUltimaModificacion"] = datetime.now()
         song.add_historial(song_dict)
+        song.set_fechaUltimaModificacion("")
 
+        if song.get_album() is not None:
+            # Si la canción tiene un album, lo descargamos y lo actualizamos
+            album_dict = model.get_album(song.get_album())
+            if not album_dict:
+                print(PCTRL_WARN, "Album", song.get_album(), "not found in database")
+                return JSONResponse(content={"error": "El Album de la versión que se quiere recuperar no existe"}, status_code=403)
+            
+            album_object = AlbumDTO()
+            album_object.load_from_dict(album_dict)
+            album_object.add_cancion(song_id)
+
+            album_dict["fechaUltimaModificacion"] = datetime.now()
+            album_object.add_historial(album_dict)
+
+            if not model.update_album(album_object):
+                print(PCTRL_WARN, "Album", song.get_album(), "not updated in database!")
+                return JSONResponse(content={"error": "Album not updated in database"}, status_code=500)
+        
+        elif song_dict["album"] is not None:
+            # Si la canción no tiene un album, lo descargamos y lo actualizamos
+            album_dict = model.get_album(song_dict["album"])
+            if not album_dict:
+                print(PCTRL_WARN, "Album", song_dict["album"], "not found in database")
+                return JSONResponse(content={"error": "El Album de la versión que se quiere recuperar no existe"}, status_code=403)
+            
+            album_object = AlbumDTO()
+            album_object.load_from_dict(album_dict)
+            album_object.remove_cancion(song_id)
+
+            album_dict["fechaUltimaModificacion"] = datetime.now()
+            album_object.add_historial(album_dict)
+
+            if not model.update_album(album_object):
+                print(PCTRL_WARN, "Album", song.get_album(), "not updated in database!")
+                return JSONResponse(content={"error": "Album not updated in database"}, status_code=500)
+        
         if model.update_song(song):
             print(PCTRL, "Song", song_id, "updated in database")
             return JSONResponse(content={"success": True}, status_code=200)
@@ -1650,7 +1787,6 @@ async def last_version_post(request: Request):
     except Exception as e:
         print(PCTRL_WARN, "Error while processing Song", song_id, ", updating to database failed!")
         return JSONResponse(content={"error": "Song not updated in database"}, status_code=500)
-
 
 # Ruta para eliminar una canción
 @app.post("/delete-song")
@@ -1689,7 +1825,10 @@ async def delete_song_post(request: Request):
             return JSONResponse(content={"error": "Album does not exist"}, status_code=404)
         album_object = AlbumDTO()
         album_object.load_from_dict(album)
+        album["fechaUltimaModificacion"] = datetime.now()
+        album_object.add_historial(album)
         album_object.remove_cancion(song_id)
+
         if not model.update_album(album_object):
             print(PCTRL_WARN, "Album", album["id"], "not updated in database!")
             return JSONResponse(content={"error": "Album not updated in database"}, status_code=500)

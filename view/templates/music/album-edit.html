@@ -140,7 +140,7 @@
                         <button type="button" onclick="addSong()">Añadir canción</button>
                     </div>
                     <div class="grid-biblioteca">
-                        {% if album.canciones|length == 0 %}
+                        {% if album.canciones |length == 0 %}
                         <p id="no_songs" style="display: flex;">No hay canciones añadidas.</p>
                         {% else %}
                         {% for song in album.canciones %}         
@@ -197,10 +197,9 @@
                                 <p><strong>Descripción:</strong><pre> {{cambios.descripcion}} </pre></p>
                                 <p><strong>Canciones: </strong>
                                     {% if cambios.canciones | length == 0 %}
-                                        <p id="no_songs" style="display: flex;">No hay canciones añadidas.</p>
+                                        <p>No hay canciones añadidas.</p>
                                     {% else %}
-                                        {% for song in cambios.canciones %}         
-                                            <p id="no_songs" style="display: none;">No hay canciones añadidas.</p>              
+                                        {% for song in cambios.canciones %}                    
                                             <pre>    {{ loop.index }}. {{ song.titulo }}</pre>
                                         {% endfor %}
                                     {% endif %}
@@ -216,8 +215,8 @@
                         </div>
                     
                         <div class="historial-actions">
-                            <button class="btn" title="Editar"><img alt="Editar" height="20"
-                                    src="/static/icons/site/edit-icon.svg" width="20" /></button>
+                            <button class="btn" title="Editar" onclick="lastVersion('{{ cambios.fechaUltimaModificacion }}')">
+                                <img alt="Editar" height="20" src="/static/icons/site/edit-icon.svg" width="20" /></button>
                         </div>
                     </details>
                     {% endfor %}
@@ -298,7 +297,7 @@
                 descripcion: document.getElementById('description').value,
                 colaboradores: document.getElementById('collaborators').value,
                 precio: parseFloat(document.getElementById('price').value),
-                generos: Array.from(document.querySelectorAll('.upload-checkbox-container div:first-child input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
+                generos: Array.from(document.querySelectorAll('.upload-checkbox-container input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
                 canciones: Array.from(document.querySelectorAll('.grid-biblioteca .songs-cell[style*="display: flex"]')).map(songDiv => songDiv.id),
                 portada: document.getElementById('cover-preview').src,
                 visible: document.getElementById('is-visible').checked
@@ -317,7 +316,6 @@
             if (!albumData.generos.length) {
                 return displayMessage("error", "Debes seleccionar al menos un género.");
             }
-
             try {
                 const response = await fetch('/album-edit', {
                     method: 'POST',
@@ -330,14 +328,47 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    displayMessage('success', 'Canción subida exitosamente');
-                    window.location.href = '/studio';
+                    displayMessage('success', 'Álbum subido exitosamente, espero un momento...');
+                    setTimeout(() => {
+                        window.location.href = '/studio';
+                    }, 2000);
                 } else {
-                    displayMessage('error', 'Error al subir la canción: ' + result.error);
+                    displayMessage('error', 'Error al subir el álbum: ' + result.error);
                 }
             } catch (error) {
                 console.error('Error uploading album:', error);
                 displayMessage('error', 'Error al guardar el álbum. Inténtalo nuevamente.');
+            }
+        }
+
+        async function lastVersion(fechaModificacion){
+            const songData = {
+                id: "{{album.id}}",
+                fechaUltimaModificacion: fechaModificacion
+            };
+
+            try {
+                const response = await fetch('/last-version-album', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(songData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    displayMessage('success', 'Versión restaurada exitosamente, espero un momento...');
+                    setTimeout(() => {
+                        window.location.href = '/studio';
+                    }, 2000);
+                } else {
+                    displayMessage('error', 'Error al restaurar el álbum: ' + result.error);
+                }
+            } catch (error) {
+                displayMessage('error', 'Ocurrió un error al restaurar el álbum.');
+                console.error('Error editing album:', error);
             }
         }
 

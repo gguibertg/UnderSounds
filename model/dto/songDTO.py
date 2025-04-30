@@ -208,7 +208,7 @@ class SongDTO():
             "visible": self.visible,
             "album": self.album,
             "pista": self.pista,
-            "historial": [self._clean_historial_entry(h) for h in self.historial]
+            "historial": [self._clean_historial_entry(h) for h in self.historial or []]
         }
 
     def _clean_historial_entry(self, h: dict) -> dict:
@@ -238,20 +238,30 @@ class SongDTO():
                 cleaned = {k: v for k, v in entry.items() if k != "historial"}
                 self.historial.append(cleaned)
 
-    def revert_to_version_by_fecha(self, fecha_objetivo: datetime):
+    def revert_to_version_by_fecha(self, fecha_objetivo: str) -> bool:
+
+        try:
+            fecha_objetivo_dt = datetime.fromisoformat(fecha_objetivo)
+        except ValueError:
+            print("Error: La fecha objetivo no tiene un formato válido.")
+            return False
+
         for version in reversed(self.historial):  # reversed para ir de la más reciente a la más antigua
             fecha_version = version.get("fechaUltimaModificacion")
+
             if isinstance(fecha_version, str):
                 try:
-                    fecha_version = datetime.fromisoformat(fecha_version)
+                    fecha_version_dt = datetime.fromisoformat(fecha_version)
                 except ValueError:
                     continue  # ignorar si no es válida
+            else:
+                fecha_version_dt = fecha_version
 
-            if fecha_version and fecha_version <= fecha_objetivo:
-                print(f"Revirtiendo a versión del {fecha_version}")
+            if fecha_version_dt and fecha_version_dt <= fecha_objetivo_dt:
                 self._load_partial(version)
                 return True
-        return False  # No se encontró una versión anterior a esa fecha
+
+        return False # No se encontró una versión anterior a esa fecha
 
     def _load_partial(self, data: dict):
         #Carga solo los campos de edición
