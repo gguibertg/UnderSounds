@@ -63,8 +63,6 @@ app.mount(
 view = View()
 model = Model()
 
-listSongs = {}
-
 # Almacenamiento en memoria para sesiones
 sessions = {}
 
@@ -93,16 +91,15 @@ async def index(request: Request):
 # Endpoint para obtener listado de canciones por genero
 @app.get("/songs/genre")
 async def get_song_list_by_genre(request: Request):
-    genre_id = request.query_params.get("id")
-    
+    genre_id = request.query_params.get("id")  
     if not genre_id:
         return JSONResponse(content={"error": "Falta el parámetro 'id'"}, status_code=400)
 
     try:
         canciones = model.get_songs_by_genre(genre_id)
-
-        # 🔥 Aquí conviertes todos los datetime a strings
-        canciones = convert_datetime(canciones)
+        # Convertir fecha (Datetime) a string (ISO 8601) para JSON
+        for cancion in canciones:
+            cancion["fecha"] = cancion["fecha"].isoformat()
 
         if canciones:
             print(PCTRL, "Canciones filtradas por el género: ", genre_id)
@@ -2185,21 +2182,6 @@ def validate_song_fields(data) -> JSONResponse | bool:
 
     return validate_fields(data)
 
-
-
-
-
-from datetime import datetime
-# TODO: Esta función probablemente es innecesaria si se optimiza en donde se usa, pero la dejo por si acaso
-def convert_datetime(obj):
-    if isinstance(obj, list):
-        return [convert_datetime(item) for item in obj]
-    elif isinstance(obj, dict):
-        return {k: convert_datetime(v) for k, v in obj.items()}
-    elif isinstance(obj, datetime):
-        return obj.isoformat()
-    else:
-        return obj
 
 # --------------------------- HACKS DE MIERDA - ELIMINAR CUANDO HAYA UNA MEJOR IMPLEMENTACIÓN --------------------------- #
 # Guardar sesiones en un archivo JSON al cerrar el servidor y recuperarlas al iniciar.
