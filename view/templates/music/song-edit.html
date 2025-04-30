@@ -47,14 +47,12 @@
                         <label for="price">Precio</label>
                         <input type="text" id="precio" name="precio" placeholder="Precio de la canción" value="{{song.precio}}" required>
                     
+                        <label for="description">Descripción</label>
+                        <textarea id="descripcion" name="descripcion" rows="7" cols="40"
+                            placeholder="Escribe una breve descripción..." required>{{song.descripcion}}</textarea>
+
                         <label for="is-visible">Visible al público</label>
                         <input type="checkbox" id="is-visible" name="is_visible" {% if song.visible %} checked {% endif %}>
-                    </div>
-
-                    <div class="div-pannel-sub upload-group" style="width: auto;">
-                        <label for="description">Descripción</label>
-                        <textarea id="descripcion" name="descripcion" rows="4"
-                            placeholder="Escribe una breve descripción..." required> {{song.descripcion}} </textarea>
                     </div>
 
                     <div class="div-pannel-sub upload-checkbox-container" style="width:auto;">

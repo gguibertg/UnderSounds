@@ -153,11 +153,11 @@ h2 {
 #canciones-filtradas-placeholder .song-item {
     flex-shrink: 0;
     width: 200px;
-    height: 330px;
+    height: 280px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     text-align: center;
     padding: 10px 0;
     box-sizing: border-box;

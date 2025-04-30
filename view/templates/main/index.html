@@ -21,7 +21,7 @@
     <link rel="manifest" href="/static/icons/favicons/site.webmanifest" />
 </head>
 
-<body>
+<body data-tipo-usuario="{{ tipoUsuario if tipoUsuario else '' }}">
 
     <!-- Barra de navegación -->
     <div id="header-placeholder"></div>
@@ -56,8 +56,8 @@
                 <h1><i>Nuevos lanzamientos</i></h1>
                 <br>
                 <div class="div-carrusel div-pannel" id="carrusel-nuevos-lanzamientos">
-                    {% for item in songs [-4:] %}
-                    <div style="margin: 0 3rem;">
+                    {% for item in songs [-6:] %}
+                    <div class="div-pannel-sub" style="margin: 0 2rem; width: 13rem;">
                         <img src="{{ item.portada }}" onclick="window.location.href='/song?id={{ item.id }}'"
                             class="foto-artista">
                         <p class="texto-producto">{{ item.titulo }}</p>
