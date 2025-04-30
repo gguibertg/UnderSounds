@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const botonesGeneros = document.querySelectorAll(".foto-genero");
+    const tipoUsuario = document.body.dataset.tipoUsuario; // <-- Añade esta línea
 
     botonesGeneros.forEach(boton => {
         boton.addEventListener("click", async event => {
@@ -29,23 +30,28 @@ document.addEventListener("DOMContentLoaded", function () {
                     canciones.forEach(cancion => {
                         const songItem = document.createElement("div");
                         songItem.classList.add("song-item");
-
-                        songItem.innerHTML = `
-                            <img src="${cancion.portada}" alt="${cancion.titulo}" class="foto-artista" onclick="window.location.href='/song?id=${cancion.id}'">
-                            <p class="texto-producto">${cancion.titulo}</p>
-                            <p class="texto-artista">${cancion.artista}</p>
-                            <form action="/cart" method="post">
-                                <input type="hidden" name="action" value="add">
-                                <input type="hidden" name="item_id" value="${cancion.id}">
-                                <input type="hidden" name="item_titulo" value="${cancion.titulo}">
-                                <input type="hidden" name="item_portada" value="${cancion.portada}">
-                                <input type="hidden" name="artist_name" value="${cancion.artista}">
-                                <input type="hidden" name="item_desc" value="${cancion.descripcion || ''}">
-                                <input type="hidden" name="item_precio" value="${cancion.precio || 0}">
-                                <button type="submit" class="button-comprar-item">Añadir</button>
-                            </form>
-                        `;
-
+                        
+                            let htmlContent = `
+                                <img src="${cancion.portada}" alt="${cancion.titulo}" class="foto-artista" onclick="window.location.href='/song?id=${cancion.id}'">
+                                <p class="texto-producto">${cancion.titulo}</p>
+                                <p class="texto-artista">${cancion.artista}</p>
+                            `;
+                        
+                        if (tipoUsuario) {
+                            htmlContent += `
+                                <form action="/cart" method="post">
+                                    <input type="hidden" name="action" value="add">
+                                    <input type="hidden" name="item_id" value="${cancion.id}">
+                                    <input type="hidden" name="item_titulo" value="${cancion.titulo}">
+                                    <input type="hidden" name="item_portada" value="${cancion.portada}">
+                                    <input type="hidden" name="artist_name" value="${cancion.artista}">
+                                    <input type="hidden" name="item_desc" value="${cancion.descripcion || ''}">
+                                    <input type="hidden" name="item_precio" value="${cancion.precio || 0}">
+                                    <button type="submit" class="button-comprar-item">Añadir</button>
+                                </form>
+                            `;
+                        }
+                        songItem.innerHTML = htmlContent;
                         carruselContainer.appendChild(songItem);
                     });
 
