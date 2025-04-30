@@ -77,6 +77,9 @@ class Model ():
         usuario_dto.remove_song_from_lista_reproduccion(nombre_lista, id_cancion)
         self.daoUsuario.update_usuario(usuario_dto)
 
+    def get_usuarios_by_song(self, song_id):
+        return self.daoUsuario.get_all_usuarios_by_song(song_id)
+
     # Faqs
     def get_faqs(self):
         return self.faqsDAO.get_all_faqs()

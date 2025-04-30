@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class InterfaceUsuarioDAO(ABC):
     
     @abstractmethod
-    def get_all_usuarios(self):
+    def get_all_usuarios_by_song(self, song_id):
         pass
 
     @abstractmethod

@@ -1975,7 +1975,7 @@ async def delete_song_post(request: Request):
         return JSONResponse(content={"error": "User not updated in database"}, status_code=500)
     
     # Borrado en cascada de la canción de las listas de reproducción del usuario
-    usuarios = model.get_usuarios()
+    usuarios = model.get_usuarios_by_song(song_id)
     for usuario_dict in usuarios:
         usuario_dto = UsuarioDTO()
         usuario_dto.load_from_dict(usuario_dict)
