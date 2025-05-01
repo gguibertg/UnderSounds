@@ -1,4 +1,5 @@
 # Imports estándar de Python
+import os
 import base64
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -2528,3 +2529,13 @@ def validate_song_fields(data) -> JSONResponse | bool:
         return JSONResponse(content={"error": "La pista debe ser un archivo no vacío"}, status_code=400)
 
     return validate_fields(data)
+
+def convert_datetime(obj):
+    if isinstance(obj, list):
+        return [convert_datetime(item) for item in obj]
+    elif isinstance(obj, dict):
+        return {key: convert_datetime(value) for key, value in obj.items()}
+    elif isinstance(obj, datetime):
+        return obj.isoformat()
+    else:
+        return obj
