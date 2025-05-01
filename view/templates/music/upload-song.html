@@ -47,12 +47,14 @@
                         <label for="price">Precio</label>
                         <input type="text" id="precio" name="precio" placeholder="Precio de la canción" required>
                     
-                        <label for="description">Descripción</label>
-                        <textarea id="descripcion" name="descripcion" rows="7" cols="40"
-                            placeholder="Escribe una breve descripción..." required></textarea>
-
                         <label for="is-visible">Visible al público</label>
                         <input type="checkbox" id="is-visible" name="is_visible">
+                    </div>
+
+                    <div class="div-pannel-sub upload-group" style="width: auto;">
+                        <label for="description">Descripción</label>
+                        <textarea id="descripcion" name="descripcion" rows="4"
+                            placeholder="Escribe una breve descripción..." required> </textarea>
                     </div>
 
                     <div class="div-pannel-sub upload-checkbox-container" style="width:auto;">
@@ -140,28 +142,8 @@
     </main>
 
     <script>
-
-        function getAudioDuration(file) {
-            return new Promise((resolve, reject) => {
-                const audio = new Audio();
-                audio.src = URL.createObjectURL(file);
-
-                audio.addEventListener("loadedmetadata", () => {
-                    resolve(audio.duration); // duración en segundos
-                });
-
-                audio.addEventListener("error", (e) => {
-                    reject("No se pudo cargar el archivo de audio");
-                });
-            });
-        }
-
         async function postSong() {
             event.preventDefault();
-
-            const pista = document.getElementById('song-upload').files[0];
-            const duracion = await getAudioDuration(pista);
-
             const songData = {
                 titulo: document.getElementById('titulo').value,
                 artista: document.getElementById('artista').value,
@@ -170,9 +152,9 @@
                 precio: parseFloat(document.getElementById('precio').value),
                 generos: Array.from(document.querySelectorAll('.upload-checkbox-container input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
                 portada: document.getElementById('cover-preview').src,
-                visible: document.getElementById('is-visible').checked,
-                pista: pista.name,
-                duracion: duracion
+                visible: document.getElementById('is-visible').checked
+                // TODO: Al hacer be-stream, se debe pasar también la ruta del archuvo de audio en el backend (puede ser por ejemplo el nombre del archivo y ya)
+                // TODO: La duración de la canción se puede calcular en el backend.
             };
 
             // Validar que los campos no estén vacíos y tengan el formato correcto
@@ -189,9 +171,6 @@
                 return displayMessage("error", "Debes seleccionar al menos un género.");
             }
             // Validar que la canción esté subida
-            if (!pista) {
-                return displayMessage("error", "Debes seleccionar una canción para subir.");
-            }
 
             try {
                 const response = await fetch('/upload-song', {
@@ -202,28 +181,18 @@
                     body: JSON.stringify(songData)
                 });
 
-                const formData = new FormData();
-                formData.append('pista', pista);
-
-                const fileResponse = await fetch('/upload-song-file', {
-                    method: 'POST',
-                    body: formData
-                });
-
                 const result = await response.json();
-                const fileResult = await fileResponse.json();
 
-                if (response.ok && fileResponse.ok) {
+                if (response.ok) {
                     displayMessage('success', 'Canción subida exitosamente');
                     window.location.href = '/studio';
                 } else {
-                    // Si alguna de las respuestas falla, muestra el mensaje de error correspondiente
-                    const errorMessage = result.error || fileResult.error || 'Error desconocido al subir la canción';
-                    displayMessage('error', errorMessage);
+                    displayMessage('error', 'Error al subir la canción: ' + result.error);
                 }
             } catch (error) {
                 displayMessage('error', 'Error al subir la canción: ' + error.message);
             }
+
         }
     </script>
 

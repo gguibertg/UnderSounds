@@ -39,9 +39,9 @@
                             {% for item in carrito.articulos %}
                             <div class="div-pannel-sub div-row">
                                 <div class="cart-item">
-                                    <img src="{{ item.portada }}" alt="{{ item.titulo }}" class="item-image">
+                                    <img src="{{ item.imagen }}" alt="{{ item.nombre }}" class="item-image">
                                     <div class="item-info">
-                                        <h3 class="item-title">{{ item.titulo }}</h3>
+                                        <h3 class="item-title">{{ item.nombre }}</h3>
                                         <p class="item-description">{{ item.descripcion }}</p>
                                         <p class="item-author">Autor: {{ item.artista }}</p>
                                     </div>
