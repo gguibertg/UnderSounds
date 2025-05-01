@@ -141,7 +141,14 @@
                 body: JSON.stringify({ token, esArtista })
                 });
             })
-            .then(response => response.json())
+            .then(async response => {
+            const data = await response.json();
+            if (response.ok) {
+                    return data;
+                } else {
+                    throw new Error(data.error || "Ocurrió un error desconocido");
+                }
+            })
             .then(data => {
                 if (data.success) {
                 window.location.href = "/profile";

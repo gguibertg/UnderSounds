@@ -27,3 +27,15 @@ class InterfaceDAOFactory(ABC):
     def getGeneroDAO(self):
         pass
 
+    @abstractmethod
+    def getContactoDAO(self):
+        pass
+
+    @abstractmethod
+    def getReseñaDAO(self):
+        pass
+
+    @abstractmethod
+    def getSesionDAO(self):
+        pass
+

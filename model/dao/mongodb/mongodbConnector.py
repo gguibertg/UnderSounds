@@ -85,3 +85,10 @@ class MongoConnector:
         if self.db is None:
             print(PCONN_ERR, "Database connection is not initialized.")
         return self.db.Reseñas
+    
+    # Sesion
+    def get_sesion_collection(self):
+        print(PCONN, "Descargando sesiones...")
+        if self.db is None:
+            print(PCONN_ERR, "Database connection is not initialized.")
+        return self.db.Sesiones

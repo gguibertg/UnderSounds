@@ -129,14 +129,16 @@
                         body: JSON.stringify({ token })
                     });
                 })
-                .then(response => response.json())
+                .then(async response => {
+                const data = await response.json();
+                if (response.ok) {
+                    return data;
+                } else {
+                    throw new Error(data.error || "Ocurrió un error desconocido");
+                }
+                })
                 .then(data => {
-                    console.log("Cuerpo de la respuesta: ", data);
-                    if (data.success) {
-                        window.location.href = "/profile";
-                    } else {
-                        throw new Error(data.error || "Ocurrió un error desconocido");
-                    }
+                window.location.href = "/profile";
                 })
                 .catch(error => {
                     console.error("Error durante el inicio de sesión con Google:", error);
@@ -168,7 +170,4 @@
 
     <!-- Scripts -->
     <script src="/static/js/dark-mode.js"></script>
-
-</body>
-
-</html>
+/displayMessage.js"></script> <!-- Script para mostrar mensajes de error o éxito -->
