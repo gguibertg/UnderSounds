@@ -113,6 +113,7 @@ async def get_song_list_by_genre(request: Request):
         print(PCTRL_WARN, "Error al obtener canciones:", e)
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+
 # ------------------------------------------------------------------ #
 # ----------------------------- LOGIN ------------------------------ #
 # ------------------------------------------------------------------ #
@@ -200,6 +201,7 @@ async def get_logout(request: Request):
     if isinstance(res, Response):
         return res   
     return view.get_logout_view(request)
+
 
 # --------------------------------------------------------------------- #
 # ----------------------------- REGISTER ------------------------------ #
@@ -342,6 +344,7 @@ async def deregister(request: Request, response: Response):
         print(PCTRL, "Error al eliminar al usuario:", str(e))
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+
 # ------------------------------------------------------------------- #
 # ----------------------------- PERFIL ------------------------------ #
 # ------------------------------------------------------------------- #
@@ -456,6 +459,7 @@ async def update_profile(request: Request, response: Response):
         print(PCTRL_WARN, "Usuario", user.get_email(), "no actualizado en la base de datos")
         return JSONResponse(content={"error": "El usuario no se actualizó en la base de datos"}, status_code=500)
     
+# Ruta para crear una nueva lista de reproducción
 @app.post("/crear-lista")
 async def crear_lista(request: Request, nombre_lista: str = Form(...)):
     res = verifySessionAndGetUserInfo(request)
@@ -465,6 +469,7 @@ async def crear_lista(request: Request, nombre_lista: str = Form(...)):
     model.add_lista_usuario(res["id"], nombre_lista)
     return RedirectResponse("/profile", status_code=302)
 
+# Ruta para eliminar una lista de reproducción
 @app.post("/remove-lista")
 async def remove_lista(request: Request, nombre_lista: str = Form(...)):
     res = verifySessionAndGetUserInfo(request)
@@ -474,6 +479,7 @@ async def remove_lista(request: Request, nombre_lista: str = Form(...)):
     model.remove_lista_usuario(res["id"], nombre_lista)
     return RedirectResponse("/profile", status_code=302)
 
+# Ruta para añadir una canción a una lista de reproducción
 @app.post("/add-song-to-list")
 async def add_song_to_list(request: Request, nombre_lista: str = Form(...), id_cancion: str = Form(...)):
     res = verifySessionAndGetUserInfo(request)
@@ -483,6 +489,7 @@ async def add_song_to_list(request: Request, nombre_lista: str = Form(...), id_c
     model.add_cancion_a_lista_usuario(res["id"], nombre_lista, id_cancion)
     return RedirectResponse("/profile", status_code=302)
 
+# Ruta para eliminar una canción de una lista de reproducción
 @app.post("/remove-song-from-list")
 async def remove_song_from_list(request: Request, nombre_lista: str = Form(...), id_cancion: str = Form(...)):
     res = verifySessionAndGetUserInfo(request)
@@ -491,6 +498,7 @@ async def remove_song_from_list(request: Request, nombre_lista: str = Form(...),
 
     model.remove_cancion_de_lista_usuario(res["id"], nombre_lista, id_cancion)
     return RedirectResponse("/profile", status_code=302)
+
 
 # ------------------------------------------------------------------- #
 # ----------------------------- ALBUM ------------------------------- #
@@ -1051,10 +1059,12 @@ async def like_album_post(request: Request):
         print(PCTRL_WARN, "¡Error al actualizar el usuario en la base de datos!")
         return JSONResponse(content={"error": "Error al actualizar el usuario en la base de datos"}, status_code=500)
 
+
 # ------------------------------------------------------------------ #
 # ----------------------------- INCLUDES --------------------------- #
 # ------------------------------------------------------------------ #
 
+# Ruta para cargar el header
 @app.get("/header")
 def header(request: Request):
     res = verifySessionAndGetUserInfo(request)
@@ -1063,6 +1073,7 @@ def header(request: Request):
     
     return view.get_header_view(request, res)  # Si es un dict, pasamos los datos del usuario
 
+# Ruta para cargar el footer
 @app.get("/footer")
 def footer(request: Request):
     res = verifySessionAndGetUserInfo(request)
@@ -1071,27 +1082,33 @@ def footer(request: Request):
     
     return view.get_footer_view(request, res)  # Si es un dict, pasamos los datos del usuario
 
+
 # ------------------------------------------------------------- #
 # --------------------------- ABOUT --------------------------- #
 # ------------------------------------------------------------- #
 
+# Ruta para cargar la vista de about
 @app.get("/about" , description="Muestra información sobre Undersounds")
 def about(request: Request):
     return view.get_about_view(request)
+
 
 # ------------------------------------------------------------ #
 # --------------------------- FAQS --------------------------- #
 # ------------------------------------------------------------ #
 
+# Ruta para cargar la vista de FAQs
 @app.get("/faqs", description="Muestra preguntas frecuentes desde MongoDB")
 def get_faqs(request: Request):
     faqs_json = model.get_faqs()
     return view.get_faqs_view(request, faqs_json)
 
+
 # ------------------------------------------------------------------ #
 # ----------------------------- CARRITO ---------------------------- #
 # ------------------------------------------------------------------ #
 
+# Ruta para cargar la vista del carrito y añadir artículos al carrito
 @app.api_route("/cart", methods=["GET", "POST"], description="Muestra los artículos de tu cesta")
 async def get_carrito(request: Request):
     
@@ -1154,6 +1171,7 @@ async def get_carrito(request: Request):
 # ----------------------------- PREPAID ---------------------------- #
 # ------------------------------------------------------------------ #
 
+# Ruta para cargar la vista de prepaid
 @app.get("/prepaid")
 def get_prepaid(request: Request):
     res = verifySessionAndGetUserInfo(request)
@@ -1169,6 +1187,7 @@ def get_prepaid(request: Request):
 # ----------------------------- TPV ---------------------------- #
 # -------------------------------------------------------------- #
 
+# Ruta para cargar la vista de tpv
 @app.post("/tpv")
 def get_tpv(request: Request):
 
@@ -1211,6 +1230,12 @@ def get_tpv(request: Request):
 
     return view.get_tpv_view(request)
 
+
+# ------------------------------------------------------------ #
+# --------------------------- PURCHASED ---------------------- #
+# ------------------------------------------------------------ #
+
+# Ruta para cargar la vista de purchased
 @app.get("/purchased")
 def get_purchased(request: Request):
     res = verifySessionAndGetUserInfo(request)
@@ -1221,6 +1246,7 @@ def get_purchased(request: Request):
 
     # Devolvemos la vista de purchased con el carrito
     return view.get_purchased_view(request, res, songs)
+
 
 # ------------------------------------------------------------ #
 # --------------------------- CONTACT ------------------------ #
@@ -1261,7 +1287,8 @@ async def contact_post(request: Request):
         return JSONResponse(content={"success": True}, status_code=200)
     else:
         return JSONResponse(content={"error": "Error al enviar el formulario"}, status_code=500)
-    
+
+
 # ------------------------------------------------------------ #
 # ---------------------------- SONG -------------------------- #
 # ------------------------------------------------------------ #
@@ -1390,9 +1417,6 @@ async def upload_song_file(request: Request, pista: UploadFile = File(...)):
         print(PCTRL_WARN, f"Error al subir el archivo {filename}: {str(e)}")
         return JSONResponse(content={"error": "Error al subir el archivo"}, status_code=500)
     
-    
-    
-
 # Ruta para cargar vista song
 @app.get("/song")
 async def get_song(request: Request):
@@ -1663,7 +1687,6 @@ async def delete_song_post(request: Request):
         print(PCTRL_WARN, "Canción", song_id, "no eliminada de la base de datos")
         return JSONResponse(content={"error": "La canción no se eliminó de la base de datos"}, status_code=500)
 
-
 # Ruta para darle like a una canción
 @app.post("/like-song")
 async def like_song_post(request: Request):
@@ -1791,6 +1814,7 @@ async def studio_settings_post(request: Request):
         print(PCTRL_WARN, "Usuario", user_object.get_email(), "no actualizado en la base de datos")
         return JSONResponse(content={"error": "El usuario no se actualizó en la base de datos"}, status_code=500)
 
+
 # --------------------------------------------------------------- #
 # ---------------------------- ARTISTA -------------------------- #
 # --------------------------------------------------------------- #
@@ -1865,10 +1889,12 @@ async def get_artista(request: Request):
     # 3 = Artista (creador)
     return view.get_artista_view(request, artista_info, singles, user_albums_objects, user_songs_objects, tipoUsuario)
 
+
 # ------------------------------------------------------------ #
 # --------------------------- Reseña ------------------------- #
 # ------------------------------------------------------------ #
 
+# Ruta para añadir una reseña a una canción
 @app.post("/add-review")
 async def add_review(request: Request):
     
@@ -1913,7 +1939,7 @@ async def add_review(request: Request):
         print(PCTRL_WARN, "ERROR al añadir reseña:", e)
         return JSONResponse(status_code=500, content={"error": str(e)})
     
-
+# Ruta para eliminar una reseña de una canción
 @app.post("/delete-review")
 async def delete_review(request: Request):
         try:
@@ -1950,7 +1976,7 @@ async def delete_review(request: Request):
         except Exception as e:
             return JSONResponse(status_code=500, content={"error": str(e)})
 
-
+# Ruta para actualizar una reseña de una canción
 @app.post("/update-review")
 async def update_review(request: Request):
         try:
@@ -1998,19 +2024,23 @@ async def update_review(request: Request):
 # -------------------------------------------------------------------------- #
 # --------------------------- RADIO ---------------------------------------- #
 # -------------------------------------------------------------------------- #
-        
+
+# Ruta para cargar la vista de radio      
 @app.get("/play", response_class=HTMLResponse)
 def play(request: Request):
     return view.get_play_view(request)
+
 
 # -------------------------------------------------------------------------- #
 # --------------------------- SEARCH --------------------------------------- #
 # -------------------------------------------------------------------------- #
 
+# Ruta para cargar la vista de búsqueda
 @app.get("/search")
 def get_search(request: Request):
     return view.get_search_view(request, {})
 
+# Ruta para procesar la búsqueda
 @app.get("/search")
 def get_search(request: Request):
 
@@ -2200,6 +2230,7 @@ def shutdown_event():
     with open("sessions.json", "w") as f:
         json.dump(sessions, f)
     print(PCTRL, "Sessions saved to sessions.json")
+
 @app.on_event("startup")
 def startup_event():
     if Path("sessions.json").is_file():
