@@ -766,7 +766,7 @@ async def get_album(request: Request):
         duracion_total += cancion["duracion"]
         if not cancion:
             print(PCTRL_WARN, "Canción", cancion_id, "not found in database")
-            return Response("Error del sistema", status_code=403)
+            return Response("Error del sistema", status_code=403)    
         
         # Convertimos los generos de cada canción a un string sencillo
         # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en cancion["generosStr"]
