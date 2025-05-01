@@ -42,7 +42,9 @@
                         <p><strong>Colaboradores:</strong> {{song.colaboradores}}</p>
                         <pre style="max-width: 30rem; word-wrap: break-word; white-space: pre-wrap;"><strong>Descripción:</strong> {{song.descripcion}} </pre>
                         <p><strong>Fecha de lanzamiento:</strong> {{song.fecha}}</p>
-                        <p><strong>Duración:</strong> {{song.duracion}}</p> <!-- TODO: Hacer be-stream primero! y que los archivos tengan duración, no null! -->
+                        {% set minutos = song.duracion // 60 %}
+                        {% set segundos = song.duracion % 60 %}
+                        <p><strong>Duración:</strong> {{ "%02d:%02d"|format(minutos, segundos) }}</p>
                         {% if song.album %}
                         <p><strong>Álbum:</strong> {{song.albumStr}}</p>
                         {% else %}

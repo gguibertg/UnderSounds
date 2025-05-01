@@ -677,15 +677,18 @@ async def get_album(request: Request):
         if not model.update_album(album_object):
             print(PCTRL_WARN, "Album", album_id, "not updated in database!")
             return Response("Error del sistema", status_code=403)
+        
+    duracion_total = 0
 
     # Descargamos las canciones del album de la base de datos via su ID en el campo canciones y las insertamos en este album_info
     print(PCTRL, "Starting to populate album with songs...")
     canciones_out : list[dict] = []
     for cancion_id in album_info["canciones"]:
         cancion = model.get_song(cancion_id)
+        duracion_total += cancion["duracion"]
         if not cancion:
             print(PCTRL_WARN, "Canción", cancion_id, "not found in database")
-            return Response("Error del sistema", status_code=403)
+            return Response("Error del sistema", status_code=403)    
         
         # Convertimos los generos de cada canción a un string sencillo
         # Primero, descargamos todos los generos, escogemos su nombre, lo añadimos al string, y luego lo metemos en cancion["generosStr"]
@@ -704,6 +707,9 @@ async def get_album(request: Request):
         canciones_out.append(cancion)
 
     album_info["canciones"] = canciones_out
+    minutos = duracion_total // 60
+    segundos = duracion_total % 60
+    tiempo_formateado = f"{minutos:02d}:{segundos:02d}"
 
 
     # Convertimos los generos del album a un string sencillo
@@ -742,7 +748,7 @@ async def get_album(request: Request):
     # 1 = User
     # 2 = Propietario (User o Artista)
     # 3 = Artista (creador)
-    return view.get_album_view(request, album_info, tipoUsuario, isLiked, inCarrito) # Devolvemos la vista del album
+    return view.get_album_view(request, album_info, tipoUsuario, isLiked, inCarrito, tiempo_formateado) # Devolvemos la vista del album
 
 # Ruta para cargar la vista de álbum-edit
 @app.get("/album-edit")
@@ -1333,10 +1339,7 @@ async def upload_song_post(request: Request):
     song.set_album(None) 
     song.set_pista(data["pista"])
     duracion = data["duracion"]
-    minutos = duracion/60
-    segundos = duracion % 60
-    tiempo = f"{int(minutos):02d}:{int(segundos):02d}"
-    song.set_duracion(tiempo)
+    song.set_duracion(int(duracion))
 
     try:
         song_id = model.add_song(song)

@@ -62,8 +62,8 @@ class View():
         return templates.TemplateResponse("music/upload-album.html", {"request": request , "songs": songs}) 
     
     # Renderizar la template album.html
-    def get_album_view(self, request: Request, album_info : dict, tipoUsuario : int, isLiked: bool, inCarrito: bool):
-        return templates.TemplateResponse("music/album.html", {"request": request, "album": album_info, "tipoUsuario": tipoUsuario, "isLiked": isLiked, "inCarrito": inCarrito})
+    def get_album_view(self, request: Request, album_info : dict, tipoUsuario : int, isLiked: bool, inCarrito: bool, tiempo_formateado: str):
+        return templates.TemplateResponse("music/album.html", {"request": request, "album": album_info, "tipoUsuario": tipoUsuario, "isLiked": isLiked, "inCarrito": inCarrito, "duracion_total": tiempo_formateado})
     
     # Renderizar la template header.html
     def get_header_view(self, request: Request, user_info : dict):
