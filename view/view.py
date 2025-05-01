@@ -11,8 +11,8 @@ class View():
         pass
 
     # Esta función se va a usar para renderizar la template index.html
-    def get_index_view(self, request: Request, songs, genres, tipoUsuario: bool): 
-        return templates.TemplateResponse("main/index.html", {"request" :request, "songs" : songs, "genres": genres, "tipoUsuario": tipoUsuario})
+    def get_index_view(self, request: Request, songs, genres, artistas, albums, tipoUsuario: bool): 
+        return templates.TemplateResponse("main/index.html", {"request" :request, "songs" : songs, "genres": genres, "artistas": artistas, "albums": albums, "tipoUsuario": tipoUsuario})
     # Esta función se va a usar para renderizar la template songs.html
     def get_upload_song_view(self, request: Request):
         return templates.TemplateResponse("music/upload-song.html", {"request": request})

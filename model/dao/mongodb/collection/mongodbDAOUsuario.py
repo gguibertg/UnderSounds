@@ -103,28 +103,29 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
                 "fechaIngreso": {
                     "$gte": fecha_min,
                     "$lt": fecha_max
-                }
+                },
+                "esArtista": True, 
+                "esVisible": True
             })
             for doc in query:
-                if doc.get("esArtista") == True and doc.get("esVisible") == True:
-                    user_dto = UsuarioDTO()
-                    user_dto.set_id(str(doc.get("_id")))
-                    user_dto.set_nombre(doc.get("nombre"))
-                    user_dto.set_bio(doc.get("bio"))
-                    user_dto.set_email(doc.get("email"))
-                    user_dto.set_imagen(doc.get("imagen"))
-                    user_dto.set_url(doc.get("url"))
-                    user_dto.set_fechaIngreso(doc.get("fechaIngreso"))
-                    user_dto.set_esArtista(doc.get("esArtista"))
-                    user_dto.set_esVisible(doc.get("esVisible"))
-                    user_dto.set_emailVisible(doc.get("emailVisible"))
-                    user_dto.set_id_likes(doc.get("id_likes", []))
-                    user_dto.set_studio_albumes(doc.get("studio_albumes", []))
-                    user_dto.set_studio_canciones(doc.get("studio_canciones", []))
-                    user_dto.set_biblioteca(doc.get("biblioteca", []))
-                    user_dto.set_listas_reproduccion(doc.get("listas_reproduccion", []))
+                user_dto = UsuarioDTO()
+                user_dto.set_id(str(doc.get("_id")))
+                user_dto.set_nombre(doc.get("nombre"))
+                user_dto.set_bio(doc.get("bio"))
+                user_dto.set_email(doc.get("email"))
+                user_dto.set_imagen(doc.get("imagen"))
+                user_dto.set_url(doc.get("url"))
+                user_dto.set_fechaIngreso(doc.get("fechaIngreso"))
+                user_dto.set_esArtista(doc.get("esArtista"))
+                user_dto.set_esVisible(doc.get("esVisible"))
+                user_dto.set_emailVisible(doc.get("emailVisible"))
+                user_dto.set_id_likes(doc.get("id_likes", []))
+                user_dto.set_studio_albumes(doc.get("studio_albumes", []))
+                user_dto.set_studio_canciones(doc.get("studio_canciones", []))
+                user_dto.set_biblioteca(doc.get("biblioteca", []))
+                user_dto.set_listas_reproduccion(doc.get("listas_reproduccion", []))
 
-                    users.insertUser(user_dto)
+                users.insertUser(user_dto)
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar los usuarios: {e}")
@@ -134,31 +135,60 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
     def get_all_by_nombre(self, nombre):
         users = UsuariosDTO()
         try:
-            query = self.collection.find({"nombre": {"$regex": nombre, "$options": "i"}})
+            query = self.collection.find({"nombre": {"$regex": nombre, "$options": "i"}, "esArtista": True, "esVisible": True})
 
             for doc in query:
-                if doc.get("esArtista") == True and doc.get("esVisible") == True:
-                    user_dto = UsuarioDTO()
-                    user_dto.set_id(str(doc.get("_id")))
-                    user_dto.set_nombre(doc.get("nombre"))
-                    user_dto.set_bio(doc.get("bio"))
-                    user_dto.set_email(doc.get("email"))
-                    user_dto.set_imagen(doc.get("imagen"))
-                    user_dto.set_url(doc.get("url"))
-                    user_dto.set_fechaIngreso(doc.get("fechaIngreso"))
-                    user_dto.set_esArtista(doc.get("esArtista"))
-                    user_dto.set_esVisible(doc.get("esVisible"))
-                    user_dto.set_emailVisible(doc.get("emailVisible"))
-                    user_dto.set_id_likes(doc.get("id_likes", []))
-                    user_dto.set_studio_albumes(doc.get("studio_albumes", []))
-                    user_dto.set_studio_canciones(doc.get("studio_canciones", []))
-                    user_dto.set_biblioteca(doc.get("biblioteca", []))
-                    user_dto.set_listas_reproduccion(doc.get("listas_reproduccion", []))
+                user_dto = UsuarioDTO()
+                user_dto.set_id(str(doc.get("_id")))
+                user_dto.set_nombre(doc.get("nombre"))
+                user_dto.set_bio(doc.get("bio"))
+                user_dto.set_email(doc.get("email"))
+                user_dto.set_imagen(doc.get("imagen"))
+                user_dto.set_url(doc.get("url"))
+                user_dto.set_fechaIngreso(doc.get("fechaIngreso"))
+                user_dto.set_esArtista(doc.get("esArtista"))
+                user_dto.set_esVisible(doc.get("esVisible"))
+                user_dto.set_emailVisible(doc.get("emailVisible"))
+                user_dto.set_id_likes(doc.get("id_likes", []))
+                user_dto.set_studio_albumes(doc.get("studio_albumes", []))
+                user_dto.set_studio_canciones(doc.get("studio_canciones", []))
+                user_dto.set_biblioteca(doc.get("biblioteca", []))
+                user_dto.set_listas_reproduccion(doc.get("listas_reproduccion", []))
 
-                    users.insertUser(user_dto)
+                users.insertUser(user_dto)
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar los usuarios: {e}")
+
+        return [user.usuario_to_dict() for user in users.userlist]
+
+    def get_artistas(self):
+        users = UsuariosDTO()
+        try:
+            query = self.collection.find({"esArtista": True, "esVisible": True})
+
+            for doc in query:
+                user_dto = UsuarioDTO()
+                user_dto.set_id(str(doc.get("_id")))
+                user_dto.set_nombre(doc.get("nombre"))
+                user_dto.set_bio(doc.get("bio"))
+                user_dto.set_email(doc.get("email"))
+                user_dto.set_imagen(doc.get("imagen"))
+                user_dto.set_url(doc.get("url"))
+                user_dto.set_fechaIngreso(doc.get("fechaIngreso"))
+                user_dto.set_esArtista(doc.get("esArtista"))
+                user_dto.set_esVisible(doc.get("esVisible"))
+                user_dto.set_emailVisible(doc.get("emailVisible"))
+                user_dto.set_id_likes(doc.get("id_likes", []))
+                user_dto.set_studio_albumes(doc.get("studio_albumes", []))
+                user_dto.set_studio_canciones(doc.get("studio_canciones", []))
+                user_dto.set_biblioteca(doc.get("biblioteca", []))
+                user_dto.set_listas_reproduccion(doc.get("listas_reproduccion", []))
+
+                users.insertUser(user_dto)
+
+        except Exception as e:
+            print(f"{PDAO_ERROR}Error al recuperar los artistas: {e}")
 
         return [user.usuario_to_dict() for user in users.userlist]
 
@@ -191,7 +221,6 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
 
         return user.usuario_to_dict() if user else None
     
-
     def add_usuario(self, usuario : UsuarioDTO) -> bool:
         try:
             user_dict : dict = usuario.usuario_to_dict()
@@ -203,7 +232,6 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
             print(f"{PDAO_ERROR}Error al agregar el usuario: {e}")
             return False
         
-
     def update_usuario(self, usuario) -> bool:
         try:
             user_dict : dict = usuario.usuario_to_dict()
@@ -215,7 +243,6 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
             print(f"{PDAO_ERROR}Error al actualizar el usuario: {e}")
             return False
     
-
     def delete_usuario(self, id) -> bool:
         try:
             result : pymongo.results.DeleteResult = self.collection.delete_one({"_id": id})

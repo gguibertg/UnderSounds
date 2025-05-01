@@ -18,6 +18,10 @@ class InterfaceUsuarioDAO(ABC):
     def get_all_by_nombre(self, nombre):
         pass
 
+    @abstractmethod
+    def get_artistas(self):
+        pass
+
     @abstractmethod	
     def get_usuario(self, id):
         pass

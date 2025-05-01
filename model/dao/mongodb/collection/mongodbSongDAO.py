@@ -19,35 +19,33 @@ class MongodbSongDAO(InterfaceSongDAO):
     def get_all_songs(self):
         songs = SongsDTO()
         try:
-            query = self.collection.find()
+            query = self.collection.find({"visible": True})
 
             for doc in query:
-                if doc.get("visible") == True:
-                    song_dto = SongDTO()
-                    song_dto.set_id(str(doc.get("_id")))
-                    song_dto.set_titulo(doc.get("titulo"))
-                    song_dto.set_artista(doc.get("artista"))
-                    song_dto.set_colaboradores(doc.get("colaboradores"))
-                    song_dto.set_fecha(doc.get("fecha"))
-                    song_dto.set_descripcion(doc.get("descripcion"))
-                    song_dto.set_duracion(doc.get("duracion"))
-                    song_dto.set_generos(doc.get("generos"))
-                    song_dto.set_likes(doc.get("likes"))
-                    song_dto.set_visitas(doc.get("visitas"))
-                    song_dto.set_portada(doc.get("portada"))
-                    song_dto.set_precio(doc.get("precio"))
-                    song_dto.set_lista_resenas(doc.get("lista_resenas"))
-                    song_dto.set_visible(doc.get("visible"))
-                    song_dto.set_album(doc.get("album"))
-                    song_dto.set_pista(doc.get("pista"))
+                song_dto = SongDTO()
+                song_dto.set_id(str(doc.get("_id")))
+                song_dto.set_titulo(doc.get("titulo"))
+                song_dto.set_artista(doc.get("artista"))
+                song_dto.set_colaboradores(doc.get("colaboradores"))
+                song_dto.set_fecha(doc.get("fecha"))
+                song_dto.set_descripcion(doc.get("descripcion"))
+                song_dto.set_duracion(doc.get("duracion"))
+                song_dto.set_generos(doc.get("generos"))
+                song_dto.set_likes(doc.get("likes"))
+                song_dto.set_visitas(doc.get("visitas"))
+                song_dto.set_portada(doc.get("portada"))
+                song_dto.set_precio(doc.get("precio"))
+                song_dto.set_lista_resenas(doc.get("lista_resenas"))
+                song_dto.set_visible(doc.get("visible"))
+                song_dto.set_album(doc.get("album"))
+                song_dto.set_pista(doc.get("pista"))
 
-                    songs.insertSong(song_dto)
+                songs.insertSong(song_dto)
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
 
         return [song.songdto_to_dict() for song in songs.songlist]
-
 
     def get_song(self, id: str):
         song = None
@@ -79,7 +77,6 @@ class MongodbSongDAO(InterfaceSongDAO):
 
         return song.songdto_to_dict() if song else None
     
-
     def add_song(self, song: SongDTO) -> str:
         try:
             song_dict : dict = song.songdto_to_dict()
@@ -91,7 +88,6 @@ class MongodbSongDAO(InterfaceSongDAO):
             print(f"{PDAO_ERROR}Error al agregar la cancion: {e}")
             return None
         
-
     def update_song(self, song: SongDTO) -> bool:
         try:
             song_dict = song.songdto_to_dict()
@@ -105,7 +101,6 @@ class MongodbSongDAO(InterfaceSongDAO):
             print(f"{PDAO_ERROR}Error al actualizar la cancion: {e}")
             return False
     
-
     def delete_song(self, id: str) -> bool:
         try:
             result : DeleteResult = self.collection.delete_one({"_id": ObjectId(id)})
@@ -118,35 +113,33 @@ class MongodbSongDAO(InterfaceSongDAO):
     def get_all_by_genre(self, genre: str):
         songs = SongsDTO()
         try:
-            query = self.collection.find({"generos": genre})
+            query = self.collection.find({"generos": genre, "visible": True})
 
             for doc in query:
-                if doc.get("visible") == True:
-                    song_dto = SongDTO()
-                    song_dto.set_id(str(doc.get("_id")))
-                    song_dto.set_titulo(doc.get("titulo"))
-                    song_dto.set_artista(doc.get("artista"))
-                    song_dto.set_colaboradores(doc.get("colaboradores"))
-                    song_dto.set_fecha(doc.get("fecha"))
-                    song_dto.set_descripcion(doc.get("descripcion"))
-                    song_dto.set_duracion(doc.get("duracion"))
-                    song_dto.set_generos(doc.get("generos"))
-                    song_dto.set_likes(doc.get("likes"))
-                    song_dto.set_visitas(doc.get("visitas"))
-                    song_dto.set_portada(doc.get("portada"))
-                    song_dto.set_precio(doc.get("precio"))
-                    song_dto.set_lista_resenas(doc.get("lista_resenas"))
-                    song_dto.set_visible(doc.get("visible"))
-                    song_dto.set_album(doc.get("album"))
-                    song_dto.set_pista(doc.get("pista"))
+                song_dto = SongDTO()
+                song_dto.set_id(str(doc.get("_id")))
+                song_dto.set_titulo(doc.get("titulo"))
+                song_dto.set_artista(doc.get("artista"))
+                song_dto.set_colaboradores(doc.get("colaboradores"))
+                song_dto.set_fecha(doc.get("fecha"))
+                song_dto.set_descripcion(doc.get("descripcion"))
+                song_dto.set_duracion(doc.get("duracion"))
+                song_dto.set_generos(doc.get("generos"))
+                song_dto.set_likes(doc.get("likes"))
+                song_dto.set_visitas(doc.get("visitas"))
+                song_dto.set_portada(doc.get("portada"))
+                song_dto.set_precio(doc.get("precio"))
+                song_dto.set_lista_resenas(doc.get("lista_resenas"))
+                song_dto.set_visible(doc.get("visible"))
+                song_dto.set_album(doc.get("album"))
+                song_dto.set_pista(doc.get("pista"))
 
-                    songs.insertSong(song_dto)
+                songs.insertSong(song_dto)
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
 
         return [song.songdto_to_dict() for song in songs.songlist]
-    
 
     def get_all_by_fecha(self, fecha_str):
         songs = SongsDTO()
@@ -176,30 +169,30 @@ class MongodbSongDAO(InterfaceSongDAO):
                 "fecha": {
                     "$gte": fecha_min,
                     "$lt": fecha_max
-                }
+                },
+                "visible": True
             })
 
             for doc in query:
-                if doc.get("visible") == True:
-                    song_dto = SongDTO()
-                    song_dto.set_id(str(doc.get("_id")))
-                    song_dto.set_titulo(doc.get("titulo"))
-                    song_dto.set_artista(doc.get("artista"))
-                    song_dto.set_colaboradores(doc.get("colaboradores"))
-                    song_dto.set_fecha(doc.get("fecha"))
-                    song_dto.set_descripcion(doc.get("descripcion"))
-                    song_dto.set_duracion(doc.get("duracion"))
-                    song_dto.set_generos(doc.get("generos"))
-                    song_dto.set_likes(doc.get("likes"))
-                    song_dto.set_visitas(doc.get("visitas"))
-                    song_dto.set_portada(doc.get("portada"))
-                    song_dto.set_precio(doc.get("precio"))
-                    song_dto.set_lista_resenas(doc.get("lista_resenas"))
-                    song_dto.set_visible(doc.get("visible"))
-                    song_dto.set_album(doc.get("album"))
-                    song_dto.set_pista(doc.get("pista"))
+                song_dto = SongDTO()
+                song_dto.set_id(str(doc.get("_id")))
+                song_dto.set_titulo(doc.get("titulo"))
+                song_dto.set_artista(doc.get("artista"))
+                song_dto.set_colaboradores(doc.get("colaboradores"))
+                song_dto.set_fecha(doc.get("fecha"))
+                song_dto.set_descripcion(doc.get("descripcion"))
+                song_dto.set_duracion(doc.get("duracion"))
+                song_dto.set_generos(doc.get("generos"))
+                song_dto.set_likes(doc.get("likes"))
+                song_dto.set_visitas(doc.get("visitas"))
+                song_dto.set_portada(doc.get("portada"))
+                song_dto.set_precio(doc.get("precio"))
+                song_dto.set_lista_resenas(doc.get("lista_resenas"))
+                song_dto.set_visible(doc.get("visible"))
+                song_dto.set_album(doc.get("album"))
+                song_dto.set_pista(doc.get("pista"))
 
-                    songs.insertSong(song_dto)
+                songs.insertSong(song_dto)
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
@@ -209,29 +202,28 @@ class MongodbSongDAO(InterfaceSongDAO):
     def get_all_by_nombre(self, titulo):
         songs = SongsDTO()
         try:
-            query = self.collection.find({"titulo": {"$regex": titulo, "$options": "i"}})
+            query = self.collection.find({"titulo": {"$regex": titulo, "$options": "i"}, "visible": True})
 
             for doc in query:
-                if doc.get("visible") == True:
-                    song_dto = SongDTO()
-                    song_dto.set_id(str(doc.get("_id")))
-                    song_dto.set_titulo(doc.get("titulo"))
-                    song_dto.set_artista(doc.get("artista"))
-                    song_dto.set_colaboradores(doc.get("colaboradores"))
-                    song_dto.set_fecha(doc.get("fecha"))
-                    song_dto.set_descripcion(doc.get("descripcion"))
-                    song_dto.set_duracion(doc.get("duracion"))
-                    song_dto.set_generos(doc.get("generos"))
-                    song_dto.set_likes(doc.get("likes"))
-                    song_dto.set_visitas(doc.get("visitas"))
-                    song_dto.set_portada(doc.get("portada"))
-                    song_dto.set_precio(doc.get("precio"))
-                    song_dto.set_lista_resenas(doc.get("lista_resenas"))
-                    song_dto.set_visible(doc.get("visible"))
-                    song_dto.set_album(doc.get("album"))
-                    song_dto.set_pista(doc.get("pista"))
+                song_dto = SongDTO()
+                song_dto.set_id(str(doc.get("_id")))
+                song_dto.set_titulo(doc.get("titulo"))
+                song_dto.set_artista(doc.get("artista"))
+                song_dto.set_colaboradores(doc.get("colaboradores"))
+                song_dto.set_fecha(doc.get("fecha"))
+                song_dto.set_descripcion(doc.get("descripcion"))
+                song_dto.set_duracion(doc.get("duracion"))
+                song_dto.set_generos(doc.get("generos"))
+                song_dto.set_likes(doc.get("likes"))
+                song_dto.set_visitas(doc.get("visitas"))
+                song_dto.set_portada(doc.get("portada"))
+                song_dto.set_precio(doc.get("precio"))
+                song_dto.set_lista_resenas(doc.get("lista_resenas"))
+                song_dto.set_visible(doc.get("visible"))
+                song_dto.set_album(doc.get("album"))
+                song_dto.set_pista(doc.get("pista"))
 
-                    songs.insertSong(song_dto)
+                songs.insertSong(song_dto)
 
         except Exception as e:
             print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")

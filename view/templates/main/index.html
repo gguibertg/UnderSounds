@@ -80,6 +80,45 @@
 
                 <br><br><br>
 
+                <h1><i>Nuevos artistas</i></h1>
+                <br>
+                <div class="div-carrusel div-pannel" id="carrusel-nuevos-lanzamientos">
+                    {% for item in artistas [-6:] %}
+                    <div class="div-pannel-sub" style="margin: 0 2rem; width: 13rem;">
+                        <img src="{{ item.imagen }}" onclick="window.location.href='/artista?id={{ item.id }}'"
+                            class="foto-artista">
+                        <p class="texto-producto">{{ item.nombre }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <br><br><br>
+
+                <h1><i>Nuevos albumes</i></h1>
+                <br>
+                <div class="div-carrusel div-pannel" id="carrusel-nuevos-lanzamientos">
+                    {% for item in albums [-6:] %}
+                    <div class="div-pannel-sub" style="margin: 0 2rem; width: 13rem;">
+                        <img src="{{ item.portada }}" onclick="window.location.href='/album?id={{ item.id }}'"
+                            class="foto-artista">
+                        <p class="texto-producto">{{ item.titulo }}</p>
+                        <p class="texto-artista">{{ item.artista }}</p>
+                        {% if tipoUsuario %}
+                        <form action="/cart" method="post">
+                            <input type="hidden" name="action" value="add">
+                            <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <input type="hidden" name="item_name" value="{{ item.titulo }}">
+                            <input type="hidden" name="item_image" value="{{ item.portada }}">
+                            <input type="hidden" name="artist_name" value="{{ item.artista }}">
+                            <input type="hidden" name="item_desc" value="{{ item.descripcion }}">
+                            <input type="hidden" name="item_precio" value="{{ item.precio }}">
+                            <button type="submit" class="button-comprar-item">Añadir</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
                 <h1><i>Géneros que te podrían interesar</i></h1>
                 <br>
                 <div id="msg-spawner"></div>

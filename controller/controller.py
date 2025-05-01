@@ -86,7 +86,9 @@ async def index(request: Request):
 
     genres_json = model.get_generos()
     song_json = model.get_songs()
-    return view.get_index_view(request, song_json, genres_json, tipoUsuario)
+    artistas_json = model.get_artistas()
+    albums_json = model.get_albums()
+    return view.get_index_view(request, song_json, genres_json, artistas_json, albums_json, tipoUsuario)
 
 # Endpoint para obtener listado de canciones por genero
 @app.get("/songs/genre")

@@ -29,12 +29,18 @@ class Model ():
     # Usuario
     def get_usuario(self, id : str):
         return self.daoUsuario.get_usuario(id)
+    def get_artistas(self):
+        return self.daoUsuario.get_artistas()
     def get_usuarios_by_fecha(self, fecha):
         return self.daoUsuario.get_all_by_fecha(fecha)
     def get_usuarios_by_nombre(self, nombre):
         return self.daoUsuario.get_all_by_nombre(nombre)
     def add_usuario(self, usuario : UsuarioDTO):
         return self.daoUsuario.add_usuario(usuario)
+    def get_usuarios_by_song(self, song_id):
+        return self.daoUsuario.get_all_usuarios_by_song(song_id)
+    def get_usuarios_by_song_in_list(self, song_id):
+        return self.daoUsuario.get_all_usuarios_by_song_in_list(song_id)
     def update_usuario(self, usuario : UsuarioDTO):
         return self.daoUsuario.update_usuario(usuario)
     def delete_usuario(self, id : str):
@@ -68,12 +74,6 @@ class Model ():
         usuario_dto.load_from_dict(usuario_dict)
         usuario_dto.remove_song_from_lista_reproduccion(nombre_lista, id_cancion)
         self.daoUsuario.update_usuario(usuario_dto)
-
-    def get_usuarios_by_song(self, song_id):
-        return self.daoUsuario.get_all_usuarios_by_song(song_id)
-    
-    def get_usuarios_by_song_in_list(self, song_id):
-        return self.daoUsuario.get_all_usuarios_by_song_in_list(song_id)
 
     # Faqs
     def get_faqs(self):
