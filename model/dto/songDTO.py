@@ -1,4 +1,6 @@
 import json
+import datetime
+from datetime import datetime
 from .reseñasDTO import ReseñaDTO
 
 class SongsDTO():
@@ -22,6 +24,7 @@ class SongDTO():
         self.artista: str = None
         self.colaboradores: list[str] = []
         self.fecha: str = None
+        self.fechaUltimaModificacion: str = None
         self.descripcion: str = None
         self.duracion: str = None
         self.generos: list[str] = []
@@ -33,16 +36,17 @@ class SongDTO():
         self.visible: bool = None
         self.album: str = None
         self.pista: str = None
+        self.historial: list[dict] = []
 
     def is_empty(self):
         return (self.id is None and self.titulo is None and 
                 self.artista is None and self.colaboradores is None and 
-                self.fecha is None and self.descripcion is None and 
+                self.fecha is None and self.fechaUltimaModificacion is None and self.descripcion is None and 
                 self.duracion is None and self.generos is None and 
                 self.likes is None and self.visitas is None and 
                 self.portada is None and self.precio is None and 
                 self.lista_resenas is None and self.visible is None and 
-                self.album is None and self.pista is None)
+                self.album is None and self.pista is None and self.historial is None)
 
     def get_id(self) -> str:
         return self.id
@@ -73,6 +77,12 @@ class SongDTO():
 
     def set_fecha(self, fecha: str):
         self.fecha = fecha
+
+    def get_fechaUltimaModificacion(self) -> str:
+        return self.fechaUltimaModificacion
+    
+    def set_fechaUltimaModificacion(self, fecha: str):
+        self.fechaUltimaModificacion = fecha
 
     def get_descripcion(self) -> str:
         return self.descripcion
@@ -160,6 +170,25 @@ class SongDTO():
     def set_pista(self, pista):
         self.pista = pista
 
+    def get_historial(self) -> list[dict]:
+        return self.historial
+    
+    def add_historial(self, old_song_dict: dict):
+        def clean_historial(d: dict) -> dict:
+            cleaned = dict(d)  # copia superficial
+            cleaned.pop("historial", None)  # elimina historial si existe
+            return cleaned
+
+        cleaned_version = clean_historial(old_song_dict)
+        self.historial.append(cleaned_version)
+
+    def remove_historial(self, historial: dict):
+        if historial in self.historial:
+            self.historial.remove(historial)
+
+    def set_historial(self, historial: list[dict]):
+        self.historial = historial
+
     def songdto_to_dict(self) -> dict:
         return {
             "id": self.id,
@@ -167,6 +196,7 @@ class SongDTO():
             "artista": self.artista,
             "colaboradores": self.colaboradores,
             "fecha": self.fecha,
+            "fechaUltimaModificacion": self.fechaUltimaModificacion,
             "descripcion": self.descripcion,
             "duracion": self.duracion,
             "generos": self.generos,
@@ -177,8 +207,12 @@ class SongDTO():
             "lista_resenas": self.lista_resenas,
             "visible": self.visible,
             "album": self.album,
-            "pista": self.pista
+            "pista": self.pista,
+            "historial": [self._clean_historial_entry(h) for h in self.historial or []]
         }
+
+    def _clean_historial_entry(self, h: dict) -> dict:
+        return {k: v for k, v in h.items() if k != "historial"}
     
     def load_from_dict(self, data: dict):
         self.id = data.get("id")
@@ -186,6 +220,7 @@ class SongDTO():
         self.artista = data.get("artista")
         self.colaboradores = data.get("colaboradores")
         self.fecha = data.get("fecha")
+        self.fechaUltimaModificacion = data.get("fechaUltimaModificacion")
         self.descripcion = data.get("descripcion")
         self.duracion = data.get("duracion")
         self.generos = data.get("generos", [])
@@ -197,3 +232,45 @@ class SongDTO():
         self.visible = data.get("visible")
         self.album = data.get("album")
         self.pista = data.get("pista")
+        self.historial = []
+        for entry in data.get("historial", []):
+            if isinstance(entry, dict):
+                cleaned = {k: v for k, v in entry.items() if k != "historial"}
+                self.historial.append(cleaned)
+
+    def revert_to_version_by_fecha(self, fecha_objetivo: str) -> bool:
+
+        try:
+            fecha_objetivo_dt = datetime.fromisoformat(fecha_objetivo)
+        except ValueError:
+            print("Error: La fecha objetivo no tiene un formato válido.")
+            return False
+
+        for version in reversed(self.historial):  # reversed para ir de la más reciente a la más antigua
+            fecha_version = version.get("fechaUltimaModificacion")
+
+            if isinstance(fecha_version, str):
+                try:
+                    fecha_version_dt = datetime.fromisoformat(fecha_version)
+                except ValueError:
+                    continue  # ignorar si no es válida
+            else:
+                fecha_version_dt = fecha_version
+
+            if fecha_version_dt and fecha_version_dt <= fecha_objetivo_dt:
+                self._load_partial(version)
+                return True
+
+        return False # No se encontró una versión anterior a esa fecha
+
+    def _load_partial(self, data: dict):
+        #Carga solo los campos de edición
+        self.titulo = data.get("titulo")
+        self.artista = data.get("artista")
+        self.colaboradores = data.get("colaboradores")
+        self.descripcion = data.get("descripcion")
+        self.generos = data.get("generos", [])
+        self.portada = data.get("portada")
+        self.precio = data.get("precio")
+        self.visible = data.get("visible")
+        self.album = data.get("album")

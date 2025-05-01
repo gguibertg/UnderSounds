@@ -117,17 +117,6 @@
                 {% for lista in listas_completas %}
                 <div class="lista-header">
                     <h2>{{ lista.nombre }}</h2>
-                    <br>
-                    <button
-                        class="playlist-btn"
-                        type="button"
-                        data-titulos="{{ lista.songs | map(attribute='titulo') | join('|||') }}"
-                        data-artistas="{{ lista.songs | map(attribute='artista') | join('|||') }}"
-                        data-covers="{{ lista.songs | map(attribute='portada') | join('|||') }}"
-                        data-pistas="{{ lista.songs | map(attribute='pista') | join('|||') }}">
-                        Reproducir lista
-                    </button>
-                    <br><br>
                     <form method="post" action="/remove-lista">
                         <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}" />
                         <button type="submit" class="btn-delete-list">
@@ -190,11 +179,9 @@
         </div>
     </main>
     <div id="footer-placeholder"></div>
-    <div id="mini-player-placeholder"></div>
     <script src="/static/js/header.js"></script>
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
-    <script src="/static/js/radio.js"></script>
     
 
     <script>
@@ -298,27 +285,27 @@
                 return;
             }
 
-        user.verifyBeforeUpdateEmail(newEmail)
-            .then(() => {
-                alert(`Se ha enviado un correo de verificación a ${newEmail}. Debes verificarlo para completar el cambio.`);
-            })
-            .catch((error) => {
-                console.error("Error al cambiar el correo:", error);
-                switch (error.code) {
-                    case "auth/requires-recent-login":
-                        alert("Debes volver a iniciar sesión para cambiar el correo.");
-                        break;
-                    case "auth/email-already-in-use":
-                        alert("Ese correo ya está en uso. Intenta con otro.");
-                        break;
-                    case "auth/invalid-email":
-                        alert("El correo introducido no es válido.");
-                        break;
-                    default:
-                        alert("No se pudo enviar la verificación para el cambio de correo.");
-                        break;
-                }
-            });
+            user.verifyBeforeUpdateEmail(newEmail)
+                .then(() => {
+                    alert(`Se ha enviado un correo de verificación a ${newEmail}. Debes verificarlo para completar el cambio.`);
+                })
+                .catch((error) => {
+                    console.error("Error al cambiar el correo:", error);
+                    switch (error.code) {
+                        case "auth/requires-recent-login":
+                            alert("Debes volver a iniciar sesión para cambiar el correo.");
+                            break;
+                        case "auth/email-already-in-use":
+                            alert("Ese correo ya está en uso. Intenta con otro.");
+                            break;
+                        case "auth/invalid-email":
+                            alert("El correo introducido no es válido.");
+                            break;
+                        default:
+                            alert("No se pudo enviar la verificación para el cambio de correo.");
+                            break;
+                    }
+                });
         }
 
         function unregister() {

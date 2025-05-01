@@ -83,68 +83,65 @@
             const backButton = mainElement.querySelector(".button-back");
             mainElement.insertBefore(errorDiv, backButton);
         }
+
         document.getElementById("login-form").addEventListener("submit", function (event) {
             event.preventDefault();
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
             console.log("Usuario " + email + " iniciando sesión...");
             auth.signInWithEmailAndPassword(email, password)
-            .then(userCredential => {
-                return userCredential.user.getIdToken();
-            })
-            .then(token => {
-                console.log("Token obtenido: " + token);
-                return fetch("/login-credentials", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token })
+                .then(userCredential => {
+                    return userCredential.user.getIdToken();
+                })
+                .then(token => {
+                    console.log("Token obtenido: " + token);
+                    return fetch("/login-credentials", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ token })
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = "/profile";
+                    } else {
+                        throw new Error(data.error || "Ocurrió un error desconocido");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error durante el inicio de sesión con credenciales:", error);
+                    displayError("Error durante el inicio de sesión: " + error.message);
                 });
-            })
-            .then(response => {
-                if (response.ok) {
-                return response.json();
-                } else {
-                throw new Error("Error en la respuesta del servidor: " + response.statusText);
-                }
-            })
-            .then(data => {
-                window.location.href = "/profile";
-            })
-            .catch(error => {
-                console.error("Error durante el inicio de sesión con credenciales:", error);
-                displayMessage("error", "Error durante el inicio de sesión: " + error.message);
-            });
         });
 
         document.getElementById("google-login").addEventListener("click", function () {
             const provider = new firebase.auth.GoogleAuthProvider();
             console.log("Usuario iniciando sesión con Google...");
             auth.signInWithPopup(provider)
-            .then(result => result.user.getIdToken())
-            .then(token => {
-                console.log("Token del usuario: ", token);
-                console.log("Solicitando acceso a la API...");
-                return fetch("/login-google", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token })
+                .then(result => result.user.getIdToken())
+                .then(token => {
+                    console.log("Token del usuario: ", token);
+                    console.log("Solicitando acceso a la API...");
+                    return fetch("/login-google", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ token })
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Cuerpo de la respuesta: ", data);
+                    if (data.success) {
+                        window.location.href = "/profile";
+                    } else {
+                        throw new Error(data.error || "Ocurrió un error desconocido");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error durante el inicio de sesión con Google:", error);
+                    displayError("Error durante el inicio de sesión con Google: " + error.message);
                 });
-            })
-            .then(response => {
-                if (response.ok) {
-                return response.json();
-                } else {
-                throw new Error("Error en la respuesta del servidor: " + response.statusText);
-                }
-            })
-            .then(data => {
-                console.log("Cuerpo de la respuesta: ", data);
-                window.location.href = "/profile";
-            })
-            .catch(error => {
-                console.error("Error durante el inicio de sesión con Google:", error);
-                displayMessage("error", "Error durante el inicio de sesión con Google: " + error.message);
-            });
         });
 
         // Función para restablecer la contraseña
@@ -164,14 +161,13 @@
                 })
                 .catch(error => {
                     console.error("Error al enviar el correo de recuperación:", error);
-                    displayMessage("error", "No se pudo enviar el correo: " + error.message);
+                    displayError("No se pudo enviar el correo: " + error.message);
                 });
         });
     </script>
 
     <!-- Scripts -->
     <script src="/static/js/dark-mode.js"></script>
-    <script src="/static/js/displayMessage.js"></script> <!-- Script para mostrar mensajes de error o éxito -->
 
 </body>
 

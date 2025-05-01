@@ -47,12 +47,14 @@
                         <label for="price">Precio</label>
                         <input type="text" id="precio" name="precio" placeholder="Precio de la canción" value="{{song.precio}}" required>
                     
-                        <label for="description">Descripción</label>
-                        <textarea id="descripcion" name="descripcion" rows="7" cols="40"
-                            placeholder="Escribe una breve descripción..." required>{{song.descripcion}}</textarea>
-
                         <label for="is-visible">Visible al público</label>
                         <input type="checkbox" id="is-visible" name="is_visible" {% if song.visible %} checked {% endif %}>
+                    </div>
+
+                    <div class="div-pannel-sub upload-group" style="width: auto;">
+                        <label for="description">Descripción</label>
+                        <textarea id="descripcion" name="descripcion" rows="4"
+                            placeholder="Escribe una breve descripción..." required> {{song.descripcion}} </textarea>
                     </div>
 
                     <div class="div-pannel-sub upload-checkbox-container" style="width:auto;">
@@ -133,6 +135,49 @@
             
             </div>
             <br>
+            <section class="div-pannel historial" style="align-items: center;">
+                <h2>Historial </h2>
+                <div class="historial-grid">
+                    {% if song.historial |length == 0 %}
+                    <p id="no_reseñas" style="display: flex; justify-content: center; align-items: center;">No hay historial de cambios.</p>
+                    {% else %}
+                    {% for cambios in song.historial | reverse %}
+                    <details class="historial" id="cambio -¨{{ cambios.fechaUltimaModificacion }}">
+                        <summary><img alt="Desplegar" class="chevron" height="16"
+                                src="/static/icons/site/dropdown-icon.svg" width="16" />
+                            <strong> {{ cambios.fechaUltimaModificacion }} </strong>
+                        </summary>
+                        
+                        <div class="historial-content">
+                            <div class="text-content">
+                                <h2 class="song-title"> {{cambios.titulo}}</h2>
+                                <p><strong>Autor:</strong> {{cambios.artista}}</p>
+                                <p><strong>Colaboradores:</strong> {{cambios.colaboradores}}</p>
+                                <p><strong>Descripción:</strong> <pre> {{cambios.descripcion}} </pre></p>
+                                {% if cambios.album %}
+                                    <p><strong>Álbum:</strong> {{cambios.albumStr}}</p>
+                                {% else %}
+                                    <p><strong> La canción es un <i>Single</i></strong></p>
+                                {% endif %}
+                                <p><strong>Géneros:</strong> {{cambios.generos}} </p>
+                                <p><strong>Precio:</strong> {{cambios.precio}}€</p>
+                                <p><strong>Visible:</strong> {% if cambios.visible %} Sí {% else %} No {% endif %}</p>
+                            </div>
+                    
+                            <div class="image-content">
+                                <img id="cover-preview" src="{{ cambios.portada }}" alt="Portada de la canción">
+                            </div>
+                        </div>
+                    
+                        <div class="historial-actions">
+                            <button class="btn" title="Editar" onclick="lastVersion('{{ cambios.fechaUltimaModificacion }}')">
+                                <img alt="Editar" height="20" src="/static/icons/site/edit-icon.svg" width="20" /></button>
+                        </div>
+                    </details>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </section>
         </div>
     </main>
 
@@ -168,9 +213,61 @@
                 return displayMessage("error", "Debes seleccionar al menos un género.");
             }
             // Validar que la canción esté subida
+            let generosBackend = "{{ song.generos }}";  // Esto es una cadena que representa un array
+            generosBackend = generosBackend.replace(/&#39;/g, "'")  // Reemplazar &#39; por '
+                                            .replace(/&quot;/g, '"') // Reemplazar &quot; por "
+                                            .replace(/'/g, '"');
+            const generosArray = JSON.parse(generosBackend); 
+            const generosCoinciden = songData.generos.every(genero => generosArray.includes(genero)) &&
+                                generosArray.every(genero => songData.generos.includes(genero));
+
+            
+            if (    Boolean(songData.titulo == "{{ song.titulo }}") &&
+                    Boolean(songData.artista == "{{ song.artista }}") &&
+                    Boolean(songData.colaboradores == "{{ song.colaboradores }}") &&
+                    Boolean(songData.descripcion.trim() == "{{song.descripcion}}".trim()) &&
+                    Boolean(songData.portada == "{{ song.portada }}") &&
+                    generosCoinciden &&
+                    Boolean(songData.precio == "{{ song.precio }}") &&
+                    Boolean(String(songData.visible) == "{{ song.visible }}".toLowerCase())) {
+
+                return displayMessage("error", "No se han realizado cambios en la canción."); 
+            }
+            else{
+                try {
+                    const response = await fetch('/edit-song', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(songData)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        displayMessage('success', 'Canción editada exitosamente, espero un momento...');
+                        setTimeout(() => {
+                            window.location.href = '/studio';
+                        }, 2000);
+                    } else {
+                        displayMessage('error', 'Error al editar la canción: ' + result.error);
+                    }
+                } catch (error) {
+                    displayMessage('error', 'Ocurrió un error al editar la canción.');
+                    console.error('Error editing song:', error);
+                }
+            }
+        }
+
+        async function lastVersion(fechaModificacion){
+            const songData = {
+                id: "{{song.id}}",
+                fechaUltimaModificacion: fechaModificacion
+            };
 
             try {
-                const response = await fetch('/edit-song', {
+                const response = await fetch('/last-version', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -181,16 +278,19 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    displayMessage('success', 'Canción subida exitosamente');
-                    window.location.href = '/studio';
+                    displayMessage('success', 'Versión restaurada exitosamente, espero un momento...');
+                    setTimeout(() => {
+                        window.location.href = '/studio';
+                    }, 2000);
                 } else {
-                    displayMessage('error', 'Error al subir la canción: ' + result.error);
+                    displayMessage('error', 'Error al restaurar la canción: ' + result.error);
                 }
             } catch (error) {
-                displayMessage('error', 'Ocurrió un error al editar la canción.');
+                displayMessage('error', 'Ocurrió un error al restaurar la canción.');
                 console.error('Error editing song:', error);
             }
         }
+        
     </script>
 
     <div id="footer-placeholder"></div>

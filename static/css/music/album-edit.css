@@ -281,3 +281,167 @@
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 1fr;
 }
+
+.historial h2 {
+    margin-bottom: 0.9375rem;
+}
+
+.historial-actions button svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    vertical-align: middle;
+    pointer-events: none;
+}
+
+.historial-actions .button-alt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+}
+
+.historial-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.historial summary::-webkit-details-marker {
+    display: none;
+}
+
+.historial[open] {
+    background-color: #e9e9e9;
+}
+
+.historial-actions {
+    margin-top: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+}
+
+.dark-mode .dark-mode .historial[open] {
+    background-color: #444;
+}
+
+.dark-mode .historial p {
+    color: #ccc;
+}
+
+.historial summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.historial .chevron {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.historial[open] .chevron {
+    transform: rotate(90deg);
+}
+
+.historial-grid .historial {
+    max-width: 750px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.historial {
+    max-width: 850px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+
+.historial {
+    background-color: #f4f4f4;
+    color: #222;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.historial[open] {
+    background-color: #e9e9e9;
+}
+
+.historial summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    list-style: none;
+}
+
+.historial summary::-webkit-details-marker {
+    display: none;
+}
+
+.historial p {
+    margin: 0.5rem 0;
+    text-align: justify;
+    font-size: 0.95rem;
+}
+
+.historial-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.historial .chevron {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.historial[open] .chevron {
+    transform: rotate(90deg);
+}
+
+.historial-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.text-content {
+    flex: 2;
+}
+
+.image-content {
+    flex: 1;
+    text-align: right;
+}
+
+.image-content img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 50%;
+}
+
+/* MODO OSCURO */
+.dark-mode .historial {
+    background-color: #333;
+    color: #eee;
+    border-color: #555;
+}
+
+.dark-mode .historial[open] {
+    background-color: #444;
+}
+
+.dark-mode .historial p {
+    color: #ccc;
+}
