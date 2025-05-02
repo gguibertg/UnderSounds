@@ -605,27 +605,9 @@ async def upload_album_post(request: Request):
     data = await request.json()
 
     # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
-    required_fields = ["titulo", "autor", "generos", "portada", "precio"]
-    for field in required_fields:
-        if field not in data or data[field] is None:
-            print(PCTRL_WARN, f"El campo '{field}' falta o está vacío")
-            return JSONResponse(content={"error": f"El campo '{field}' es requerido y no puede estar vacío"}, status_code=400)
-        
-    # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
-    optional_fields = ["descripcion", "colaboradores"]
-    for field in optional_fields:
-        if field not in data or data[field] is None:
-            data[field] = ""
-
-    # Validar que el precio sea un número positivo
-    if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
-        print(PCTRL_WARN, "El precio debe ser un número positivo")
-        return JSONResponse(content={"error": "El precio debe ser un número positivo"}, status_code=400)
-
-    # Validar que los géneros sean una lista no vacía
-    if not isinstance(data["generos"], list) or not data["generos"]:
-        print(PCTRL_WARN, "Los géneros deben ser una lista no vacía")
-        return JSONResponse(content={"error": "Los géneros deben ser una lista no vacía"}, status_code=400)
+    validate = validate_album_fields(data)
+    if validate is not True:
+        return validate
 
     album = AlbumDTO()
     album.set_titulo(data["titulo"])
@@ -950,27 +932,9 @@ async def album_edit_post(request: Request):
         album.load_from_dict(album_dict)
 
         # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
-        required_fields = ["titulo", "autor", "generos", "portada", "precio"]
-        for field in required_fields:
-            if field not in data or data[field] is None:
-                print(PCTRL_WARN, f"El campo '{field}' falta o está vacío")
-                return JSONResponse(content={"error": f"El campo '{field}' es requerido y no puede estar vacío"}, status_code=400)
-
-        # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
-        optional_fields = ["descripcion", "colaboradores"]
-        for field in optional_fields:
-            if field not in data or data[field] is None:
-               data[field] = ""
-
-        # Validar que el precio sea un número positivo
-        if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
-            print(PCTRL_WARN, "El precio debe ser un número positivo")
-            return JSONResponse(content={"error": "El precio debe ser un número positivo"}, status_code=400)
-
-        # Validar que los géneros sean una lista no vacía
-        if not isinstance(data["generos"], list) or not data["generos"]:
-            print(PCTRL_WARN, "Los géneros deben ser una lista no vacía")
-            return JSONResponse(content={"error": "Los géneros deben ser una lista no vacía"}, status_code=400)
+        validate = validate_album_fields(data)
+        if validate is not True:
+            return validate
 
         # Editamos el album con los nuevos datos recibidos en la request
         album.set_titulo(data["titulo"])
@@ -1739,27 +1703,9 @@ async def edit_song_post(request: Request):
             return JSONResponse(content={"error": "No autorizado"}, status_code=403)
         
         # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
-        required_fields = ["titulo", "artista", "generos", "portada", "precio"]
-        for field in required_fields:
-            if field not in data or data[field] is None:
-                print(PCTRL_WARN, f"El campo '{field}' falta o está vacío")
-                return JSONResponse(content={"error": f"El campo '{field}' es requerido y no puede estar vacío"}, status_code=400)
-
-        # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
-        optional_fields = ["descripcion", "colaboradores"]
-        for field in optional_fields:
-            if field not in data or data[field] is None:
-               data[field] = ""
-
-        # Validar que el precio sea un número positivo
-        if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
-            print(PCTRL_WARN, "El precio debe ser un número positivo")
-            return JSONResponse(content={"error": "El precio debe ser un número positivo"}, status_code=400)
-
-        # Validar que los géneros sean una lista no vacía
-        if not isinstance(data["generos"], list) or not data["generos"]:
-            print(PCTRL_WARN, "Los géneros deben ser una lista no vacía")
-            return JSONResponse(content={"error": "Los géneros deben ser una lista no vacía"}, status_code=400)
+        validate = validate_song_fields(data)
+        if validate is not True:
+            return validate
     
         song = SongDTO()
         song.load_from_dict(song_dict)
@@ -2046,8 +1992,7 @@ async def process_song_file(pista : UploadFile) -> JSONResponse | bool:
         print(PCTRL_WARN, f"Error al subir el archivo {filename}: {str(e)}")
         return JSONResponse(content={"error": "Error al subir el archivo"}, status_code=500)
     
-
-
+# Sirve las rutas mp3 a los usuarios
 @app.get("/mp3/{filename}")
 async def protected_mp3(filename: str, request: Request):
     # Verificar sesión activa y obtener info de usuario
@@ -2364,6 +2309,7 @@ def play(request: Request):
 # --------------------------- SEARCH --------------------------------------- #
 # -------------------------------------------------------------------------- #
 
+# Sirve la vista de búsqueda
 @app.get("/search")
 def get_search(request: Request):
 
