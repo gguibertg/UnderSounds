@@ -1719,8 +1719,10 @@ async def edit_song_post(request: Request):
         song.set_precio(data["precio"])
         song.set_visible(data["visible"])
 
-        song_dict["fechaUltimaModificacion"] = datetime.now()
-        song.add_historial(song_dict)
+        if song_dict != song.songdto_to_dict():
+            song_dict["fechaUltimaModificacion"] = datetime.now()
+            song.add_historial(song_dict)
+            print(PCTRL, "El historial de la canción ha sido actualizado")
 
         # Actualizamos el song en la base de datos
         if model.update_song(song):
