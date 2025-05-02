@@ -183,6 +183,31 @@
     </main>
 
     <script>
+        function getAudioDuration(file) {
+            return new Promise((resolve, reject) => {
+                const audio = new Audio();
+                audio.src = URL.createObjectURL(file);
+
+                audio.addEventListener("loadedmetadata", () => {
+                    resolve(audio.duration); // duración en segundos
+                });
+
+                audio.addEventListener("error", (e) => {
+                    reject("No se pudo cargar el archivo de audio");
+                });
+            });
+        }
+
+        // Convierte un File a Base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = err => reject(err);
+            });
+        }
+
         async function postSong() {
             event.preventDefault();
 
@@ -194,6 +219,7 @@
             const pistaBase64 = await fileToBase64(pistaFile);
 
             const songData = {
+                id: "{{song.id}}",
                 titulo: document.getElementById('titulo').value,
                 artista: document.getElementById('artista').value,
                 descripcion: document.getElementById('descripcion').value,
