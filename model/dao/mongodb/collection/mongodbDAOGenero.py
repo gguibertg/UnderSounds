@@ -44,6 +44,6 @@ class mongodbGeneroDAO(InterfaceGeneroDAO):
                 generos.insertGenero(genero)
 
         except Exception as e:
-            print(f"Error retrieving Generos: {e}")
+            print(f"Error al recuperar los Generos: {e}")
             
         return [genero.genero_to_dict() for genero in generos.generolist]

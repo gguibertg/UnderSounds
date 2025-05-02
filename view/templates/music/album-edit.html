@@ -336,7 +336,7 @@
                     displayMessage('error', 'Error al subir el álbum: ' + result.error);
                 }
             } catch (error) {
-                console.error('Error uploading album:', error);
+                console.error('Error al subir el álbum:', error);
                 displayMessage('error', 'Error al guardar el álbum. Inténtalo nuevamente.');
             }
         }
@@ -368,7 +368,7 @@
                 }
             } catch (error) {
                 displayMessage('error', 'Ocurrió un error al restaurar el álbum.');
-                console.error('Error editing album:', error);
+                console.error('Error al restaurar el álbum:', error);
             }
         }
 

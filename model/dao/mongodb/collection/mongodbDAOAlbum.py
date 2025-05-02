@@ -42,7 +42,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
                 albums.insertSong(album_dto)
 
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar los álbumes: {e}")
 
         return [album.album_to_dict() for album in albums.albumlist]
     
@@ -73,7 +73,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
                 albums.insertSong(album_dto)
 
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar los álbumes: {e}")
 
         return [album.album_to_dict() for album in albums.albumlist]
     
@@ -131,7 +131,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
                 albums.insertSong(album_dto)
 
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar los álbumes: {e}")
 
         return [album.album_to_dict() for album in albums.albumlist]
     
@@ -162,7 +162,7 @@ class mongodbAlbumDAO(InterfaceAlbumDAO):
                 albums.insertSong(album_dto)
 
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al recuperar las canciones: {e}")
+            print(f"{PDAO_ERROR}Error al recuperar los álbumes: {e}")
 
         return [album.album_to_dict() for album in albums.albumlist]
     
