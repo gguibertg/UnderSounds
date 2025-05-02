@@ -1,3 +1,5 @@
+import json
+
 class GenerosDTO:
     def __init__(self):
         self.generolist = []
