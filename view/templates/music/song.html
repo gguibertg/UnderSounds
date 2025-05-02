@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="/static/css/base/header.css"> <!-- Hoja de estilo del header -->
     <link rel="stylesheet" href="/static/css/base/footer.css"> <!-- Hoja de estilo del footer -->
     <link rel="stylesheet" href="/static/css/music/song.css"> <!-- Hoja de estilo de la página de canción -->
-    <link rel="stylesheet" href="/static/css/music/radio.css">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/static/icons/favicons/favicon-96x96.png" sizes="96x96" />
@@ -59,8 +58,14 @@
                         <p><strong>Precio:</strong> {{song.precio}}€</p>
                         {% if tipoUsuario >= 2 %}
                         <div class="play">
-                            <button id="play-btn">▶️ Reproducir</button> <!-- TODO hacer en be-stream !-->
-                        </div>
+                            <button id="play-btn" 
+                            type="button" 
+                            data-source="/static/mp3/{{ song.pista }}"
+                            data-title="{{ song.titulo }}"
+                            data-artist="{{ song.artista }}"
+                            data-cover="{{ song.portada }}">
+                            Reproducir
+                        </button>
                         <div class="song-buttons">
                             <button class="btn download-btn">Descargar canción</button>
                             <!-- TODO hacer en be-stream !-->
@@ -256,6 +261,7 @@
     </script>
     <!-- Pie de página -->
     <div id="footer-placeholder"></div>
+    <div id="mini-player-placeholder"></div>
 
     <!-- Scripts -->
     <script src="/static/js/header.js"></script>
