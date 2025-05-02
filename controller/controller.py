@@ -2148,11 +2148,6 @@ async def studio_settings_post(request: Request):
 # ---------------------------- ARTISTA -------------------------- #
 # --------------------------------------------------------------- #
 
-# DEBUG MERCH
-@app.get("/merch")
-def get_merch(request: Request):
-    return view.get_merch_view(request)
-
 # Ruta para cargar la vista de artista
 @app.get("/artista")
 async def get_artista(request: Request):
