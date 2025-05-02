@@ -26,7 +26,7 @@ class SongDTO():
         self.fecha: str = None
         self.fechaUltimaModificacion: str = None
         self.descripcion: str = None
-        self.duracion: str = None
+        self.duracion: int = None
         self.generos: list[str] = []
         self.likes: int = None
         self.visitas: int = None

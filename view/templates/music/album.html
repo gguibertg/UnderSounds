@@ -38,8 +38,8 @@
                         <pre><strong>Descripción:</strong> {{album.descripcion}}</pre>
                         <p><strong>Fecha:</strong> {{album.fecha}}</p>
                         <p><strong>Géneros:</strong> {{album.generosStr}}</p> <!-- Este genero es especial -> Es un campo populado por los nombres de los generos, NO los IDs -->
-                        <p><strong>Número de canciones en total:</strong> {{album.canciones|length}}</p>
-                        <p><strong>Duración total:</strong> TODO</p> <!-- TODO: Hacer be-stream primero! y que los archivos tengan duración, no null! -->
+                        <p><strong>Número de canciones en total:</strong> {{album.canciones|length}}</p>                        
+                        <p><strong>Duración total:</strong> {{duracion_total}}</p>
                         <p><strong>Likes:</strong> {{album.likes}}</p>
                         <p><strong>Visualizaciones:</strong> {{album.visitas}}</p>
                         <p><strong>Precio:</strong> {{album.precio}}€</p>

@@ -754,12 +754,15 @@ async def get_album(request: Request):
         if not model.update_album(album_object):
             print(PCTRL_WARN, "Album", album_id, "not updated in database!")
             return Response("Error del sistema", status_code=403)
+        
+    duracion_total = 0
 
-    # Descargamos las canciones del album de la base de datos via su ID en el campo canciones y las insertamos en este album_info
-    print(PCTRL, "Starting to populate album with songs...")
+    # Descargamos las canciones del álbum de la base de datos vía su ID en el campo canciones y las insertamos en este album_info
+    print(PCTRL, "Comenzando a poblar el álbum con canciones...")
     canciones_out : list[dict] = []
     for cancion_id in album_info["canciones"]:
         cancion = model.get_song(cancion_id)
+        duracion_total += cancion["duracion"]
         if not cancion:
             print(PCTRL_WARN, "Canción", cancion_id, "not found in database")
             return Response("Error del sistema", status_code=403)
@@ -781,6 +784,9 @@ async def get_album(request: Request):
         canciones_out.append(cancion)
 
     album_info["canciones"] = canciones_out
+    minutos = duracion_total // 60
+    segundos = duracion_total % 60
+    tiempo_formateado = f"{minutos:02d}:{segundos:02d}"
 
 
     # Convertimos los generos del album a un string sencillo
@@ -819,7 +825,7 @@ async def get_album(request: Request):
     # 1 = User
     # 2 = Propietario (User o Artista)
     # 3 = Artista (creador)
-    return view.get_album_view(request, album_info, tipoUsuario, isLiked, inCarrito) # Devolvemos la vista del album
+    return view.get_album_view(request, album_info, tipoUsuario, isLiked, inCarrito, tiempo_formateado) # Devolvemos la vista del album
 
 # Ruta para cargar la vista de álbum-edit
 @app.get("/album-edit")
@@ -1534,6 +1540,9 @@ async def upload_song_post(request: Request):
     song.set_precio(data["precio"])
     song.set_lista_resenas([])
     song.set_visible(data["visible"])
+    song.set_pista(data["pista"])
+    duracion = data["duracion"]
+    song.set_duracion(int(duracion))
     song.set_album(None)  # El album se asigna posteriormente en el editor de albumes
     song.set_historial([])  # Inicializamos el historial como una lista vacía
 
