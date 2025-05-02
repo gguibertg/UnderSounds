@@ -176,3 +176,4 @@ cython_debug/
 # Access credentials
 credentials.json
 sessions.json
+mp3

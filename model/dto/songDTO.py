@@ -35,7 +35,6 @@ class SongDTO():
         self.lista_resenas: list[dict] = []
         self.visible: bool = None
         self.album: str = None
-        self.pista: str = None
         self.historial: list[dict] = []
 
     def is_empty(self):
@@ -46,7 +45,7 @@ class SongDTO():
                 self.likes is None and self.visitas is None and 
                 self.portada is None and self.precio is None and 
                 self.lista_resenas is None and self.visible is None and 
-                self.album is None and self.pista is None and self.historial is None)
+                self.album is None and self.historial is None)
 
     def get_id(self) -> str:
         return self.id
@@ -163,12 +162,6 @@ class SongDTO():
 
     def set_album(self, album: str):
         self.album = album
-        
-    def get_pista(self):
-        return self.pista
-    
-    def set_pista(self, pista):
-        self.pista = pista
 
     def get_historial(self) -> list[dict]:
         return self.historial
@@ -207,7 +200,6 @@ class SongDTO():
             "lista_resenas": self.lista_resenas,
             "visible": self.visible,
             "album": self.album,
-            "pista": self.pista,
             "historial": [self._clean_historial_entry(h) for h in self.historial or []]
         }
 
@@ -231,7 +223,6 @@ class SongDTO():
         self.lista_resenas = data.get("lista_resenas", [])
         self.visible = data.get("visible")
         self.album = data.get("album")
-        self.pista = data.get("pista")
         self.historial = []
         for entry in data.get("historial", []):
             if isinstance(entry, dict):

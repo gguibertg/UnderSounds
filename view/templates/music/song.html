@@ -60,12 +60,13 @@
                         <div class="play">
                             <button id="play-btn" 
                             type="button" 
-                            data-source="/static/mp3/{{ song.pista }}"
+                            data-source="/mp3/{{ song.id }}"
                             data-title="{{ song.titulo }}"
                             data-artist="{{ song.artista }}"
                             data-cover="{{ song.portada }}">
                             Reproducir
-                        </button>
+                            </button>
+                        </div>
                         <div class="song-buttons">
                             <button class="btn download-btn">Descargar canción</button>
                             <!-- TODO hacer en be-stream !-->

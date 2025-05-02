@@ -1,4 +1,5 @@
 # Imports estándar de Python
+from io import BytesIO
 import os
 import base64
 from datetime import datetime, timedelta
@@ -8,22 +9,25 @@ import os
 # Imports de terceros
 import firebase_admin
 import requests
-from fastapi import FastAPI, Request, Response, Form, UploadFile, File
-from fastapi.responses import JSONResponse, RedirectResponse, HTMLResponse
+from fastapi import Depends, FastAPI, HTTPException, Request, Response, Form, UploadFile, Header
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from firebase_admin import auth, credentials
 from datetime import datetime
 
 # Imports locales del proyecto
 from model.dto.albumDTO import AlbumDTO
-from model.dto.carritoDTO import ArticuloCestaDTO, CarritoDTO
+from model.dto.carritoDTO import ArticuloCestaDTO
 from model.dto.sesionDTO import SesionDTO
 from model.dto.songDTO import SongDTO
 from model.dto.contactoDTO import ContactoDTO
-from model.dto.usuarioDTO import UsuarioDTO, UsuariosDTO
+from model.dto.usuarioDTO import UsuarioDTO
 from model.dto.reseñasDTO import ReseñaDTO
 from model.model import Model
 from view.view import View
+from fastapi import Request, HTTPException
+from fastapi.responses import FileResponse
+from pathlib import Path
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
@@ -1248,8 +1252,6 @@ async def like_album_post(request: Request):
         print(PCTRL_WARN, "Failed to update user in database!")
         return JSONResponse(content={"error": "Failed to update user in database"}, status_code=500)
 
-
-
 # ------------------------------------------------------------------ #
 # ----------------------------- INCLUDES --------------------------- #
 # ------------------------------------------------------------------ #
@@ -1503,32 +1505,14 @@ async def upload_song_post(request: Request):
     data = await request.json()
 
     # Validar que los campos requeridos no estén vacíos y tengan el formato correcto
-    required_fields = ["titulo", "artista", "generos", "portada", "precio"]
-    for field in required_fields:
-        if field not in data or data[field] is None:
-            print(PCTRL_WARN, f"Field '{field}' is missing or empty")
-            return JSONResponse(content={"error": f"Field '{field}' is required and cannot be empty"}, status_code=400)
-        
-    # Si alguno de los campos opcionales está a None, lo inicializamos a una cadena vacía
-    optional_fields = ["descripcion", "colaboradores"]
-    for field in optional_fields:
-        if field not in data or data[field] is None:
-            data[field] = ""
-
-    # Validar que el precio sea un número positivo
-    if not isinstance(data["precio"], (int, float)) or data["precio"] < 0:
-        print(PCTRL_WARN, "Invalid price value")
-        return JSONResponse(content={"error": "Price must be a positive number"}, status_code=400)
-
-    # Validar que los géneros sean una lista no vacía
-    if not isinstance(data["generos"], list) or not data["generos"]:
-        print(PCTRL_WARN, "Genres must be a non-empty list")
-        return JSONResponse(content={"error": "Genres must be a non-empty list"}, status_code=400)
+    validation = validate_song_fields(data)
+    if validation is not True:
+        return validation
     
-    if not isinstance(data["pista"], str) or not data["pista"]:
-        print(PCTRL_WARN, "Pista must be a non-empty file")
-        return JSONResponse(content={"error": "Pista must be a non-empty file"}, status_code=400)
-
+    # Verificar que el campo "pista", "extension" y "duracion" no estén vacíos
+    if not data.get("pista") or not data.get("extension") or not data.get("duracion"):
+        print(PCTRL_WARN, "El campo 'pista', 'extension' o 'duracion' falta o está vacío")
+        return JSONResponse(content={"error": "No se ha seleccionado un archivo, o ocurrió un error al procesarlo."}, status_code=400)
 
     song = SongDTO()
     song.set_titulo(data["titulo"])
@@ -1544,13 +1528,12 @@ async def upload_song_post(request: Request):
     song.set_precio(data["precio"])
     song.set_lista_resenas([])
     song.set_visible(data["visible"])
-    song.set_pista(data["pista"])
-    duracion = data["duracion"]
-    song.set_duracion(int(duracion))
+    song.set_duracion(int(data["duracion"]))
     song.set_album(None)  # El album se asigna posteriormente en el editor de albumes
     song.set_historial([])  # Inicializamos el historial como una lista vacía
 
     try:
+        # Subimos la canción a la base de datos y obtenemos su ID
         song_id = model.add_song(song)
 
         if song_id is not None:
@@ -1558,6 +1541,19 @@ async def upload_song_post(request: Request):
         else:
             print(PCTRL_WARN, "Song registration failed in database!")
             return JSONResponse(content={"error": "Song registration failed"}, status_code=500)
+
+        # Subimos el archivo de la canción a la carpeta de canciones
+        # Convertimos pistaBase64 a tipo UploadFile
+        pistaBase64 = data["pista"]
+        extension = data["extension"]
+        pistaBase64 = pistaBase64.split(",")[1]  # Quitamos el prefijo de base64
+        pistaBase64 = base64.b64decode(pistaBase64)  # Decodificamos el base64
+        pistaBase64 = BytesIO(pistaBase64)  # Convertimos el base64 a un objeto BytesIO
+        pista = UploadFile(pistaBase64, filename=f"{song_id}.{extension}") # Convertimos el BytesIO a un objeto UploadFile con content_type
+
+        result = await process_song_file(pista)
+        if result is not True:
+            return result
 
         # Convertirmos res en un objeto UsuarioDTO, le añadimos la nueva canción a studio_canciones y lo actualizamos en la base de datos
         user = UsuarioDTO()
@@ -1572,54 +1568,11 @@ async def upload_song_post(request: Request):
             raise Exception("User not updated in database")
 
     except Exception as e:
-        print(PCTRL_WARN, "Error while processing Song", song_id, ", adding to database failed!")
+        print(PCTRL_WARN, "Error while processing Song", song_id, ", adding to database failed!", str(e))
         # Eliminar la canción subida (intentar tanto si se ha subido como si no)
         model.delete_song(song_id)
         return JSONResponse(content={"error": "La canción no se añadió a la base de datos"}, status_code=500)
 
-# Ruta para la subida del archivo mp3
-@app.post("/upload-song-file")
-async def upload_song_file(request: Request, pista: UploadFile = File(...)):
-    # Verificar si el usuario tiene una sesión activa y es artista
-    res = verifySessionAndGetUserInfo(request)
-    if isinstance(res, Response):
-        return JSONResponse(content={"error": "No autorizado"}, status_code=401)  # Si es un Response, devolvemos el error
-    if not res["esArtista"]:
-        print(PCTRL_WARN, "El usuario no es un artista")
-        return JSONResponse(content={"error": "No autorizado"}, status_code=403)
-
-    # Obtener el nombre del archivo y la ruta de almacenamiento
-    filename = pista.filename
-    file_path = os.path.join("static", "mp3", filename)
-
-    # Validar el archivo
-    if not filename:
-        print(PCTRL_WARN, "No se seleccionó ningún archivo")
-        return JSONResponse(content={"error": "No se seleccionó ningún archivo"}, status_code=400)
-
-    if pista.content_type not in ["audio/mpeg", "audio/mp3", "audio/wav"]:
-        print(PCTRL_WARN, f"Tipo de archivo inválido: {pista.content_type}")
-        return JSONResponse(content={"error": "Tipo de archivo inválido. Solo se permiten MP3 y WAV."}, status_code=400)
-
-    file_content = await pista.read()
-
-    # Intentar guardar el archivo
-    try:
-        # Asegurarse de que la carpeta exista
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
-        # Guardar el archivo en el sistema
-        with open(file_path, "wb") as f:
-            f.write(file_content)
-
-        # Respuesta exitosa
-        print(PCTRL, f"Archivo {filename} subido exitosamente a {file_path}")
-        return JSONResponse(content={"success": True, "filename": filename}, status_code=200)
-
-    except Exception as e:
-        print(PCTRL_WARN, f"Error al subir el archivo {filename}: {str(e)}")
-        return JSONResponse(content={"error": "Error al subir el archivo"}, status_code=500)
-    
 # Ruta para cargar vista song
 @app.get("/song")
 async def get_song(request: Request):
@@ -1994,7 +1947,7 @@ async def delete_song_post(request: Request):
         model.update_usuario(usuario_dto)
     
     # Ruta completa al archivo .mp3
-    mp3_path = os.path.join(os.path.dirname(__file__), "..", "static", "mp3", data.get("pista"))
+    mp3_path = os.path.join("mp3", song_id)
 
     # Borrar el archivo si existe
     if os.path.exists(mp3_path):
@@ -2010,7 +1963,6 @@ async def delete_song_post(request: Request):
     else:
         print(PCTRL_WARN, "Canción", song_id, "no eliminada de la base de datos")
         return JSONResponse(content={"error": "La canción no se eliminó de la base de datos"}, status_code=500)
-
 
 # Ruta para darle like a una canción
 @app.post("/like-song")
@@ -2061,6 +2013,59 @@ async def like_song_post(request: Request):
         print(PCTRL_WARN, "Failed to update user in database!")
         return JSONResponse(content={"error": "Failed to update user in database"}, status_code=500)
 
+
+# -------------------------------------------------------------- #
+# ----------------------------- MP3 ---------------------------- #
+# -------------------------------------------------------------- #
+
+# Ruta para la subida del archivo mp3
+async def process_song_file(pista : UploadFile) -> JSONResponse | bool:
+    # Validar el archivo
+    filename, file_extension = os.path.splitext(pista.filename)
+    if file_extension not in [".mp3", ".wav"]:
+        print(PCTRL_WARN, f"Tipo de archivo inválido: {file_extension}")
+        return JSONResponse(content={"error": "Tipo de archivo inválido. Solo se permiten MP3 y WAV."}, status_code=400)
+    
+    file_path = os.path.join("mp3", filename)
+    file_content = await pista.read()
+
+    # Intentar guardar el archivo
+    try:
+        # Asegurarse de que la carpeta exista
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        # Si el archivo ya existe, imprimir un mensaje indicando que se va a sobreescribir
+        if os.path.exists(file_path):
+            print(PCTRL_WARN, f"El archivo {filename} ya existe. Se va a sobreescribir.")    
+        # Guardar el archivo en el sistema
+        with open(file_path, "wb") as f:
+            f.write(file_content)
+        print(PCTRL, f"Archivo {filename} subido exitosamente a {file_path}")
+
+        return True
+
+    except Exception as e:
+        print(PCTRL_WARN, f"Error al subir el archivo {filename}: {str(e)}")
+        return JSONResponse(content={"error": "Error al subir el archivo"}, status_code=500)
+    
+
+
+@app.get("/mp3/{filename}")
+async def protected_mp3(filename: str, request: Request):
+    # Verificar sesión activa y obtener info de usuario
+    user_info = verifySessionAndGetUserInfo(request)
+    if isinstance(user_info, Response):
+        raise HTTPException(status_code=401, detail="No autorizado")
+    # Comprobar que el usuario tiene el archivo en su biblioteca
+    if filename not in user_info["biblioteca"] and filename not in user_info["studio_canciones"]:
+        print(PCTRL_WARN, "El usuario", user_info["email"], "ha solicitado el archivo", filename, ", ¡pero carecía de acceso!")
+        raise HTTPException(status_code=403, detail="Acceso denegado al archivo")
+    # Construir ruta al mp3
+    file_path = Path(__file__).parent.parent / "mp3" / filename
+    if not file_path.is_file():
+        print(PCTRL_WARN, "El archivo", filename, "no existe en el servidor")
+        raise HTTPException(status_code=404, detail="Archivo no encontrado")
+    
+    return FileResponse(file_path, media_type="audio/mpeg")
 
 # -------------------------------------------------------------- #
 # ---------------------------- STUDIO -------------------------- #
@@ -2554,7 +2559,7 @@ def validate_fields(data) -> JSONResponse | bool:
         return JSONResponse(content={"error": "Los colaboradores no deben exceder los 80 caracteres"}, status_code=400)
 
     # Validar que el campo 'descripcion' no exceda los 500 caracteres
-    if len(data["descripción"]) > 500:
+    if len(data["descripcion"]) > 500:
         print(PCTRL_WARN, "El campo 'descripcion' excede los 500 caracteres")
         return JSONResponse(content={"error": "La descripción no debe exceder los 500 caracteres"}, status_code=400)
     
@@ -2564,11 +2569,6 @@ def validate_album_fields(data) -> JSONResponse | bool:
     return validate_fields(data)
 
 def validate_song_fields(data) -> JSONResponse | bool:
-    # Validar que el campo 'pista' tenga un archivo no vacío
-    if not isinstance(data["pista"], str) or not data["pista"]:
-        print(PCTRL_WARN, "Pista must be a non-empty file")
-        return JSONResponse(content={"error": "La pista debe ser un archivo no vacío"}, status_code=400)
-
     return validate_fields(data)
 
 def convert_datetime(obj):

@@ -40,7 +40,6 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_lista_resenas(doc.get("lista_resenas"))
                     song_dto.set_visible(doc.get("visible"))
                     song_dto.set_album(doc.get("album"))
-                    song_dto.set_pista(doc.get("pista"))
                     song_dto.set_historial(doc.get("historial"))
 
                 songs.insertSong(song_dto)
@@ -74,7 +73,6 @@ class MongodbSongDAO(InterfaceSongDAO):
                 song.set_lista_resenas(query.get("lista_resenas"))
                 song.set_visible(query.get("visible"))
                 song.set_album(query.get("album"))
-                song.set_pista(query.get("pista"))
                 song.set_historial(query.get("historial"))
 
         except Exception as e:
@@ -140,7 +138,6 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_lista_resenas(doc.get("lista_resenas"))
                     song_dto.set_visible(doc.get("visible"))
                     song_dto.set_album(doc.get("album"))
-                    song_dto.set_pista(doc.get("pista"))
                     song_dto.set_historial(doc.get("historial"))
 
                 songs.insertSong(song_dto)
@@ -201,7 +198,6 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_lista_resenas(doc.get("lista_resenas"))
                     song_dto.set_visible(doc.get("visible"))
                     song_dto.set_album(doc.get("album"))
-                    song_dto.set_pista(doc.get("pista"))
                     song_dto.set_historial(doc.get("historial"))
 
                 songs.insertSong(song_dto)
@@ -236,7 +232,6 @@ class MongodbSongDAO(InterfaceSongDAO):
                     song_dto.set_lista_resenas(doc.get("lista_resenas"))
                     song_dto.set_visible(doc.get("visible"))
                     song_dto.set_album(doc.get("album"))
-                    song_dto.set_pista(doc.get("pista"))   
                     song_dto.set_historial(doc.get("historial"))
 
                 songs.insertSong(song_dto)
