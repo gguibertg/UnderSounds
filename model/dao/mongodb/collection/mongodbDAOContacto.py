@@ -23,5 +23,5 @@ class mongodbContactoDAO(InterfaceContactoDAO):
             return str(result.inserted_id)  # Devolvemos el nuevo _id del álbum
 
         except Exception as e:
-            print(f"{PDAO_ERROR}Error al agregar el álbum: {e}")
+            print(f"{PDAO_ERROR}Error al agregar el mensaje: {e}")
             return None

@@ -21,6 +21,6 @@ class MongodbFaqDAO(InterfaceFaqDAO):
                 faqs.insertFaq(faq_dto)
 
         except Exception as e:
-            print(f"Error retrieving FAQs: {e}")
+            print(f"Error al recuperar los FAQs: {e}")
             
         return [faq.faqdto_to_dict() for faq in faqs.faqsList]
