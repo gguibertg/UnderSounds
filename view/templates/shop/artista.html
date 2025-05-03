@@ -36,7 +36,7 @@
                         <h2 class="artista-title">{{artista.nombre}}</h2>
                         <p><strong>Biografía:</strong> {{artista.bio}}</p>
                         <br>
-                        <p><strong>Enlace social:</strong> {{artista.url}}</p>
+                        <p><strong>Enlace social:</strong> <a href="{{ artista.url }}" target="_blank">{{ artista.url }}</a></p>
                         {% if artista.emailVisible %}
                         <p><strong>Email de contacto:</strong> {{artista.email}}</p>
                         {% endif %}
