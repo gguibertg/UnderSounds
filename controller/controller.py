@@ -10,7 +10,7 @@ import os
 import firebase_admin
 import requests
 from fastapi import Depends, FastAPI, HTTPException, Request, Response, Form, UploadFile, Header
-from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, HTMLResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, HTMLResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from firebase_admin import auth, credentials
 from datetime import datetime
@@ -2013,7 +2013,28 @@ async def protected_mp3(filename: str, request: Request):
         print(PCTRL_WARN, "El archivo", filename, "no existe en el servidor")
         raise HTTPException(status_code=404, detail="Archivo no encontrado")
     
-    return FileResponse(file_path, media_type="audio/mpeg")
+    return FileResponse(file_path, media_type="audio/mpeg")   
+
+@app.get("/download-song")
+async def download_song(filename: str, song_title: str, request: Request):
+    # Verificar sesión activa y obtener info de usuario
+    user_info = verifySessionAndGetUserInfo(request)
+    if isinstance(user_info, Response):
+        raise HTTPException(status_code=401, detail="No autorizado")
+    
+    # Comprobar que el usuario tiene el archivo en su biblioteca
+    if filename not in user_info["biblioteca"] and filename not in user_info["studio_canciones"]:
+        print(PCTRL_WARN, "El usuario", user_info["email"], "ha solicitado el archivo", filename, ", ¡pero carecía de acceso!")
+        raise HTTPException(status_code=403, detail="Acceso denegado al archivo")
+    
+    # Construir ruta al archivo MP3 (sin base64)
+    file_path = Path(__file__).parent.parent / "mp3" / filename
+    if not file_path.is_file():
+        print(PCTRL_WARN, "El archivo", filename, "no existe en el servidor")
+        raise HTTPException(status_code=404, detail="Archivo no encontrado")
+    
+    # Retornar el archivo MP3 directamente usando FileResponse
+    return FileResponse(file_path, media_type="audio/mpeg", filename=f"{song_title}.mp3")
 
 # -------------------------------------------------------------- #
 # ---------------------------- STUDIO -------------------------- #
