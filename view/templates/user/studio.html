@@ -127,7 +127,7 @@
 
                         <div class="button-array">
                             <button type="button" style="background-color: white;" onclick="window.location.href='/song?id={{ song.id }}'">🔗</button>
-                            <button type="button" style="background-color: #ff4646;" onclick="removeSong('{{ song.id }}', '{{ song.pista }}')">🗑️</button>
+                            <button type="button" style="background-color: #ff4646;" onclick="removeSong('{{ song.id }}', '{{ song.id }}')">🗑️</button>
                             <button type="button" style="background-color: #0077ff;" onclick="window.location.href='/edit-song?id={{ song.id }}'">✏️</button>
                         </div>
                     </div>
@@ -168,14 +168,14 @@
             }
         }
 
-        function removeSong(id, pista) {
+        function removeSong(id) {
             if (confirm("¿Estás seguro de que deseas eliminar esta canción?\nAl eliminar la canción se borrará del album asociado.\n\nEsta acción no se puede deshacer.")) {
             fetch('/delete-song', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ id: id, pista: pista })
+            body: JSON.stringify({ id: id })
             })
             .then(async response => {
             const result = await response.json();

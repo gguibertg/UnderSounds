@@ -38,6 +38,18 @@ function displayMessage(type, message, containerId = "") {
     // Crear un nuevo div de mensaje
     const messageDiv = document.createElement("div");
     messageDiv.className = `div-${type}`;
+
+    // Posicionar el mensaje como flotante
+    messageDiv.style.position   = "fixed";
+    messageDiv.style.top        = "20px";
+    messageDiv.style.left       = "50%";
+    messageDiv.style.transform  = "translateX(-50%)";
+    messageDiv.style.marginLeft  = "30px";   // margen adicional a la izquierda
+    messageDiv.style.marginRight = "30px";  // margen adicional a la derecha
+    messageDiv.style.maxWidth    = "calc(100% - 60px)"; // evita que crezca más allá de márgenes
+    messageDiv.style.width       = "auto";  // tamaño según contenido
+    messageDiv.style.zIndex     = "9999";
+
     const messageContent = document.createElement("p");
     messageContent.textContent = message;
     messageDiv.appendChild(messageContent);
@@ -45,9 +57,13 @@ function displayMessage(type, message, containerId = "") {
     // Insertar el div justo después del contenedor especificado, antes de cualquier otro contenido
     containerElement.insertAdjacentElement("afterbegin", messageDiv);
 
-    // Forzar a la página a desplazarse al mensaje con desplazamiento suave
-    window.scrollTo({
-        top: messageDiv.offsetTop,
-        behavior: "smooth"
-    });
+    // Mantener visible 5s, luego hacer fade de 2s y eliminar
+    messageDiv.style.opacity = "1";
+    messageDiv.style.transition = "opacity 2.5s ease";
+    setTimeout(() => {
+        messageDiv.style.opacity = "0";
+        setTimeout(() => {
+            messageDiv.remove();
+        }, 2500);
+    }, 3000);
 }

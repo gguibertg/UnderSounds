@@ -156,11 +156,25 @@
             });
         }
 
+        // Convierte un File a Base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = err => reject(err);
+            });
+        }
+
         async function postSong() {
             event.preventDefault();
 
-            const pista = document.getElementById('song-upload').files[0];
-            const duracion = await getAudioDuration(pista);
+            const pistaFile = document.getElementById('song-upload').files[0];
+            if (!pistaFile) {
+                return displayMessage("error", "Debes seleccionar una canción para subir.");
+            }
+            const duracion = await getAudioDuration(pistaFile);
+            const pistaBase64 = await fileToBase64(pistaFile);
 
             const songData = {
                 titulo: document.getElementById('titulo').value,
@@ -171,7 +185,8 @@
                 generos: Array.from(document.querySelectorAll('.upload-checkbox-container input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
                 portada: document.getElementById('cover-preview').src,
                 visible: document.getElementById('is-visible').checked,
-                pista: pista.name,
+                pista: pistaBase64,
+                extension: pistaFile.name.split('.').pop(),
                 duracion: duracion
             };
 
@@ -188,10 +203,8 @@
             if (!songData.generos.length) {
                 return displayMessage("error", "Debes seleccionar al menos un género.");
             }
-            // Validar que la canción esté subida
-            if (!pista) {
-                return displayMessage("error", "Debes seleccionar una canción para subir.");
-            }
+
+
 
             try {
                 const response = await fetch('/upload-song', {
@@ -202,18 +215,9 @@
                     body: JSON.stringify(songData)
                 });
 
-                const formData = new FormData();
-                formData.append('pista', pista);
-
-                const fileResponse = await fetch('/upload-song-file', {
-                    method: 'POST',
-                    body: formData
-                });
-
                 const result = await response.json();
-                const fileResult = await fileResponse.json();
 
-                if (response.ok && fileResponse.ok) {
+                if (response.ok) {
                     displayMessage('success', 'Canción subida exitosamente');
                     window.location.href = '/studio';
                 } else {

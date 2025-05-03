@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 titulo: titulos[index],
                                 artista: artistas[index],
                                 portada: covers[index],
-                                pista: pistas[index]
+                                id: id[index]
                             };
 
                             if (miniCover) {
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
 
                             if (audio) {
-                                audio.src = `/static/mp3/${song.pista}`;
+                                audio.src = `/mp3/${song.id}`;
                                 audio.play();
                             }
                         }

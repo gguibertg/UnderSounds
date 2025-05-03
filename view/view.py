@@ -96,10 +96,6 @@ class View():
     # Renderizar la template studio.html
     def get_studio_view(self, request: Request, songs: list[dict], albums: list[dict], user: dict):
         return templates.TemplateResponse("user/studio.html", {"request": request, "songs": songs, "albums": albums, "user" : user})
-
-    # Renderizar la template merch.html
-    def get_merch_view(self, request: Request):
-        return templates.TemplateResponse("shop/merch.html", {"request": request})
     
     # Renderizar la template artista.html
     def get_artista_view(self, request: Request, artista: dict, singles: list[dict], albums: list[dict], songs: list[dict], tipoUsuario: int):

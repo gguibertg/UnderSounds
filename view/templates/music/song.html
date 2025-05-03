@@ -60,15 +60,15 @@
                         <div class="play">
                             <button id="play-btn" 
                             type="button" 
-                            data-source="/static/mp3/{{ song.pista }}"
+                            data-source="/mp3/{{ song.id }}"
                             data-title="{{ song.titulo }}"
                             data-artist="{{ song.artista }}"
                             data-cover="{{ song.portada }}">
                             Reproducir
-                        </button>
+                            </button>
+                        </div>
                         <div class="song-buttons">
-                            <button class="btn download-btn">Descargar canción</button>
-                            <!-- TODO hacer en be-stream !-->
+                            <button class="btn download-btn" onclick="descargarCancion('{{song.id}}', '{{song.titulo}}')">Descargar canción</button>
                             <button class="{% if isLiked %}button{% else %}button-alt{% endif %} fav-btn"
                                 title="Añadir a favoritos" onclick="toggleLike()">
                                 <img alt="Favorito" class="fav-icon"
@@ -258,6 +258,49 @@
                 }
             }
         }
+        async function descargarCancion(song_id, song_title) {
+            if (!song_id) {
+                alert('No se ha encontrado la canción solicitada.');
+                return;
+            }
+
+            try {
+                // Hacemos la solicitud GET al servidor
+                const response = await fetch(`/download-song?filename=${encodeURIComponent(song_id)}&song_title=${encodeURIComponent(song_title)}`);
+
+                // Si la respuesta no es exitosa (código 2xx)
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert("Error: " + error.detail);  // Usamos 'error.detail' que es lo que FastAPI nos devuelve por defecto
+                    return;
+                }
+
+                // Recibimos el archivo como blob (objeto binario)
+                const blob = await response.blob();
+
+                // Creamos una URL temporal para el archivo blob
+                const url = window.URL.createObjectURL(blob);
+
+                // Creamos un elemento de enlace <a> para iniciar la descarga
+                const a = document.createElement('a');
+                a.href = url;
+                // Usamos song_title como nombre de archivo para la descarga
+                a.download = `${song_title}.mp3`; // Descargamos el archivo con el nombre basado en song_title
+
+                // Agregamos el enlace al DOM, le hacemos click y lo eliminamos después
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                // Revocamos la URL temporal
+                window.URL.revokeObjectURL(url);
+            } catch (err) {
+                console.error(err);
+                alert("Ocurrió un error inesperado.");
+            }
+        }
+
+
     </script>
     <!-- Pie de página -->
     <div id="footer-placeholder"></div>

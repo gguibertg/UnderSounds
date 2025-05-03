@@ -113,19 +113,16 @@
     background-color: #333333;
     color: white;
     border: 3px solid rgb(132, 255, 39);
-    box-shadow: 0 0 10px #444444;
 }
 
 .dark-mode .div-error {
     background-color: #333333;
     color: white;
     border: 3px solid rgb(255, 0, 0);
-    box-shadow: 0 0 10px #444444;
 }
 
 .dark-mode .div-warn {
     background-color: #333333;
     color: white;
     border: 3px solid yellow;
-    box-shadow: 0 0 10px #444444;
 }
