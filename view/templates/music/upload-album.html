@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="/static/css/base/darkmode.css"> <!-- Hoja de estilo de modo oscuro -->
     <link rel="stylesheet" href="/static/css/base/header.css"> <!-- Hoja de estilo del header -->
     <link rel="stylesheet" href="/static/css/base/footer.css"> <!-- Hoja de estilo del footer -->
-    <link rel="stylesheet" href="/static/css/music/album-edit.css"> <!-- Hoja de estilo de la página de subida de música -->
+    <link rel="stylesheet" href="/static/css/music/album-edit.css">
+    <!-- Hoja de estilo de la página de subida de música -->
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/static/icons/favicons/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/static/icons/favicons/favicon.svg" />
@@ -31,17 +32,16 @@
             <div class="div-pannel upload-page">
                 <h1 class="upload-title">Subir Álbum</h1>
 
-                <form class="upload-form">
-
+                <form class="upload-form" onsubmit="postAlbum(event)">
                     <div class="div-pannel-sub upload-group" style="width: auto;">
                         <label for="title">Título</label>
                         <input type="text" id="title" name="title" required placeholder="Título del álbum">
 
-                        <label for="author">Autor</label>
-                        <input type="text" id="author" name="author" required placeholder="Autor del álbum">
+                        <label for="artista">Artista</label>
+                        <input type="text" id="artista" name="artista" required placeholder="Artista del álbum">
 
                         <label for="collaborators">Colaboradores</label>
-                        <input type="text" id="collaborators" name="collaborators" placeholder="Separados por coma" required>
+                        <input type="text" id="collaborators" name="collaborators" placeholder="Separados por coma">
 
                         <label for="price">Precio</label>
                         <input type="text" id="price" name="price" placeholder="Precio del álbum" required>
@@ -125,13 +125,13 @@
                         <button type="button" class="upload-cover-button"
                             onclick="document.getElementById('cover-upload').click();">Seleccionar portada</button>
                     </div>
-                    
+
                     <div class="div-pannel-sub upload-song" style="width: 100%;">
                         <label for="song-upload">Agregar canciones</label>
                         <div class="div-pannel-sub grid-container" style="grid-template-columns: 1fr auto; gap: 20px;">
                             <select id="song-list" name="song-list" style="height: 40px; width: 100%;">
                                 <option value="" disabled selected>Selecciona una canción</option>
-                                {% for song in songs %}   
+                                {% for song in songs %}
                                 <option value="{{ song.id }}">{{ song.titulo }} · {{ song.artista }}</option>
                                 {% endfor %}
                             </select>
@@ -139,23 +139,25 @@
                         </div>
                         <div class="grid-biblioteca">
                             <p id="no_songs">No hay canciones añadidas.</p>
-                            {% for song in songs %}                       
+                            {% for song in songs %}
                             <div id="{{ song.id }}" class="div-pannel-sub songs-cell" style="display: none;">
                                 <img src="{{ song.portada }}" class="songs-image" alt="Song Image">
                                 <h3>{{ song.titulo }}</h3>
                                 <p>{{ song.artista }}</p>
                                 <div class="button-array">
-                                    <button type="button" style="background-color: white;" onclick="window.location.href='/song?id={{song.id}}'">🔗</button>
-                                    <button type="button" style="background-color: #ff4646;" onclick="removeSong('{{ song.id }}')">🗑️</button>
-                                    <button type="button" style="background-color: #0077ff;" onclick="window.location.href='/edit-song?id={{song.id}}'">✏️</button>
+                                    <button type="button" style="background-color: white;"
+                                        onclick="window.location.href='/song?id={{song.id}}'">🔗</button>
+                                    <button type="button" style="background-color: #ff4646;"
+                                        onclick="removeSong('{{ song.id }}')">🗑️</button>
+                                    <button type="button" style="background-color: #0077ff;"
+                                        onclick="window.location.href='/edit-song?id={{song.id}}'">✏️</button>
                                 </div>
                             </div>
                             {% endfor %}
                         </div>
                     </div>
+                    <button type="submit" style="display: block; margin: 20px auto;">Subir álbum</button>
                 </form>
-
-                <button type="submit" onclick="postAlbum()">Subir álbum</button>
             </div>
             <br>
         </div>
@@ -211,30 +213,31 @@
                 noSongsMessage.style.display = 'flex';
             }
         }
-        
 
-        async function postAlbum() {
+
+        async function postAlbum(event) {
             event.preventDefault();
+
             const albumData = {
                 titulo: document.getElementById('title').value,
-                autor: document.getElementById('author').value,
+                artista: document.getElementById('artista').value,
                 descripcion: document.getElementById('description').value,
                 colaboradores: document.getElementById('collaborators').value,
                 precio: parseFloat(document.getElementById('price').value),
-                generos: Array.from(document.querySelectorAll('.upload-checkbox-container input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
-                canciones: Array.from(document.querySelectorAll('.grid-biblioteca .songs-cell[style*="display: flex"]')).map(songDiv => songDiv.id),
+                generos: Array.from(document.querySelectorAll('.upload-checkbox-container input[type="checkbox"]:checked')).map(cb => cb.id),
+                canciones: Array.from(document.querySelectorAll('.grid-biblioteca .songs-cell[style*="display: flex"]')).map(div => div.id),
                 portada: document.getElementById('cover-preview').src,
                 visible: document.getElementById('is-visible').checked
             };
 
-            // Validar que los campos no estén vacíos y que tienen el formato correcto
+            // Validaciones
             if (!albumData.titulo.trim()) {
                 return displayMessage("error", "El campo 'Título' no puede estar vacío.");
             }
-            if (!albumData.autor.trim()) {
-                return displayMessage("error", "El campo 'Autor' no puede estar vacío.");
+            if (!albumData.artista.trim()) {
+                return displayMessage("error", "El campo 'Artista' no puede estar vacío.");
             }
-            if (isNaN(albumData.precio) || parseFloat(albumData.precio) < 0) {
+            if (isNaN(albumData.precio) || albumData.precio < 0) {
                 return displayMessage("error", "El campo 'Precio' debe ser un número positivo.");
             }
             if (!albumData.generos.length) {
@@ -244,9 +247,7 @@
             try {
                 const response = await fetch('/upload-album', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(albumData)
                 });
 
@@ -259,10 +260,9 @@
                     displayMessage('error', 'Error al subir el álbum: ' + result.error);
                 }
             } catch (error) {
+                console.error('Error al subir el álbum:', error);
                 displayMessage('error', 'Error al subir el álbum. Por favor, inténtalo de nuevo.');
-                console.error('Error al subir el album:', error);
             }
-
         }
 
     </script>

@@ -613,7 +613,7 @@ async def upload_album_post(request: Request):
 
     album = AlbumDTO()
     album.set_titulo(data["titulo"])
-    album.set_autor(data["autor"])
+    album.set_autor(data["artista"])
     album.set_colaboradores(data["colaboradores"])
     album.set_descripcion(data["descripcion"])
     album.set_fecha(datetime.now()) # La fecha se caclula desde el lado del servidor
