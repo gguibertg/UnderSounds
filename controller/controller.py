@@ -28,6 +28,8 @@ from view.view import View
 from fastapi import Request, HTTPException
 from fastapi.responses import FileResponse
 from pathlib import Path
+from PIL import Image
+import io
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
@@ -483,7 +485,7 @@ async def update_profile(request: Request, response: Response):
     user.set_nombre(data["nombre"])
     user.set_email(data["email"])
     user.set_bio(data["bio"])
-    user.set_imagen(data["imagen"])
+    user.set_imagen(compress_image(data["imagen"]))
     user.set_url(data["url"])
 
     # Actualizar el usuario en la base de datos
@@ -618,7 +620,7 @@ async def upload_album_post(request: Request):
     album.set_generos(data["generos"])
     album.set_canciones(data["canciones"])
     album.set_visitas(0)
-    album.set_portada(data["portada"])
+    album.set_portada(compress_image(data["portada"]))
     album.set_precio(data["precio"])
     album.set_likes(0)
     album.set_visible(data["visible"])
@@ -945,7 +947,7 @@ async def album_edit_post(request: Request):
         album.set_generos(data["generos"])
         album.set_canciones(data["canciones"])
         # album.set_visitas() # La cantidad de visitas no se puede editar.
-        album.set_portada(data["portada"])
+        album.set_portada(compress_image(data["portada"]))
         album.set_precio(data["precio"])
         # album.set_likes() # La cantidad de likes no se puede editar.
         album.set_visible(data["visible"])
@@ -1487,7 +1489,7 @@ async def upload_song_post(request: Request):
     song.set_generos(data["generos"])
     song.set_likes(0)
     song.set_visitas(0)
-    song.set_portada(data["portada"])
+    song.set_portada(compress_image(data["portada"]))
     song.set_precio(data["precio"])
     song.set_lista_resenas([])
     song.set_visible(data["visible"])
@@ -1715,7 +1717,7 @@ async def edit_song_post(request: Request):
         song.set_colaboradores(data["colaboradores"])
         song.set_descripcion(data["descripcion"])
         song.set_generos(data["generos"])
-        song.set_portada(data["portada"])
+        song.set_portada(compress_image(data["portada"]))
         song.set_precio(data["precio"])
         song.set_visible(data["visible"])
 
@@ -2512,3 +2514,37 @@ def validate_album_fields(data) -> JSONResponse | bool:
 
 def validate_song_fields(data) -> JSONResponse | bool:
     return validate_fields(data)
+
+def compress_image(base64_image: str) -> str:
+    try:
+        # Verificar si la entrada es válida
+        if not base64_image or not base64_image.startswith("data:image"):
+            if base64_image != "":
+                print(PCTRL_WARN, "La entrada no es una imagen base64 válida. Devolviendo la imagen original.")
+            return base64_image
+
+        # Decodificar la imagen base64
+        image_data = base64.b64decode(base64_image.split(",")[1])
+        img = Image.open(BytesIO(image_data))
+
+        # Convertir a RGB si no lo está (WebP no soporta algunos modos como CMYK)
+        if img.mode != "RGB":
+            img = img.convert("RGB")
+
+        # Comprimir y guardar la imagen en un buffer en formato WebP
+        buffer = BytesIO()
+        img.save(buffer, "webp", quality=85)
+        buffer.seek(0)
+
+        # Codificar la imagen comprimida a base64
+        compressed_base64 = base64.b64encode(buffer.read()).decode("utf-8")
+
+        # Printear estadisticas de imagen
+        original_size = len(image_data)
+        compressed_size = len(buffer.getvalue())
+        print(PCTRL, f"Imagen comprimida de {original_size / 1024:.2f} KB a {compressed_size / 1024:.2f} KB ({(1 - compressed_size / original_size) * 100:.2f}%/-{(original_size - compressed_size) / 1024:.2f} KB)")
+        return f"data:image/webp;base64,{compressed_base64}"
+    
+    except Exception as e:
+        print(PCTRL_WARN, f"Error al comprimir la imagen: {e}. Devolviendo la imagen original.")
+        return base64_image  # Devolver la imagen original en caso de error
