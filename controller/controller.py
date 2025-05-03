@@ -1,35 +1,32 @@
 # Imports estándar de Python
-from io import BytesIO
-import os
 import base64
+import io
+import os
 from datetime import datetime, timedelta
 from pathlib import Path
-import os
+from zipfile import ZipFile
+from io import BytesIO
 
 # Imports de terceros
 import firebase_admin
 import requests
-from fastapi import Depends, FastAPI, HTTPException, Request, Response, Form, UploadFile, Header
-from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, HTMLResponse, StreamingResponse
+from fastapi import Depends, FastAPI, Form, Header, HTTPException, Request, Response, UploadFile
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from firebase_admin import auth, credentials
-from datetime import datetime
+from PIL import Image
 
 # Imports locales del proyecto
 from model.dto.albumDTO import AlbumDTO
 from model.dto.carritoDTO import ArticuloCestaDTO
+from model.dto.contactoDTO import ContactoDTO
+from model.dto.reseñasDTO import ReseñaDTO
 from model.dto.sesionDTO import SesionDTO
 from model.dto.songDTO import SongDTO
-from model.dto.contactoDTO import ContactoDTO
 from model.dto.usuarioDTO import UsuarioDTO
-from model.dto.reseñasDTO import ReseñaDTO
 from model.model import Model
 from view.view import View
-from fastapi import Request, HTTPException
-from fastapi.responses import FileResponse
-from pathlib import Path
-from PIL import Image
-import io
+
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
@@ -2035,6 +2032,53 @@ async def download_song(filename: str, song_title: str, request: Request):
     
     # Retornar el archivo MP3 directamente usando FileResponse
     return FileResponse(file_path, media_type="audio/mpeg", filename=f"{song_title}.mp3")
+
+from fastapi.responses import StreamingResponse
+from zipfile import ZipFile
+import io
+
+@app.get("/download-album")
+async def download_album(album_id: str, album_title: str, request: Request):
+    # Verificar sesión activa
+    user_info = verifySessionAndGetUserInfo(request)
+    if isinstance(user_info, Response):
+        raise HTTPException(status_code=401, detail="No autorizado")
+
+    # Obtener álbum y canciones
+    album_dict = model.get_album(album_id)
+    if not album_dict:
+        raise HTTPException(status_code=404, detail="Álbum no encontrado")
+
+    album = AlbumDTO()
+    album.load_from_dict(album_dict)
+
+    # Verificar acceso del usuario a las canciones
+    canciones_autorizadas = []
+    for song_id in album.get_canciones():
+        if song_id in user_info["biblioteca"] or song_id in user_info["studio_canciones"]:
+            cancion = model.get_song(song_id)
+            if cancion:
+                canciones_autorizadas.append(cancion)
+
+    if not canciones_autorizadas:
+        raise HTTPException(status_code=403, detail="No tienes acceso a las canciones del álbum")
+
+    # Crear ZIP en memoria
+    zip_buffer = io.BytesIO()
+    with ZipFile(zip_buffer, "w") as zip_file:
+        for cancion in canciones_autorizadas:
+            file_path = Path(__file__).parent.parent / "mp3" / cancion["id"]
+            if file_path.exists():
+                zip_file.write(file_path, arcname=f"{cancion['titulo']}.mp3")
+            else:
+                print(PCTRL_WARN, f"Archivo no encontrado: {cancion['id']}")
+
+    zip_buffer.seek(0)
+    return StreamingResponse(
+        zip_buffer,
+        media_type="application/zip",
+        headers={"Content-Disposition": f'attachment; filename="{album_title}.zip"'}
+    )
 
 # -------------------------------------------------------------- #
 # ---------------------------- STUDIO -------------------------- #

@@ -36,7 +36,8 @@
                         <h2 class="album-title">{{album.titulo}}</h2>
                         <p><strong>Autor:</strong> {{album.autor}}</p>
                         <p><strong>Colaboradores:</strong>{{album.colaboradores}}</p>
-                        <pre style="max-width: 30rem; word-wrap: break-word; white-space: pre-wrap;"><strong>Descripción:</strong> {{album.descripcion}}</pre>
+                        <pre
+                            style="max-width: 30rem; word-wrap: break-word; white-space: pre-wrap;"><strong>Descripción:</strong> {{album.descripcion}}</pre>
                         <p><strong>Fecha:</strong> {{album.fecha}}</p>
                         <p><strong>Géneros:</strong> {{album.generosStr}}</p>
                         <!-- Este genero es especial -> Es un campo populado por los nombres de los generos, NO los IDs -->
@@ -47,7 +48,8 @@
                         <p><strong>Precio:</strong> {{album.precio}}€</p>
                         <div class="album-buttons">
                             {% if tipoUsuario >= 2 %}
-                            <button class="btn">Descargar álbum</button> <!-- TODO en be-stream! -->
+                            <button class="btn" onclick="descargarAlbum('{{album.id}}', '{{album.titulo}}')">Descargar
+                                álbum</button>
                             <button class="{% if isLiked %}button{% else %}button-alt{% endif %} fav-btn"
                                 title="Añadir a favoritos" onclick="toggleLike()">
                                 <img alt="Favorito" class="fav-icon"
@@ -175,6 +177,30 @@
             } catch (error) {
                 console.error('Error:', error);
                 displayMessage('error', 'Ocurrió un error al intentar realizar la acción.');
+            }
+        }
+
+        async function descargarAlbum(album_id, album_title) {
+            try {
+                const response = await fetch(`/download-album?album_id=${encodeURIComponent(album_id)}&album_title=${encodeURIComponent(album_title)}`);
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert("Error: " + error.detail);
+                    return;
+                }
+
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${album_title.replace(/[\\/:*?"<>|]/g, '')}.zip`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error("Error al descargar álbum:", error);
+                alert("Error inesperado al descargar el álbum.");
             }
         }
     </script>
