@@ -2342,6 +2342,14 @@ def get_search(request: Request):
         elif primer_caracter.startswith("@"):
             tipo_busqueda = "fecha"
             date =  next((p[1:] for p in palabras if p.startswith("@")), None)
+        elif primer_caracter.startswith("&"):
+            tipo =  next((p[1:] for p in palabras if p.startswith("&")), None)
+            if tipo.lower() == "artistas":
+                tipo_busqueda = "artista"
+            elif tipo.lower() == "albumes":
+                tipo_busqueda = "album"
+            elif tipo.lower() == "canciones":
+                tipo_busqueda = "cancion"
         else:
             print(PCTRL, "Busqueda no válida")
             return view.get_search_view(request, {})
@@ -2387,6 +2395,20 @@ def get_search(request: Request):
         for album in albums:
             all_items.append({"tipo": "Álbum", "nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"][:50] + "..." if len(album["descripcion"]) > 50 else album["descripcion"], "url": f"/album?id={album['id']}"})
 
+    elif tipo_busqueda == "artista":
+        artists = model.get_artistas()
+        for artist in artists:
+            all_items.append({"tipo": "Artista", "nombre": artist["nombre"], "portada": artist["imagen"], "descripcion": artist["bio"][:50] + "..." if len(artist["bio"]) > 50 else artist["bio"], "url": f"/artista?id={artist['id']}"})
+    
+    elif tipo_busqueda == "album":
+        albums = model.get_albums()
+        for album in albums:
+            all_items.append({"tipo": "Álbum", "nombre": album["titulo"], "portada": album["portada"], "descripcion": album["descripcion"][:50] + "..." if len(album["descripcion"]) > 50 else album["descripcion"], "url": f"/album?id={album['id']}"})
+
+    elif tipo_busqueda == "cancion":
+        songs = model.get_songs()
+        for song in songs:
+            all_items.append({"tipo": "Canción", "nombre": song["titulo"][:25] + "..." if len(song["titulo"]) > 25 else song["titulo"], "portada": song["portada"], "descripcion": song["descripcion"][:50] + "..." if len(song["descripcion"]) > 50 else song["descripcion"], "url": f"/song?id={song['id']}"})
 
     # list (dict (nombre, portada, descripcion))
     print(PCTRL, "Busqueda terminada")
