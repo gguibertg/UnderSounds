@@ -2,6 +2,7 @@
 import base64
 import io
 import os
+import time
 from datetime import datetime, timedelta
 from pathlib import Path
 from zipfile import ZipFile
@@ -1265,6 +1266,8 @@ def get_faqs(request: Request):
 # Ruta para cargar la vista del carrito y añadir artículos al carrito
 @app.api_route("/cart", methods=["GET", "POST"], description="Muestra los artículos de tu cesta")
 async def get_carrito(request: Request):
+    
+    time.sleep(0.5)
     
     # Así se obtendría el usuario, por motivos de prueba, se probará un usuario fijo
     res = verifySessionAndGetUserInfo(request)
