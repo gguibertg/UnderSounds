@@ -26,6 +26,7 @@
 <body>
     <!-- Barra de navegación -->
     <div id="header-placeholder"></div>
+    <canvas id="backgroundCanvas"></canvas>
     <!-- Contenido principal -->
     <main>
         {% if not song.visible %}
@@ -312,6 +313,7 @@
     <script src="/static/js/dark-mode.js"></script>
     <script src="/static/js/radio.js"></script>
     <script src="/static/js/displayMessage.js"></script>
+    <script src="/static/js/animations.js"></script>
 
     <script>
         async function toggleLike() {

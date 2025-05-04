@@ -24,6 +24,7 @@
 <body>
     <!-- Barra de navegación -->
     <div id="header-placeholder"></div>
+    <canvas id="backgroundCanvas"></canvas>
 
     <!-- Contenido principal -->
     <main>
@@ -97,9 +98,11 @@
                             </div>
                         </div>
                         <br>
-                        <a href="/prepaid" style="align-self: center; width: 100%;">
-                            <button class="checkout-btn">Pedir y pagar</button>
-                        </a>
+                        {% if carrito.articulos %}
+                            <a href="/prepaid" style="align-self: center; width: 100%;">
+                                <button class="checkout-btn">Pedir y pagar</button>
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -113,6 +116,7 @@
     <script src="/static/js/header.js"></script>
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
+    <script src="/static/js/animations.js"></script>
 
 </body>
 

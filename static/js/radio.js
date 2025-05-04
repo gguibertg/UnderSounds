@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const titulos = button.getAttribute("data-titulos").split("|||");
             const artistas = button.getAttribute("data-artistas").split("|||");
             const covers = button.getAttribute("data-covers").split("|||");
-            const pistas = button.getAttribute("data-pistas").split("|||");
+            const id = button.getAttribute("data-pistas").split("|||");
 
             // Comprobamos que haya al menos una canción
             if (titulos.length > 0) {
