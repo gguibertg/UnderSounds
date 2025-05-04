@@ -169,6 +169,9 @@
         async function postSong() {
             event.preventDefault();
 
+            // Añadir mensaje de subiendo canción
+            displayMessage("warn", "Subiendo canción...");
+
             const pistaFile = document.getElementById('song-upload').files[0];
             if (!pistaFile) {
                 return displayMessage("error", "Debes seleccionar una canción para subir.");
