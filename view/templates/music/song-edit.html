@@ -200,7 +200,7 @@
 
         async function cargarCancionEnInput(song_id, song_title) {
             if (!song_id) {
-                alert('No se ha encontrado la canción solicitada.');
+                displayMessage('error', 'No se ha encontrado la canción solicitada.');
                 return;
             }
 
@@ -209,7 +209,7 @@
 
                 if (!response.ok) {
                     const error = await response.json();
-                    alert("Error: " + error.detail);
+                    displayMessage('error', "Error: " + error.detail);
                     return;
                 }
 
@@ -234,9 +234,10 @@
 
             } catch (err) {
                 console.error(err);
-                alert("Ocurrió un error inesperado.");
+                displayMessage('error', "Ocurrió un error inesperado.");
             }
         }
+    </script>
 
         function getAudioDuration(file) {
             return new Promise((resolve, reject) => {
