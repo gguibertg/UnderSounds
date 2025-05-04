@@ -1,22 +1,23 @@
 # Imports estándar de Python
 import base64
 import io
+import json
 import os
 import time
-import json
 from datetime import datetime, timedelta
+from io import BytesIO
 from pathlib import Path
 from zipfile import ZipFile
-from io import BytesIO
 
 # Imports de terceros
 import firebase_admin
 import requests
+from PIL import Image
 from fastapi import Depends, FastAPI, Form, Header, HTTPException, Request, Response, UploadFile
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from firebase_admin import auth, credentials
-from PIL import Image
 
 # Imports locales del proyecto
 from model.dto.albumDTO import AlbumDTO
@@ -28,7 +29,6 @@ from model.dto.songDTO import SongDTO
 from model.dto.usuarioDTO import UsuarioDTO
 from model.model import Model
 from view.view import View
-
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
@@ -98,7 +98,7 @@ async def index(request: Request):
     if isinstance(res, Response):
         tipoUsuario = False # Guest
     else:
-       tipoUsuario = True # Miembro (User)
+        tipoUsuario = True # Miembro (User)
 
     genres_json = model.get_generos()
     song_json = model.get_songs()
@@ -115,22 +115,20 @@ async def get_song_list_by_genre(request: Request):
 
     try:
         canciones = model.get_songs_by_genre(genre_id)
-        # Convertir fecha (Datetime) a string (ISO 8601) para JSON
-        for cancion in canciones:
-            if isinstance(cancion["fecha"], datetime):
-                cancion["fecha"] = cancion["fecha"].isoformat()
+        canciones_serializadas = jsonable_encoder(canciones)
 
-        if canciones:
-            print(PCTRL, "Canciones filtradas por el género: ", genre_id)
-            return JSONResponse(content=canciones, status_code=200)
+        if canciones_serializadas:
+            print(PCTRL, "Canciones filtradas por el género:", genre_id)
+            return JSONResponse(content=canciones_serializadas, status_code=200)
         else:
             print(PCTRL_WARN, "No existen canciones para ese género")
             return JSONResponse(content=[], status_code=200)
+
     except Exception as e:
         print(PCTRL_WARN, "Error al obtener canciones:", e)
         return JSONResponse(
-            content=json.loads(json.dumps(canciones, default=str)),
-            status_code=200
+            content={"error": "Hubo un error al obtener las canciones."},
+            status_code=500
         )
 
 
@@ -1614,6 +1612,28 @@ async def get_song(request: Request):
     else:
         song_info["albumStr"] = None
 
+    # Populamos las reseñas de la canción, para ello, descargamos cada reseña y la añadimos a la lista de reseñas del song_info.
+    # Si no tiene reseñas, dejamos la lista vacía.
+    if song_info["lista_resenas"]:
+        reseñas = []
+        for resena_id in song_info["lista_resenas"]:
+            resena = model.get_reseña(resena_id)
+            if not resena:
+                print(PCTRL_WARN, "Reseña", resena_id,"not found in database")
+                return Response("Error del sistema", status_code=403)
+            # Descargamos el usuario asociado a la reseña
+            usuario = model.get_usuario(resena["usuario"])
+            if not usuario:
+                print(PCTRL_WARN, "Usuario", resena["usuario"],"not found in database")
+                return Response("Error del sistema", status_code=403)
+            resena["usuarioStr"] = usuario["nombre"]
+            resena["usuarioImg"] = usuario["imagen"]
+            reseñas.append(resena)
+        song_info["lista_resenas"] = reseñas
+    else:
+        song_info["lista_resenas"] = []
+
+
     # Comprobamos si el usuario le ha dado like a la canción mirando si el id de la canción está en id_likes del usuario.
     isLiked = False
     if tipoUsuario > 0:
@@ -1636,6 +1656,8 @@ async def get_song(request: Request):
                     break
         else:
             print(PCTRL_WARN, "El carrito no se ha encontrado en la base de datos! - skipping")
+
+            
         
     return view.get_song_view(request, song_info, tipoUsuario, user_db, isLiked, inCarrito) # Devolvemos la vista del song
 
@@ -1724,7 +1746,24 @@ async def edit_song_post(request: Request):
         song.set_generos(data["generos"])
         song.set_portada(compress_image(data["portada"]))
         song.set_precio(data["precio"])
+        song.set_duracion(int(data["duracion"]))
         song.set_visible(data["visible"])
+
+        # Ruta completa al archivo .mp3
+        mp3_path = os.path.join("mp3", song_id)
+
+        pistaBase64 = data["pista"]
+        extension = data["extension"]
+        pistaBase64 = pistaBase64.split(",")[1]  # Quitamos el prefijo de base64
+        pistaBase64 = base64.b64decode(pistaBase64)  # Decodificamos el base64
+        pistaBase64 = BytesIO(pistaBase64)  # Convertimos el base64 a un objeto BytesIO
+        pista = UploadFile(pistaBase64, filename=f"{song_id}.{extension}") # Convertimos el BytesIO a un objeto UploadFile con content_type
+
+        result = await process_song_file(pista)
+        if result is not True:
+            return result
+        else:
+            print(PCTRL_WARN, "El archivo MP3", mp3_path, "no existe")
 
         if song_dict != song.songdto_to_dict():
             song_dict["fechaUltimaModificacion"] = datetime.now()
@@ -1898,6 +1937,13 @@ async def delete_song_post(request: Request):
         usuario_dto = UsuarioDTO()
         usuario_dto.load_from_dict(usuario_dict)
         usuario_dto.remove_song_from_biblioteca(song_id)
+        model.update_usuario(usuario_dto)
+
+    usuarios = model.get_usuarios_by_song_like(song_id)
+    for usuario_dict in usuarios:
+        usuario_dto = UsuarioDTO()
+        usuario_dto.load_from_dict(usuario_dict)
+        usuario_dto.remove_id_like(song_id)
         model.update_usuario(usuario_dto)
     
     # Ruta completa al archivo .mp3
@@ -2272,14 +2318,13 @@ async def add_review(request: Request):
             print(PCTRL, "Al reseña añadida con ID:", reseña_id)
         else:
             print(PCTRL_WARN, "No se pudo guardar la reseña.")
-
-        reseña.set_id(reseña_id)
+            return JSONResponse(status_code=500, content={"error": "No se pudo guardar la reseña."})
         
         song_dict = model.get_song(song_id)
 
         song = SongDTO()
         song.load_from_dict(song_dict)
-        song.add_resenas(reseña.reseñadto_to_dict())
+        song.add_resenas(reseña_id)
 
         if model.update_song(song):
             return JSONResponse(status_code=200, content={"message": "Reseña añadida correctamente."})
@@ -2312,7 +2357,7 @@ async def delete_review(request: Request):
             song_dict = model.get_song(song_id)
             song = SongDTO()
             song.load_from_dict(song_dict)
-            song.remove_resena(reseña_data)
+            song.remove_resena(reseña_id)
 
             if model.update_song(song):
                 print(PCTRL, "Reseña eliminada de la canción", song_id )
@@ -2337,7 +2382,6 @@ async def update_review(request: Request):
                 return user_db # Si es un Response, devolvemos el error  
             
             data_info = await request.json()
-            song_id = data_info["song_id"]
             reseña_id = data_info["reseña_id"]
             titulo = data_info["titulo"]
             texto = data_info["reseña"]
@@ -2348,20 +2392,10 @@ async def update_review(request: Request):
             if user_db != reseña_data["usuario"]:
                 return JSONResponse(status_code=500, content={"error": "No se pudo eliminar la reseña."})
 
-            song_dict = model.get_song(song_id)
-            song = SongDTO()
-            song.load_from_dict(song_dict)
-
             reseña = ReseñaDTO()
             reseña.load_from_dict(reseña_data)
             reseña.set_titulo(str(titulo))
             reseña.set_reseña(str(texto))
-            song.update_resenas(reseña.reseñadto_to_dict())
-
-            if model.update_song(song):
-                print(PCTRL, "Reseña editada en la canción", song_id )
-            else:
-                return JSONResponse(status_code=500, content={"error": "No se pudo actualizar la reseña."})
 
             if model.update_reseña(reseña):
                 return JSONResponse(status_code=200, content={"message": "Reseña actualizada."})

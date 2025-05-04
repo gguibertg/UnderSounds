@@ -184,10 +184,13 @@
 
         async function descargarAlbum(album_id, album_title) {
             try {
+                // Mostrar mensaje de descarga
+                displayMessage('warn', 'Preparando la descarga del álbum. Esto puede tardar unos minutos... ¡Paciencia!');
+
                 const response = await fetch(`/download-album?album_id=${encodeURIComponent(album_id)}&album_title=${encodeURIComponent(album_title)}`);
                 if (!response.ok) {
                     const error = await response.json();
-                    alert("Error: " + error.detail);
+                    displayMessage('error', error.message || 'Error al descargar el álbum. Por favor, inténtalo de nuevo más tarde.');
                     return;
                 }
 
@@ -200,9 +203,11 @@
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
+
+                displayMessage('success', '¡Album descargado con éxito!');
             } catch (error) {
                 console.error("Error al descargar álbum:", error);
-                alert("Error inesperado al descargar el álbum.");
+                displayMessage('error', 'Error al descargar el álbum. Por favor, inténtalo de nuevo más tarde.');
             }
         }
     </script>
