@@ -283,15 +283,15 @@
                 return displayMessage("error", "Debes seleccionar una canción para subir.");
             }
 
-            try {s
+            try {
                 duracion = await getAudioDuration(pistaFile);
                 pistaBase64 = await fileToBase64(pistaFile);
             } catch (err) {
-                return displayMessage("error", "No se pudo procesar el archivo de audio.");
+                return displayMessage("error", "No se pudo procesar el archivo de audio. (" + err.message + ")");
             }
 
             const songData = {
-                id: "681667a371c094c3a3185529",
+                id: "{{song.id}}",
                 titulo: document.getElementById('titulo').value,
                 artista: document.getElementById('artista').value,
                 descripcion: document.getElementById('descripcion').value,
