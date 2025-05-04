@@ -98,7 +98,7 @@ async def index(request: Request):
     if isinstance(res, Response):
         tipoUsuario = False # Guest
     else:
-       tipoUsuario = True # Miembro (User)
+        tipoUsuario = True # Miembro (User)
 
     genres_json = model.get_generos()
     song_json = model.get_songs()
