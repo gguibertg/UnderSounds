@@ -1,22 +1,23 @@
 # Imports estándar de Python
 import base64
 import io
+import json
 import os
 import time
-import json
 from datetime import datetime, timedelta
+from io import BytesIO
 from pathlib import Path
 from zipfile import ZipFile
-from io import BytesIO
 
 # Imports de terceros
 import firebase_admin
 import requests
+from PIL import Image
 from fastapi import Depends, FastAPI, Form, Header, HTTPException, Request, Response, UploadFile
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from firebase_admin import auth, credentials
-from PIL import Image
 
 # Imports locales del proyecto
 from model.dto.albumDTO import AlbumDTO
@@ -28,7 +29,6 @@ from model.dto.songDTO import SongDTO
 from model.dto.usuarioDTO import UsuarioDTO
 from model.model import Model
 from view.view import View
-
 
 # Variable para el color + modulo de la consola
 PCTRL = "\033[96mCTRL\033[0m:\t "
@@ -115,22 +115,20 @@ async def get_song_list_by_genre(request: Request):
 
     try:
         canciones = model.get_songs_by_genre(genre_id)
-        # Convertir fecha (Datetime) a string (ISO 8601) para JSON
-        for cancion in canciones:
-            if isinstance(cancion["fecha"], datetime):
-                cancion["fecha"] = cancion["fecha"].isoformat()
+        canciones_serializadas = jsonable_encoder(canciones)
 
-        if canciones:
-            print(PCTRL, "Canciones filtradas por el género: ", genre_id)
-            return JSONResponse(content=canciones, status_code=200)
+        if canciones_serializadas:
+            print(PCTRL, "Canciones filtradas por el género:", genre_id)
+            return JSONResponse(content=canciones_serializadas, status_code=200)
         else:
             print(PCTRL_WARN, "No existen canciones para ese género")
             return JSONResponse(content=[], status_code=200)
+
     except Exception as e:
         print(PCTRL_WARN, "Error al obtener canciones:", e)
         return JSONResponse(
-            content=json.loads(json.dumps(canciones, default=str)),
-            status_code=200
+            content={"error": "Hubo un error al obtener las canciones."},
+            status_code=500
         )
 
 
