@@ -74,23 +74,6 @@
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        function displayError(message) {
-            const existingErrorDiv = document.querySelector(".div-error");
-            if (existingErrorDiv) {
-                existingErrorDiv.remove();
-            }
-
-            const errorDiv = document.createElement("div");
-            errorDiv.className = "div-error";
-            const errorMessage = document.createElement("p");
-            errorMessage.textContent = message;
-            errorDiv.appendChild(errorMessage);
-
-            const mainElement = document.querySelector("main");
-            const backButton = mainElement.querySelector(".button-back");
-            mainElement.insertBefore(errorDiv, backButton);
-        }
-
         document.getElementById("register-form").addEventListener("submit", function (event) {
             event.preventDefault();
             const username = document.getElementById("username").value;
@@ -122,7 +105,7 @@
                 })
                 .catch(error => {
                     console.error("Error durante el registro de credenciales:", error.code, error.message);
-                    displayError("Error durante el registro: " + error.message);
+                    displayMessage('error', "Error durante el registro: " + error.message);
                 });
         });
 
@@ -158,7 +141,7 @@
             })
             .catch(error => {
                 console.error("Error durante el registro con Google:", error);
-                displayError("Error durante el registro con Google: " + error.message);
+                displayMessage('error', "Error durante el registro con Google: " + error.message);
             });
         });
         
@@ -166,7 +149,7 @@
 
     <!-- Scripts -->
     <script src="/static/js/dark-mode.js"></script>
-
+    <script src="/static/js/displayMessage.js"></script> <!-- Script para el encabezado de la página -->
 </body>
 
 </html>
