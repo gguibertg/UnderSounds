@@ -943,7 +943,7 @@ async def album_edit_post(request: Request):
 
         # Editamos el album con los nuevos datos recibidos en la request
         album.set_titulo(data["titulo"])
-        album.set_autor(data["autor"])
+        album.set_autor(data["artista"])
         album.set_colaboradores(data["colaboradores"])
         album.set_descripcion(data["descripcion"])
         #album.set_fecha(datetime.now()) # La fecha no se puede editar.
