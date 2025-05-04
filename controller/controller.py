@@ -3,6 +3,7 @@ import base64
 import io
 import os
 import time
+import json
 from datetime import datetime, timedelta
 from pathlib import Path
 from zipfile import ZipFile
@@ -116,7 +117,8 @@ async def get_song_list_by_genre(request: Request):
         canciones = model.get_songs_by_genre(genre_id)
         # Convertir fecha (Datetime) a string (ISO 8601) para JSON
         for cancion in canciones:
-            cancion["fecha"] = cancion["fecha"].isoformat()
+            if isinstance(cancion["fecha"], datetime):
+                cancion["fecha"] = cancion["fecha"].isoformat()
 
         if canciones:
             print(PCTRL, "Canciones filtradas por el género: ", genre_id)
@@ -126,7 +128,10 @@ async def get_song_list_by_genre(request: Request):
             return JSONResponse(content=[], status_code=200)
     except Exception as e:
         print(PCTRL_WARN, "Error al obtener canciones:", e)
-        return JSONResponse(content={"error": str(e)}, status_code=500)
+        return JSONResponse(
+            content=json.loads(json.dumps(canciones, default=str)),
+            status_code=200
+        )
 
 
 # ------------------------------------------------------------------ #
