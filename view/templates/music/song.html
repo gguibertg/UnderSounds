@@ -135,14 +135,13 @@
                             reseñas.</p>
                         {% else %}
                         {% for resena in song.lista_resenas %}
-                        {% if usuario.id == resena.usuario.id %}
+                        {% if usuario.id == resena.usuario %}
                         <details class="review" id="resena-¨{{ resena.id }}">
                             <summary><img alt="Desplegar" class="chevron" height="16"
                                     src="/static/icons/site/dropdown-icon.svg"
-                                    width="16" /><strong>{{resena.usuario.nombre}}</strong>
-                                —
-                                <input id="editar_titulo_{{ resena.id }}" type="text" name="titulo"
-                                    value="{{ resena.titulo }}" required>
+                                    width="16" />
+                                    <img alt="Usuario" height="32" width="32" src="{{resena.usuarioImg}}" style="border-radius: 15px;"/>
+                                    <strong>{{resena.usuarioStr}}</strong> — <input id="editar_titulo_{{ resena.id }}" type="text" name="titulo" value="{{ resena.titulo }}" required>
                             </summary>
                             <textarea id="editar_reseña_{{ resena.id }}" name="texto"
                                 required>{{ resena.reseña }}</textarea>
@@ -160,9 +159,9 @@
                         <details class="review" id="resena-¨{{ resena.id }}">
                             <summary><img alt="Desplegar" class="chevron" height="16"
                                     src="/static/icons/site/dropdown-icon.svg"
-                                    width="16" /><strong>{{resena.usuario.nombre}}</strong>
-                                —
-                                {{ resena.titulo }}</summary>
+                                    width="16" />
+                                <img alt="Usuario" height="32" width="32" src="{{resena.usuarioImg}}" style="border-radius: 15px;"/>
+                                <strong>{{resena.usuarioStr}}</strong> — {{ resena.titulo }}</summary>
                             <p>{{ resena.reseña }}</p>
                             <div class="review-actions"></div>
                         </details>
@@ -241,7 +240,6 @@
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            song_id: "{{ song.id }}",
                             reseña_id: reseñaId,
                             titulo: titulo,
                             reseña: reseña

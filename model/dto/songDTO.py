@@ -132,23 +132,17 @@ class SongDTO():
     def set_precio(self, precio: float):
         self.precio = precio
 
-    def get_lista_resenas(self) -> list[dict]:
+    def get_lista_resenas(self) -> list[str]:
         return self.lista_resenas
     
-    def add_resenas(self, resenas: dict):
-        self.lista_resenas.append(resenas)
+    def add_resenas(self, resena: str):
+        self.lista_resenas.append(resena)
 
-    def update_resenas(self, resenas: dict):
-        for i, r in enumerate(self.lista_resenas):
-            if r["id"] == resenas["id"]:
-                r["titulo"] = resenas["titulo"]
-                r["reseña"] = resenas["reseña"]
+    def remove_resena(self, resena: str):
+        if resena in self.lista_resenas:
+            self.lista_resenas.remove(resena)
 
-    def remove_resena(self, resenas: dict):
-        if resenas in self.lista_resenas:
-            self.lista_resenas.remove(resenas)
-
-    def set_lista_resenas(self, lista_resenas: list[dict]):
+    def set_lista_resenas(self, lista_resenas: list[str]):
         self.lista_resenas = lista_resenas
 
     def get_visible(self) -> bool:

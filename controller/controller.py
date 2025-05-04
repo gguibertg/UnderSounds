@@ -1612,6 +1612,28 @@ async def get_song(request: Request):
     else:
         song_info["albumStr"] = None
 
+    # Populamos las reseñas de la canción, para ello, descargamos cada reseña y la añadimos a la lista de reseñas del song_info.
+    # Si no tiene reseñas, dejamos la lista vacía.
+    if song_info["lista_resenas"]:
+        reseñas = []
+        for resena_id in song_info["lista_resenas"]:
+            resena = model.get_reseña(resena_id)
+            if not resena:
+                print(PCTRL_WARN, "Reseña", resena_id,"not found in database")
+                return Response("Error del sistema", status_code=403)
+            # Descargamos el usuario asociado a la reseña
+            usuario = model.get_usuario(resena["usuario"])
+            if not usuario:
+                print(PCTRL_WARN, "Usuario", resena["usuario"],"not found in database")
+                return Response("Error del sistema", status_code=403)
+            resena["usuarioStr"] = usuario["nombre"]
+            resena["usuarioImg"] = usuario["imagen"]
+            reseñas.append(resena)
+        song_info["lista_resenas"] = reseñas
+    else:
+        song_info["lista_resenas"] = []
+
+
     # Comprobamos si el usuario le ha dado like a la canción mirando si el id de la canción está en id_likes del usuario.
     isLiked = False
     if tipoUsuario > 0:
@@ -2270,14 +2292,13 @@ async def add_review(request: Request):
             print(PCTRL, "Al reseña añadida con ID:", reseña_id)
         else:
             print(PCTRL_WARN, "No se pudo guardar la reseña.")
-
-        reseña.set_id(reseña_id)
+            return JSONResponse(status_code=500, content={"error": "No se pudo guardar la reseña."})
         
         song_dict = model.get_song(song_id)
 
         song = SongDTO()
         song.load_from_dict(song_dict)
-        song.add_resenas(reseña.reseñadto_to_dict())
+        song.add_resenas(reseña_id)
 
         if model.update_song(song):
             return JSONResponse(status_code=200, content={"message": "Reseña añadida correctamente."})
@@ -2310,7 +2331,7 @@ async def delete_review(request: Request):
             song_dict = model.get_song(song_id)
             song = SongDTO()
             song.load_from_dict(song_dict)
-            song.remove_resena(reseña_data)
+            song.remove_resena(reseña_id)
 
             if model.update_song(song):
                 print(PCTRL, "Reseña eliminada de la canción", song_id )
@@ -2335,7 +2356,6 @@ async def update_review(request: Request):
                 return user_db # Si es un Response, devolvemos el error  
             
             data_info = await request.json()
-            song_id = data_info["song_id"]
             reseña_id = data_info["reseña_id"]
             titulo = data_info["titulo"]
             texto = data_info["reseña"]
@@ -2346,20 +2366,10 @@ async def update_review(request: Request):
             if user_db != reseña_data["usuario"]:
                 return JSONResponse(status_code=500, content={"error": "No se pudo eliminar la reseña."})
 
-            song_dict = model.get_song(song_id)
-            song = SongDTO()
-            song.load_from_dict(song_dict)
-
             reseña = ReseñaDTO()
             reseña.load_from_dict(reseña_data)
             reseña.set_titulo(str(titulo))
             reseña.set_reseña(str(texto))
-            song.update_resenas(reseña.reseñadto_to_dict())
-
-            if model.update_song(song):
-                print(PCTRL, "Reseña editada en la canción", song_id )
-            else:
-                return JSONResponse(status_code=500, content={"error": "No se pudo actualizar la reseña."})
 
             if model.update_reseña(reseña):
                 return JSONResponse(status_code=200, content={"message": "Reseña actualizada."})
