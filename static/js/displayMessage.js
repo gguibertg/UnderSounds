@@ -50,6 +50,10 @@ function displayMessage(type, message, containerId = "") {
     messageDiv.style.width       = "auto";  // tamaño según contenido
     messageDiv.style.zIndex     = "9999";
 
+    // Añadir padding y ajustar la fuente
+    messageDiv.style.padding    = "10px 30px"; // 10px vertical, 30px horizontal
+    messageDiv.style.fontSize   = "1.15em";     // fuente ligeramente más grande
+
     const messageContent = document.createElement("p");
     messageContent.textContent = message;
     messageDiv.appendChild(messageContent);

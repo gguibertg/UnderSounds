@@ -222,7 +222,7 @@
                         }
                     }).catch(error => {
                         console.error("Error al cerrar sesión en Firebase:", error);
-                        alert("Error al cerrar sesión: " + error.message);
+                        displayMessage('error', 'Ocurrió un error inesperado al cerrar sesión.');
                     });
             }
         }
@@ -274,52 +274,52 @@
         function sendPasswordReset() {
             const email = document.getElementById("email").value;
             if (!email) {
-                alert("Por favor, introduce tu correo electrónico.");
-                return;
+            displayMessage('error', "Por favor, introduce tu correo electrónico.");
+            return;
             }
 
             auth.sendPasswordResetEmail(email)
-                .then(() => alert("Se ha enviado un correo para restablecer tu contraseña."))
-                .catch((error) => {
-                    console.error("Error al enviar el correo:", error);
-                    alert("No se pudo enviar el correo.");
-                });
+            .then(() => displayMessage('success', "Se ha enviado un correo para restablecer tu contraseña."))
+            .catch((error) => {
+                console.error("Error al enviar el correo:", error);
+                displayMessage('error', "No se pudo enviar el correo.");
+            });
         }
 
         function changeEmail() {
             const newEmail = prompt("Introduce tu nuevo correo electrónico:");
             if (!newEmail) {
-                alert("No se proporcionó un correo nuevo.");
-                return;
+            displayMessage('error', "No se proporcionó un correo nuevo.");
+            return;
             }
 
             const user = auth.currentUser;
             if (!user) {
-                alert("No hay sesión iniciada.");
-                return;
+            displayMessage('error', "No hay sesión iniciada.");
+            return;
             }
 
             user.verifyBeforeUpdateEmail(newEmail)
-                .then(() => {
-                    alert(`Se ha enviado un correo de verificación a ${newEmail}. Debes verificarlo para completar el cambio.`);
-                })
-                .catch((error) => {
-                    console.error("Error al cambiar el correo:", error);
-                    switch (error.code) {
-                        case "auth/requires-recent-login":
-                            alert("Debes volver a iniciar sesión para cambiar el correo.");
-                            break;
-                        case "auth/email-already-in-use":
-                            alert("Ese correo ya está en uso. Intenta con otro.");
-                            break;
-                        case "auth/invalid-email":
-                            alert("El correo introducido no es válido.");
-                            break;
-                        default:
-                            alert("No se pudo enviar la verificación para el cambio de correo.");
-                            break;
-                    }
-                });
+            .then(() => {
+                displayMessage('success', `Se ha enviado un correo de verificación a ${newEmail}. Debes verificarlo para completar el cambio.`);
+            })
+            .catch((error) => {
+                console.error("Error al cambiar el correo:", error);
+                switch (error.code) {
+                case "auth/requires-recent-login":
+                    displayMessage('error', "Debes volver a iniciar sesión para cambiar el correo.");
+                    break;
+                case "auth/email-already-in-use":
+                    displayMessage('error', "Ese correo ya está en uso. Intenta con otro.");
+                    break;
+                case "auth/invalid-email":
+                    displayMessage('error', "El correo introducido no es válido.");
+                    break;
+                default:
+                    displayMessage('error', "No se pudo enviar la verificación para el cambio de correo.");
+                    break;
+                }
+            });
         }
 
         function unregister() {
@@ -355,7 +355,7 @@
                     };
                     reader.readAsDataURL(file);
                 } else {
-                    alert('El archivo no debe pesar más de 2MB.');
+                    displayMessage('error', 'El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.');
                 }
             };
             input.click();

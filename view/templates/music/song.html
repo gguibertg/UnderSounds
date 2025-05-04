@@ -197,10 +197,10 @@
 
                 const result = await response.json();
                 if (response.ok) {
-                    alert("Reseña publicada!");
+                    displayMessage('success', 'Reseña publicada con éxito.');
                     location.reload();
                 } else {
-                    alert("Error: " + result.error);
+                    displayMessage('error', result.error || 'Error al publicar la reseña.');
                 }
             }
         }
@@ -218,10 +218,10 @@
 
             const result = await response.json();
             if (response.ok) {
-                alert("Reseña eliminada.");
+                displayMessage('success', 'Reseña eliminada con éxito.');
                 location.reload();
             } else {
-                alert("Error: " + result.error);
+                displayMessage('error', result.error || 'Error al eliminar la reseña.');
             }
         }
 
@@ -250,28 +250,30 @@
 
                     const result = await response.json();
                     if (response.ok) {
-                        alert("Reseña actualizada.");
+                        displayMessage('success', 'Reseña actualizada con éxito.');
                         location.reload();
                     } else {
-                        alert("Error: " + result.error);
+                        displayMessage('error', result.error || 'Error al actualizar la reseña.');
                     }
                 }
             }
         }
         async function descargarCancion(song_id, song_title) {
             if (!song_id) {
-                alert('No se ha encontrado la canción solicitada.');
+                displayMessage('error', 'No se ha encontrado la canción solicitada.');
                 return;
             }
 
             try {
+                displayMessage('warn', 'Preparando la descarga de la canción. Esto puede tardar unos instantes... ¡Paciencia!');
+
                 // Hacemos la solicitud GET al servidor
                 const response = await fetch(`/download-song?filename=${encodeURIComponent(song_id)}&song_title=${encodeURIComponent(song_title)}`);
 
                 // Si la respuesta no es exitosa (código 2xx)
                 if (!response.ok) {
                     const error = await response.json();
-                    alert("Error: " + error.detail);  // Usamos 'error.detail' que es lo que FastAPI nos devuelve por defecto
+                    displayMessage('error', error.error || 'Error al descargar la canción. Por favor, inténtalo de nuevo más tarde.');
                     return;
                 }
 
@@ -294,9 +296,11 @@
 
                 // Revocamos la URL temporal
                 window.URL.revokeObjectURL(url);
+
+                displayMessage('success', '¡Canción descargada con éxito!');
             } catch (err) {
                 console.error(err);
-                alert("Ocurrió un error inesperado.");
+                displayMessage('error', 'Error al descargar la canción. Por favor, inténtalo de nuevo más tarde.');
             }
         }
 

@@ -12,7 +12,7 @@ export async function irACancion(songId) {
     if (response.ok) {
         window.location.href = result.redirect_url;
     } else {
-        alert("Error al obtener la canción");
+        displayMessage("error", "Error al obtener la canción");
     }
 }
 
@@ -29,6 +29,6 @@ export async function irAlbum(albumId) {
     if (response.ok) {
         window.location.href = result.redirect_url;
     } else {
-        alert("Error al obtener el album");
+        displayMessage("error", "Error al obtener el álbum");
     }
 }
