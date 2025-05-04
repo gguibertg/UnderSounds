@@ -37,6 +37,8 @@ class Model ():
         return self.daoUsuario.get_all_by_fecha(fecha)
     def get_usuarios_by_nombre(self, nombre):
         return self.daoUsuario.get_all_by_nombre(nombre)
+    def get_usuarios_by_song_like(self, song_id):
+        return self.daoUsuario.get_all_usuarios_by_song_like(song_id)
     def add_usuario(self, usuario : UsuarioDTO):
         return self.daoUsuario.add_usuario(usuario)
     def get_usuarios_by_song(self, song_id):

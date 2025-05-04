@@ -19,6 +19,10 @@ class InterfaceUsuarioDAO(ABC):
         pass
 
     @abstractmethod
+    def get_all_usuarios_by_song_like(self, song_id):
+        pass
+
+    @abstractmethod
     def get_artistas(self):
         pass
 

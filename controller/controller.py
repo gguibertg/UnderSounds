@@ -1656,6 +1656,8 @@ async def get_song(request: Request):
                     break
         else:
             print(PCTRL_WARN, "El carrito no se ha encontrado en la base de datos! - skipping")
+
+            
         
     return view.get_song_view(request, song_info, tipoUsuario, user_db, isLiked, inCarrito) # Devolvemos la vista del song
 
@@ -1744,7 +1746,24 @@ async def edit_song_post(request: Request):
         song.set_generos(data["generos"])
         song.set_portada(compress_image(data["portada"]))
         song.set_precio(data["precio"])
+        song.set_duracion(int(data["duracion"]))
         song.set_visible(data["visible"])
+
+        # Ruta completa al archivo .mp3
+        mp3_path = os.path.join("mp3", song_id)
+
+        pistaBase64 = data["pista"]
+        extension = data["extension"]
+        pistaBase64 = pistaBase64.split(",")[1]  # Quitamos el prefijo de base64
+        pistaBase64 = base64.b64decode(pistaBase64)  # Decodificamos el base64
+        pistaBase64 = BytesIO(pistaBase64)  # Convertimos el base64 a un objeto BytesIO
+        pista = UploadFile(pistaBase64, filename=f"{song_id}.{extension}") # Convertimos el BytesIO a un objeto UploadFile con content_type
+
+        result = await process_song_file(pista)
+        if result is not True:
+            return result
+        else:
+            print(PCTRL_WARN, "El archivo MP3", mp3_path, "no existe")
 
         if song_dict != song.songdto_to_dict():
             song_dict["fechaUltimaModificacion"] = datetime.now()
@@ -1918,6 +1937,13 @@ async def delete_song_post(request: Request):
         usuario_dto = UsuarioDTO()
         usuario_dto.load_from_dict(usuario_dict)
         usuario_dto.remove_song_from_biblioteca(song_id)
+        model.update_usuario(usuario_dto)
+
+    usuarios = model.get_usuarios_by_song_like(song_id)
+    for usuario_dict in usuarios:
+        usuario_dto = UsuarioDTO()
+        usuario_dto.load_from_dict(usuario_dict)
+        usuario_dto.remove_id_like(song_id)
         model.update_usuario(usuario_dto)
     
     # Ruta completa al archivo .mp3
