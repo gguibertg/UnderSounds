@@ -161,6 +161,36 @@ class mongodbUsuarioDAO(InterfaceUsuarioDAO):
             print(f"{PDAO_ERROR}Error al recuperar los usuarios: {e}")
 
         return [user.usuario_to_dict() for user in users.userlist]
+    
+    def get_all_usuarios_by_song_like(self, song_id):
+        users = UsuariosDTO()
+        try:
+            query = self.collection.find({"id_likes": song_id})
+
+            for doc in query:
+                user_dto = UsuarioDTO()
+                user_dto.set_id(str(doc.get("_id")))
+                user_dto.set_nombre(doc.get("nombre"))
+                user_dto.set_bio(doc.get("bio"))
+                user_dto.set_email(doc.get("email"))
+                user_dto.set_imagen(doc.get("imagen"))
+                user_dto.set_url(doc.get("url"))
+                user_dto.set_fechaIngreso(doc.get("fechaIngreso"))
+                user_dto.set_esArtista(doc.get("esArtista"))
+                user_dto.set_esVisible(doc.get("esVisible"))
+                user_dto.set_emailVisible(doc.get("emailVisible"))
+                user_dto.set_id_likes(doc.get("id_likes", []))
+                user_dto.set_studio_albumes(doc.get("studio_albumes", []))
+                user_dto.set_studio_canciones(doc.get("studio_canciones", []))
+                user_dto.set_biblioteca(doc.get("biblioteca", []))
+                user_dto.set_listas_reproduccion(doc.get("listas_reproduccion", []))
+
+                users.insertUser(user_dto)
+
+        except Exception as e:
+            print(f"{PDAO_ERROR}Error al recuperar los usuarios: {e}")
+
+        return [user.usuario_to_dict() for user in users.userlist]
 
     def get_artistas(self):
         users = UsuariosDTO()

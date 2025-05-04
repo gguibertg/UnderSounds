@@ -128,7 +128,13 @@
                     </div>
 
                 </form>
-
+                <div class="div-pannel-sub upload-song" style="width: auto;">
+                    <label for="song-upload">Seleccionar canción</label>
+                    <p id="archivo-actual-info"></p>
+                    <!-- Reproductor de audio opcional -->
+                    <audio id="preview-audio" controls style="display: none;"></audio>
+                    <input type="file" id="song-upload" accept="audio/*">
+                </div>
                 <button type="submit" onclick="postSong()">Guardar cambios</button>
             
             </div>
@@ -151,12 +157,15 @@
                                 <h2 class="song-title"> {{cambios.titulo}}</h2>
                                 <p><strong>Autor:</strong> {{cambios.artista}}</p>
                                 <p><strong>Colaboradores:</strong> {{cambios.colaboradores}}</p>
-                                <p><strong>Descripción:</strong> <pre> {{cambios.descripcion}} </pre></p>
+                                <p><strong>Descripción:</strong> <pre style="max-width: 30rem; word-wrap: break-word; white-space: pre-wrap;"> {{cambios.descripcion}} </pre></p>
                                 {% if cambios.album %}
                                     <p><strong>Álbum:</strong> {{cambios.albumStr}}</p>
                                 {% else %}
                                     <p><strong> La canción es un <i>Single</i></strong></p>
                                 {% endif %}
+                                {% set minutos = cambios.duracion // 60 %}
+                                {% set segundos = cambios.duracion % 60 %}
+                                <p><strong>Duración:</strong> {{ "%02d:%02d"|format(minutos, segundos) }}</p>
                                 <p><strong>Géneros:</strong> {{cambios.generos}} </p>
                                 <p><strong>Precio:</strong> {{cambios.precio}}€</p>
                                 <p><strong>Visible:</strong> {% if cambios.visible %} Sí {% else %} No {% endif %}</p>
@@ -180,11 +189,111 @@
     </main>
 
     <script>
+        let storedFile = null;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const songId = "{{ song.id }}";
+            const songTitle = "{{ song.titulo }}";
+
+            if (songId && songTitle) {
+                cargarCancionEnInput(songId, songTitle);
+            }
+        });
+
+        async function cargarCancionEnInput(song_id, song_title) {
+            if (!song_id) {
+                alert('No se ha encontrado la canción solicitada.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/download-song?filename=${encodeURIComponent(song_id)}&song_title=${encodeURIComponent(song_title)}`);
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert("Error: " + error.detail);
+                    return;
+                }
+
+                const blob = await response.blob();
+                const fileName = `${song_title}.mp3`;
+                const file = new File([blob], fileName, { type: "audio/mpeg" });
+
+                // Guardar el archivo en una variable global
+                storedFile = file;
+
+                // Mostrar solo el nombre del archivo en el <p>
+                document.getElementById('archivo-actual-info').innerText = `Canción actual: ${file.name}`;
+
+                // Mostrar reproductor
+                const audioURL = URL.createObjectURL(file);
+                const audio = document.getElementById("preview-audio");
+                audio.src = audioURL;
+                audio.style.display = "block";
+
+                // ⚠️ No se puede asignar 'file' al input por restricciones del navegador
+                // document.getElementById("song-upload").files = [file]; // Esto está prohibido
+
+            } catch (err) {
+                console.error(err);
+                alert("Ocurrió un error inesperado.");
+            }
+        }
+
+        function getAudioDuration(file) {
+            return new Promise((resolve, reject) => {
+                const audio = new Audio();
+                audio.src = URL.createObjectURL(file);
+
+                audio.addEventListener("loadedmetadata", () => {
+                    resolve(audio.duration); // duración en segundos
+                });
+
+                audio.addEventListener("error", (e) => {
+                    reject("No se pudo cargar el archivo de audio");
+                });
+            });
+        }
+
+        // Convierte un File a Base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = err => reject(err);
+            });
+        }
+
         async function postSong() {
             event.preventDefault();
-            
+
+            displayMessage("warn", "Subiendo canción...");
+
+            let pistaFile = null;
+            let pistaBase64 = null;
+            let duracion = null;
+
+            pistaFile = document.getElementById('song-upload').files[0];
+
+            if (pistaFile) {
+
+            } else if (storedFile) {
+                pistaFile = storedFile;
+
+            } else {
+                return displayMessage("error", "Debes seleccionar una canción para subir.");
+            }
+
+            try {s
+                duracion = await getAudioDuration(pistaFile);
+                pistaBase64 = await fileToBase64(pistaFile);
+            } catch (err) {
+                return displayMessage("error", "No se pudo procesar el archivo de audio.");
+            }
+
             const songData = {
-                id: "{{song.id}}",
+                id: "681667a371c094c3a3185529",
                 titulo: document.getElementById('titulo').value,
                 artista: document.getElementById('artista').value,
                 descripcion: document.getElementById('descripcion').value,
@@ -192,69 +301,41 @@
                 precio: parseFloat(document.getElementById('precio').value),
                 generos: Array.from(document.querySelectorAll('.upload-checkbox-container input[type="checkbox"]:checked')).map(checkbox => checkbox.id),
                 portada: document.getElementById('cover-preview').src,
-                visible: document.getElementById('is-visible').checked
-                // TODO: Al hacer be-stream, se debe pasar también la ruta del archuvo de audio en el backend (puede ser por ejemplo el nombre del archivo y ya)
-                // TODO: La duración de la canción se puede calcular en el backend.
+                visible: document.getElementById('is-visible').checked,
+                pista: pistaBase64,
+                extension: pistaFile.name.split('.').pop(),
+                duracion: duracion
             };
 
-            // Validar que todos los campos requeridos estén completos y tienen un valor válido
-            if (!songData.titulo.trim()) {
-                return displayMessage("error", "El campo 'Título' no puede estar vacío.");
-            }
-            if (!songData.artista.trim()) {
-                return displayMessage("error", "El campo 'Autor' no puede estar vacío.");
-            }
-            if (isNaN(songData.precio) || parseFloat(songData.precio) < 0) {
-                return displayMessage("error", "El campo 'Precio' debe ser un número positivo.");
-            }
-            if (!songData.generos.length) {
-                return displayMessage("error", "Debes seleccionar al menos un género.");
-            }
-            // Validar que la canción esté subida
-            let generosBackend = "{{ song.generos }}";  // Esto es una cadena que representa un array
-            generosBackend = generosBackend.replace(/&#39;/g, "'")  // Reemplazar &#39; por '
-                                            .replace(/&quot;/g, '"') // Reemplazar &quot; por "
-                                            .replace(/'/g, '"');
-            const generosArray = JSON.parse(generosBackend); 
-            const generosCoinciden = songData.generos.every(genero => generosArray.includes(genero)) &&
-                                generosArray.every(genero => songData.generos.includes(genero));
+            // Validaciones
+            if (!songData.titulo.trim()) return displayMessage("error", "El campo 'Título' no puede estar vacío.");
+            if (!songData.artista.trim()) return displayMessage("error", "El campo 'Autor' no puede estar vacío.");
+            if (isNaN(songData.precio) || songData.precio < 0) return displayMessage("error", "El campo 'Precio' debe ser un número positivo.");
+            if (!songData.generos.length) return displayMessage("error", "Debes seleccionar al menos un género.");
 
-            
-            if (    Boolean(songData.titulo == "{{ song.titulo }}") &&
-                    Boolean(songData.artista == "{{ song.artista }}") &&
-                    Boolean(songData.colaboradores == "{{ song.colaboradores }}") &&
-                    Boolean(songData.descripcion.trim() == "{{song.descripcion}}".trim()) &&
-                    Boolean(songData.portada == "{{ song.portada }}") &&
-                    generosCoinciden &&
-                    Boolean(songData.precio == "{{ song.precio }}") &&
-                    Boolean(String(songData.visible) == "{{ song.visible }}".toLowerCase())) {
+            // Enviar datos
+            try {
+                const response = await fetch('/edit-song', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(songData)
+                });
 
-                return displayMessage("error", "No se han realizado cambios en la canción."); 
-            }
-            else{
-                try {
-                    const response = await fetch('/edit-song', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(songData)
-                    });
+                const result = await response.json();
 
-                    const result = await response.json();
-
-                    if (response.ok) {
-                        displayMessage('success', 'Canción editada exitosamente, espero un momento...');
-                        setTimeout(() => {
-                            window.location.href = '/studio';
-                        }, 2000);
-                    } else {
-                        displayMessage('error', 'Error al editar la canción: ' + result.error);
-                    }
-                } catch (error) {
-                    displayMessage('error', 'Ocurrió un error al editar la canción.');
-                    console.error('Error al editar la cancion:', error);
+                if (response.ok) {
+                    displayMessage('success', 'Canción editada exitosamente, espera un momento...');
+                    setTimeout(() => {
+                        window.location.href = '/studio';
+                    }, 2000);
+                } else {
+                    displayMessage('error', 'Error al editar la canción: ' + result.error);
                 }
+            } catch (error) {
+                displayMessage('error', 'Ocurrió un error al editar la canción.');
+                console.error('Error al editar la canción:', error);
             }
         }
 
