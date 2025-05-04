@@ -39,8 +39,8 @@
                         <label for="title">Título</label>
                         <input type="text" id="title" name="title" placeholder="Título del álbum" value="{{ album.titulo }}">
 
-                        <label for="author">Autor</label>
-                        <input type="text" id="author" name="author" placeholder="Autor del álbum" value="{{ album.autor }}">
+                        <label for="artista">Artista</label>
+                        <input type="text" id="artista" name="artista" placeholder="Artista del álbum" value="{{ album.autor }}">
 
                         <label for="collaborators">Colaboradores</label>
                         <input type="text" id="collaborators" name="collaborators" placeholder="Separados por coma" value="{{ album.colaboradores }}">
@@ -293,7 +293,7 @@
             const albumData = {
                 id: '{{ album.id }}',
                 titulo: document.getElementById('title').value,
-                autor: document.getElementById('author').value,
+                artista: document.getElementById('artista').value,
                 descripcion: document.getElementById('description').value,
                 colaboradores: document.getElementById('collaborators').value,
                 precio: parseFloat(document.getElementById('price').value),
@@ -307,7 +307,7 @@
             if (!albumData.titulo.trim()) {
                 return displayMessage("error", "El campo 'Título' no puede estar vacío.");
             }
-            if (!albumData.autor.trim()) {
+            if (!albumData.artista.trim()) {
                 return displayMessage("error", "El campo 'Autor' no puede estar vacío.");
             }
             if (isNaN(albumData.precio) || parseFloat(albumData.precio) <= 0) {

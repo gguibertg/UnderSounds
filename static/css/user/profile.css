@@ -5,10 +5,10 @@
 
 /* ========== TARJETAS DE CANCIÓN ========== */
 .item-element {
-    min-width: 14rem;
-    max-width: 14rem;
-    min-height: 22rem; 
-    max-height: 22rem;
+    min-width: 15rem;
+    max-width: 15rem;
+    min-height: 25rem; 
+    max-height: 25rem;
     flex: 0 0 auto;
     margin: 0 0.5rem;
 }
@@ -52,9 +52,11 @@
 }
 
 .btn-container {
-    width: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem;
 }
 
 .songs-content h3 {

@@ -27,7 +27,6 @@
 
 <body>
     <div id="header-placeholder"></div>
-    <canvas id="backgroundCanvas"></canvas>
     <main>
         <div class="div-bg">
             <!-- Sección 1: Información personal -->
@@ -119,9 +118,7 @@
                 <div class="lista-header">
                     <h2>{{ lista.nombre }}</h2>
                     <br>
-                    <button
-                        class="playlist-btn"
-                        type="button"
+                    <button class="playlist-btn" type="button"
                         data-titulos="{{ lista.songs | map(attribute='titulo') | join('|||') }}"
                         data-artistas="{{ lista.songs | map(attribute='artista') | join('|||') }}"
                         data-covers="{{ lista.songs | map(attribute='portada') | join('|||') }}"
@@ -154,12 +151,13 @@
                         <img class="songs-image" src="{{ cancion.portada }}" alt="{{ cancion.titulo }}" />
                         <h3>{{ cancion.titulo }}</h3>
                         <p>{{ cancion.artista }}</p>
-                        <form method="post" action="/remove-song-from-list">
+                        <form action="/song" method="get" class="btn-container">
+                            <input type="hidden" name="id" value="{{ cancion.id }}">
+                            <button type="submit" class="btn">Ver canción</button>
+                        </form>
+                        <form method="post" action="/remove-song-from-list" class="btn-container">
                             <input type="hidden" name="nombre_lista" value="{{ lista.nombre }}" />
                             <input type="hidden" name="id_cancion" value="{{ cancion.id }}" />
-                            <a href="/song?id={{ cancion.id }}">
-                                <button class="btn" type="button">Ver canción</button>
-                            </a>
                             <button type="submit" class="btn" title="Borrar">
                                 <img src="/static/icons/site/delete-icon.svg" alt="Borrar" width="20" height="20" />
                             </button>
@@ -182,10 +180,12 @@
                     <p>Envía una solicitud de cambio de contraseña a tu correo electrónico.</p>
 
                     <button onclick="changeEmail()">Cambiar correo electrónico</button>
-                    <p>Inicia un proceso de cambio de correo electrónico principal por otro. Necesitarás acceso al correo anterior.</p>
+                    <p>Inicia un proceso de cambio de correo electrónico principal por otro. Necesitarás acceso al
+                        correo anterior.</p>
 
                     <button onclick="unregister()" class="btn-danger">Cerrar cuenta</button>
-                    <p>Borra todas tus canciones, albumes y compras realizadas, así como tu información personal y perfil. Esta acción es irreversible.</p>
+                    <p>Borra todas tus canciones, albumes y compras realizadas, así como tu información personal y
+                        perfil. Esta acción es irreversible.</p>
                 </div>
             </section>
         </div>
@@ -196,8 +196,7 @@
     <script src="/static/js/footer.js"></script>
     <script src="/static/js/dark-mode.js"></script>
     <script src="/static/js/radio.js"></script>
-    <script src="/static/js/animations.js"></script>
-    
+
 
     <script>
         const firebaseConfig = {
@@ -223,7 +222,7 @@
                         }
                     }).catch(error => {
                         console.error("Error al cerrar sesión en Firebase:", error);
-                        alert("Error al cerrar sesión: " + error.message);
+                        displayMessage('error', 'Ocurrió un error inesperado al cerrar sesión.');
                     });
             }
         }
@@ -237,108 +236,108 @@
             const imagen = document.getElementById('user_image_upload').src;
 
             if (!nombre) {
-            displayMessage('error', "El campo 'Nombre completo' es obligatorio.");
-            return;
+                displayMessage('error', "El campo 'Nombre completo' es obligatorio.");
+                return;
             }
 
             if (!email) {
-            displayMessage('error', "El campo 'Correo electrónico' es obligatorio.");
-            return;
+                displayMessage('error', "El campo 'Correo electrónico' es obligatorio.");
+                return;
             }
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-            displayMessage('error', "Por favor, introduce un correo electrónico válido.");
-            return;
+                displayMessage('error', "Por favor, introduce un correo electrónico válido.");
+                return;
             }
 
             fetch("/update-profile", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nombre, email, url, bio, imagen })
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ nombre, email, url, bio, imagen })
             })
-            .then(async response => {
-            const result = await response.json();
-            if (response.ok) {
-                displayMessage('success', 'Tu perfil ha sido actualizado exitosamente.');
-                window.location.href = "/profile";
-            } else {
-                displayMessage('error', 'Hubo un problema al actualizar tu perfil: ' + result.error);
-            }
-            })
-            .catch(error => {
-            console.error("Error al actualizar el perfil:", error);
-            displayMessage('error', 'Ocurrió un error inesperado.');
-            });
+                .then(async response => {
+                    const result = await response.json();
+                    if (response.ok) {
+                        displayMessage('success', 'Tu perfil ha sido actualizado exitosamente.');
+                        window.location.href = "/profile";
+                    } else {
+                        displayMessage('error', 'Hubo un problema al actualizar tu perfil: ' + result.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al actualizar el perfil:", error);
+                    displayMessage('error', 'Ocurrió un error inesperado.');
+                });
         }
 
         function sendPasswordReset() {
             const email = document.getElementById("email").value;
             if (!email) {
-                alert("Por favor, introduce tu correo electrónico.");
-                return;
+            displayMessage('error', "Por favor, introduce tu correo electrónico.");
+            return;
             }
 
             auth.sendPasswordResetEmail(email)
-                .then(() => alert("Se ha enviado un correo para restablecer tu contraseña."))
-                .catch((error) => {
-                    console.error("Error al enviar el correo:", error);
-                    alert("No se pudo enviar el correo.");
-                });
+            .then(() => displayMessage('success', "Se ha enviado un correo para restablecer tu contraseña."))
+            .catch((error) => {
+                console.error("Error al enviar el correo:", error);
+                displayMessage('error', "No se pudo enviar el correo.");
+            });
         }
 
         function changeEmail() {
             const newEmail = prompt("Introduce tu nuevo correo electrónico:");
             if (!newEmail) {
-                alert("No se proporcionó un correo nuevo.");
-                return;
+            displayMessage('error', "No se proporcionó un correo nuevo.");
+            return;
             }
 
             const user = auth.currentUser;
             if (!user) {
-                alert("No hay sesión iniciada.");
-                return;
+            displayMessage('error', "No hay sesión iniciada.");
+            return;
             }
 
-        user.verifyBeforeUpdateEmail(newEmail)
+            user.verifyBeforeUpdateEmail(newEmail)
             .then(() => {
-                alert(`Se ha enviado un correo de verificación a ${newEmail}. Debes verificarlo para completar el cambio.`);
+                displayMessage('success', `Se ha enviado un correo de verificación a ${newEmail}. Debes verificarlo para completar el cambio.`);
             })
             .catch((error) => {
                 console.error("Error al cambiar el correo:", error);
                 switch (error.code) {
-                    case "auth/requires-recent-login":
-                        alert("Debes volver a iniciar sesión para cambiar el correo.");
-                        break;
-                    case "auth/email-already-in-use":
-                        alert("Ese correo ya está en uso. Intenta con otro.");
-                        break;
-                    case "auth/invalid-email":
-                        alert("El correo introducido no es válido.");
-                        break;
-                    default:
-                        alert("No se pudo enviar la verificación para el cambio de correo.");
-                        break;
+                case "auth/requires-recent-login":
+                    displayMessage('error', "Debes volver a iniciar sesión para cambiar el correo.");
+                    break;
+                case "auth/email-already-in-use":
+                    displayMessage('error', "Ese correo ya está en uso. Intenta con otro.");
+                    break;
+                case "auth/invalid-email":
+                    displayMessage('error', "El correo introducido no es válido.");
+                    break;
+                default:
+                    displayMessage('error', "No se pudo enviar la verificación para el cambio de correo.");
+                    break;
                 }
             });
         }
 
         function unregister() {
             if (confirm('¿Estás seguro de que deseas cerrar tu cuenta? Esta acción es irreversible.')) {
-            fetch("/unregister", { method: "POST" })
-                .then(async response => {
-                const result = await response.json();
-                if (response.ok) {
-                    displayMessage('success', 'Tu cuenta ha sido cerrada exitosamente.');
-                    window.location.href = "/";
-                } else {
-                    displayMessage('error', 'Hubo un problema al cerrar tu cuenta: ' + result.error);
-                }
-                })
-                .catch(error => {
-                console.error("Error al cerrar la cuenta:", error);
-                displayMessage('error', 'Ocurrió un error inesperado.');
-                });
+                fetch("/unregister", { method: "POST" })
+                    .then(async response => {
+                        const result = await response.json();
+                        if (response.ok) {
+                            displayMessage('success', 'Tu cuenta ha sido cerrada exitosamente.');
+                            window.location.href = "/";
+                        } else {
+                            displayMessage('error', 'Hubo un problema al cerrar tu cuenta: ' + result.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error al cerrar la cuenta:", error);
+                        displayMessage('error', 'Ocurrió un error inesperado.');
+                    });
             }
         }
 
@@ -356,7 +355,7 @@
                     };
                     reader.readAsDataURL(file);
                 } else {
-                    alert('El archivo no debe pesar más de 2MB.');
+                    displayMessage('error', 'El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.');
                 }
             };
             input.click();
