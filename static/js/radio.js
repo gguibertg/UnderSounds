@@ -27,6 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     const playPauseBtn = miniPlayerContainer.querySelector("#play-pause-btn");
                     const progressBar = miniPlayerContainer.querySelector(".mini-progress");
                     const closeBtn = miniPlayerContainer.querySelector(".mini-close-btn");
+                    const currentTimeEl = miniPlayerContainer.querySelector("#current-time");
+                    const remainingTimeEl = miniPlayerContainer.querySelector("#remaining-time");
 
                     // Actualizar portada, título y artista con un retardo para asegurarnos de que el DOM está completamente listo
                     const miniCover = miniPlayerContainer.querySelector("#mini-cover");
@@ -51,6 +53,22 @@ document.addEventListener("DOMContentLoaded", function () {
                         audio.src = songSource;
                         setupAudioPlayer(audio, playPauseBtn, progressBar);
                     }
+
+                    // Función auxiliar para formatear segundos a mm:ss
+                    function formatTime(sec) {
+                        const m = Math.floor(sec / 60).toString().padStart(1, '0');
+                        const s = Math.floor(sec % 60).toString().padStart(2, '0');
+                        return `${m}:${s}`;
+                    }
+
+                    // En timeupdate, actualiza progreso y tiempos
+                    audio.addEventListener("timeupdate", () => {
+                        updateProgressBar(audio, progressBar);
+                        if (!isNaN(audio.duration)) {
+                            currentTimeEl.textContent = formatTime(audio.currentTime);
+                            remainingTimeEl.textContent = formatTime(audio.duration);
+                        }
+                    });
 
                     // Cerrar el mini-player
                     if (closeBtn) {
@@ -95,7 +113,7 @@ function togglePlayPause(audio, playPauseBtn) {
         playPauseBtn.textContent = "⏸️"; // Cambiar a "Pausa"
     } else {
         audio.pause();
-        playPauseBtn.textContent = "⏯️"; // Cambiar a "Reproducir"
+        playPauseBtn.textContent = "▶️"; // Cambiar a "Reproducir"
     }
 }
 
@@ -141,6 +159,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         const playPauseBtn = miniPlayerContainer.querySelector("#play-pause-btn");
                         const progressBar = miniPlayerContainer.querySelector(".mini-progress");
                         const closeBtn = miniPlayerContainer.querySelector(".mini-close-btn");
+                        const currentTimeEl = miniPlayerContainer.querySelector("#current-time");
+                        const remainingTimeEl = miniPlayerContainer.querySelector("#remaining-time");
 
                         // Actualizamos la portada, título y artista
                         const miniCover = miniPlayerContainer.querySelector("#mini-cover");
@@ -216,6 +236,10 @@ document.addEventListener("DOMContentLoaded", function () {
                             audio.addEventListener("timeupdate", function () {
                                 const progress = (audio.currentTime / audio.duration) * 100;
                                 progressBar.value = progress;
+                                if (!isNaN(audio.duration)) {
+                                    currentTimeEl.textContent = formatTime(audio.currentTime);
+                                    remainingTimeEl.textContent = formatTime(audio.duration);
+                                }
                             });
 
                             // Permitir que el usuario mueva la barra de progreso para cambiar la posición del audio

@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/static/css/base/radio.css"> <!-- Hoja de estilo del inicio -->
 <div class="mini-player">
     <button class="mini-close-btn" title="Cerrar">✖️</button>
-    <img src="" alt="Portada" id="mini-cover">
+    <img src="" alt="Portada" id="mini-cover" style="border-radius: 15px;">
 
     <div class="mini-content">
         <div class="mini-song-info">
@@ -12,10 +12,14 @@
         <div class="mini-controls-bar">
             <div class="mini-controls">
                 <button class="mini-btn" id="next-btn">⏮️</button>
-                <button class="mini-btn" id="play-pause-btn">⏯️</button>
+                <button class="mini-btn" id="play-pause-btn">⏸️</button>
                 <button class="mini-btn" id="prev-btn">⏭️</button>
             </div>
             <input type="range" class="mini-progress" min="0" max="100" value="0">
+        </div>
+        <!-- Nueva sección de tiempo -->
+        <div class="mini-time-info" style="font-size:0.9rem; color:#555; margin-top:4px;">
+            <span id="current-time">0:00</span> / <span id="remaining-time">0:00</span>
         </div>
     </div>
 
