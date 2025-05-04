@@ -195,7 +195,7 @@
                                 <h2 class="song-title"> {{cambios.titulo}}</h2>
                                 <p><strong>Autor:</strong> {{cambios.autor}}</p>
                                 <p><strong>Colaboradores:</strong> {{cambios.colaboradores}}</p>
-                                <p><strong>Descripción:</strong><pre> {{cambios.descripcion}} </pre></p>
+                                <p><strong>Descripción:</strong> <pre style="max-width: 30rem; word-wrap: break-word; white-space: pre-wrap;"> {{cambios.descripcion}} </pre></p>
                                 <p><strong>Canciones: </strong>
                                     {% if cambios.canciones | length == 0 %}
                                         <p>No hay canciones añadidas.</p>

@@ -164,9 +164,6 @@
                                 {% else %}
                                     <p><strong> La canción es un <i>Single</i></strong></p>
                                 {% endif %}
-                                {% set minutos = cambios.duracion // 60 %}
-                                {% set segundos = cambios.duracion % 60 %}
-                                <p><strong>Duración:</strong> {{ "%02d:%02d"|format(minutos, segundos) }}</p>
                                 <p><strong>Géneros:</strong> {{cambios.generos}} </p>
                                 <p><strong>Precio:</strong> {{cambios.precio}}€</p>
                                 <p><strong>Visible:</strong> {% if cambios.visible %} Sí {% else %} No {% endif %}</p>
